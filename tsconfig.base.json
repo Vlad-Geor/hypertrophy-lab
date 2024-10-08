@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@ikigaidev/footer": ["libs/shared/layout/footer/src/index.ts"],
+      "@ikigaidev/header": ["libs/shared/layout/header/src/index.ts"],
+      "@ikigaidev/navigation": ["libs/shared/layout/navigation/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
