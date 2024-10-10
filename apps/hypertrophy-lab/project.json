@@ -24,6 +24,11 @@
           {
             "glob": "**/*",
             "input": "apps/hypertrophy-lab/public"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/hypertrophy-lab/src/assets/fonts",
+            "output": "/assets/fonts"
           }
         ],
         "styles": [
