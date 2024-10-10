@@ -1,1 +1,34 @@
-<p>navigation works!</p>
+<nav class="py-4 rounded-[44px] flex bg-white shadow-md justify-around">
+    <div class="flex-center">
+      <lib-icon
+        icon="smart_display"
+        [iconSize]="36"
+        iconColor="gray.disabled"
+      ></lib-icon>
+    </div>
+    <div
+      class="rounded-2xl p-2 flex-center"
+      [ngClass]="{ 'bg-gradient-primary': isSelected }"
+    >
+      <lib-icon
+        icon="fitness_center"
+        [iconSize]="36"
+        [iconColor]="isSelected ? 'white' : 'gray.disabled'"
+      ></lib-icon>
+    </div>
+    <div class="flex-center">
+      <lib-icon
+        icon="ramen_dining"
+        [iconSize]="36"
+        iconColor="gray.disabled"
+      ></lib-icon>
+    </div>
+    <div class="flex-center">
+      <lib-icon
+        icon="person"
+        iconColor="gray.disabled"
+        [iconSize]="36"
+      ></lib-icon>
+    </div>
+  </nav>
+  

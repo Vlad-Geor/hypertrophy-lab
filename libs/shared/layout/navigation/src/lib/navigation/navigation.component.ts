@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { IconComponent } from '@ikigaidev/icon';
+import { ColorThemePipe } from '@ikigaidev/pipe';
 
 @Component({
   selector: 'lib-navigation',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent, ColorThemePipe],
   templateUrl: './navigation.component.html',
-  styleUrl: './navigation.component.css',
 })
-export class NavigationComponent {}
+export class NavigationComponent {
+  isSelected = true;
+}
