@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { ColorThemePipe } from '@ikigaidev/hl/ui/pipe';
 import { IconComponent } from '@ikigaidev/icon';
-import { ColorThemePipe } from '@ikigaidev/pipe';
 
 @Component({
   selector: 'lib-navigation',

@@ -1,8 +1,8 @@
 export default {
-  displayName: 'pipe',
+  displayName: 'icon-text',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/shared/ui/pipe',
+  coverageDirectory: '../../../../coverage/libs/shared/ui/icon-text',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

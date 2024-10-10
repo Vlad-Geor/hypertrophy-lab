@@ -1,1 +1,46 @@
-<p>header works!</p>
+<header
+  class="min-h-48 w-full bg-gradient-primary rounded-[44px] text-white p-5 pb-2 relative"
+>
+  <div class="flex justify-between">
+    <div class="rounded-2xl bg-slate-300 bg-opacity-25">
+      <lib-icon icon="notifications" [badgeData]="3"></lib-icon>
+    </div>
+    <div class="rounded-2xl bg-slate-300 bg-opacity-25">
+      <lib-icon icon="settings"></lib-icon>
+    </div>
+  </div>
+
+  <div class="flex items-center flex-col mb-12">
+    <p class="text-sm font-normal">Good Morning,</p>
+    <h1 class="font-heading text-3xl tracking-wide leading-5">Vlad Geor</h1>
+  </div>
+
+  <div class="flex justify-between px-4">
+    <lib-icon-text
+      iconType="fitness_center"
+      textPosition="UP"
+      iconColorTheme="secondary.light"
+      adjacentText="3 / week"
+      [iconSize]="32"
+    ></lib-icon-text>
+    <lib-icon-text
+      iconType="ramen_dining"
+      textPosition="UP"
+      adjacentText="2300 cal"
+      iconColorTheme="secondary.light"
+      [iconSize]="32"
+    >
+    </lib-icon-text>
+  </div>
+
+  <div
+    class="rounded-full flex-center absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[45%] border-4 border-gray-background"
+  >
+    <!-- TBD link real profile picture of users -->
+    <img
+      class="w-40 h-40 rounded-full"
+      src="https://r2.erweima.ai/imgcompressed/img/compressed_8696f1bbcef64a24a6b160beb551eb27.webp"
+      alt="Trainee's Profile Pic"
+    />
+  </div>
+</header>

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-export type ThemeColorFor = 'text' | 'background';
+type ThemeColorFor = 'text' | 'background';
 
 @Pipe({
   name: 'colorTheme',

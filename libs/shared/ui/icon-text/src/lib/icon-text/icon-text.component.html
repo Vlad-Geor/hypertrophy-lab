@@ -1,0 +1,24 @@
+@let position = textPosition();
+
+<div
+  class="flex justify-center items-center"
+  [ngClass]="{
+    'flex-col': position === 'DOWN',
+    'flex-col-reverse': position === 'UP',
+    'flex-row-reverse': position === 'LEFT',
+  }"
+>
+  <div>
+    <lib-icon
+      [icon]="iconType()"
+      [iconColor]="iconColorTheme()"
+      [iconSize]="iconSize()"
+    ></lib-icon>
+  </div>
+  <p
+    class="font-semibold max-w-16 overflow-ellipsis overflow-hidden text-center"
+    [class]="textSize()"
+  >
+    {{ adjacentText() }}
+  </p>
+</div>

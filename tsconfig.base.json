@@ -15,11 +15,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@ikigaidev/hl/ui/pipe": ["libs/hypertrophy-lab/ui/pipe/src/index.ts"],
       "@ikigaidev/footer": ["libs/shared/layout/footer/src/index.ts"],
       "@ikigaidev/header": ["libs/shared/layout/header/src/index.ts"],
       "@ikigaidev/icon": ["libs/shared/ui/icon/src/index.ts"],
+      "@ikigaidev/icon-text": ["libs/shared/ui/icon-text/src/index.ts"],
       "@ikigaidev/navigation": ["libs/shared/layout/navigation/src/index.ts"],
-      "@ikigaidev/pipe": ["libs/shared/ui/pipe/src/index.ts"],
       "@ikigaidev/util": ["libs/shared/util/src/index.ts"]
     }
   },
