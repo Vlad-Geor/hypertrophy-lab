@@ -1,11 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, InputSignal, input } from '@angular/core';
 import { ColorThemePipe } from '@ikigaidev/hl/ui/pipe';
-import { IconComponent } from '@ikigaidev/icon';
-import { IconType } from 'libs/shared/ui/icon/src/lib/model/icon-type.model';
-import { Direction } from 'libs/shared/ui/model/position.model';
-import { AllowedTextSizes } from 'libs/shared/ui/model/text-size.model';
-import { ThemeColor } from 'libs/shared/ui/model/theme-color.model';
+import { IconComponent, IconType } from '@ikigaidev/icon';
+import { AllowedTextSizes, Direction, ThemeColor } from '@ikigaidev/model';
 
 @Component({
   selector: 'lib-icon-text',

@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx run hypertrophy-lab:serve"
+    "start": "nx run hypertrophy-lab:serve",
+    "lint": "nx run hypertrophy-lab:lint --fix"
   },
   "private": true,
   "dependencies": {

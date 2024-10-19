@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { getColorValue } from '@ikigaidev/util';
-import { ThemeColor } from 'libs/shared/ui/model/theme-color.model';
+import { ThemeColor } from '@ikigaidev/model';
 import { IconType } from '../model/icon-type.model';
 
 @Component({

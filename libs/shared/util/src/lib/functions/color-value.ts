@@ -1,4 +1,4 @@
-import { THEME_COLORS } from 'libs/shared/ui/fixture/theme-colors';
+import { THEME_COLORS } from '@ikigaidev/model';
 
 export function getColorValue(colorKey: string): string | undefined {
   const keys = colorKey.split('.');

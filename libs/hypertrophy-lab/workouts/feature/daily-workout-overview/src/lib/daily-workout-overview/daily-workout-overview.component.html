@@ -1,0 +1,17 @@
+<div class="px-3 overflow-hidden">
+  <div class="flex justify-between mb-3">
+    <p class="font-bold">Today's Workout</p>
+    <button class="underline font-medium text-primary-light">
+      Edit Workous
+    </button>
+  </div>
+
+  <div class="flex gap-3 overflow-x-auto">
+    @for (group of muscleGroupCards; track $index) {
+    <lib-muscle-group-card
+      [muscleGroupExercises]="group"
+    ></lib-muscle-group-card>
+
+    }
+  </div>
+</div>
