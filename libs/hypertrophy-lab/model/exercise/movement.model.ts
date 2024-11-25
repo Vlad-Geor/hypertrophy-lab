@@ -6,7 +6,7 @@ export type Movement = {
 
 export const movements = {
   neck: ['flexion', 'extension', 'lateral flexion'] as const,
-  shoulders: ['press', 'raise', 'rotation', 'shrug'] as const,
+  shoulders: ['press', 'raise', 'rotation', 'pull'] as const,
   chest: ['press', 'fly', 'pullover'] as const,
   back: ['row', 'pull', 'deadlift'] as const,
   triceps: ['extension', 'press', 'pushdown'] as const,

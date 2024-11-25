@@ -1,0 +1,1 @@
+import '/Users/vlad/Desktop/Workspace/Projects/ikigaidev/node_modules/@storybook/core/dist/core-server/presets/common-manager.js';

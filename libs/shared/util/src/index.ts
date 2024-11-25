@@ -1,2 +1,2 @@
-export * from './lib/functions/color-value';
-export * from './lib/functions/nested-key-of';
+export * from './lib/color-value';
+export * from './lib/nested-key-of';

@@ -1,13 +1,13 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { ExerciseDetails } from 'libs/hypertrophy-lab/model';
+import { ExerciseDetails, MuscleGroup } from '@ikigaidev/hl/model';
 
 @Component({
   selector: 'lib-muscle-group-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TitleCasePipe],
   templateUrl: './muscle-group-card.component.html',
 })
-export class MuscleGroupCardComponent {
-  muscleGroupExercises = input.required<ExerciseDetails>();
+export class MuscleGroupCardComponent<T extends MuscleGroup = MuscleGroup> {
+  muscleGroupExercises = input.required<ExerciseDetails<T>[]>();
 }

@@ -1,0 +1,14 @@
+<div
+  class="w-64 h-64 bg-primary-light p-3 rounded-2xl text-white relative overflow-hidden"
+>
+  <h1 class="text-center pt-4 mb-1 text-xl">Optional Title</h1>
+  <hr class="border-none h-[2px] bg-white rounded-lg mb-2" />
+  <!-- @for (workout of (workouts | keyvalue); track $index) { -->
+  <div class="p-3 rounded-lg h-3/4 bg-secondary-light">
+    <section class="overflow-hidden h-full">
+      <div>{{ currentPair[0] | json }}</div>
+      <div>{{ currentPair[1] | json }}</div>
+    </section>
+  </div>
+  <!-- } -->
+</div>

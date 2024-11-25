@@ -3,39 +3,25 @@ import { SubMuscles } from '../muscle/sub-muscles.model';
 import { ExerciseEquipment } from './exercise-equipment.model';
 import { Movement } from './movement.model';
 
-export type ExerciseDetails = {
-  movement: Movement[MuscleGroup];
-  targetSubMuscle: SubMuscles[MuscleGroup];
-  targetMuslce: MuscleGroup;
+export type ExerciseDetails<T extends MuscleGroup> = {
+  targetMuscle: T;
+  targetSubMuscle: SubMuscles[T];
+  movement: Movement[T];
   equipment: ExerciseEquipment;
   sets: number;
   reps: number;
+  weight?: number;
+  weightUnits?: 'kg' | 'lbs';
 };
+// targetMuscle: T;
 
-// export const ExercisesPerGroup: ExercisesPerGroup = {
-//   abs: ['upper abs', 'lower abs', 'obliques'],
-//   back: [
-//     'upper traps',
-//     'middle traps',
-//     'lower traps',
-//     'upper lats',
-//     'lower lats',
-//     'rhomboid major',
-//     'rhomboid minor',
-//     'erectors',
-//   ],
-//   biceps: ['short head', 'long head'],
-//   chest: ['upper chest', 'mid chest', 'lower chest'],
-//   forearms: [
-//     'brachioradialis - elbow flexion',
-//     'flexor Group',
-//     'extensor Group',
-//   ],
-//   glutes: ['maximus', 'medius', 'minimus'],
-//   neck: ['side neck', 'front neck', 'back neck'],
-//   quads: ['short head', 'long head'],
-//   shoulders: ['front shoulder', 'side shoulder', 'rear shoulder'],
-//   triceps: ['short head', 'long head'],
-//   calves: ['gastrocnemius - main muscle', 'soleus - side calf'],
-//   hamstring: ['biceps femoris - inner hamstring', 'semimembranosus'],
-// };
+// export type ExerciseDetails = {
+//   [K in MuscleGroup]: {
+//     targetMuscle: K;
+//     movement: Movement[K];
+//     targetSubMuscle: SubMuscles[K];
+//     equipment: ExerciseEquipment;
+//     sets: number;
+//     reps: number;
+//   };
+// }[MuscleGroup];

@@ -1,19 +1,37 @@
-<div class="w-[200px] px-4 py-2 rounded-2xl text-white relative">
+@let groupedExercises = muscleGroupExercises(); @let muscleGroupedExercise =
+groupedExercises[0];
+
+<div class="w-[200px] px-2 py-2 rounded-2xl text-white relative">
   <!-- Add wrapping div to apply relavite + z-index on all children -->
   <div class="relative z-20">
     <h2 class="font-heading text-xl mb-2">
-      {{ muscleGroupExercises().targetMuslce }}
+      {{ muscleGroupedExercise?.targetMuscle | titlecase }}
     </h2>
-    <h3 class="font-heading text-secondary-light">3 sets</h3>
+    @for (exercise of groupedExercises; track $index) { @if ($index < 2) {
+    <h3 class="font-heading text-secondary-light text-sm">
+      {{ exercise.sets + ' Sets' }}
+    </h3>
     <div class="flex justify-between text-xs font-medium mb-3">
-      <p>Machine Bicep Curl</p>
-      <p>15kg</p>
+      <p class="truncate w-3/4">
+        {{
+          exercise.equipment +
+            ' ' +
+            exercise.targetSubMuscle +
+            ' ' +
+            exercise.movement | titlecase
+        }}
+      </p>
+      @if (exercise.weight && exercise.weightUnits) {
+      <p class="text-secondary-light">
+        {{ exercise.weight + (exercise.weightUnits || 'kg') }}
+      </p>
+      } @else if (exercise.equipment === 'bodyweight') {
+      <p class="text-secondary-light">
+        BW{{ exercise.weight ? '/' + exercise.weight + 'kg' : '' }}
+      </p>
+      }
     </div>
-    <h3 class="font-heading text-secondary-light">3 sets</h3>
-    <div class="flex justify-between text-xs font-medium pb-2">
-      <p>Cable Hammer Curl</p>
-      <p>10kg</p>
-    </div>
+    } }
   </div>
   <img
     class="absolute top-0 left-0 right-0 bottom-0 h-full w-full object-fill rounded-2xl"

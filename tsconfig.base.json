@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@ikigaidev/assets": ["libs/shared/assets/src/index.ts"],
+      "@ikigaidev/carousel": ["libs/shared/ui/carousel/src/index.ts"],
+      "@ikigaidev/fixture": ["libs/shared/fixture/src/index.ts"],
       "@ikigaidev/footer": ["libs/shared/layout/footer/src/index.ts"],
       "@ikigaidev/header": ["libs/shared/layout/header/src/index.ts"],
       "@ikigaidev/hl/daily-workout-overview": [
@@ -30,6 +33,7 @@
       "@ikigaidev/icon-text": ["libs/shared/ui/icon-text/src/index.ts"],
       "@ikigaidev/model": ["libs/shared/ui/model/src/index.ts"],
       "@ikigaidev/navigation": ["libs/shared/layout/navigation/src/index.ts"],
+      "@ikigaidev/test": ["libs/hypertrophy-lab/ui/test/src/index.ts"],
       "@ikigaidev/util": ["libs/shared/util/src/index.ts"]
     }
   },
