@@ -3,6 +3,21 @@ import { MuscleGroupCardComponent } from './muscle-group-card.component';
 
 type Story = StoryObj<MuscleGroupCardComponent>;
 
+export const decorators = [
+  (storyFn: any) => {
+    return {
+      component: MuscleGroupCardComponent,
+      props: {
+        // Pass your props here
+        muscleGroupExercises: [
+          // Example data for the muscleGroupExercises prop
+        ],
+        ...storyFn().props,
+      },
+    };
+  },
+];
+
 const meta: Meta<MuscleGroupCardComponent> = {
   title: 'MuscleGroupCard',
   component: MuscleGroupCardComponent,
@@ -12,6 +27,7 @@ const meta: Meta<MuscleGroupCardComponent> = {
       control: 'object',
     },
   },
+  decorators: [...decorators],
 };
 
 export default meta;
