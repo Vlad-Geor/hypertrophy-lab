@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { DailyWorkoutOverviewComponent } from '@ikigaidev/hl/daily-workout-overview'
 import {
   Component,
   InputSignal,
@@ -6,14 +7,14 @@ import {
   input,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { getColorValue } from '@ikigaidev/util';
 import { ThemeColor } from '@ikigaidev/model';
+import { getColorValue } from '@ikigaidev/util';
 import { IconType } from '../model/icon-type.model';
 
 @Component({
   selector: 'lib-icon',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, DailyWorkoutOverviewComponent],
   templateUrl: './icon.component.html',
   styles: [
     '.mat-icon { display: flex; justify-content: center; align-items: center; min-width: 44px; min-height: 44px}',

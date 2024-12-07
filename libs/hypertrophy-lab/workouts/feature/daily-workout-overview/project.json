@@ -4,7 +4,7 @@
   "sourceRoot": "libs/hypertrophy-lab/workouts/feature/daily-workout-overview/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["type:feature", "scope:workouts"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
