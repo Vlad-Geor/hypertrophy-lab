@@ -3,7 +3,7 @@ import { Component, input } from '@angular/core';
 import { ExerciseDetails, MuscleGroup } from '@ikigaidev/hl/model';
 
 @Component({
-  selector: 'lib-muscle-group-card',
+  selector: 'hl-muscle-group-card',
   standalone: true,
   imports: [CommonModule, TitleCasePipe],
   templateUrl: './muscle-group-card.component.html',

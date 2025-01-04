@@ -15,12 +15,21 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@ikigaidev/accordion": ["libs/shared/ui/accordion/src/index.ts"],
       "@ikigaidev/carousel": ["libs/shared/ui/carousel/src/index.ts"],
+      "@ikigaidev/divider": ["libs/shared/ui/divider/src/index.ts"],
+      "@ikigaidev/elements": ["libs/shared/ui/elements/src/index.ts"],
+      "@ikigaidev/exercise-details-card": [
+        "libs/hypertrophy-lab/workout/ui/exercise-details-card/src/index.ts"
+      ],
+      "@ikigaidev/exercise-list": [
+        "libs/hypertrophy-lab/workout/ui/exercise-list/src/index.ts"
+      ],
       "@ikigaidev/fixture": ["libs/shared/fixture/src/index.ts"],
       "@ikigaidev/footer": ["libs/shared/layout/footer/src/index.ts"],
       "@ikigaidev/header": ["libs/shared/layout/header/src/index.ts"],
-      "@ikigaidev/hl/daily-workout-overview": [
-        "libs/hypertrophy-lab/workouts/feature/daily-workout-overview/src/index.ts"
+      "@ikigaidev/hl/daily-workout": [
+        "libs/hypertrophy-lab/workout/feature/daily-workout/src/index.ts"
       ],
       "@ikigaidev/hl/model": ["libs/hypertrophy-lab/model/index.ts"],
       "@ikigaidev/hl/ui": ["libs/hypertrophy-lab/ui/index.js"],
@@ -30,10 +39,11 @@
       "@ikigaidev/hl/ui/pipe": ["libs/hypertrophy-lab/ui/pipe/src/index.ts"],
       "@ikigaidev/icon": ["libs/shared/ui/icon/src/index.ts"],
       "@ikigaidev/icon-text": ["libs/shared/ui/icon-text/src/index.ts"],
-      "@ikigaidev/model": ["libs/shared/ui/model/src/index.ts"],
+      "@ikigaidev/model": ["libs/shared/model/src/index.ts"],
       "@ikigaidev/navigation": ["libs/shared/layout/navigation/src/index.ts"],
-      "@ikigaidev/storybook-host": ["libs/storybook-host/src/index.ts"],
+      "@ikigaidev/tag": ["libs/shared/ui/tag/src/index.ts"],
       "@ikigaidev/test": ["libs/hypertrophy-lab/ui/test/src/index.ts"],
+      "@ikigaidev/ui": ["libs/shared/ui/index.ts"],
       "@ikigaidev/util": ["libs/shared/util/src/index.ts"]
     }
   },

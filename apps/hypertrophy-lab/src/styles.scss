@@ -38,6 +38,33 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Poppins';
+  src: url('/assets/fonts/poppins/Poppins-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/assets/fonts/poppins/Poppins-Bold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/assets/fonts/poppins/Poppins-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@layer base {
+  html {
+    font-family: 'Poppins', 'serif';
+  }
+}
+
 :root {
   --color-primary-light: #117465;
   --color-primary-dark: #09202b;
@@ -57,6 +84,9 @@
 
   /* Gradient definitions */
   --gradient-primary: linear-gradient(142.02deg, #081f2a 32.53%, #117465 120%);
+
+  /* Sizes */
+  --size-tag-max-height: 1.25rem;
 }
 
 /* Example for dark theme (optional) */

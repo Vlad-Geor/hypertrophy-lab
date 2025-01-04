@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { IconComponent } from '@ikigaidev/icon';
-import { IconTextComponent } from '@ikigaidev/icon-text';
+import { IconComponent, IconTextComponent } from '@ikigaidev/elements';
 
 @Component({
   selector: 'lib-header',

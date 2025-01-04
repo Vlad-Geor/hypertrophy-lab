@@ -1,0 +1,38 @@
+@for (exercise of exercises(); track $index; let i = $index) {
+  <div class="flex justify-between items-center mb-2">
+    <p class="font-semibold">
+      {{ exercise.equipment + ' ' + exercise.targetSubMuscle + ' ' + exercise.movement | titlecase }}
+    </p>
+    <lib-tag>{{ exercise.sets }} Sets</lib-tag>
+  </div>
+
+  <hl-accordion>
+    <hl-accordion-header>
+      <div class="flex">
+        <div class="h-20 w-2/5">
+          <img
+            class="w-40 h-full rounded-xl object-cover object-top"
+            src="https://r2.erweima.ai/imgcompressed/img/compressed_8696f1bbcef64a24a6b160beb551eb27.webp"
+            alt="Trainee's Profile Pic"
+          />
+        </div>
+        <div class="flex flex-col flex-grow pl-4 justify-between">
+          <div class="flex flex-col justify-items-end">
+            <div class="flex justify-between">
+              <p class="text-xs font-medium">Chest, Shoulders</p>
+              <p class="font-semibold">56KG</p>
+            </div>
+            <div class="flex justify-between">
+              <p class="text-[10px] text-gray-helper">Power, size</p>
+              <p class="text-xs">10-15 Reps</p>
+            </div>
+          </div>
+          <div class="text-sm text-secondary-light underline pb-1"><p>Watch Video</p></div>
+        </div>
+      </div>
+    </hl-accordion-header>
+    <hl-accordion-body></hl-accordion-body>
+  </hl-accordion>
+}
+
+<p>{{ exercises() | json }}</p>

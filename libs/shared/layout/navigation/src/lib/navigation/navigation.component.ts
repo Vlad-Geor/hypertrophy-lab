@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { IconComponent, IconType } from '@ikigaidev/elements';
 import { ColorThemePipe } from '@ikigaidev/hl/ui/pipe';
-import { IconComponent } from '@ikigaidev/icon';
-import { IconType } from '@ikigaidev/icon';
 import { FabNavItem } from '../model/fab-nav-item.model';
 import { createIconItem } from '../util/create-nav-item.util';
 
