@@ -1,4 +1,4 @@
-import { IconType } from '@ikigaidev/icon';
+import { IconType } from '@ikigaidev/elements';
 import { FabNavItem } from '../model/fab-nav-item.model';
 
 export const createIconItem = (

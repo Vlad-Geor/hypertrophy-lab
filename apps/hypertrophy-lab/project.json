@@ -27,8 +27,8 @@
           },
           {
             "glob": "**/*",
-            "input": "apps/hypertrophy-lab/src/assets/fonts",
-            "output": "/assets/fonts"
+            "input": "apps/hypertrophy-lab/src/assets",
+            "output": "assets"
           }
         ],
         "styles": [

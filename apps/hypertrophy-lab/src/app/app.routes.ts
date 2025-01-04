@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { DailyWorkoutOverviewComponent } from '@ikigaidev/hl/daily-workout-overview';
+import { DailyWorkoutComponent } from '@ikigaidev/hl/daily-workout';
 
 export const appRoutes: Route[] = [
   {
@@ -9,6 +9,6 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'todays-workout',
-    component: DailyWorkoutOverviewComponent,
+    component: DailyWorkoutComponent,
   },
 ];
