@@ -3,50 +3,45 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import {
   Directive,
   ElementRef,
+  HostListener,
   OnDestroy,
-  OnInit,
   TemplateRef,
   ViewContainerRef,
   inject,
   input,
+  linkedSignal,
 } from '@angular/core';
 
 @Directive({
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[ikiDevOverlay]',
   standalone: true,
 })
-export class OverlayDirective implements OnInit, OnDestroy {
+export class OverlayDirective implements OnDestroy {
   private overlay = inject(Overlay);
   private elementRef = inject(ElementRef);
   private viewContainerRef = inject(ViewContainerRef);
 
-  templateRef = input<TemplateRef<any> | null>(null, { alias: 'ikiDevOverlay' });
-  triggerElement = input<HTMLElement>();
+  private _overlayRef: OverlayRef | null = null;
+
   width = input<string | undefined>(undefined);
   height = input<string | undefined>(undefined);
 
-  private overlayRef?: OverlayRef;
+  templateRef = input<TemplateRef<any> | null>(null, { alias: 'ikiDevOverlay' });
+  _templateRef = linkedSignal(() => this.templateRef());
 
-  ngOnInit() {
-    const trigger = this.triggerElement() || this.elementRef.nativeElement;
-    trigger.addEventListener('click', this.openPopup.bind(this));
-  }
+  overlayAnchor = input<HTMLElement>();
 
-  ngOnDestroy() {
-    this.closePopup();
-    const trigger = this.triggerElement() || this.elementRef.nativeElement;
-    trigger.removeEventListener('click', this.openPopup.bind(this));
-  }
-
-  openPopup() {
-    if (this.overlayRef) {
-      this.closePopup();
+  @HostListener('click')
+  openOverlay(): void {
+    if (this._overlayRef) {
+      this.closeOverlay();
       return;
     }
 
     const positionStrategy = this.overlay
       .position()
-      .flexibleConnectedTo(this.triggerElement() || this.elementRef.nativeElement)
+      .flexibleConnectedTo(this.overlayAnchor() || this.elementRef.nativeElement)
       .withPositions([
         {
           originX: 'start',
@@ -70,23 +65,26 @@ export class OverlayDirective implements OnInit, OnDestroy {
       height: this.height(),
     };
 
-    this.overlayRef = this.overlay.create(overlayConfig);
-    const tplRef = this.templateRef();
+    this._overlayRef = this.overlay.create(overlayConfig);
+    const tplRef = this._templateRef();
 
     if (tplRef) {
-      const portal = new TemplatePortal(tplRef, this.viewContainerRef);
-      this.overlayRef.attach(portal);
+      this._overlayRef.attach(new TemplatePortal(tplRef, this.viewContainerRef));
 
-      this.overlayRef.backdropClick().subscribe(() => {
-        this.closePopup();
+      this._overlayRef.backdropClick().subscribe(() => {
+        this.closeOverlay();
       });
     }
   }
 
-  closePopup() {
-    if (this.overlayRef) {
-      this.overlayRef.dispose();
-      this.overlayRef = undefined;
+  ngOnDestroy() {
+    this.closeOverlay();
+  }
+
+  closeOverlay() {
+    if (this._overlayRef) {
+      this._overlayRef.dispose();
+      this._overlayRef = null;
     }
   }
 }
