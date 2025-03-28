@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { FooterComponent } from '@ikigaidev/footer';
 import { HeaderComponent } from '@ikigaidev/header';
 import { NavigationComponent } from '@ikigaidev/navigation';
 
@@ -8,7 +7,6 @@ import { NavigationComponent } from '@ikigaidev/navigation';
   standalone: true,
   imports: [
     RouterModule,
-    FooterComponent,
     HeaderComponent,
     NavigationComponent,
   ],

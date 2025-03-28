@@ -1,0 +1,58 @@
+@for (exercise of exercises(); track $index; let i = $index) {
+  <div class="flex justify-between items-center mb-1">
+    <p class="font-semibold">
+      {{
+        exercise.equipment + ' ' + exercise.targetSubMuscle + ' ' + exercise.movement
+          | titlecase
+      }}
+    </p>
+    <lib-tag>{{ exercise.sets }} Sets</lib-tag>
+  </div>
+
+  <hl-accordion>
+    <hl-accordion-header>
+      <div class="flex mb-3">
+        <div class="h-20 w-2/5">
+          <img
+            class="w-full h-full rounded-md object-cover object-top"
+            src="https://r2.erweima.ai/imgcompressed/img/compressed_8696f1bbcef64a24a6b160beb551eb27.webp"
+            alt="Trainee's Profile Pic"
+          />
+        </div>
+        <div class="flex flex-col flex-grow pl-4 justify-between">
+          <div class="flex flex-col justify-items-end">
+            <div class="flex justify-between">
+              <p class="text-xs font-semibold">
+                {{
+                  (exercise.targetMuscle | titlecase) +
+                    ', ' +
+                    (exercise.targetSubMuscle | titlecase)
+                }}
+              </p>
+              <p class="font-semibold">
+                @if (exercise.weight) {
+                  {{ exercise.weight + (exercise.weightUnits ?? 'kg') }}
+                } @else {
+                  BW
+                }
+              </p>
+            </div>
+            <div class="flex justify-between">
+              <p class="text-[10px] text-gray-helper">
+                @if (exercise.exerciseGoals) {
+                  @for (goal of exercise.exerciseGoals; track $index) {
+                    {{ goal | titlecase
+                    }}{{ $index === exercise.exerciseGoals.length - 1 ? '' : ', ' }}
+                  }
+                }
+              </p>
+              <p class="text-xs">10-15 Reps</p>
+            </div>
+          </div>
+          <a class="text-sm text-secondary-light underline pb-1"><p>Watch Video</p></a>
+        </div>
+      </div>
+    </hl-accordion-header>
+    <hl-accordion-body><h2>Dummy body</h2></hl-accordion-body>
+  </hl-accordion>
+}

@@ -1,4 +1,5 @@
 export type AllowedTextSizes =
+  | 'text-xxs'
   | 'text-xs'
   | 'text-sm'
   | 'text-base'

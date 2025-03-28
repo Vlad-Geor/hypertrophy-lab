@@ -1,7 +1,7 @@
 {
   "singleQuote": true,
+  "printWidth": 90,
   "htmlWhitespaceSensitivity": "ignore",
-  "printWidth": 120,
   "tabWidth": 2,
   "bracketSameLine": false,
   "proseWrap": "preserve"

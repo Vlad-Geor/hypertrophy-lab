@@ -1,4 +1,5 @@
 export type Size =
+  | 'xxs'
   | 'xs'
   | 'sm'
   | 'md'

@@ -3,6 +3,7 @@ import {
   Component,
   InputSignal,
   InputSignalWithTransform,
+  OnInit,
   input,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,7 +26,10 @@ export type IconType =
   | 'lock'
   | 'local_dining'
   | 'smart_display'
-  | 'person';
+  | 'expand_more'
+  | 'person'
+  | 'expand_circle_up'
+  | 'expand_circle_down';
 
 @Component({
   selector: 'lib-icon',
@@ -35,15 +39,20 @@ export type IconType =
   styles: [
     '.mat-icon { display: flex; justify-content: center; align-items: center; min-width: 44px; min-height: 44px}',
   ],
+  host: {
+    'class': 'rounded-2xl p-1 relative flex-center'
+  }
 })
-export class IconComponent {
-  icon = input.required<IconType>();
-  iconColor: InputSignalWithTransform<string | undefined, ThemeColor> = input(
-    'white',
-    {
-      transform: (value: ThemeColor) => getColorValue(value),
-    }
-  );
+export class IconComponent implements OnInit {
+  icon = input.required<IconType | undefined>();
+  iconColor: InputSignalWithTransform<string | undefined, ThemeColor> = input('white', {
+    transform: (value: ThemeColor) => getColorValue(value),
+  });
+  // iconColor = input<string | ThemeColor>();
   iconSize = input<number>();
   badgeData: InputSignal<number | string | undefined> = input();
+
+  ngOnInit(): void {
+    console.log(this.icon());
+  }
 }

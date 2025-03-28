@@ -1,4 +1,18 @@
-<div class="bg-white p-3 rounded-xl">
-    <ng-content></ng-content>
-    <div class="flex justify-center"><button (click)="expand()">V</button></div>
+@let headerTpl = accordionHeader()?.implicitTemplate;
+@let bodyTpl = accordionBody()?.implicitTemplate;
+<div class="bg-white p-3 pb-0 rounded-xl">
+  @if (headerTpl) {
+    <ng-container [ngTemplateOutlet]="headerTpl() ?? null"></ng-container>
+    <lib-divider type="transparent" marginBottom="mb-0"></lib-divider>
+  }
+
+  <div class="flex justify-center">
+    <button (click)="toggleExpand()" [class.rotate-180]="expanded()" class="w-full transition-all duration-100">
+      <lib-icon [iconSize]="28" [iconColor]="'primary.light'" [icon]="'expand_more'"></lib-icon>
+    </button>
+  </div>
+
+  @if (expanded() && bodyTpl) {
+    <ng-container [ngTemplateOutlet]="bodyTpl() ?? null"></ng-container>
+  }
 </div>

@@ -1,0 +1,16 @@
+<button class="relative group" (click)="toggleSlide()">
+  <div
+    class="w-9 h-[14px] opacity-30 rounded-full"
+    [class.bg-gray-700]="!isActive()"
+    [class.bg-primary]="isActive()"
+  ></div>
+  <div
+    class="h-5 w-5 rounded-full absolute top-0 -translate-y-[3px] transition-all
+     ease-in duration-150 shadow-hl-light group-hover:ring-8"
+     [ngClass]="{
+      'bg-white left-0 group-hover:ring-gray-background-faded': !isActive(),
+      'bg-primary right-0 group-hover:ring-primary-light-faded': isActive()
+     }"
+    
+  ></div>
+</button>

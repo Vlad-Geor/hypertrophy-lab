@@ -1,1 +1,8 @@
-<hr class="h-1 bg-primary-light rounded-xl w-2/5 m-auto mb-6" />
+<hr
+  class="rounded-xl h-1 w-2/5 m-auto"
+  [ngClass]="{
+    'h3 bg-primary-light': type() === 'normal',
+    'h2 bg-primary-light': type() === 'thick',
+    'h-[2px] bg-gray-disabled opacity-50': type() === 'transparent',
+  }"
+/>

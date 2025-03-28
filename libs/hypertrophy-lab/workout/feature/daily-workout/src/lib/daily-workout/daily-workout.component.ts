@@ -1,10 +1,10 @@
 import { CommonModule, KeyValuePipe } from '@angular/common';
 import { Component } from '@angular/core';
-import { ExerciseDetailsCardComponent } from '@ikigaidev/exercise-details-card';
+import { ButtonComponent, DividerComponent, IconComponent } from '@ikigaidev/elements';
+import { ExerciseBreakdownComponent } from '@ikigaidev/exercise-details-card';
 import { ExerciseListComponent } from '@ikigaidev/exercise-list';
 import { MuscleGroupExercises } from '@ikigaidev/hl/model';
 import { MuscleGroupCardComponent } from '@ikigaidev/hl/ui/muscle-group-card';
-import { DividerComponent } from '@ikigaidev/elements';
 
 @Component({
   selector: 'hl-daily-workout',
@@ -14,9 +14,11 @@ import { DividerComponent } from '@ikigaidev/elements';
     MuscleGroupCardComponent,
     KeyValuePipe,
     DividerComponent,
-    ExerciseDetailsCardComponent,
+    ExerciseBreakdownComponent,
     ExerciseListComponent,
-  ],
+    ButtonComponent,
+    IconComponent,
+],
   templateUrl: './daily-workout.component.html',
 })
 export class DailyWorkoutComponent {
@@ -36,6 +38,7 @@ export class DailyWorkoutComponent {
         sets: 3,
         weight: 40,
         weightUnits: 'kg',
+        exerciseGoals: ['size', 'strength']
       },
       {
         targetMuscle: 'abs',
@@ -45,6 +48,7 @@ export class DailyWorkoutComponent {
         weight: 5,
         reps: 15,
         sets: 2,
+        exerciseGoals: ['size', 'cardio']
       },
       {
         targetMuscle: 'abs',
@@ -53,6 +57,7 @@ export class DailyWorkoutComponent {
         equipment: 'dumbell',
         reps: 20,
         sets: 2,
+        exerciseGoals: ['size', 'cardio']
       },
       {
         targetMuscle: 'abs',
@@ -61,6 +66,7 @@ export class DailyWorkoutComponent {
         equipment: 'machine',
         reps: 15,
         sets: 2,
+        exerciseGoals: ['size', 'cardio']
       },
     ],
     chest: [
@@ -73,6 +79,7 @@ export class DailyWorkoutComponent {
         sets: 4,
         weight: 80,
         weightUnits: 'kg',
+        exerciseGoals: ['size', 'strength']
       },
       {
         targetMuscle: 'chest',
@@ -83,6 +90,7 @@ export class DailyWorkoutComponent {
         sets: 3,
         weight: 25,
         weightUnits: 'kg',
+        exerciseGoals: ['size', 'cardio']
       },
     ],
     shoulders: [
@@ -95,6 +103,7 @@ export class DailyWorkoutComponent {
         sets: 3,
         weight: 25,
         weightUnits: 'kg',
+        exerciseGoals: ['size', 'cardio']
       },
     ],
   };
