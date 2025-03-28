@@ -17,6 +17,7 @@
     "paths": {
       "@ikigaidev/accordion": ["libs/shared/ui/accordion/src/index.ts"],
       "@ikigaidev/carousel": ["libs/shared/ui/carousel/src/index.ts"],
+      "@ikigaidev/directive": ["libs/shared/directive/src/index.ts"],
       "@ikigaidev/elements": ["libs/shared/ui/elements/src/index.ts"],
       "@ikigaidev/exercise-details-card": [
         "libs/hypertrophy-lab/workout/ui/exercise-details-card/src/index.ts"

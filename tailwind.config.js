@@ -2,22 +2,15 @@ module.exports = {
   content: ['./apps/**/*.{html,ts}', './libs/**/*.{html,ts}'],
   theme: {
     extend: {
-      keyframes: {
-        wiggle: {
-          '0%, 100%': { transform: 'rotate(-9deg)' },
-          '50%': { transform: 'rotate(9deg)' },
-        },
-      },
       colors: {
         primary: {
           DEFAULT: 'var(--color-primary)',
           light: {
             DEFAULT: 'var(--color-primary-light)',
             hover: 'var(--color-primary-light-hover)',
-            faded: 'var(--color-primary-light-faded)'
+            faded: 'var(--color-primary-light-faded)',
           },
           dark: 'var(--color-primary-dark)',
-          
         },
         secondary: {
           light: 'var(--color-secondary-light)',
@@ -28,9 +21,10 @@ module.exports = {
         },
         gray: {
           disabled: 'var(--color-gray-disabled)',
-          background:{ 
+          background: {
             DEFAULT: 'var(--color-gray-background)',
-            faded: 'var(--color-gray-background-faded)'},
+            faded: 'var(--color-gray-background-faded)',
+          },
           helper: 'var(--color-gray-helper)',
         },
         black: {
@@ -58,8 +52,24 @@ module.exports = {
         primary: theme('colors.primary'),
         secondary: theme('colors.secondary'),
       }),
+      keyframes: {
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-9deg)' },
+          '50%': { transform: 'rotate(9deg)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(20px)' },
+          '100%': { transform: 'translateY(0)' },
+        },
+      },
       animation: {
         wiggle: 'wiggle 1s ease-in-out infinite',
+        'fade-in': 'fadeIn 0.5s ease-in-out',
+        'slide-up': 'slideUp 0.3s ease-out',
       },
     },
   },
