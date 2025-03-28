@@ -3,11 +3,15 @@ import { SubMuscles } from '../muscle/sub-muscles.model';
 import { ExerciseEquipment } from './exercise-equipment.model';
 import { Movement } from './movement.model';
 
+export type ExerciseGoal = 'strength' | 'cardio' | 'size';
+
 export type ExerciseDetails<T extends MuscleGroup> = {
   targetMuscle: T;
   targetSubMuscle: SubMuscles[T];
   movement: Movement[T];
   equipment: ExerciseEquipment;
+  exerciseGoals?: ExerciseGoal[];
+  videoUrl?: string;
   sets: number;
   reps: number;
   weight?: number;

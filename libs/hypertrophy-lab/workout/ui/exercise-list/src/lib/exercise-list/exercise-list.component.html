@@ -1,21 +1,6 @@
-<!-- @let keys = (exerciseList() | keyvalue)?.keys; -->
-<!-- @for (exercise of exerciseList() | keyvalue; track exercise.key) {
-  @let exerciseDetails = exercise.value;
-  @if (exerciseDetails) {
-    @for (exerciseCategory of exercise.key; track exerciseCategory; let i = $index) {
-      <div class="bg-slate-500 mb-4">
-        <p>{{ exercise.key | json }}</p>
-        <hl-tag></hl-tag>
-      </div>
-      <hl-exercise-details-card [exercises]="exerciseDetails"></hl-exercise-details-card>
-    }
-  }
-} -->
-<!-- This returns 4 objects of  -->
-<!-- <p>{{ exerciseList() | keyvalue }}</p>  -->
 @for (item of exerciseList() | keyvalue; track $index) {
   @if (item.value) {
-    <hl-exercise-details-card [exercises]="item.value"></hl-exercise-details-card>
+    <hl-exercise-breakdown [exercises]="item.value"></hl-exercise-breakdown>
   }
 }
-<!-- {{ (exerciseList() | keyvalue | json)}} -->
+

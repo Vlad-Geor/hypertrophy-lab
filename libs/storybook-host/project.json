@@ -30,7 +30,9 @@
         "outputDir": "dist/storybook/storybook-host",
         "configDir": "libs/storybook-host/.storybook",
         "browserTarget": "storybook-host:build-storybook",
-        "styles": ["libs/shared/styles/src/lib/styles.scss"],
+        "styles": [
+          "@angular/material/prebuilt-themes/cyan-orange.css",
+          "apps/hypertrophy-lab/src/styles.scss"],
         "compodoc": false
       },
       "configurations": {

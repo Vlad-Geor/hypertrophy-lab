@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 import { DailyWorkoutComponent } from '@ikigaidev/hl/daily-workout';
+import { PlaygroundComponent } from '@ikigaidev/playground';
 
 export const appRoutes: Route[] = [
   {
@@ -11,4 +12,12 @@ export const appRoutes: Route[] = [
     path: 'todays-workout',
     component: DailyWorkoutComponent,
   },
+  {
+    path: 'nutrition',
+    loadComponent: () => import ('@ikigaidev/nutrition').then(m => m.NutritionComponent)
+  },
+  {
+    path: 'pg',
+    component: PlaygroundComponent
+  }
 ];

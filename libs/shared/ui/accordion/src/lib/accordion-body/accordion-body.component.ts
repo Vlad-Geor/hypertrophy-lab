@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,4 +8,6 @@ import { CommonModule } from '@angular/common';
   templateUrl: './accordion-body.component.html',
   styleUrl: './accordion-body.component.scss',
 })
-export class AccordionBodyComponent {}
+export class AccordionBodyComponent {
+  implicitTemplate = viewChild(TemplateRef);
+}

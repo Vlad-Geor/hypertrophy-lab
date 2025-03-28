@@ -14,6 +14,7 @@ export const workoutObjects: MuscleGroupExercises = {
       sets: 3,
       weight: 40,
       weightUnits: 'kg',
+      exerciseGoals: ['size', 'strength']
     },
     {
       targetMuscle: 'abs',
@@ -23,6 +24,7 @@ export const workoutObjects: MuscleGroupExercises = {
       weight: 5,
       reps: 15,
       sets: 2,
+      exerciseGoals: ['size', 'cardio']
     },
     {
       targetMuscle: 'abs',
@@ -31,6 +33,7 @@ export const workoutObjects: MuscleGroupExercises = {
       equipment: 'dumbell',
       reps: 20,
       sets: 2,
+      exerciseGoals: ['size', 'cardio']
     },
     {
       targetMuscle: 'abs',
@@ -39,6 +42,7 @@ export const workoutObjects: MuscleGroupExercises = {
       equipment: 'machine',
       reps: 15,
       sets: 2,
+      exerciseGoals: ['size', 'cardio']
     },
   ],
   chest: [
@@ -51,6 +55,7 @@ export const workoutObjects: MuscleGroupExercises = {
       sets: 4,
       weight: 80,
       weightUnits: 'kg',
+      exerciseGoals: ['size', 'strength']
     },
     {
       targetMuscle: 'chest',
@@ -61,6 +66,7 @@ export const workoutObjects: MuscleGroupExercises = {
       sets: 3,
       weight: 25,
       weightUnits: 'kg',
+      exerciseGoals: ['size', 'cardio']
     },
   ],
   shoulders: [
@@ -73,6 +79,7 @@ export const workoutObjects: MuscleGroupExercises = {
       sets: 3,
       weight: 25,
       weightUnits: 'kg',
+      exerciseGoals: ['size', 'cardio']
     },
   ],
 };

@@ -1,1 +1,1 @@
-export * from './lib/exercise-details-card/exercise-details-card.component';
+export * from './lib/exercise-details-card/exercise-breakdown.component';

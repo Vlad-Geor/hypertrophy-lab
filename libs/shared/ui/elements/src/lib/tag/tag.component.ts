@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { ThemeColor } from '@ikigaidev/model';
 
 @Component({
   selector: 'lib-tag',
-  standalone: true,
   imports: [CommonModule],
   template: '<ng-content></ng-content>',
   styles: `
     :host {
-      background-color: var(--color-primary-light);
+      background-color: var(--color-primary);
       color: var(--color-white);
       padding-inline: 0.5rem;
       border-radius: 0.25rem;
@@ -20,4 +20,6 @@ import { Component } from '@angular/core';
     }
   `,
 })
-export class TagComponent {}
+export class TagComponent {
+bgColor = input<ThemeColor>();
+}

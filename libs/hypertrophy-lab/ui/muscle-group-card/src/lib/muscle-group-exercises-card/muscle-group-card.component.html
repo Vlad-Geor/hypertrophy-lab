@@ -1,40 +1,35 @@
-@let groupedExercises = muscleGroupExercises(); @let muscleGroupedExercise =
-groupedExercises[0];
+@let groupedExercises = muscleGroupExercises();
+@let muscleGroupedExercise = groupedExercises[0];
 
-<div class="w-40 h-40 lg:w-52 px-3 py-2 rounded-2xl text-white relative">
+<div class="w-40 h-36 lg:w-52 px-3 py-2 rounded-2xl text-white relative">
   <!-- Add wrapping div to apply relavite + z-index on all children -->
   <div class="relative z-20">
     <h2 class="font-heading text-xl mb-2">
       {{ muscleGroupedExercise?.targetMuscle | titlecase }}
     </h2>
-    @for (exercise of groupedExercises; track $index) { @if ($index < 2) {
-    <h3 class="font-heading text-secondary-light text-sm">
-      {{ exercise.sets + ' Sets' }}
-    </h3>
-    <div class="flex justify-between text-xs font-medium mb-2">
-      <p class="truncate w-3/4">
-        {{
-          exercise.equipment +
-            ' ' +
-            exercise.targetSubMuscle +
-            ' ' +
-            exercise.movement | titlecase
-        }}
-      </p>
-      @if (exercise.weight && exercise.weightUnits) {
-      <p class="text-secondary-light">
-        {{ exercise.weight + (exercise.weightUnits || 'kg') }}
-      </p>
-      } @else if (exercise.equipment === 'bodyweight') {
-      <p class="text-secondary-light">
-        BW
-      </p>
+    @for (exercise of groupedExercises; track $index) {
+      @if ($index < 2) {
+        <h3 class="font-heading text-secondary-light text-xs">
+          {{ exercise.sets + ' Sets' }}
+        </h3>
+        <div class="flex justify-between text-xxs font-medium" [class.mb-2]="$index < 1" [class.mb-1]="$index >= 1">
+          <p class="truncate w-3/4">
+            {{ exercise.equipment + ' ' + exercise.targetSubMuscle + ' ' + exercise.movement | titlecase }}
+          </p>
+          @if (exercise.weight && exercise.weightUnits) {
+            <p class="text-secondary-light">
+              {{ exercise.weight + (exercise.weightUnits || 'kg') }}
+            </p>
+          } @else if (exercise.equipment === 'bodyweight') {
+            <p class="text-secondary-light">BW</p>
+          }
+        </div>
       }
-    </div>
-    } } @if (groupedExercises.length > 2) {
-    <p class="text-secondary-light text-sm">
-      {{ groupedExercises.length - 2 + ' more...' }}
-    </p>
+    }
+    @if (groupedExercises.length > 2) {
+      <p class="text-secondary-light text-xs">
+        {{ groupedExercises.length - 2 + ' more...' }}
+      </p>
     }
   </div>
   <img
@@ -42,7 +37,5 @@ groupedExercises[0];
     src="https://i.ytimg.com/vi/in7PaeYlhrM/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBc5PpCXomvXx1M8fszowi5zdlXhA"
     alt="Picture of athele performing a bicep curl"
   />
-  <div
-    class="absolute top-0 left-0 right-0 bottom-0 bg-black-text opacity-80 rounded-2xl z-10"
-  ></div>
+  <div class="absolute top-0 left-0 right-0 bottom-0 bg-black-text opacity-80 rounded-2xl z-10"></div>
 </div>

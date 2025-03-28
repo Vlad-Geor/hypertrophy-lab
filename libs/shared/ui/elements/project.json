@@ -15,6 +15,39 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint"
+    },
+    "storybook": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "libs/shared/ui/elements/.storybook",
+        "browserTarget": "elements:build-storybook",
+        "compodoc": false,
+        "styles": [
+          "@angular/material/prebuilt-themes/cyan-orange.css",
+          "apps/hypertrophy-lab/src/styles.scss"
+        ]
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/elements",
+        "configDir": "libs/shared/ui/elements/.storybook",
+        "browserTarget": "elements:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
     }
   }
 }
