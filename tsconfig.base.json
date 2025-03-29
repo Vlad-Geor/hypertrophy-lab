@@ -17,6 +17,7 @@
     "paths": {
       "@ikigaidev/accordion": ["libs/shared/ui/accordion/src/index.ts"],
       "@ikigaidev/carousel": ["libs/shared/ui/carousel/src/index.ts"],
+      "@ikigaidev/dashboard": ["libs/hypertrophy-lab/dashboard/src/index.ts"],
       "@ikigaidev/directive": ["libs/shared/directive/src/index.ts"],
       "@ikigaidev/elements": ["libs/shared/ui/elements/src/index.ts"],
       "@ikigaidev/exercise-details-card": [
@@ -42,6 +43,7 @@
       "@ikigaidev/playground": ["libs/playground/src/index.ts"],
       "@ikigaidev/tag": ["libs/shared/ui/tag/src/index.ts"],
       "@ikigaidev/test": ["libs/hypertrophy-lab/ui/test/src/index.ts"],
+      "@ikigaidev/tokens": ["libs/shared/tokens/src/index.ts"],
       "@ikigaidev/ui": ["libs/shared/ui/index.ts"],
       "@ikigaidev/util": ["libs/shared/util/src/index.ts"]
     }

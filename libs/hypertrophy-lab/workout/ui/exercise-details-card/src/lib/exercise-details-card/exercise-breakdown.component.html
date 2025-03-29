@@ -56,3 +56,17 @@
     <hl-accordion-body><h2>Dummy body</h2></hl-accordion-body>
   </hl-accordion>
 }
+
+@let items = [1, 2, 3];
+<ng-template #overlay>
+  <div class="shadow-lg rounded-md overflow-hidden w-full">
+    @for (item of items; track $index) {
+      <div
+        class="w-full bg-sky-950 hover:bg-sky-700 transition-colors duration-150 flex items-center"
+      >
+        <p class="text-sm p-4 text-white">Sample 'option'</p>
+        <lib-icon icon="check_circle"></lib-icon>
+      </div>
+    }
+  </div>
+</ng-template>

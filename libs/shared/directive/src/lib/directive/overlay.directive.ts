@@ -24,8 +24,9 @@ export class OverlayDirective implements OnDestroy {
 
   private _overlayRef: OverlayRef | null = null;
 
-  width = input<string | undefined>(undefined);
-  height = input<string | undefined>(undefined);
+  width = input<number | undefined>(undefined);
+  height = input<number | undefined>(undefined);
+  inheritDimensions = input<boolean>(false);
 
   templateRef = input<TemplateRef<any> | null>(null, { alias: 'ikiDevOverlay' });
   _templateRef = linkedSignal(() => this.templateRef());
@@ -61,8 +62,12 @@ export class OverlayDirective implements OnDestroy {
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-transparent-backdrop',
       positionStrategy,
-      width: this.width(),
+      width: this.inheritDimensions()
+        ? this.overlayAnchor()?.getBoundingClientRect().width ||
+          this.elementRef.nativeElement.getBoundingClientRect().width
+        : this.width(),
       height: this.height(),
+      scrollStrategy: this.overlay.scrollStrategies.reposition(),
     };
 
     this._overlayRef = this.overlay.create(overlayConfig);

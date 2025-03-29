@@ -2,11 +2,12 @@
   "name": "hypertrophy-lab",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "prefix": "app",
+  "prefix": "hl",
   "sourceRoot": "apps/hypertrophy-lab/src",
   "tags": [],
   "targets": {
     "build": {
+      "dependsOn": ["tokens:build"],
       "executor": "@angular-devkit/build-angular:application",
       "outputs": [
         "{options.outputPath}"

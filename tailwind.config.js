@@ -35,7 +35,7 @@ module.exports = {
       },
       fontFamily: {
         heading: ['var(--font-heading)', 'sans-serif'],
-        primary: ['var(--font-primary)', 'serif'],
+        body: ['var(--font-body)', 'serif'],
       },
       fontSize: {
         xxs: '10px',

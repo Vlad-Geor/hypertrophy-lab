@@ -8,7 +8,7 @@
 
   <!-- TBD should be a component which receives data / accesses the store -->
   <div class="flex gap-3 overflow-x-auto mb-6">
-    @for (exercise of (muscleGroupExercises | keyvalue); track $index) { @if
+    @for (exercise of (groupExercises | keyvalue); track $index) { @if
     (exercise.value) {
     <hl-muscle-group-card
       [muscleGroupExercises]="exercise.value"
@@ -17,6 +17,6 @@
   </div>
 
   <lib-divider></lib-divider>
-  <hl-exercise-list [exerciseList]="muscleGroupExercises">
+  <hl-exercise-list [exerciseList]="groupExercises">
   </hl-exercise-list>
 </div>
