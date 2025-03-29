@@ -1,5 +1,4 @@
 import { Route } from '@angular/router';
-import { DailyWorkoutComponent } from '@ikigaidev/hl/daily-workout';
 import { PlaygroundComponent } from '@ikigaidev/playground';
 import { ShellComponent } from './shell/shell.component';
 
@@ -19,10 +18,6 @@ export const appRoutes: Route[] = [
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
-  },
-  {
-    path: 'todays-workout',
-    component: DailyWorkoutComponent,
   },
   {
     path: 'nutrition',

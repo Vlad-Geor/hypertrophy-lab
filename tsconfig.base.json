@@ -43,7 +43,6 @@
       "@ikigaidev/playground": ["libs/playground/src/index.ts"],
       "@ikigaidev/tag": ["libs/shared/ui/tag/src/index.ts"],
       "@ikigaidev/test": ["libs/hypertrophy-lab/ui/test/src/index.ts"],
-      "@ikigaidev/tokens": ["libs/shared/tokens/src/index.ts"],
       "@ikigaidev/ui": ["libs/shared/ui/index.ts"],
       "@ikigaidev/util": ["libs/shared/util/src/index.ts"]
     }
