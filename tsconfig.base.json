@@ -39,10 +39,11 @@
       "@ikigaidev/hl/ui/pipe": ["libs/hypertrophy-lab/ui/pipe/src/index.ts"],
       "@ikigaidev/model": ["libs/shared/model/src/index.ts"],
       "@ikigaidev/navigation": ["libs/shared/layout/navigation/src/index.ts"],
-      "@ikigaidev/nutrition": ["libs/hypertrophy-lab/nutrition/src/index.ts"],
       "@ikigaidev/playground": ["libs/playground/src/index.ts"],
+      "@ikigaidev/supplements": ["libs/hypertrophy-lab/supplements/src/index.ts"],
       "@ikigaidev/tag": ["libs/shared/ui/tag/src/index.ts"],
       "@ikigaidev/test": ["libs/hypertrophy-lab/ui/test/src/index.ts"],
+      "@ikigaidev/tokens": ["libs/shared/tokens/src/index.ts"],
       "@ikigaidev/ui": ["libs/shared/ui/index.ts"],
       "@ikigaidev/util": ["libs/shared/util/src/index.ts"]
     }

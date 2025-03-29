@@ -56,6 +56,12 @@ module.exports = {
           ui: 'var(--color-ui-black)',
           background: 'var(--color-black-background)',
         },
+        border: {
+          default: 'var(--color-border-default)',
+          focus: 'var(--color-border-focus)',
+          divider: 'var(--color-border-divider)',
+          subtle: 'var(--color-border-subtle)',
+        },
       },
       fontFamily: {
         heading: ['var(--font-heading)', 'sans-serif'],

@@ -1,7 +1,7 @@
 {
-  "name": "nutrition",
+  "name": "supplements",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/hypertrophy-lab/nutrition/src",
+  "sourceRoot": "libs/hypertrophy-lab/supplements/src",
   "prefix": "hl",
   "projectType": "library",
   "tags": [],
@@ -10,7 +10,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/hypertrophy-lab/nutrition/jest.config.ts"
+        "jestConfig": "libs/hypertrophy-lab/supplements/jest.config.ts"
       }
     },
     "lint": {

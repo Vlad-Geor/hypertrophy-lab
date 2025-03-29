@@ -16,13 +16,14 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('@ikigaidev/hl/daily-workout').then((m) => m.DailyWorkoutComponent),
       },
+      {
+        path: 'supplements',
+        loadComponent: () =>
+          import('@ikigaidev/supplements').then((m) => m.SupplementsComponent),
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
-  },
-  {
-    path: 'nutrition',
-    loadComponent: () => import('@ikigaidev/nutrition').then((m) => m.NutritionComponent),
-  },
+},
   {
     path: 'pg',
     component: PlaygroundComponent,
