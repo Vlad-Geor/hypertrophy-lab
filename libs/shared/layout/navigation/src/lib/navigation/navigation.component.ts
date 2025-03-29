@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { IconComponent, IconType } from '@ikigaidev/elements';
+import { IconComponent } from '@ikigaidev/elements';
 import { ColorThemePipe } from '@ikigaidev/hl/ui/pipe';
+import { IconType } from '@ikigaidev/model';
 import { FabNavItem } from '../model/fab-nav-item.model';
 import { createIconItem } from '../util/create-nav-item.util';
 
@@ -22,6 +23,6 @@ export class NavigationComponent {
   ];
 
   navItems: FabNavItem[] = this.icons.map((icon) =>
-    createIconItem(icon.icon, icon.routerLink, this.isSelected)
+    createIconItem(icon.icon, icon.routerLink, this.isSelected),
   );
 }

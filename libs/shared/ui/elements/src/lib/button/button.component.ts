@@ -1,7 +1,7 @@
-import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BadgeConfig, ThemeColor } from '@ikigaidev/model';
-import { IconComponent, IconType } from '../icon/icon.component';
+import { Component, input } from '@angular/core';
+import { BadgeConfig, IconType, ThemeColor } from '@ikigaidev/model';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'lib-button',
@@ -10,8 +10,9 @@ import { IconComponent, IconType } from '../icon/icon.component';
   styleUrl: './button.component.scss',
 })
 export class ButtonComponent {
-color = input<ThemeColor>();
-badge = input<BadgeConfig>();
-icon = input<IconType>();
-iconColor = input<ThemeColor>();
+  bgColor = input<ThemeColor>();
+  badge = input<BadgeConfig>();
+  icon = input<IconType>();
+  iconColor = input<ThemeColor>('accent.DEFAULT');
+  iconSize = input<number>();
 }

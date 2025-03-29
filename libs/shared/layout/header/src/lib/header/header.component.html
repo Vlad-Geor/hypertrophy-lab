@@ -2,12 +2,8 @@
   class="min-h-48 w-full bg-gradient-primary rounded-[44px] text-white p-5 pb-2 relative"
 >
   <div class="flex justify-between">
-    <div class="rounded-2xl bg-slate-300 bg-opacity-25">
-      <lib-icon icon="notifications" [badgeData]="3"></lib-icon>
-    </div>
-    <div class="rounded-2xl bg-slate-300 bg-opacity-25">
-      <lib-icon icon="settings"></lib-icon>
-    </div>
+    <lib-button icon="notifications" [iconSize]="20"></lib-button>
+    <lib-button icon="settings" [iconSize]="20"></lib-button>
   </div>
 
   <div class="flex items-center flex-col mb-12">
@@ -29,8 +25,7 @@
       adjacentText="2300 cal"
       iconColorTheme="secondary.light"
       [iconSize]="32"
-    >
-    </lib-icon-text>
+    ></lib-icon-text>
   </div>
 
   <div

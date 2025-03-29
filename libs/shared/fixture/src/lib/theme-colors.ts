@@ -1,22 +1,58 @@
 export const THEME_COLORS = {
-    primary: {
-      light: '#117465',
-      dark: '#09202B',
+  primary: {
+    DEFAULT: 'var(--color-primary)',
+    light: {
+      DEFAULT: 'var(--color-primary-light)',
+      hover: 'var(--color-primary-light-hover)',
+      faded: 'var(--color-primary-light-faded)',
     },
-    secondary: {
-      dark: '#FF8502',
-      light: '#FFC710',
+    dark: 'var(--color-primary-dark)',
+  },
+  secondary: {
+    light: 'var(--color-secondary-light)',
+    dark: 'var(--color-secondary-dark)',
+  },
+  accent: {
+    DEFAULT: 'var(--color-accent)',
+  },
+  gray: {
+    disabled: 'var(--color-gray-disabled)',
+    background: {
+      DEFAULT: 'var(--color-gray-background)',
+      faded: 'var(--color-gray-background-faded)',
     },
-    white: '#F5F5F0',
-    gray: {
-      disabled: '#E1E1E1',
-      background: '#F0F4F6',
-      helper: '#5A6A73',
-    },
-    black: {
-      text: '#1A1A1A',
-      ui: '#333333',
-      background: '#121212',
-    },
-  } as const;
-  
+    helper: 'var(--color-gray-helper)',
+  },
+  neutral: {
+    50: 'var(--color-neutral-50)',
+    100: 'var(--color-neutral-100)',
+    200: 'var(--color-neutral-200)',
+    300: 'var(--color-neutral-300)',
+    400: 'var(--color-neutral-400)',
+    500: 'var(--color-neutral-500)',
+    600: 'var(--color-neutral-600)',
+    700: 'var(--color-neutral-700)',
+    800: 'var(--color-neutral-800)',
+    900: 'var(--color-neutral-900)',
+  },
+  state: {
+    error: 'var(--color-state-error)',
+    warning: 'var(--color-state-warning)',
+    success: 'var(--color-state-success)',
+    info: 'var(--color-state-info)',
+  },
+  white: {
+    DEFAULT: 'var(--color-ui-white)',
+  },
+  black: {
+    text: 'var(--color-black-text)',
+    ui: 'var(--color-ui-black)',
+    background: 'var(--color-black-background)',
+  },
+  border: {
+    default: 'var(--color-border-default)',
+    focus: 'var(--color-border-focus)',
+    divider: 'var(--color-border-divider)',
+    subtle: 'var(--color-border-subtle)',
+  },
+} as const;
