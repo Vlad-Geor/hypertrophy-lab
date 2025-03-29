@@ -1,6 +1,7 @@
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { ExerciseDetails, MuscleGroup } from '@ikigaidev/hl/model';
+import { colorMap } from '@ikigaidev/tokens';
 
 @Component({
   selector: 'hl-muscle-group-card',
@@ -10,4 +11,5 @@ import { ExerciseDetails, MuscleGroup } from '@ikigaidev/hl/model';
 })
 export class MuscleGroupCardComponent<T extends MuscleGroup = MuscleGroup> {
   muscleGroupExercises = input.required<ExerciseDetails<T>[]>();
+  colors = colorMap;
 }

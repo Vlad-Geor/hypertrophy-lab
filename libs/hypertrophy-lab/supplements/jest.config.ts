@@ -1,8 +1,8 @@
 export default {
-  displayName: 'nutrition',
+  displayName: 'supplements',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../coverage/libs/hypertrophy-lab/nutrition',
+  coverageDirectory: '../../../coverage/libs/hypertrophy-lab/supplements',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

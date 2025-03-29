@@ -30,6 +30,7 @@
   --color-border-default: var(--color-neutral-200);
   --color-border-focus: var(--color-teal-300);
   --color-border-divider: var(--color-neutral-100);
+  --color-border-subtle: --alpha(var(--color-neutral-100) / 30%);
 
   // --color-teal-50: #e6f7f6;
   // --color-teal-100: #b0e8e5;
@@ -67,7 +68,7 @@
   --color-neutral-900: #212529;
 
   /* UI */
-  --color-ui-white: #F0F8FF;
+  --color-ui-white: #f0f8ff;
   --color-ui-black: #1e1e1e;
 
   /* State */
@@ -75,9 +76,6 @@
   --color-state-warning: #ffc107;
   --color-state-success: #28a745;
   --color-state-info: #17a2b8;
-
-
-  
 
   // TODO create H, S, L for Primary / Secondary / Accent
   // TODO create utility functions for all of these
