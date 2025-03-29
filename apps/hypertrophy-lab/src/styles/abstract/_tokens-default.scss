@@ -1,28 +1,94 @@
 :root {
-  --primary-h: 180;
-  --primary-s: 90%;
-  --primary-l: 20%;
+  /* UI Colors */
+  --color-ui-white: #f0f8ff;
+  --color-ui-black: #1e1e1e;
+
+  /* Background */
+  --color-ui-background-primary: var(--color-ui-white);
+  --color-ui-background-secondary: var(--color-neutral-50);
+  --color-ui-background-tertiary: var(--color-neutral-100);
+
+  /* Text */
+  --color-ui-text-primary: var(--color-ui-black);
+  --color-ui-text-secondary: var(--color-neutral-600);
+  --color-ui-text-on-primary: var(--color-ui-white);
+  --color-ui-text-on-secondary: var(--color-ui-black);
+
+  /* Primary */
+  --color-primary-default: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-400);
+  --color-primary-active: var(--color-teal-600);
+  --color-primary-selected: var(--color-teal-50);
+
+  /* State */
+  --color-state-error: theme(colors.red.800);
+  --color-state-success: var(--color-teal-600);
+  --color-state-warning: var(--color-yellow-500);
+  --color-state-disabled: var(--color-neutral-300);
+
+  /* Border */
+  --color-border-default: var(--color-neutral-200);
+  --color-border-focus: var(--color-teal-300);
+  --color-border-divider: var(--color-neutral-100);
+
+  // --color-teal-50: #e6f7f6;
+  // --color-teal-100: #b0e8e5;
+  // --color-teal-200: #8adbd7;
+  // --color-teal-300: #54ccc7;
+  // --color-teal-400: #33c1bc;
+  // --color-teal-500: #007a72;
+  // --color-teal-600: #006e67;
+  // --color-teal-700: #00564f;
+  // --color-teal-800: #00433d;
+  // --color-teal-900: #00332e;
+
+  // /* Yellow */
+  // --color-yellow-50: #fffae6;
+  // --color-yellow-100: #ffedb3;
+  // --color-yellow-200: #ffe38d;
+  // --color-yellow-300: #ffd75a;
+  // --color-yellow-400: #ffcf39;
+  // --color-yellow-500: #ffc70f;
+  // --color-yellow-600: #e8b50e;
+  // --color-yellow-700: #b58d0b;
+  // --color-yellow-800: #8c6d08;
+  // --color-yellow-900: #6b5306;
+
+  /* Neutral */
+  --color-neutral-50: #f8f9fa;
+  --color-neutral-100: #f1f3f5;
+  --color-neutral-200: #e9ecef;
+  --color-neutral-300: #dee2e6;
+  --color-neutral-400: #ced4da;
+  --color-neutral-500: #adb5bd;
+  --color-neutral-600: #868e96;
+  --color-neutral-700: #495057;
+  --color-neutral-800: #343a40;
+  --color-neutral-900: #212529;
+
+  /* UI */
+  --color-ui-white: #F0F8FF;
+  --color-ui-black: #1e1e1e;
+
+  /* State */
+  --color-state-error: #dc3545;
+  --color-state-warning: #ffc107;
+  --color-state-success: #28a745;
+  --color-state-info: #17a2b8;
+
+
+  
 
   // TODO create H, S, L for Primary / Secondary / Accent
   // TODO create utility functions for all of these
-  --color-primary: hsl(var(--primary-h) var(--primary-s) var(--primary-l));
-  --color-primary-light: hsl(
-    var(--primary-h) var(--primary-s) calc(var(--primary-l) + 10%)
-  );
-  --color-primary-dark: hsl(
-    var(--primary-h) var(--primary-s) calc(var(--primary-l) - 10%)
-  );
-  --color-primary-light-hover: #19a28d;
-  --color-primary-light-faded: hsla(
-    var(--primary-h),
-    var(--primary-s),
-    calc(var(--primary-l) + 10%),
-    0.2
-  );
+  --color-primary: theme(colors.teal.500);
+  --color-primary-light: theme(colors.teal.200);
+  --color-primary-dark: theme(colors.teal.800);
+  --color-primary-light-hover: theme(colors.teal.400);
+  --color-primary-light-faded: --alpha(theme(colors.teal.200) / 30%);
 
-  --color-secondary-light: #ffc710;
-  --color-secondary-dark: #ff8502;
-  --color-white: #f5f5f0;
+  --color-secondary-light: theme(colors.yellow.400);
+  --color-secondary-dark: theme(colors.yellow.600) --color-white: #f0f8ff;
   --color-gray-disabled: hsl(200, 14%, 74%);
   --color-gray-background: hsla(0, 0%, 88%, 0.8);
   --color-gray-background-faded: hsla(0, 0%, 60%, 0.2);
