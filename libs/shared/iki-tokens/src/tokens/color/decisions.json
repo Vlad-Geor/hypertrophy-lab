@@ -1,0 +1,41 @@
+{
+    "color": {
+      "ui": {
+        "white": "#F0F8FF",
+        "black": "#1e1e1e",
+        "background": {
+          "primary": "{color.ui.white}",
+          "secondary": "{color.neutral.50}",
+          "tertiary": "{color.neutral.100}"
+        },
+        "text": {
+          "primary": "{color.ui.black}",
+          "secondary": "{color.neutral.600}",
+          "onPrimary": "{color.ui.white}",
+          "onSecondary": "{color.ui.black}" 
+      },
+      "primary": {
+        "default": "{color.teal.500}",
+        "hover": "{color.teal.400}", 
+        "active": "{color.teal.600}", 
+        "selected": "{color.teal.50}"  
+      },
+      "secondary": {
+        "default": "{color.yellow.500}", 
+        "hover": "{color.yellow.400}",   
+        "active": "{color.yellow.600}"   
+      },
+      "state": {
+        "error": "#dc3545",
+        "success": "{color.teal.600}",
+        "warning": "{color.yellow.500}",
+        "disabled": "{color.neutral.300}" 
+      },
+      "border": {
+        "default": "{color.neutral.200}", 
+        "focus": "{color.teal.300}",      
+        "divider": "{color.neutral.100}" 
+      }
+    }
+  }
+}

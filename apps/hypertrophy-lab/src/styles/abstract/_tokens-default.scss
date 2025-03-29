@@ -1,0 +1,43 @@
+:root {
+  --primary-h: 180;
+  --primary-s: 90%;
+  --primary-l: 20%;
+
+  // TODO create H, S, L for Primary / Secondary / Accent
+  // TODO create utility functions for all of these
+  --color-primary: hsl(var(--primary-h) var(--primary-s) var(--primary-l));
+  --color-primary-light: hsl(
+    var(--primary-h) var(--primary-s) calc(var(--primary-l) + 10%)
+  );
+  --color-primary-dark: hsl(
+    var(--primary-h) var(--primary-s) calc(var(--primary-l) - 10%)
+  );
+  --color-primary-light-hover: #19a28d;
+  --color-primary-light-faded: hsla(
+    var(--primary-h),
+    var(--primary-s),
+    calc(var(--primary-l) + 10%),
+    0.2
+  );
+
+  --color-secondary-light: #ffc710;
+  --color-secondary-dark: #ff8502;
+  --color-white: #f5f5f0;
+  --color-gray-disabled: hsl(200, 14%, 74%);
+  --color-gray-background: hsla(0, 0%, 88%, 0.8);
+  --color-gray-background-faded: hsla(0, 0%, 60%, 0.2);
+  --color-gray-helper: hsl(0, 0%, 50%);
+  --color-black-text: #1a1a1a;
+  --color-black-ui: #333333;
+  --color-black-background: #121212;
+
+  /* Define font variables */
+  --font-heading: 'Nico Moji', sans-serif;
+  --font-body: 'Poppins', serif;
+
+  /* Gradient definitions */
+  --gradient-primary: linear-gradient(142.02deg, #081f2a 32.53%, #117465 120%);
+
+  /* Sizes */
+  --size-tag-max-height: 1.25rem;
+}
