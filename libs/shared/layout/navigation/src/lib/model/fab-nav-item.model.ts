@@ -1,5 +1,4 @@
-import { IconType } from '@ikigaidev/elements';
-import { ThemeColor } from '@ikigaidev/model';
+import { IconType, ThemeColor } from '@ikigaidev/model';
 
 export type FabNavItem = {
   icon: IconType;

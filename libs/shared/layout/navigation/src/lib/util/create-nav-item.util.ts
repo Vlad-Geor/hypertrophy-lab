@@ -1,10 +1,10 @@
-import { IconType } from '@ikigaidev/elements';
+import { IconType } from '@ikigaidev/model';
 import { FabNavItem } from '../model/fab-nav-item.model';
 
 export const createIconItem = (
   icon: IconType,
   routerLink: string,
-  isSelected: boolean
+  isSelected: boolean,
 ): FabNavItem => ({
   icon,
   routerLink,

@@ -30,7 +30,7 @@
   --color-border-default: var(--color-neutral-200);
   --color-border-focus: var(--color-teal-300);
   --color-border-divider: var(--color-neutral-100);
-  --color-border-subtle: --alpha(var(--color-neutral-100) / 30%);
+  --color-border-subtle: rgba(203, 251, 241, 0.1);
 
   // --color-teal-50: #e6f7f6;
   // --color-teal-100: #b0e8e5;
@@ -57,7 +57,7 @@
 
   /* Neutral */
   --color-neutral-50: #f8f9fa;
-  --color-neutral-100: #f1f3f5;
+  --color-neutral-100: rgb(241, 243, 245);
   --color-neutral-200: #e9ecef;
   --color-neutral-300: #dee2e6;
   --color-neutral-400: #ced4da;
@@ -77,8 +77,6 @@
   --color-state-success: #28a745;
   --color-state-info: #17a2b8;
 
-  // TODO create H, S, L for Primary / Secondary / Accent
-  // TODO create utility functions for all of these
   --color-primary: theme(colors.teal.500);
   --color-primary-light: theme(colors.teal.200);
   --color-primary-dark: theme(colors.teal.800);
