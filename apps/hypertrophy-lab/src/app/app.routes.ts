@@ -1,14 +1,15 @@
 import { Route } from '@angular/router';
 import { PlaygroundComponent } from '@ikigaidev/playground';
-import { ShellComponent } from './shell/shell.component';
+import { DashboardShellComponent } from './dashboard-shell/shell.component';
+import { FeatureShellComponent } from './feature-shell/feature-shell.component';
 
 export const appRoutes: Route[] = [
   {
     path: '',
-    component: ShellComponent,
+    component: DashboardShellComponent,
     children: [
       {
-        path: 'dashboard',
+        path: '',
         loadChildren: () => import('@ikigaidev/dashboard').then((m) => m.dashboardRoutes),
       },
       {
@@ -16,14 +17,19 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('@ikigaidev/hl/daily-workout').then((m) => m.DailyWorkoutComponent),
       },
-      {
-        path: 'supplements',
-        loadComponent: () =>
-          import('@ikigaidev/supplements').then((m) => m.SupplementsComponent),
-      },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
-},
+  },
+  {
+    path: '',
+    component: FeatureShellComponent,
+    children: [
+      {
+        path: 'inventory',
+        loadComponent: () =>
+          import('@ikigaidev/supplements').then((m) => m.SupplementListComponent),
+      },
+    ],
+  },
   {
     path: 'pg',
     component: PlaygroundComponent,

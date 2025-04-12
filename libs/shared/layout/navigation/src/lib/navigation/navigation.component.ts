@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { IconComponent } from '@ikigaidev/elements';
-import { ColorThemePipe } from '@ikigaidev/hl/ui/pipe';
 import { IconType } from '@ikigaidev/model';
 import { FabNavItem } from '../model/fab-nav-item.model';
 import { createIconItem } from '../util/create-nav-item.util';
@@ -9,7 +8,7 @@ import { createIconItem } from '../util/create-nav-item.util';
 @Component({
   selector: 'lib-navigation',
   standalone: true,
-  imports: [CommonModule, IconComponent, ColorThemePipe],
+  imports: [CommonModule, IconComponent],
   templateUrl: './navigation.component.html',
 })
 export class NavigationComponent {

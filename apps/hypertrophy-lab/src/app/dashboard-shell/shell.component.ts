@@ -5,9 +5,10 @@ import { HeaderComponent } from '@ikigaidev/header';
 import { NavigationComponent } from '@ikigaidev/navigation';
 
 @Component({
-  selector: 'hl-shell',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'hl-dashboard-shell',
   imports: [CommonModule, NavigationComponent, HeaderComponent, RouterOutlet],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
 })
-export class ShellComponent {}
+export class DashboardShellComponent {}

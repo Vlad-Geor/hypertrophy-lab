@@ -1,9 +1,7 @@
 import { CommonModule, KeyValuePipe } from '@angular/common';
 import { Component } from '@angular/core';
-import { ButtonComponent, DividerComponent, IconComponent } from '@ikigaidev/elements';
-import { ExerciseBreakdownComponent } from '@ikigaidev/exercise-details-card';
+import { DividerComponent } from '@ikigaidev/elements';
 import { ExerciseListComponent } from '@ikigaidev/exercise-list';
-import { MuscleGroupExercises } from '@ikigaidev/hl/model';
 import { MuscleGroupCardComponent } from '@ikigaidev/hl/ui/muscle-group-card';
 import { muscleGroupExercises } from './muscle-group-exercise.mock';
 
@@ -15,11 +13,8 @@ import { muscleGroupExercises } from './muscle-group-exercise.mock';
     MuscleGroupCardComponent,
     KeyValuePipe,
     DividerComponent,
-    ExerciseBreakdownComponent,
     ExerciseListComponent,
-    ButtonComponent,
-    IconComponent,
-],
+  ],
   templateUrl: './daily-workout.component.html',
 })
 export class DailyWorkoutComponent {

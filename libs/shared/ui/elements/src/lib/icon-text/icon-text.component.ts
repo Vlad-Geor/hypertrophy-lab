@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, InputSignal, input } from '@angular/core';
-import { ColorThemePipe } from '@ikigaidev/hl/ui/pipe';
 import { AllowedTextSizes, Direction, IconType, ThemeColor } from '@ikigaidev/model';
 import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'lib-icon-text',
   standalone: true,
-  imports: [CommonModule, IconComponent, ColorThemePipe],
+  imports: [CommonModule, IconComponent],
   templateUrl: './icon-text.component.html',
 })
 export class IconTextComponent {

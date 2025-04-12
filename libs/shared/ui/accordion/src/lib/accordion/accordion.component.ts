@@ -7,7 +7,7 @@ import { AccordionHeaderComponent } from '../accordion-header/accordion-header.c
 @Component({
   selector: 'hl-accordion',
   standalone: true,
-  imports: [CommonModule, AccordionHeaderComponent, AccordionBodyComponent, IconComponent, DividerComponent],
+  imports: [CommonModule, IconComponent, DividerComponent],
   templateUrl: './accordion.component.html',
   host: {
     '[class.mb-6]': "'true'",

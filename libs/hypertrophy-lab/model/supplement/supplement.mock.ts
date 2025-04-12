@@ -1,3 +1,4 @@
+import { of } from 'rxjs';
 import { Supplement } from './supplement.model';
 
 export const supplements: Supplement[] = [
@@ -22,3 +23,5 @@ export const supplements: Supplement[] = [
     recommendedBrands: [{ name: 'California Gold Nutrition' }],
   },
 ];
+
+export const supplementData = of(supplements);

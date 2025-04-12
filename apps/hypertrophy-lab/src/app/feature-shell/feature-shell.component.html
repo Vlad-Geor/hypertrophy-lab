@@ -1,0 +1,16 @@
+<div id="app-shell" class="flex justify-center">
+  <div
+    id="mobile-emulator"
+    class="w-[385px] pt-4 rounded-b-[44px] bg-gray-background min-h-dvh flex flex-col"
+  >
+    <header
+      class="h-20 bg-primary-dark flex items-center justify-center rounded-t-[44px]"
+    >
+      <lib-input [transparent]="true" placeholder="Search..."></lib-input>
+      <lib-avatar></lib-avatar>
+    </header>
+    <div id="main-content-shell" class="pt-6 flex-1">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

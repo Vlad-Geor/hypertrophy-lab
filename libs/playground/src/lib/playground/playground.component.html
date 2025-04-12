@@ -1,18 +1,1 @@
-<div class="w-full h-80 p-4 bg-red-200 flex flex-col justify-between gap">
-  <button
-    class="p-3 bg-primary-light h-fit rounded-lg"
-    [ikiDevOverlay]="popupTemplate"
-    [overlayAnchor]="anchor"
-  >
-    Trigger remote overlay
-  </button>
-
-  <div #anchor class="bg-primary-light animate-fade-in">Overlay should trigger here</div>
-</div>
-
-<ng-template #popupTemplate>
-  <div class="bg-primary-light shadow-md py-2 px-3 rounded-md h-60">
-    <h3 class="text-lg pb-2">Popup Content</h3>
-    <p class="text-sm">This can be any content you want!</p>
-  </div>
-</ng-template>
+<lib-input placeholder="Type in text..." type="text"></lib-input>
