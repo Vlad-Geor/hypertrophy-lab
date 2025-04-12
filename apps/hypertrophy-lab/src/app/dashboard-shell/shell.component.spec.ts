@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ShellComponent } from './shell.component';
+import { DashboardShellComponent } from './shell.component';
 
 describe('ShellComponent', () => {
-  let component: ShellComponent;
-  let fixture: ComponentFixture<ShellComponent>;
+  let component: DashboardShellComponent;
+  let fixture: ComponentFixture<DashboardShellComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ShellComponent],
+      imports: [DashboardShellComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ShellComponent);
+    fixture = TestBed.createComponent(DashboardShellComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

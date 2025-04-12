@@ -79,9 +79,12 @@
 
   --color-primary: theme(colors.teal.500);
   --color-primary-light: theme(colors.teal.200);
-  --color-primary-dark: theme(colors.teal.800);
+  --color-primary-dark: theme(colors.teal.950);
   --color-primary-light-hover: theme(colors.teal.400);
-  --color-primary-light-faded: --alpha(theme(colors.teal.200) / 30%);
+  // --color-primary-light-faded: --alpha(theme(colors.teal.200) / 30%);
+  --color-primary-light-faded: theme(colors.teal.200);
+
+  --color-border-primary: theme(colors.teal.300);
 
   --color-secondary-light: theme(colors.yellow.400);
   --color-secondary-dark: theme(colors.yellow.600) --color-white: #f0f8ff;

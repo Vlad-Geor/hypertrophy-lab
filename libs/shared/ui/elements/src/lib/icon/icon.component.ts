@@ -15,8 +15,11 @@ import { getColorValue } from '@ikigaidev/util';
   standalone: true,
   imports: [CommonModule, MatIconModule],
   templateUrl: './icon.component.html',
+  host: {
+    style: 'display:inline-flex;',
+  },
   styles: [
-    '.mat-icon { display: flex; justify-content: center; align-items: center; min-width: 44px; min-height: 44px}',
+    '.mat-icon { display: flex; justify-content: center; align-items: center; width: fit-content; height: fit-content;}',
   ],
 })
 export class IconComponent implements OnInit {

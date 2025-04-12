@@ -58,6 +58,7 @@ module.exports = {
         },
         border: {
           default: 'var(--color-border-default)',
+          primary: 'var(--color-border-primary)',
           focus: 'var(--color-border-focus)',
           divider: 'var(--color-border-divider)',
           subtle: 'var(--color-border-subtle)',

@@ -5,3 +5,5 @@ export * from './exercise/muscle-group-exercises.model';
 export * from './muscle/muscle-group.model';
 export * from './muscle/sub-muscles.model';
 export * from './workout.model';
+export * from './supplement/supplement.model';
+export * from './supplement/supplement.mock';

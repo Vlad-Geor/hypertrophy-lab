@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { OverlayDirective } from '@ikigaidev/directive';
+import { InputComponent } from '@ikigaidev/elements';
 
 @Component({
   selector: 'hl-playground',
   templateUrl: './playground.component.html',
   styleUrl: './playground.component.scss',
-  imports: [CommonModule, OverlayDirective],
+  imports: [CommonModule, InputComponent],
 })
 export class PlaygroundComponent {
   selectedOption = 'Soft Arch';

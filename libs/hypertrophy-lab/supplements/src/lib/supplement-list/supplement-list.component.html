@@ -1,0 +1,9 @@
+<div class="flex justify-between flex-grow items-center">
+  <p class="flex-grow font-semibold">Inventory(Energy)</p>
+  <lib-icon icon="expand_more"></lib-icon>
+</div>
+<div class="">
+  @for (supp of clientSupplements.value(); track $index) {
+    <hl-supplement-card></hl-supplement-card>
+  }
+</div>
