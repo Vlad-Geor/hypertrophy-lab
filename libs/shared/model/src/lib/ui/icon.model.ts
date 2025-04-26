@@ -4,6 +4,7 @@ export type IconType =
   | 'fitness_center'
   | 'ramen_dining'
   | 'favorite'
+  | 'filter' 
   | 'search'
   | 'settings'
   | 'done'

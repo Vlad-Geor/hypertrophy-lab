@@ -9,15 +9,14 @@ import {
   ViewContainerRef,
   inject,
   input,
-  linkedSignal,
 } from '@angular/core';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: '[ikiDevOverlay]',
+  selector: '[ikiConnectedOverlay]',
   standalone: true,
 })
-export class OverlayDirective implements OnDestroy {
+export class ConnectedOverlayDirective implements OnDestroy {
   private overlay = inject(Overlay);
   private elementRef = inject(ElementRef);
   private viewContainerRef = inject(ViewContainerRef);
@@ -28,10 +27,9 @@ export class OverlayDirective implements OnDestroy {
   height = input<number | undefined>(undefined);
   inheritDimensions = input<boolean>(false);
 
-  templateRef = input<TemplateRef<any> | null>(null, { alias: 'ikiDevOverlay' });
-  _templateRef = linkedSignal(() => this.templateRef());
+  templateRef = input<TemplateRef<any> | null>(null, { alias: 'ikiConnectedOverlay' });
 
-  overlayAnchor = input<HTMLElement>();
+  overlayAnchor = input<ElementRef>();
 
   @HostListener('click')
   openOverlay(): void {
@@ -62,16 +60,11 @@ export class OverlayDirective implements OnDestroy {
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-transparent-backdrop',
       positionStrategy,
-      width: this.inheritDimensions()
-        ? this.overlayAnchor()?.getBoundingClientRect().width ||
-          this.elementRef.nativeElement.getBoundingClientRect().width
-        : this.width(),
-      height: this.height(),
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     };
 
     this._overlayRef = this.overlay.create(overlayConfig);
-    const tplRef = this._templateRef();
+    const tplRef = this.templateRef();
 
     if (tplRef) {
       this._overlayRef.attach(new TemplatePortal(tplRef, this.viewContainerRef));

@@ -2,7 +2,7 @@
   "name": "directive",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/directive/src",
-  "prefix": "ikiDev",
+  "prefix": "lib",
   "projectType": "library",
   "tags": [],
   "targets": {

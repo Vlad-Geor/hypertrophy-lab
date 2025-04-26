@@ -8,6 +8,7 @@ import { Component, input } from '@angular/core';
   styleUrl: './avatar.component.scss',
   host: {
     '[style.height.px]': 'size()',
+    '[style.width.px]': 'size()',
   },
 })
 export class AvatarComponent {

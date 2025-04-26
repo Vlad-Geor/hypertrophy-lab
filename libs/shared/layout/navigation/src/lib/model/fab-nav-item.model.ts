@@ -1,8 +1,8 @@
-import { IconType, ThemeColor } from '@ikigaidev/model';
+import { IconType, ThemeColorToken } from '@ikigaidev/model';
 
 export type FabNavItem = {
   icon: IconType;
   iconSize: number;
-  iconColor: ThemeColor;
+  iconColor: ThemeColorToken;
   routerLink: string;
 };
