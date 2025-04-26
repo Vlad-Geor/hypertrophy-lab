@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { ThemeColor } from '@ikigaidev/model';
+import { Size, ThemeColorToken, colorTokenMap } from '@ikigaidev/model';
 
 @Component({
   selector: 'lib-tag',
@@ -8,18 +8,22 @@ import { ThemeColor } from '@ikigaidev/model';
   template: '<ng-content></ng-content>',
   styles: `
     :host {
-      background-color: var(--color-primary);
       color: var(--color-white);
-      padding-inline: 0.5rem;
-      border-radius: 0.25rem;
-      font-size: 0.75rem;
-      font-weight: 400;
+      border-radius: var(--border-radius-full);
       display: flex;
       align-items: center;
       max-height: var(--size-tag-max-height);
+      width: fit-content;
     }
   `,
+  host: {
+    class: 'px-[6px]',
+    '[class]': 'size() === "sm" ? "text-caption-semibold" : "text-caption-sm-semibold"',
+    '[style.background-color]': 'colorTokenMap[bgColor()]',
+  },
 })
 export class TagComponent {
-bgColor = input<ThemeColor>();
+  bgColor = input<ThemeColorToken>('primary.light.faded');
+  size = input<Extract<Size, 'xs' | 'sm'>>('sm');
+  colorTokenMap = colorTokenMap;
 }

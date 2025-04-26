@@ -1,13 +1,7 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  InputSignal,
-  InputSignalWithTransform,
-  OnInit,
-  input,
-} from '@angular/core';
+import { Component, InputSignal, InputSignalWithTransform, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { IconType, ThemeColor } from '@ikigaidev/model';
+import { IconType, ThemeColorToken } from '@ikigaidev/model';
 import { getColorValue } from '@ikigaidev/util';
 
 @Component({
@@ -22,16 +16,15 @@ import { getColorValue } from '@ikigaidev/util';
     '.mat-icon { display: flex; justify-content: center; align-items: center; width: fit-content; height: fit-content;}',
   ],
 })
-export class IconComponent implements OnInit {
+export class IconComponent {
   icon = input.required<IconType | undefined>();
-  iconColor: InputSignalWithTransform<string | undefined, ThemeColor> = input('white', {
-    transform: (value: ThemeColor) => getColorValue(value),
-  });
+  iconColor: InputSignalWithTransform<string | undefined, ThemeColorToken> = input(
+    'white',
+    {
+      transform: (value: ThemeColorToken) => getColorValue(value),
+    },
+  );
   // iconColor = input<string | ThemeColor>();
   iconSize = input<number>();
   badgeData: InputSignal<number | string | undefined> = input();
-
-  ngOnInit(): void {
-    console.log(this.icon());
-  }
 }

@@ -1,13 +1,13 @@
-<div class="flex">
-  <div>Picture area</div>
-  <div class="flex flex-col justify-between">
-    <div>
-      <p>Chlorella</p>
-      <lib-tag>Heart</lib-tag>
-    </div>
-    <div>
-      <a>Purchase Link</a>
-      <lib-button>Edit</lib-button>
-    </div>
+<div>
+  <img src="https://picsum.photos/200" alt="Picsum pic" />
+</div>
+<div class="card-wrapper w-1/2 flex flex-col justify-between">
+  <div>
+    <p class="text-body-sm-semibold pb-1 nowrap-ellipsis font-medium">Chlorella</p>
+    <lib-tag [size]="'xs'" [bgColor]="'primary.DEFAULT'">Heart</lib-tag>
+  </div>
+  <div class="flex flex-col card-actions">
+    <a class="text-caption-sm-semibold text-underline text-primary pointer">Buy here</a>
+    <lib-button [colorToken]="'secondary.dark'">Edit</lib-button>
   </div>
 </div>

@@ -1,0 +1,22 @@
+@use '@styles' as *;
+
+.mobile-emulator {
+  width: 385px;
+  display: flex;
+  flex-direction: column;
+  border-bottom-right-radius: 44px;
+  border-bottom-left-radius: 44px;
+  background-color: var(--color-gray-background);
+  min-height: 100dvh;
+
+  .shell-header {
+    background-color: var(--color-primary-dark);
+    @include flex-center();
+    border-top-left-radius: var(--border-radius-mobile-corner);
+    border-top-right-radius: var(--border-radius-mobile-corner);
+
+    lib-avatar {
+      transform: translateX(125%);
+    }
+  }
+}

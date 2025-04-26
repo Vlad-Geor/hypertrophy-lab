@@ -1,7 +1,7 @@
 :root {
   /* UI Colors */
-  --color-ui-white: #f0f8ff;
-  --color-ui-black: #1e1e1e;
+  --color-ui-white: var(--color-white);
+  --color-ui-black: var(--color-black);
 
   /* Background */
   --color-ui-background-primary: var(--color-ui-white);
@@ -31,45 +31,8 @@
   --color-border-focus: var(--color-teal-300);
   --color-border-divider: var(--color-neutral-100);
   --color-border-subtle: rgba(203, 251, 241, 0.1);
-
-  // --color-teal-50: #e6f7f6;
-  // --color-teal-100: #b0e8e5;
-  // --color-teal-200: #8adbd7;
-  // --color-teal-300: #54ccc7;
-  // --color-teal-400: #33c1bc;
-  // --color-teal-500: #007a72;
-  // --color-teal-600: #006e67;
-  // --color-teal-700: #00564f;
-  // --color-teal-800: #00433d;
-  // --color-teal-900: #00332e;
-
-  // /* Yellow */
-  // --color-yellow-50: #fffae6;
-  // --color-yellow-100: #ffedb3;
-  // --color-yellow-200: #ffe38d;
-  // --color-yellow-300: #ffd75a;
-  // --color-yellow-400: #ffcf39;
-  // --color-yellow-500: #ffc70f;
-  // --color-yellow-600: #e8b50e;
-  // --color-yellow-700: #b58d0b;
-  // --color-yellow-800: #8c6d08;
-  // --color-yellow-900: #6b5306;
-
-  /* Neutral */
-  --color-neutral-50: #f8f9fa;
-  --color-neutral-100: rgb(241, 243, 245);
-  --color-neutral-200: #e9ecef;
-  --color-neutral-300: #dee2e6;
-  --color-neutral-400: #ced4da;
-  --color-neutral-500: #adb5bd;
-  --color-neutral-600: #868e96;
-  --color-neutral-700: #495057;
-  --color-neutral-800: #343a40;
-  --color-neutral-900: #212529;
-
   /* UI */
-  --color-ui-white: #f0f8ff;
-  --color-ui-black: #1e1e1e;
+  --color-ui-black: var(--color-black);
 
   /* State */
   --color-state-error: #dc3545;
@@ -77,28 +40,22 @@
   --color-state-success: #28a745;
   --color-state-info: #17a2b8;
 
-  --color-primary: theme(colors.teal.500);
-  --color-primary-light: theme(colors.teal.200);
-  --color-primary-dark: theme(colors.teal.950);
-  --color-primary-light-hover: theme(colors.teal.400);
-  // --color-primary-light-faded: --alpha(theme(colors.teal.200) / 30%);
-  --color-primary-light-faded: theme(colors.teal.200);
+  --color-primary: var(--color-teal-500);
+  --color-primary-light: var(--color-teal-200);
+  --color-primary-dark: var(--color-teal-900);
+  --color-primary-light-hover: var(--color-teal-400);
+  --color-primary-light-faded: var(--color-teal-200);
 
-  --color-border-primary: theme(colors.teal.300);
-
-  --color-secondary-light: theme(colors.yellow.400);
-  --color-secondary-dark: theme(colors.yellow.600) --color-white: #f0f8ff;
+  --color-border-primary: var(--color-teal-700);
+  --color-secondary-light: var(--color-yellow-400);
+  --color-secondary-dark: var(--color-yellow-400);
   --color-gray-disabled: hsl(200, 14%, 74%);
   --color-gray-background: hsla(0, 0%, 88%, 0.8);
   --color-gray-background-faded: hsla(0, 0%, 60%, 0.2);
   --color-gray-helper: hsl(0, 0%, 50%);
-  --color-black-text: #1a1a1a;
-  --color-black-ui: #333333;
-  --color-black-background: #121212;
-
-  /* Define font variables */
-  --font-heading: 'Nico Moji', sans-serif;
-  --font-body: 'Poppins', serif;
+  --color-black-text: var(--color-black);
+  // --color-black-ui: #333333;
+  --color-black-ui-background: #121212;
 
   /* Gradient definitions */
   --gradient-primary: linear-gradient(142.02deg, #081f2a 32.53%, #117465 120%);

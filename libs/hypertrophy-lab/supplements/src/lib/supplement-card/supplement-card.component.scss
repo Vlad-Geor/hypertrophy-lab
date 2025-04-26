@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--border-radius-md);
+  padding: var(--size-1);
+  gap: var(--size-2);
+  //   box-shadow: 0 2px 6px 0 var(--color-black-background);
+}
+
+img {
+  height: 100%;
+  width: 100%;
+  object-fit: fill;
+  border-radius: 4px;
+}
+
+.card-wrapper {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.card-actions {
+  margin-bottom: 4px;
+  gap: 8px;
+}

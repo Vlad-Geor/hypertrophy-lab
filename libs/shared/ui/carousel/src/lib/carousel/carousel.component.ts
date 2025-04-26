@@ -1,87 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MuscleGroupExercises } from '@ikigaidev/hl/model';
-import { Subscription, interval, timer } from 'rxjs';
+import { Component, computed, input } from '@angular/core';
+import { Size } from '@ikigaidev/model';
 
-export const workoutObjects: MuscleGroupExercises = {
-  abs: [
-    {
-      targetMuscle: 'abs',
-      targetSubMuscle: 'lower abs',
-      movement: 'crunch',
-      equipment: 'dumbell',
-      reps: 8,
-      sets: 3,
-      weight: 40,
-      weightUnits: 'kg',
-      exerciseGoals: ['size', 'strength']
-    },
-    {
-      targetMuscle: 'abs',
-      targetSubMuscle: 'obliques',
-      movement: 'crunch',
-      equipment: 'bodyweight',
-      weight: 5,
-      reps: 15,
-      sets: 2,
-      exerciseGoals: ['size', 'cardio']
-    },
-    {
-      targetMuscle: 'abs',
-      targetSubMuscle: 'upper abs',
-      movement: 'crunch',
-      equipment: 'dumbell',
-      reps: 20,
-      sets: 2,
-      exerciseGoals: ['size', 'cardio']
-    },
-    {
-      targetMuscle: 'abs',
-      targetSubMuscle: 'upper abs',
-      movement: 'crunch',
-      equipment: 'machine',
-      reps: 15,
-      sets: 2,
-      exerciseGoals: ['size', 'cardio']
-    },
-  ],
-  chest: [
-    {
-      targetMuscle: 'chest',
-      targetSubMuscle: 'upper chest',
-      movement: 'press',
-      equipment: 'barbell',
-      reps: 10,
-      sets: 4,
-      weight: 80,
-      weightUnits: 'kg',
-      exerciseGoals: ['size', 'strength']
-    },
-    {
-      targetMuscle: 'chest',
-      targetSubMuscle: 'mid chest',
-      movement: 'fly',
-      equipment: 'machine',
-      reps: 15,
-      sets: 3,
-      weight: 25,
-      weightUnits: 'kg',
-      exerciseGoals: ['size', 'cardio']
-    },
-  ],
-  shoulders: [
-    {
-      targetMuscle: 'shoulders',
-      targetSubMuscle: 'rear shoulder',
-      movement: 'pull',
-      equipment: 'machine',
-      reps: 15,
-      sets: 3,
-      weight: 25,
-      weightUnits: 'kg',
-      exerciseGoals: ['size', 'cardio']
-    },
-  ],
+export const carouselSizing: Record<
+  Extract<Size, 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'>,
+  number
+> = {
+  sm: 16,
+  md: 24,
+  lg: 32,
+  xl: 40,
+  '2xl': 48,
+  '3xl': 56,
+};
+
+export type CarouselItem = {
+  imageSrc: string;
+  label: string;
 };
 
 @Component({
@@ -89,74 +24,15 @@ export const workoutObjects: MuscleGroupExercises = {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './carousel.component.html',
-  styleUrl: './carousel.component.css',
+  styleUrl: './carousel.component.scss',
+  host: {
+    style: 'display: inline-flex; gap: 12px; border-radius: 999px;',
+    '[style.height.px]': '_size()',
+  },
 })
-export class CarouselComponent implements OnInit, OnDestroy {
-  workouts = [
-    {
-      targetMuscle: 'abs',
-      targetSubMuscle: 'lower abs',
-      movement: 'crunch',
-      equipment: 'dumbell',
-      reps: 8,
-      sets: 3,
-      weight: 40,
-      weightUnits: 'kg',
-    },
-    {
-      targetMuscle: 'abs',
-      targetSubMuscle: 'obliques',
-      movement: 'crunch',
-      equipment: 'bodyweight',
-      weight: 5,
-      reps: 15,
-      sets: 2,
-    },
-    {
-      targetMuscle: 'abs',
-      targetSubMuscle: 'upper abs',
-      movement: 'crunch',
-      equipment: 'dumbell',
-      reps: 20,
-      sets: 2,
-    },
-    {
-      targetMuscle: 'abs',
-      targetSubMuscle: 'upper abs',
-      movement: 'crunch',
-      equipment: 'machine',
-      reps: 15,
-      sets: 2,
-    },
-  ];
-  currentIndex = 0;
-  timerSub$!: Subscription;
-  currentPair!: [unknown, unknown];
+export class CarouselComponent {
+  size = input<Extract<Size, 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'>>();
+  _size = computed(() => carouselSizing[this.size() ?? 'lg']);
 
-  ngOnInit(): void {
-    this.updateCurrentPair();
-    this.startAutoPagination();
-  }
-
-  updateCurrentPair() {
-    // Select two items based on the current index
-    this.currentPair = [
-      this.workouts[this.currentIndex],
-      this.workouts[(this.currentIndex + 1) % this.workouts.length],
-    ];
-    // Increment index for the next pair
-    this.currentIndex = (this.currentIndex + 2) % this.workouts.length;
-  }
-
-  startAutoPagination() {
-    this.timerSub$ = interval(3000).subscribe(() => this.updateCurrentPair());
-  }
-
-  stopAutoPagination() {
-    this.timerSub$.unsubscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.stopAutoPagination();
-  }
+  items = input<CarouselItem[]>([]);
 }

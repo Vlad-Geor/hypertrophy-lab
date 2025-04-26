@@ -1,11 +1,10 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "../../../dist/out-tsc",
     "declaration": true,
     "declarationMap": true,
-    "inlineSources": true,
-    "types": []
+    "types": [],
   },
   "exclude": [
     "src/**/*.spec.ts",

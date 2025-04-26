@@ -1,15 +1,15 @@
+@use './styles/main.scss' as *;
 @forward './styles/main.scss';
-/* You can add global styles to this file, and also import other style files */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+@layer global {
   html {
-    font-family: var(--font-body);
+    font-family: $font-main;
   }
 }
-
 
 /* Example for dark theme (optional) */
 [data-theme='dark'] {
@@ -17,12 +17,4 @@
   --color-secondary-light: #ff8502; /* Adjust for dark theme */
   --color-gray-background: #121212;
   --color-black-background: #000000;
-}
-
-@mixin flex-center() {
-  @apply flex justify-center items-center;
-}
-
-.flex-center {
-  @include flex-center();
 }

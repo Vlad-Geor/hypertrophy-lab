@@ -1,0 +1,19 @@
+.category-carousel {
+  overflow-x: scroll;
+  background-color: var(--color-primary-default);
+  padding-inline: var(--size-3);
+  padding-bottom: var(--size-3);
+  margin-bottom: var(--size-3);
+}
+
+.supplement-inventory-header {
+  padding-inline: var(--size-3);
+  display: flex;
+  justify-content: space-between;
+}
+
+.supplement-inventory-cards {
+  padding-inline: var(--size-3);
+  display: flex;
+  gap: var(--size-2);
+}

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, InputSignal, input } from '@angular/core';
-import { AllowedTextSizes, Direction, IconType, ThemeColor } from '@ikigaidev/model';
+import { AllowedTextSizes, Direction, IconType, ThemeColorToken } from '@ikigaidev/model';
 import { IconComponent } from '../icon/icon.component';
 
 @Component({
@@ -15,6 +15,6 @@ export class IconTextComponent {
   isIconBackground: InputSignal<boolean | undefined> = input<boolean | undefined>(false);
   textPosition: InputSignal<Direction> = input<Direction>('DOWN');
   adjacentText: InputSignal<string> = input('');
-  iconColorTheme: InputSignal<ThemeColor> = input<ThemeColor>('white');
+  iconColorTheme: InputSignal<ThemeColorToken> = input<ThemeColorToken>('white');
   textSize: InputSignal<AllowedTextSizes> = input<AllowedTextSizes>('text-sm');
 }

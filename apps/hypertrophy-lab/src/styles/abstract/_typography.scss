@@ -1,0 +1,220 @@
+$font-main: 'Poppins', sans-serif;
+$font-accent: 'Nico Moji', sans-serif;
+
+$lh-tight: 1.2;
+$lh-base: 1.4;
+$lh-loose: 1.6;
+
+// .text-white {
+//   color: var(--color-white);
+// }
+
+.text-primary {
+  color: var(--color-teal-700);
+}
+
+.text-secondary {
+  color: var(--color-yellow-600);
+}
+
+.text-caption-sm {
+  font-size: 10px;
+  line-height: $lh-base;
+  font-family: $font-main;
+  font-weight: 400;
+}
+.text-caption-sm-semibold {
+  font-size: 10px;
+  line-height: $lh-base;
+  font-family: $font-main;
+  font-weight: 600;
+}
+.text-caption-sm-bold {
+  font-size: 10px;
+  line-height: $lh-base;
+  font-family: $font-main;
+  font-weight: 700;
+}
+
+// Caption - 12px
+.text-caption {
+  font-size: 12px;
+  line-height: $lh-base;
+  font-family: $font-main;
+  font-weight: 400;
+}
+.text-caption-semibold {
+  font-size: 12px;
+  line-height: $lh-base;
+  font-family: $font-main;
+  font-weight: 600;
+}
+.text-caption-bold {
+  font-size: 12px;
+  line-height: $lh-base;
+  font-family: $font-main;
+  font-weight: 700;
+}
+
+// Body - 14px
+.text-body-sm {
+  font-size: 14px;
+  line-height: $lh-loose;
+  font-family: $font-main;
+  font-weight: 400;
+}
+.text-body-sm-semibold {
+  font-size: 14px;
+  line-height: $lh-loose;
+  font-family: $font-main;
+  font-weight: 600;
+}
+.text-body-sm-bold {
+  font-size: 14px;
+  line-height: $lh-loose;
+  font-family: $font-main;
+  font-weight: 700;
+}
+
+// Body - 16px
+.text-body {
+  font-size: 16px;
+  line-height: $lh-loose;
+  font-family: $font-main;
+  font-weight: 400;
+}
+.text-body-semibold {
+  font-size: 16px;
+  line-height: $lh-loose;
+  font-family: $font-main;
+  font-weight: 600;
+}
+.text-body-bold {
+  font-size: 16px;
+  line-height: $lh-loose;
+  font-family: $font-main;
+  font-weight: 700;
+}
+
+// Heading - 18px
+.text-heading-sm {
+  font-size: 18px;
+  line-height: $lh-tight;
+  font-family: $font-main;
+  font-weight: 400;
+}
+.text-heading-sm-semibold {
+  font-size: 18px;
+  line-height: $lh-tight;
+  font-family: $font-main;
+  font-weight: 600;
+}
+.text-heading-sm-bold {
+  font-size: 18px;
+  line-height: $lh-tight;
+  font-family: $font-main;
+  font-weight: 700;
+}
+
+.text-heading-md {
+  font-size: 20px;
+  line-height: $lh-tight;
+  font-family: $font-main;
+  font-weight: 400;
+}
+.text-heading-md-semibold {
+  font-size: 20px;
+  line-height: $lh-tight;
+  font-family: $font-main;
+  font-weight: 600;
+}
+.text-heading-md-bold {
+  font-size: 20px;
+  line-height: $lh-tight;
+  font-family: $font-main;
+  font-weight: 700;
+}
+
+// Heading - 24px
+.text-heading {
+  font-size: 24px;
+  line-height: $lh-tight;
+  font-family: $font-main;
+  font-weight: 400;
+}
+.text-heading-semibold {
+  font-size: 24px;
+  line-height: $lh-tight;
+  font-family: $font-main;
+  font-weight: 600;
+}
+.text-heading-bold {
+  font-size: 24px;
+  line-height: $lh-tight;
+  font-family: $font-main;
+  font-weight: 700;
+}
+
+// Title - 32px
+.text-title {
+  font-size: 32px;
+  line-height: $lh-tight;
+  font-family: $font-main;
+  font-weight: 400;
+}
+.text-title-semibold {
+  font-size: 32px;
+  line-height: $lh-tight;
+  font-family: $font-main;
+  font-weight: 600;
+}
+.text-title-bold {
+  font-size: 32px;
+  line-height: $lh-tight;
+  font-family: $font-main;
+  font-weight: 700;
+}
+
+// ACCENT FONT (Nico Moji) — used for high-attention headings
+
+.text-accent-heading {
+  font-size: 24px;
+  line-height: $lh-tight;
+  font-family: $font-accent;
+  font-weight: 400;
+}
+.text-accent-heading-semibold {
+  font-size: 24px;
+  line-height: $lh-tight;
+  font-family: $font-accent;
+  font-weight: 600;
+}
+.text-accent-heading-bold {
+  font-size: 24px;
+  line-height: $lh-tight;
+  font-family: $font-accent;
+  font-weight: 800;
+}
+
+.text-accent-title {
+  font-size: 32px;
+  line-height: $lh-tight;
+  font-family: $font-accent;
+  font-weight: 400;
+}
+.text-accent-title-semibold {
+  font-size: 32px;
+  line-height: $lh-tight;
+  font-family: $font-accent;
+  font-weight: 600;
+}
+.text-accent-title-bold {
+  font-size: 32px;
+  line-height: $lh-tight;
+  font-family: $font-accent;
+  font-weight: 800;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
