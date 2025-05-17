@@ -10,6 +10,11 @@ export const appRoutes: Route[] = [
     component: LoginComponent,
   },
   {
+    path: 'login-success',
+    loadComponent: () => import('@ikigaidev/dashboard').then((m) => m.DashboardComponent),
+    data: { loginSuccess: 'YUUP' },
+  },
+  {
     path: '',
     component: DashboardShellComponent,
     children: [
