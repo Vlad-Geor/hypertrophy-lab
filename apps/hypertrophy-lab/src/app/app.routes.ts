@@ -1,9 +1,14 @@
 import { Route } from '@angular/router';
+import { LoginComponent } from '@ikigaidev/login';
 import { PlaygroundComponent } from '@ikigaidev/playground';
 import { DashboardShellComponent } from './dashboard-shell/shell.component';
 import { FeatureShellComponent } from './feature-shell/feature-shell.component';
 
 export const appRoutes: Route[] = [
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
   {
     path: '',
     component: DashboardShellComponent,

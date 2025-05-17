@@ -1,4 +1,5 @@
 import { Supplement } from '@ikigaidev/hl/model';
+import { CarouselItem} from "@ikigaidev/model"
 import { of } from 'rxjs';
 
 const supplementData: Supplement[] = [
@@ -22,6 +23,16 @@ const supplementData: Supplement[] = [
     dosageForm: 'pill',
     standardQuantity: 1,
   },
+];
+
+export const categories: CarouselItem[] = [
+  { imageSrc: '', label: 'Energy' },
+  { imageSrc: '', label: 'General' },
+  { imageSrc: '', label: 'Hypertrophy' },
+  { imageSrc: '', label: 'Immune' },
+  { imageSrc: '', label: 'Memory' },
+  { imageSrc: '', label: 'Cognitive' },
+  { imageSrc: '', label: 'Heart' },
 ];
 
 export const supplements = of(supplementData);

@@ -1,4 +1,25 @@
-<div class="input-container">
-  <lib-icon [iconSize]="16" icon="search"></lib-icon>
-  <input class="input-element" [placeholder]="placeholder()" [type]="type()" />
+@if (label()) {
+  <label [for]="id()" style="flex: 1">{{ label() }}:</label>
+}
+
+<div
+  class="input-container"
+  [style.border-radius]="
+    rounded() ? 'var(--border-radius-full)' : 'var(--border-radius-md)'
+  "
+>
+  @if (withSearch()) {
+    <lib-icon [iconSize]="16" icon="search"></lib-icon>
+  }
+
+  <input
+    class="input-element placeholder:text-sm outline-none"
+    [value]="_value() || ''"
+    [placeholder]="placeholder() || ''"
+    [type]="type()"
+    [disabled]="disabled()"
+    [id]="id() || 'input'"
+    (input)="onInputChange($event)"
+    (blur)="onBlur()"
+  />
 </div>

@@ -1,20 +1,21 @@
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express, { Application } from 'express';
-import supplementRouter from './routes/supplement.routes';
 
-const app: Application = express();
-const port = process.env.PORT || 3000;
+import { registerRoutes } from './routes/register-routes';
 
-// Parse JSON bodies
+export const app: Application = express();
+
 app.use(express.json());
+app.use(cookieParser());
 
-// Mount supplement routes at /api/supplements
-app.use('/api/supplements', supplementRouter);
+app.use(
+  cors({
+    origin: 'http://localhost:4200',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }),
+);
 
-// Health check route
-app.get('/api/health', (req, res) => {
-  res.send('Server is healthy!');
-});
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+registerRoutes(app);

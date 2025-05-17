@@ -3,18 +3,19 @@
   <lib-carousel [items]="categories" [size]="'2xl'"></lib-carousel>
 </section>
 
-<section class="supplement-inventory-header">
+<section class="supplement-inventory-header mb-3">
   <h5 class="text-body-semibold mb-1">Inventory (Memory)</h5>
-  <lib-icon icon="info" [iconColor]="'accent.DEFAULT'" (click)="addSupp()"></lib-icon>
+  <button lib-button (click)="addSupp()">Add</button>
+  <!-- <lib-icon icon="info" [iconColor]="'accent.DEFAULT'" (click)="addSupp()"></lib-icon> -->
 </section>
 
 <div class="supplement-inventory-cards">
-  @for (supp of clientSupplements.value(); track $index) {
-    <hl-supplement-card></hl-supplement-card>
+  @if (supplements.hasValue()) {
+    @for (supp of supplements.value(); track $index) {
+      <hl-supplement-card
+        [supplement]="{ quantityLeft: 0, consumptionDaysLeft: 0, itemData: supp }"
+      ></hl-supplement-card>
+    }
   }
 </div>
-<!-- <div class="flex justify-between flex-grow items-center">
-  <p class="flex-grow font-semibold">Inventory(Energy)</p>
-  <lib-icon icon="expand_more"></lib-icon>
-</div>
--->
+<button (click)="goToApi()">Api Call</button>

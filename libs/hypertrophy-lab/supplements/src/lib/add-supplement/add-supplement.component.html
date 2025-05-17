@@ -1,3 +1,21 @@
-<div class="h-40 w-96 rounded-lg bg-white shadow-lg">
-  <p>Overlay Ref</p>
-</div>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
+  <lib-input
+    formControlName="name"
+    label="Vitamin Name"
+    placeholder="Vitamin Name"
+  ></lib-input>
+  <lib-input
+    formControlName="description"
+    placeholder="Description"
+    label="Description"
+  ></lib-input>
+  <!-- <lib-input formControlName="healthTarget"></lib-input>
+  <lib-input formControlName="dosageForm"></lib-input>
+  <lib-input formControlName="standardQuantity"></lib-input>
+  <lib-input formControlName="quantityUnit"></lib-input>
+  <lib-input formControlName="recommendedUsage"></lib-input>
+  <lib-input formControlName="purchaseLinks"></lib-input> -->
+
+  <!-- <lib-button type="submit">Submit</lib-button> -->
+  <button lib-button icon="check_circle" type="submit">Submit</button>
+</form>

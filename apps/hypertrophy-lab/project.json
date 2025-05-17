@@ -66,10 +66,12 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "hypertrophy-lab:build:production"
+          "buildTarget": "hypertrophy-lab:build:production",
+          "proxyConfig": "apps/hypertrophy-lab/proxy.conf.json"
         },
         "development": {
-          "buildTarget": "hypertrophy-lab:build:development"
+          "buildTarget": "hypertrophy-lab:build:development",
+          "proxyConfig": "apps/hypertrophy-lab/proxy.conf.json"
         }
       },
       "defaultConfiguration": "development"

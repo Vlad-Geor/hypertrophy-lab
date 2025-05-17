@@ -1,1 +1,1 @@
-export * from './lib/mock/mock.component';
+export * from './lib/const/supplement.mock';

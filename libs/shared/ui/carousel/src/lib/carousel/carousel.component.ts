@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
-import { Size } from '@ikigaidev/model';
+import { CarouselItem, Size } from '@ikigaidev/model';
 
 export const carouselSizing: Record<
   Extract<Size, 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'>,
@@ -14,10 +14,6 @@ export const carouselSizing: Record<
   '3xl': 56,
 };
 
-export type CarouselItem = {
-  imageSrc: string;
-  label: string;
-};
 
 @Component({
   selector: 'lib-carousel',
