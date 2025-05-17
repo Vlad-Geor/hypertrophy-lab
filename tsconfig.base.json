@@ -51,7 +51,8 @@
       "@ikigaidev/tokens": ["libs/shared/tokens/src/index.ts"],
       "@ikigaidev/ui": ["libs/shared/ui/index.ts"],
       "@ikigaidev/util": ["libs/shared/util/src/index.ts"],
-      "@styles": ["apps/hypertrophy-lab/src/styles.scss"]
+      "@styles": ["apps/hypertrophy-lab/src/styles.scss"],
+      "@styles/*": ["apps/hypertrophy-lab/src/styles/*"],
     }
   },
   "exclude": ["node_modules", "tmp"],
