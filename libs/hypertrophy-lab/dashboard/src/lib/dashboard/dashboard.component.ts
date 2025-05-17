@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {LoginComponent} from '@ikigaidev/login'
+import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { LoginComponent } from '@ikigaidev/login';
 
 @Component({
   selector: 'hl-dashboard',
@@ -8,4 +9,10 @@ import {LoginComponent} from '@ikigaidev/login'
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent {}
+export class DashboardComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+
+  ngOnInit(): void {
+    console.log(this.route.routeConfig?.data?.['loginSuccess']);
+  }
+}

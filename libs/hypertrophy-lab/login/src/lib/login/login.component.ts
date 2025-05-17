@@ -45,7 +45,7 @@ export class LoginComponent implements AfterViewInit {
     console.log('entered onTelegramAuth');
     this.http
       .post(
-        'https://2c35-2a06-c701-4cdb-2e00-d534-5bf6-4ebb-12a5.ngrok-free.app/auth/telegram',
+        'https://hypertrophy-lab.vercel.app/api/v1/auth/telegram',
         authData,
       )
       .subscribe((response: any) => {
