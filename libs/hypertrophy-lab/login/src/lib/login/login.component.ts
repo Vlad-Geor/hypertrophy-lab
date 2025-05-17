@@ -33,7 +33,7 @@ export class LoginComponent implements AfterViewInit {
     this.renderer.setAttribute(
       script,
       'data-auth-url',
-      'https://20db-2a06-c701-4cdb-2e00-4921-d1ce-b30a-a905.ngrok-free.app/api/v1/auth/telegram',
+      'https://hypertrophy-lab.vercel.app/api/v1/auth/telegram',
     ); // Backend endpoint for authentication
     this.renderer.setAttribute(script, 'data-callback', 'onTelegramAuth');
     // Append the script to the desired DOM element
@@ -45,7 +45,7 @@ export class LoginComponent implements AfterViewInit {
     console.log('entered onTelegramAuth');
     this.http
       .post(
-        'https://hypertrophy-lab.vercel.app/api/v1/auth/telegram',
+        'https://hypertrophy-lab.vercel.app/api/v1/login-success',
         authData,
       )
       .subscribe((response: any) => {
