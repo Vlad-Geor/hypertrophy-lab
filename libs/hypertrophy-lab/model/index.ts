@@ -1,3 +1,5 @@
+export * from '../../shared/model/src/lib/supplement/supplement.mock';
+export * from '../../shared/model/src/lib/supplement/supplement.model';
 export * from './exercise/exercise-details.model';
 export * from './exercise/exercise-equipment.model';
 export * from './exercise/movement.model';
@@ -5,6 +7,4 @@ export * from './exercise/muscle-group-exercises.model';
 export * from './inventory/inventory-supplement.model';
 export * from './muscle/muscle-group.model';
 export * from './muscle/sub-muscles.model';
-export * from './supplement/supplement.mock';
-export * from './supplement/supplement.model';
 export * from './workout.model';

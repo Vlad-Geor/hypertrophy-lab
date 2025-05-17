@@ -1,4 +1,4 @@
-import { Supplement } from '../supplement/supplement.model';
+import { Supplement } from '../../../shared/model/src/lib/supplement/supplement.model';
 
 export type SupplementInventoryItem = {
   quantityLeft: number;

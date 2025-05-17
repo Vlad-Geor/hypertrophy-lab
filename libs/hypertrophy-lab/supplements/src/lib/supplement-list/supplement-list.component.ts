@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient, httpResource } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { CarouselComponent } from '@ikigaidev/carousel';
 import { GlobalOverlayDirective } from '@ikigaidev/directive';
-import { IconComponent } from '@ikigaidev/elements';
-import {
-  CarouselComponent,
-  CarouselItem,
-} from '../../../../../shared/ui/carousel/src/lib/carousel/carousel.component';
-import { supplements } from '../../../../mock/src/lib/const/supplement.mock';
+import { ButtonComponent, IconComponent } from '@ikigaidev/elements';
+import { Supplement } from '@ikigaidev/hl/model';
+import { categories, supplements } from '@ikigaidev/mock';
+import { API_BASE_URL } from '@ikigaidev/shared';
 import { AddSupplementComponent } from '../add-supplement/add-supplement.component';
 import { SupplementCardComponent } from '../supplement-card/supplement-card.component';
 
@@ -15,7 +15,7 @@ export const API_URL = 'https://api.example.com/supplements';
 
 @Component({
   selector: 'hl-supplement-list',
-  imports: [CommonModule, SupplementCardComponent, IconComponent, CarouselComponent],
+  imports: [CommonModule, SupplementCardComponent, IconComponent, CarouselComponent, ButtonComponent],
   templateUrl: './supplement-list.component.html',
   styleUrl: './supplement-list.component.scss',
   host: {
@@ -25,15 +25,11 @@ export const API_URL = 'https://api.example.com/supplements';
 })
 export class SupplementListComponent {
   private readonly globalOverlay = inject(GlobalOverlayDirective);
-  categories: CarouselItem[] = [
-    { imageSrc: '', label: 'Energy' },
-    { imageSrc: '', label: 'General' },
-    { imageSrc: '', label: 'Hypertrophy' },
-    { imageSrc: '', label: 'Immune' },
-    { imageSrc: '', label: 'Memory' },
-    { imageSrc: '', label: 'Cognitive' },
-    { imageSrc: '', label: 'Heart' },
-  ];
+  private readonly baseUrl = inject(API_BASE_URL);
+
+  supplements = httpResource<Supplement[]>(`${this.baseUrl}/supplement`);
+
+  categories = categories;
 
   // if our endpoint was an external api, or a server
   // private supplemetResource = httpResource<Supplement[]>(API_URL);
@@ -42,9 +38,11 @@ export class SupplementListComponent {
     loader: () => supplements,
   });
 
-  constructor() {}
-
   addSupp(): void {
-    this.globalOverlay.open(AddSupplementComponent);
+    this.globalOverlay.open(AddSupplementComponent, [], {});
+  }
+
+  goToApi(): void {
+    console.log('nada');
   }
 }

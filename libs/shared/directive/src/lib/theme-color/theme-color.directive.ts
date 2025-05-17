@@ -14,9 +14,6 @@ export class ThemeColorDirective {
   constructor() {
     effect(() => {
       const cssValue = colorTokenMap[this.colorToken() ?? ''];
-      console.log(this.colorToken());
-      console.log(colorTokenMap);
-      console.log(cssValue);
       this.renderer.setStyle(this.el.nativeElement, this.cssProperty(), cssValue);
     });
   }

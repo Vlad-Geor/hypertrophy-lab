@@ -1,8 +1,9 @@
 /** @format */
 
 import knex, { Knex } from 'knex';
-import config from '../../knexfile';
+import knexConfig from '../knexfile';
 
-// Choose an environment, e.g., 'development' or 'production'
-const environment = process.env.NODE_ENV || 'development';
-export const db: Knex = knex(config[environment]);
+const { NODE_ENV = 'development' } = process.env;
+
+const config = knexConfig[NODE_ENV as 'development' | 'production'];
+export const db: Knex = knex(config);

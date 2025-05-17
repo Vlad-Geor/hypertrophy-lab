@@ -1,4 +1,4 @@
-import { Supplement } from '../models/supplement.model';
+import { Supplement } from '@ikigaidev/hl/model';
 import { SupplementRepository } from '../repositories/supplement.repository';
 
 export class SupplementService {
@@ -26,7 +26,10 @@ export class SupplementService {
     return this.supplementRepo.create(suppData);
   }
 
-  public async updateSupplement(id: number, suppData: Partial<Supplement>): Promise<Supplement | undefined> {
+  public async updateSupplement(
+    id: number,
+    suppData: Partial<Supplement>,
+  ): Promise<Supplement | undefined> {
     // Example rule: disallow updating name to empty
     if (suppData.name === '') {
       throw new Error('Name cannot be empty');

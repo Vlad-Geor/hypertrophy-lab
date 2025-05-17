@@ -2,7 +2,8 @@
 
 .input-container {
   border: 1px solid var(--color-border-primary);
-  border-radius: var(--border-radius-full);
+  box-sizing: border-box;
+  width: 200px;
   padding-inline: var(--size-2);
   padding-block: var(--size-1);
   @include flex-center();
@@ -11,10 +12,14 @@
   .input-element {
     background-color: transparent;
     border: none;
-    caret-color: white;
+    // caret-color: white;
 
     &:focus {
       outline: none;
     }
   }
+}
+
+input[type='number'] {
+  padding: 0;
 }

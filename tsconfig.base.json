@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@api-knexfile": ["apps/api/knexfile.ts"],
       "@ikigaidev/accordion": ["libs/shared/ui/accordion/src/index.ts"],
       "@ikigaidev/carousel": ["libs/shared/ui/carousel/src/index.ts"],
       "@ikigaidev/dashboard": ["libs/hypertrophy-lab/dashboard/src/index.ts"],
@@ -28,9 +29,6 @@
         "libs/hypertrophy-lab/workout/ui/exercise-list/src/index.ts"
       ],
       "@ikigaidev/fixture": ["libs/shared/fixture/src/index.ts"],
-      "@ikigaidev/form-field": [
-        "libs/shared/ui/elements/src/lib/form-field/form-field/src/index.ts"
-      ],
       "@ikigaidev/header": ["libs/shared/layout/header/src/index.ts"],
       "@ikigaidev/hl/daily-workout": [
         "libs/hypertrophy-lab/workout/feature/daily-workout/src/index.ts"
@@ -41,10 +39,12 @@
         "libs/hypertrophy-lab/ui/muscle-group-card/src/index.ts"
       ],
       "@ikigaidev/hl/ui/pipe": ["libs/hypertrophy-lab/ui/pipe/src/index.ts"],
+      "@ikigaidev/login": ["libs/hypertrophy-lab/login/src/index.ts"],
       "@ikigaidev/mock": ["libs/hypertrophy-lab/mock/src/index.ts"],
       "@ikigaidev/model": ["libs/shared/model/src/index.ts"],
       "@ikigaidev/navigation": ["libs/shared/layout/navigation/src/index.ts"],
       "@ikigaidev/playground": ["libs/playground/src/index.ts"],
+      "@ikigaidev/shared": ["libs/hypertrophy-lab/shared/src/index.ts"],
       "@ikigaidev/supplements": ["libs/hypertrophy-lab/supplements/src/index.ts"],
       "@ikigaidev/tag": ["libs/shared/ui/tag/src/index.ts"],
       "@ikigaidev/test": ["libs/hypertrophy-lab/ui/test/src/index.ts"],
@@ -54,5 +54,8 @@
       "@styles": ["apps/hypertrophy-lab/src/styles.scss"]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["node_modules", "tmp"],
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  }
 }
