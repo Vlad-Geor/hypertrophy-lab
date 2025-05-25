@@ -3,7 +3,11 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx run hypertrophy-lab:serve",
+    "client": "nx run hypertrophy-lab:serve",
+    "api": "nx run api:serve",
+    "knex": "knex",
+    "migrate": "knex migrate:latest --knexfile apps/api/src/knexfile.cjs --migrations-directory migrations",
+    "rollback": "knex migrate:rollback --knexfile apps/api/src/knexfile.cjs --migrations-directory migrations",
     "lint": "nx run hypertrophy-lab:lint --fix",
     "sb": "nx run hypertrophy-lab:storybook"
   },
@@ -68,6 +72,7 @@
     "@tailwindcss/forms": "^0.5.10",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
+    "@types/knex": "^0.15.2",
     "@types/node": "22.10.5",
     "@typescript-eslint/utils": "^8.19.0",
     "angular-eslint": "19.3.0",

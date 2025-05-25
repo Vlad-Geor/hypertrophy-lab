@@ -15,6 +15,8 @@ export class LoginComponent implements AfterViewInit {
   private readonly http = inject(HttpClient);
   telegram = inject(TelegramService);
 
+  API_URL = 'https://a4e3-2a06-c701-4ce6-b900-cdc3-d837-90cd-80cd.ngrok-free.app/api/v1';
+
   ngAfterViewInit(): void {
     this.loadTelegramWidget();
   }
@@ -30,11 +32,7 @@ export class LoginComponent implements AfterViewInit {
     this.renderer.setAttribute(script, 'async', 'true');
     this.renderer.setAttribute(script, 'data-telegram-login', 'vlads_fitness_bot');
     this.renderer.setAttribute(script, 'data-size', 'large');
-    this.renderer.setAttribute(
-      script,
-      'data-auth-url',
-      'https://hypertrophy-lab.vercel.app/api/v1/auth/telegram',
-    ); // Backend endpoint for authentication
+    this.renderer.setAttribute(script, 'data-auth-url', `${this.API_URL}/auth/telegram`);
     this.renderer.setAttribute(script, 'data-callback', 'onTelegramAuth');
     // Append the script to the desired DOM element
     const targetElement = this.renderer.selectRootElement('#telegram-login-btn', true);
@@ -44,10 +42,7 @@ export class LoginComponent implements AfterViewInit {
   onTelegramAuth(authData: any) {
     console.log('entered onTelegramAuth');
     this.http
-      .post(
-        'https://hypertrophy-lab.vercel.app/api/v1/login-success',
-        authData,
-      )
+      .post(`${this.API_URL}/login-success`, authData)
       .subscribe((response: any) => {
         localStorage.setItem('authToken', response.token);
       });

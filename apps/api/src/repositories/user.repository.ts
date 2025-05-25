@@ -8,11 +8,16 @@ export default {
     telegramId: string;
     username: string;
     firstName: string;
+    avatar_url: string;
   }) {
     const existing = await db(USER_TABLE).where({ telegram_id: data.telegramId }).first();
     if (existing) {
       await db(USER_TABLE)
-        .update({ username: data.username, first_name: data.firstName })
+        .update({
+          username: data.username,
+          first_name: data.firstName,
+          avatar_url: data.avatar_url,
+        })
         .where({ telegram_id: data.telegramId });
       return { ...existing, ...data };
     }
@@ -21,6 +26,7 @@ export default {
         telegram_id: data.telegramId,
         username: data.username,
         first_name: data.firstName,
+        avatar_url: data.avatar_url,
       })
       .returning('id');
     return { id, ...data };

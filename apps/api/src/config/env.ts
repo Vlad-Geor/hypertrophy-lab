@@ -1,6 +1,7 @@
-import dotenv from 'dotenv';
+import { config } from 'dotenv';
+import { resolve } from 'path';
 
-dotenv.config();
+config({ path: resolve(__dirname, '../../.env') });
 
 export function loadEnv() {
   return {

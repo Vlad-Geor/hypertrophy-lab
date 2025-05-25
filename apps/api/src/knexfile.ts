@@ -5,6 +5,8 @@ import { loadEnv } from './config/env';
 
 const { DB_URL } = loadEnv();
 
+console.log('> Knex DB_URL = ', DB_URL);
+
 const knexConfig: { [key: string]: Knex.Config } = {
   development: {
     client: 'pg',
@@ -25,7 +27,7 @@ const knexConfig: { [key: string]: Knex.Config } = {
       ssl: { rejectUnauthorized: false },
     },
     migrations: {
-      directory: './src/migrations',
+      directory: './migrations',
       extension: 'ts',
     },
     debug: false,
