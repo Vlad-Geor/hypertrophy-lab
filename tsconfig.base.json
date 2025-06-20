@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@api-knexfile": ["apps/api/knexfile.ts"],
+      "hl-env": ["apps/hypertrophy-lab/src/environments/environment.ts"],
       "@ikigaidev/accordion": ["libs/shared/ui/accordion/src/index.ts"],
       "@ikigaidev/carousel": ["libs/shared/ui/carousel/src/index.ts"],
       "@ikigaidev/dashboard": ["libs/hypertrophy-lab/dashboard/src/index.ts"],
