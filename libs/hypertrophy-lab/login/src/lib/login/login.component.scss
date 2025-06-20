@@ -1,7 +1,15 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+
 .mobile-emulator {
-  width: 385px;
+  min-width: 385px;
+  max-width: fit-content;
+  padding: 12px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   border-bottom-right-radius: 44px;
   border-bottom-left-radius: 44px;
   background-color: var(--color-gray-background);

@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, Renderer2, inject } from '@angular/core';
 import { TelegramService } from '../telegram/service/telegram.service';
 
+const APP_URL = 'https://68fe-2a06-c701-4cfc-3800-b148-bbd8-477f-cae0.ngrok-free.app';
+
 @Component({
   selector: 'hl-login',
   imports: [CommonModule],
@@ -15,7 +17,7 @@ export class LoginComponent implements AfterViewInit {
   private readonly http = inject(HttpClient);
   telegram = inject(TelegramService);
 
-  API_URL = 'https://a4e3-2a06-c701-4ce6-b900-cdc3-d837-90cd-80cd.ngrok-free.app/api/v1';
+  API_URL = `${APP_URL}/api/v1`;
 
   ngAfterViewInit(): void {
     this.loadTelegramWidget();

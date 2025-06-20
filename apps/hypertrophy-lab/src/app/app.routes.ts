@@ -1,25 +1,29 @@
 import { Route } from '@angular/router';
-import { LoginComponent } from '@ikigaidev/login';
 import { PlaygroundComponent } from '@ikigaidev/playground';
 import { DashboardShellComponent } from './dashboard-shell/shell.component';
 import { FeatureShellComponent } from './feature-shell/feature-shell.component';
 
 export const appRoutes: Route[] = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'login',
+  },
+  {
     path: 'login',
-    component: LoginComponent,
+    loadComponent: () => import('@ikigaidev/login').then((m) => m.LoginComponent),
   },
   {
     path: 'login-success',
-    loadComponent: () => import('@ikigaidev/dashboard').then((m) => m.DashboardComponent),
-    data: { loginSuccess: 'YUUP' },
+    redirectTo: 'inventory',
+    // loadComponent: () => import('@ikigaidev/dashboard').then((m) => m.DashboardComponent),
   },
   {
     path: '',
     component: DashboardShellComponent,
     children: [
       {
-        path: '',
+        path: 'dashboard',
         loadChildren: () => import('@ikigaidev/dashboard').then((m) => m.dashboardRoutes),
       },
       {
@@ -44,5 +48,5 @@ export const appRoutes: Route[] = [
     path: 'pg',
     component: PlaygroundComponent,
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: 'login' },
 ];
