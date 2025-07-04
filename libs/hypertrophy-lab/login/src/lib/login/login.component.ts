@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, Renderer2, inject } from '@angular/core';
 import { TelegramService } from '../telegram/service/telegram.service';
@@ -7,7 +7,7 @@ const APP_URL = 'https://68fe-2a06-c701-4cfc-3800-b148-bbd8-477f-cae0.ngrok-free
 
 @Component({
   selector: 'hl-login',
-  imports: [CommonModule],
+  imports: [CommonModule, NgTemplateOutlet],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   providers: [TelegramService],

@@ -2,12 +2,18 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { ButtonComponent, InputComponent } from '@ikigaidev/elements';
+import { ButtonComponent, InputComponent, SelectComponent } from '@ikigaidev/elements';
 import { Supplement } from '@ikigaidev/hl/model';
 
 @Component({
   selector: 'hl-add-supplement',
-  imports: [CommonModule, ReactiveFormsModule, InputComponent, ButtonComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    SelectComponent,
+    InputComponent,
+    ButtonComponent,
+  ],
   templateUrl: './add-supplement.component.html',
   styleUrl: './add-supplement.component.scss',
 })

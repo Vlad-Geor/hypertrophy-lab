@@ -1,9 +1,17 @@
 @use '@styles/abstract/_mixin.scss' as *;
 
+:host {
+  gap: 4px;
+  &.vertical {
+    align-items: center;
+    flex-direction: column;
+  }
+}
+
 .input-container {
   border: 1px solid var(--color-border-primary);
   box-sizing: border-box;
-  width: 200px;
+  width: 100%;
   padding-inline: var(--size-2);
   padding-block: var(--size-1);
   @include flex-center();

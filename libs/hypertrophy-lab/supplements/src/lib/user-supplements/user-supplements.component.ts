@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, httpResource } from '@angular/common/http';
+import { httpResource } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { CarouselComponent } from '@ikigaidev/carousel';
@@ -15,15 +15,21 @@ export const API_URL = 'https://api.example.com/supplements';
 
 @Component({
   selector: 'hl-supplement-list',
-  imports: [CommonModule, SupplementCardComponent, IconComponent, CarouselComponent, ButtonComponent],
-  templateUrl: './supplement-list.component.html',
-  styleUrl: './supplement-list.component.scss',
+  imports: [
+    CommonModule,
+    SupplementCardComponent,
+    IconComponent,
+    CarouselComponent,
+    ButtonComponent,
+  ],
+  templateUrl: './user-supplements.component.html',
+  styleUrl: './user-supplements.component.scss',
   host: {
     style: 'display:inline-flex; flex-direction: column',
   },
   providers: [GlobalOverlayDirective],
 })
-export class SupplementListComponent {
+export class UserSupplementsComponent {
   private readonly globalOverlay = inject(GlobalOverlayDirective);
   private readonly baseUrl = inject(API_BASE_URL);
 

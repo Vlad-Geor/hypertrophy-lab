@@ -11,7 +11,8 @@ type InputType = string | number;
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
   host: {
-    style: 'border:none; display: inline-flex; align-items:center; gap:8px; padding: 0;',
+    style: 'border:none; display: inline-flex; padding: 0;',
+    '[class.vertical]': 'orientation() === "vertical"',
   },
   providers: [
     {
@@ -28,6 +29,7 @@ export class InputComponent<
   type = input<T>();
   withSearch = input<boolean>(false);
   rounded = input<boolean>(false);
+  orientation = input<'vertical' | 'horizontal'>();
 
   override writeValue(value: T): void {
     if (value) {
