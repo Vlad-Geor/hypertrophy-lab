@@ -1,18 +1,26 @@
 <div class="mobile-emulator justify-start gap-3">
-  <p class="text-xl">Hypertrophy Lab</p>
-  <div class="relative">
-    <div class="login-image-primary">
-      <img src="/assets/images/login-person-primary.jpg" alt="Primary Image" />
+  <p class="text-glitch pl-2">Hypertrophy Lab</p>
+  <div class="login-body-wrapper">
+    <div class="login-visuals">
+      <div class="login-image-primary">
+        <img src="/assets/images/login-person-primary.jpg" alt="Primary Image" />
+      </div>
+      <div class="login-image-secondary">
+        <img src="/assets/images/login-person-secondary.jpg" alt="Secondary Image" />
+      </div>
+      <ng-container [ngTemplateOutlet]="vectors"></ng-container>
     </div>
-    <div class="login-image-secondary">
-      <img src="/assets/images/login-person-secondary.jpg" alt="Secondary Image" />
+    <div class="login-text-actions flex flex-col items-center">
+      <p class="text-xl text-body-semibold text-center mb-1">Sign In</p>
+      <p class="text-gray-helper mb-2 w-3/4 text-center">
+        Please Sign In using one of the following Options
+      </p>
+      <div class="flex flex-col gap-2 items-center">
+        <p class="text-3xl text-primary-dark">Login using Telegram</p>
+        <div id="telegram-login-btn"></div>
+      </div>
     </div>
-    <ng-container [ngTemplateOutlet]="vectors"></ng-container>
   </div>
-  <p class="text-xl text-body-semibold text-center">Sign In</p>
-  <p class="text-gray-helper">Please Sign In using one of the following Options</p>
-  <p class="text-3xl text-primary-dark">Login using Telegram</p>
-  <div id="telegram-login-btn"></div>
 </div>
 
 <ng-template #vectors>

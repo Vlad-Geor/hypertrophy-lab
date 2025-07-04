@@ -1,6 +1,62 @@
+@use '../../../../../../apps/hypertrophy-lab/src/styles/abstract/z-index' as *;
+
 :host {
   display: flex;
   justify-content: center;
+}
+
+.login-body-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .login-visuals {
+    position: relative;
+    height: 35vh;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .login-image-primary {
+      position: absolute;
+      left: 36%;
+      top: 25%;
+      z-index: $z-50;
+    }
+
+    .login-image-secondary {
+      position: absolute;
+      left: 19%;
+      top: 7%;
+      z-index: $z-40;
+    }
+
+    .svg {
+      &-yellow-upper {
+      }
+      &-yellow-lower {
+      }
+
+      &-green-dot {
+      }
+
+      &-green-line {
+      }
+    }
+  }
+
+  .login-text-actions {
+    padding-bottom: 25vh;
+  }
 }
 
 .mobile-emulator {
@@ -29,35 +85,4 @@
   width: 127px;
   background-color: blue;
   border-radius: 999px;
-}
-
-.svg {
-  &-yellow-upper {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  &-yellow-lower {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
-  &-green-dot {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
-  &-green-line {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-}
-
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
