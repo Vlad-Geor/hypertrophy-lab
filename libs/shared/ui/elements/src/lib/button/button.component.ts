@@ -8,11 +8,14 @@ import { IconComponent } from '../icon/icon.component';
   selector: 'button[lib-button]',
   imports: [CommonModule, IconComponent],
   template: `
-    <lib-icon
-      [icon]="icon()"
-      [iconColor]="iconColor()"
-      [iconSize]="iconSize()"
-    ></lib-icon>
+    @if (icon()) {
+      <lib-icon
+        [icon]="icon()"
+        [iconColor]="iconColor()"
+        [iconSize]="iconSize()"
+      ></lib-icon>
+    }
+
     <ng-content></ng-content>
   `,
   host: {

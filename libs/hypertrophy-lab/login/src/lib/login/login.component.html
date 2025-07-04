@@ -1,4 +1,83 @@
-<div class="mobile-emulator items-center gap-3">
+<div class="mobile-emulator justify-start gap-3">
+  <p class="text-xl">Hypertrophy Lab</p>
+  <div class="relative">
+    <div class="login-image-primary">
+      <img src="/assets/images/login-person-primary.jpg" alt="Primary Image" />
+    </div>
+    <div class="login-image-secondary">
+      <img src="/assets/images/login-person-secondary.jpg" alt="Secondary Image" />
+    </div>
+    <ng-container [ngTemplateOutlet]="vectors"></ng-container>
+  </div>
+  <p class="text-xl text-body-semibold text-center">Sign In</p>
+  <p class="text-gray-helper">Please Sign In using one of the following Options</p>
   <p class="text-3xl text-primary-dark">Login using Telegram</p>
   <div id="telegram-login-btn"></div>
 </div>
+
+<ng-template #vectors>
+  <div>
+    <svg
+      class="svg-yellow-upper"
+      width="254"
+      height="254"
+      viewBox="0 0 254 254"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M249 5L5.15825 248.842"
+        stroke="#FFC710"
+        stroke-width="10"
+        stroke-linecap="round"
+      />
+    </svg>
+    <svg
+      class="svg-yellow-lower"
+      width="237"
+      height="238"
+      viewBox="0 0 237 238"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M231.425 5.60437L5.00002 232.029"
+        stroke="#FFC710"
+        stroke-width="10"
+        stroke-linecap="round"
+      />
+    </svg>
+    <svg
+      class="svg-green-dot"
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        x="0.197891"
+        y="0.251709"
+        width="11.6115"
+        height="11.6115"
+        rx="5.80576"
+        fill="#117465"
+      />
+    </svg>
+    <svg
+      class="svg-green-line"
+      width="222"
+      height="371"
+      viewBox="0 0 222 371"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M189.568 369.389L3.2215 1.82861L32.6807 1.82861L219.028 369.389H189.568Z"
+        fill="#00786F"
+        stroke="#00786F"
+        stroke-width="3"
+      />
+    </svg>
+  </div>
+</ng-template>

@@ -1,3 +1,4 @@
+<!-- eslint-disable @angular-eslint/template/elements-content -->
 <section class="category-carousel">
   <h5 class="text-body-semibold mb-2 text-white">Filter By Category</h5>
   <lib-carousel [items]="categories" [size]="'2xl'"></lib-carousel>
@@ -5,7 +6,7 @@
 
 <section class="supplement-inventory-header mb-3">
   <h5 class="text-body-semibold mb-1">Inventory (Memory)</h5>
-  <button lib-button (click)="addSupp()">Add</button>
+  <button lib-button [icon]="'add'" (click)="addSupp()"></button>
   <!-- <lib-icon icon="info" [iconColor]="'accent.DEFAULT'" (click)="addSupp()"></lib-icon> -->
 </section>
 

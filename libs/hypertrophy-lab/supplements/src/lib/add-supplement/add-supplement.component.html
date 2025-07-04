@@ -1,14 +1,14 @@
+<p class="text-xl font-semibold text-center mb-2">Add new Supplement</p>
+
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
+  <lib-input formControlName="name" label="Name" placeholder="Supp name"></lib-input>
   <lib-input
-    formControlName="name"
-    label="Vitamin Name"
-    placeholder="Vitamin Name"
-  ></lib-input>
-  <lib-input
+    orientation="vertical"
     formControlName="description"
     placeholder="Description"
     label="Description"
   ></lib-input>
+  <lib-select [value]="'Select value'"></lib-select>
   <!-- <lib-input formControlName="healthTarget"></lib-input>
   <lib-input formControlName="dosageForm"></lib-input>
   <lib-input formControlName="standardQuantity"></lib-input>

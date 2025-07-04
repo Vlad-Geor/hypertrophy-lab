@@ -6,5 +6,6 @@ export * from './lib/icon-text/icon-text.component';
 export * from './lib/icon/icon.component';
 export * from './lib/input/input.component';
 export * from './lib/search/search.component';
+export * from './lib/select/select.component';
 export * from './lib/tag/tag.component';
 export * from './lib/textarea/textarea.component';

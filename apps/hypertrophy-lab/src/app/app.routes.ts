@@ -7,7 +7,7 @@ export const appRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'login',
+    redirectTo: 'dashboard',
   },
   {
     path: 'login',
@@ -40,7 +40,7 @@ export const appRoutes: Route[] = [
       {
         path: 'inventory',
         loadComponent: () =>
-          import('@ikigaidev/supplements').then((m) => m.SupplementListComponent),
+          import('@ikigaidev/supplements').then((m) => m.UserSupplementsComponent),
       },
     ],
   },
