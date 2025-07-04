@@ -5,6 +5,8 @@
   "scripts": {
     "client": "nx run hypertrophy-lab:serve",
     "api": "nx run api:serve",
+    "build-api": "npm install && npx nx build api",
+    "start-api": "node dist/apps/api/main.js",
     "ngrok-client": "ngrok http 4200",
     "knex": "knex",
     "migrate": "knex migrate:latest --knexfile apps/api/src/knexfile.cjs --migrations-directory migrations",
