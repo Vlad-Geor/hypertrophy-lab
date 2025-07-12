@@ -1,5 +1,3 @@
-@use '@styles/abstract/_mixin.scss' as *;
-
 :host {
   gap: 4px;
   &.vertical {
@@ -9,12 +7,12 @@
 }
 
 .input-container {
-  border: 1px solid var(--color-border-primary);
+  border: 1px solid var(--color-ui-white-a60);
+  background-color: var(--color-teal-800-a20);
   box-sizing: border-box;
   width: 100%;
-  padding-inline: var(--size-2);
+  padding-inline: var(--size-3);
   padding-block: var(--size-1);
-  @include flex-center();
   gap: var(--size-1);
 
   .input-element {

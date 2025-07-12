@@ -1,13 +1,14 @@
 import { IconType } from '@ikigaidev/model';
-import { FabNavItem } from '../model/fab-nav-item.model';
+import { FabNavItem, NavItemType } from '../model/fab-nav-item.model';
 
 export const createIconItem = (
   icon: IconType,
   routerLink: string,
-  isSelected: boolean,
+  navType: NavItemType,
 ): FabNavItem => ({
   icon,
   routerLink,
   iconSize: 36,
-  iconColor: isSelected ? 'white' : 'gray.disabled',
+  navType,
+  iconColor: 'white',
 });

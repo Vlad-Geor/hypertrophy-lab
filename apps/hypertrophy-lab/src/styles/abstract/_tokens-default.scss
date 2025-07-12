@@ -1,11 +1,17 @@
 :root {
   /* UI Colors */
   --color-ui-white: var(--color-white);
+  --color-ui-white-a60: var(--color-white-a60);
   --color-ui-black: var(--color-black);
 
   /* Background */
-  --color-ui-background-primary: var(--color-ui-white);
+  --color-ui-background-white: var(--color-ui-white);
+  --color-ui-background-black: var(--color-ui-black);
+  --color-ui-background-primary-overlay: var(--color-teal-900);
+  --color-ui-background-primary-dark: var(--color-teal-900);
+  --color-ui-background-primary-darkest: var(--color-teal-950);
   --color-ui-background-secondary: var(--color-neutral-50);
+  --color-ui-background-tertiary: var(--color-neutral-100);
   --color-ui-background-tertiary: var(--color-neutral-100);
 
   /* Text */

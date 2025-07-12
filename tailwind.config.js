@@ -50,6 +50,7 @@ module.exports = {
         },
         white: {
           DEFAULT: 'var(--color-ui-white)',
+          faded: 'var(--color-ui-white-a60)',
         },
         black: {
           text: 'var(--color-black-text)',

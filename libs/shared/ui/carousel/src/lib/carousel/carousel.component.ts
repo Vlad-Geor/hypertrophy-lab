@@ -23,7 +23,6 @@ export const carouselSizing: Record<
   styleUrl: './carousel.component.scss',
   host: {
     style: 'display: inline-flex; gap: 12px; border-radius: 999px;',
-    '[style.height.px]': '_size()',
   },
 })
 export class CarouselComponent {

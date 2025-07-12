@@ -40,7 +40,7 @@ export const appRoutes: Route[] = [
       {
         path: 'inventory',
         loadComponent: () =>
-          import('@ikigaidev/supplements').then((m) => m.UserSupplementsComponent),
+          import('@ikigaidev/supplements').then((m) => m.SupplementListComponent),
       },
     ],
   },

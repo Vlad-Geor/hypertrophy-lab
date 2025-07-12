@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
 import { ButtonComponent, InputComponent, SelectComponent } from '@ikigaidev/elements';
 import { Supplement } from '@ikigaidev/hl/model';
 
@@ -13,6 +14,7 @@ import { Supplement } from '@ikigaidev/hl/model';
     SelectComponent,
     InputComponent,
     ButtonComponent,
+    MatSelectModule,
   ],
   templateUrl: './add-supplement.component.html',
   styleUrl: './add-supplement.component.scss',
@@ -27,6 +29,10 @@ export class AddSupplementComponent {
     dosageForm: 'pill',
     healthTarget: 'energy production',
   });
+
+  constructor() {
+    this.form.valueChanges.subscribe(console.log);
+  }
 
   onSubmit(): void {
     this.http

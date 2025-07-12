@@ -3,17 +3,13 @@
 }
 
 <div
-  class="input-container"
+  class="input-container flex-center"
   [style.border-radius]="
     rounded() ? 'var(--border-radius-full)' : 'var(--border-radius-md)'
   "
 >
-  @if (withSearch()) {
-    <lib-icon [iconSize]="16" icon="search"></lib-icon>
-  }
-
   <input
-    class="input-element placeholder:text-sm outline-none"
+    class="input-element placeholder:text-xs placeholder:text-white-faded outline-none text-white text-sm"
     [value]="_value() || ''"
     [placeholder]="placeholder() || ''"
     [type]="type()"
@@ -22,4 +18,8 @@
     (input)="onInputChange($event)"
     (blur)="onBlur()"
   />
+
+  @if (withSearch()) {
+    <lib-icon [iconSize]="16" icon="search"></lib-icon>
+  }
 </div>

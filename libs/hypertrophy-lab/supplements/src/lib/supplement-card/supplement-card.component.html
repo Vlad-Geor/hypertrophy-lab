@@ -8,7 +8,7 @@
       {{ supp?.itemData?.name }}
     </p>
     <lib-tag [size]="'xs'" [bgColor]="'primary.DEFAULT'">
-      {{ supp?.itemData?.healthTarget }}
+      {{ supp?.itemData?.healthTarget ?? 'Target' }}
     </lib-tag>
   </div>
   <div class="flex flex-col card-actions">

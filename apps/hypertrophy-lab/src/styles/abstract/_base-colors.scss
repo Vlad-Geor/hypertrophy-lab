@@ -1,5 +1,6 @@
 :root {
   --color-white: #fcfcfc;
+  --color-white-a60: rgba(252, 252, 252, 0.6);
 
   --color-black: #1e1e1e;
   --color-black-ui: #333333;
@@ -14,7 +15,10 @@
   --color-teal-600: #006e67;
   --color-teal-700: #00564f;
   --color-teal-800: #00433d;
-  --color-teal-900: #00332e;
+  --color-teal-800-a80: rgba(0, 67, 61, 0.8);
+  --color-teal-800-a20: rgba(0, 67, 61, 0.2);
+  --color-teal-900: #021b1b;
+  --color-teal-950: #011312;
 
   /* Yellow */
   --color-yellow-50: #fffae6;
