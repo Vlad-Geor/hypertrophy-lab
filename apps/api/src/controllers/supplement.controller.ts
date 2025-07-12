@@ -23,6 +23,7 @@ export class SupplementController {
   public static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       console.log('getAll');
+      console.log(req.host);
 
       const supplements = await supplementService.getAllSupplements();
       res.send(supplements);

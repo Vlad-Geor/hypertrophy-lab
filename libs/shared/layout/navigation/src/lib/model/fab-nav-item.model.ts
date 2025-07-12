@@ -1,8 +1,11 @@
 import { IconType, ThemeColorToken } from '@ikigaidev/model';
 
+export type NavItemType = 'inventory' | 'workouts' | 'settings' | 'nutrition';
+
 export type FabNavItem = {
   icon: IconType;
-  iconSize: number;
-  iconColor: ThemeColorToken;
   routerLink: string;
+  navType: NavItemType;
+  iconSize?: number;
+  iconColor?: ThemeColorToken;
 };

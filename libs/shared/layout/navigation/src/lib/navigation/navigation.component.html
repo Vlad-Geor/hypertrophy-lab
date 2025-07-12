@@ -1,14 +1,36 @@
-<nav class="py-4 rounded-[44px] flex bg-white shadow-md justify-around">
-  @for (item of navItems; track $index) {
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<nav class="py-4 rounded-[44px] flex bg-primary-dark shadow-md justify-around">
   <div
-    class="rounded-2xl p-2 flex-center"
-    [ngClass]="{ 'bg-gradient-primary': isSelected }"
+    class="nav-item"
+    [ngClass]="{ 'bg-gradient-primary': selectedItem() }"
+    (click)="onNavClick(null)"
   >
-    <lib-icon
-      [icon]="item.icon"
-      [iconSize]="item.iconSize"
-      [iconColor]="item.iconColor"
-    ></lib-icon>
+    <svg
+      class="text-white"
+      width="42"
+      height="43"
+      viewBox="0 0 42 43"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M14.5022 15.6208L9.57206 20.555C7.98438 22.1392 7 24.3284 7 26.75C7 31.583 10.9169 35.5 15.75 35.5C18.1716 35.5 20.3608 34.5156 21.945 32.9279L26.8787 27.9973L14.5022 15.6208Z"
+        fill="currentColor"
+      />
+      <path
+        d="M35 16.25C35 11.4169 31.083 7.5 26.25 7.5C23.866 7.5 21.7109 8.45856 20.1337 10.0038L20.125 9.99506L15.1208 15.0022L27.4973 27.3787L32.5049 22.375L32.4962 22.3662C34.0414 20.7891 35 18.6322 35 16.25ZM31.9375 16.6884C31.6955 16.6884 31.5 16.4919 31.5 16.2509C31.5 13.3507 29.1493 11.0009 26.25 11.0009V11C26.008 11 25.8125 10.804 25.8125 10.5625C25.8125 10.321 26.008 10.125 26.25 10.125C26.2509 10.125 26.2517 10.1259 26.253 10.1259C29.6345 10.1272 32.375 12.8686 32.375 16.2509C32.375 16.4919 32.1794 16.6884 31.9375 16.6884Z"
+        fill="currentColor"
+      />
+    </svg>
   </div>
+  @for (item of navItems; track $index) {
+    <div
+      class="nav-item"
+      [ngClass]="{ 'bg-gradient-primary': selectedItem() }"
+      (click)="onNavClick(item)"
+    >
+      <lib-icon [icon]="item.icon" [iconSize]="item.iconSize"></lib-icon>
+    </div>
   }
 </nav>

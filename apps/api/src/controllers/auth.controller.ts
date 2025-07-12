@@ -16,8 +16,6 @@ export async function telegramCallback(req: Request, res: Response) {
 
     res.redirect(`${FRONT_URL}/login-success`);
   } catch (err) {
-    console.log(err);
-
     res.status(403).send('Authentication failed');
   }
 }

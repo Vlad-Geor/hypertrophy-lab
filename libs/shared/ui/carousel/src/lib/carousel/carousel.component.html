@@ -1,7 +1,12 @@
 @for (item of items(); track $index) {
-  <img
-    class="shadow-custom-dark"
-    [src]="`https://picsum.photos/${200 + $index}`"
-    alt="picsum image (dog)"
-  />
+  <div class="text-white flex flex-col gap-1">
+    <img
+      class="shadow-custom-dark rounded-full"
+      [style.height.px]="_size()"
+      [style.width.px]="_size()"
+      [src]="`https://picsum.photos/${200 + $index}`"
+      alt="picsum image (dog)"
+    />
+    <p class="text-xs">{{ item.label }}</p>
+  </div>
 }

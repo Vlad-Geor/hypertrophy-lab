@@ -1,2 +1,9 @@
 <!-- <label></label> -->
-<p class="text-sm">{{ _value() }}</p>
+<mat-form-field [formControl]="selectControl">
+  <mat-label>Favorite food</mat-label>
+  <mat-select>
+    @for (option of options(); track option) {
+      <mat-option [value]="option.name">{{ option.target }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
