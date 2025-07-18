@@ -14,6 +14,7 @@ module.exports = {
             faded: 'var(--color-primary-light-faded)',
           },
           dark: 'var(--color-primary-dark)',
+          darkest: 'var(--color-ui-background-primary-darkest)',
         },
         secondary: {
           light: 'var(--color-secondary-light)',

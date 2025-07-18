@@ -55,7 +55,7 @@
           "outputHashing": "all",
           "fileReplacements": [
             {
-              "replace": "apps/hypertrophy-lab/src/environments/environment.ts",
+              "replace": "libs/shared/config/src/lib/env.ts",
               "with":    "apps/hypertrophy-lab/src/environments/environment.prod.ts"
             }
           ]
@@ -63,7 +63,13 @@
         "development": {
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "libs/shared/config/src/lib/env.ts",
+              "with":    "apps/hypertrophy-lab/src/environments/environment.ts"
+            }
+          ]
         }
       },
       "defaultConfiguration": "production"

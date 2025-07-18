@@ -1,5 +1,5 @@
 import { Supplement } from '@ikigaidev/hl/model';
-import { CarouselItem} from "@ikigaidev/model"
+import { CarouselItem } from '@ikigaidev/model';
 import { of } from 'rxjs';
 
 const supplementData: Supplement[] = [
@@ -10,7 +10,7 @@ const supplementData: Supplement[] = [
     purchaseLinks: ['https://www.amazon.com/Vitamin-D-3-5000IU-Softgels/dp/B00I7X2Q4G'],
     quantityUnit: 'mg',
     dosageForm: 'powder',
-    standardQuantity: 1000,
+    servingSize: 1000,
   },
   {
     name: 'Vitamin C',
@@ -21,7 +21,7 @@ const supplementData: Supplement[] = [
     ],
     quantityUnit: 'mg',
     dosageForm: 'pill',
-    standardQuantity: 1,
+    servingSize: 1,
   },
 ];
 

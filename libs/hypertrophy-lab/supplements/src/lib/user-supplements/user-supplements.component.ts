@@ -5,10 +5,10 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CarouselComponent } from '@ikigaidev/carousel';
 import { GlobalOverlayDirective } from '@ikigaidev/directive';
-import { ButtonComponent, IconComponent } from '@ikigaidev/elements';
+import { ButtonComponent, IconComponent, TagComponent } from '@ikigaidev/elements';
 import { Supplement } from '@ikigaidev/hl/model';
 import { categories, supplements } from '@ikigaidev/mock';
-import { API_BASE_URL } from '@ikigaidev/shared';
+import { API_BASE_URL } from '@ikigaidev/hl/shared';
 import { AddSupplementComponent } from '../add-supplement/add-supplement.component';
 import { SupplementCardComponent } from '../supplement-card/supplement-card.component';
 
@@ -17,6 +17,7 @@ import { SupplementCardComponent } from '../supplement-card/supplement-card.comp
   imports: [
     CommonModule,
     SupplementCardComponent,
+    TagComponent,
     IconComponent,
     CarouselComponent,
     ReactiveFormsModule,

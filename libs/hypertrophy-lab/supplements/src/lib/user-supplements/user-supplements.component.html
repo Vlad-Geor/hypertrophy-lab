@@ -1,13 +1,18 @@
 <!-- eslint-disable @angular-eslint/template/elements-content -->
-<section class="category-carousel">
-  <h5 class="text-body-semibold mb-2 text-white">Filter By Category</h5>
-  <lib-carousel [items]="categories" [size]="'2xl'"></lib-carousel>
-</section>
-
 <section class="supplement-inventory-header mb-3">
-  <h5 class="text-body-semibold mb-1">Inventory (Memory)</h5>
-  <button lib-button [icon]="'add'" (click)="addSupp()"></button>
-  <!-- <lib-icon icon="info" [iconColor]="'accent.DEFAULT'" (click)="addSupp()"></lib-icon> -->
+  <div class="flex items-center gap-2">
+    <h5 class="text-body-semibold mb-1 text-white text-xl">Inventory</h5>
+    <lib-tag bgColor="">Memory</lib-tag>
+  </div>
+  <button
+    class="hover:bg-primary-light justify-self-end"
+    lib-button
+    [icon]="'add'"
+    (click)="addSupp()"
+  ></button>
+</section>
+<section class="category-carousel p-1">
+  <lib-carousel [items]="categories" [size]="'2xl'"></lib-carousel>
 </section>
 
 <div class="supplement-inventory-cards">
@@ -19,4 +24,3 @@
     }
   }
 </div>
-<button (click)="goToApi()">Api Call</button>

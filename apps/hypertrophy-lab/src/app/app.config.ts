@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { API_BASE_URL } from '@ikigaidev/shared';
+import { API_BASE_URL } from '@ikigaidev/hl/shared';
 import { environment } from '../environments/environment';
 import { appRoutes } from './app.routes';
 

@@ -18,7 +18,9 @@
       "@api-knexfile": ["apps/api/knexfile.ts"],
       "@ikigaidev/accordion": ["libs/shared/ui/accordion/src/index.ts"],
       "@ikigaidev/carousel": ["libs/shared/ui/carousel/src/index.ts"],
+      "@ikigaidev/config": ["libs/shared/config/src/index.ts"],
       "@ikigaidev/dashboard": ["libs/hypertrophy-lab/dashboard/src/index.ts"],
+      "@ikigaidev/data-access": ["libs/shared/data-access/src/index.ts"],
       "@ikigaidev/decorators": ["libs/shared/decorators/src/index.ts"],
       "@ikigaidev/directive": ["libs/shared/directive/src/index.ts"],
       "@ikigaidev/elements": ["libs/shared/ui/elements/src/index.ts"],
@@ -34,6 +36,7 @@
         "libs/hypertrophy-lab/workout/feature/daily-workout/src/index.ts"
       ],
       "@ikigaidev/hl/model": ["libs/hypertrophy-lab/model/index.ts"],
+      "@ikigaidev/hl/shared": ["libs/hypertrophy-lab/shared/src/index.ts"],
       "@ikigaidev/hl/ui": ["libs/hypertrophy-lab/ui/index.js"],
       "@ikigaidev/hl/ui/muscle-group-card": [
         "libs/hypertrophy-lab/ui/muscle-group-card/src/index.ts"
@@ -44,7 +47,6 @@
       "@ikigaidev/model": ["libs/shared/model/src/index.ts"],
       "@ikigaidev/navigation": ["libs/shared/layout/navigation/src/index.ts"],
       "@ikigaidev/playground": ["libs/playground/src/index.ts"],
-      "@ikigaidev/shared": ["libs/hypertrophy-lab/shared/src/index.ts"],
       "@ikigaidev/supplements": ["libs/hypertrophy-lab/supplements/src/index.ts"],
       "@ikigaidev/tag": ["libs/shared/ui/tag/src/index.ts"],
       "@ikigaidev/test": ["libs/hypertrophy-lab/ui/test/src/index.ts"],

@@ -10,8 +10,8 @@ import { IconComponent } from '../icon/icon.component';
   template: `
     @if (icon()) {
       <lib-icon
+        [ngClass]="{ 'bg-secondary-light text-white': appearance() === 'fill' }"
         [icon]="icon()"
-        [iconColor]="iconColor()"
         [iconSize]="iconSize()"
       ></lib-icon>
     }
@@ -20,18 +20,18 @@ import { IconComponent } from '../icon/icon.component';
   `,
   host: {
     class: `text-caption inline-flex justify-center items-center gap-1 px-2
-     py-1 rounded-md border-primary cursor-pointer
-      border w-fit hover:bg-gray-200 transition font-medium`,
+     py-1 rounded-md hover:cursor-pointer w-fit transition font-medium`,
     '[attr.type]': 'type()',
     '[disabled]': 'disabled()',
+    '[class]': 'appearance() === "fill" ? "bg-red-300" : "bg-primary"',
   },
 })
 export class ButtonComponent extends ThemeColoredComponent {
   bgColor = input<ThemeColorToken>('primary.DEFAULT');
   badge = input<BadgeConfig>();
   icon = input<IconType>();
-  iconColor = input<ThemeColorToken>('accent.DEFAULT');
   iconSize = input<number>();
   disabled = input<boolean>();
+  appearance = input<'transparent' | 'fill'>('transparent');
   type = input<'button' | 'submit'>('button');
 }

@@ -5,6 +5,7 @@
   --color-ui-black: var(--color-black);
 
   /* Background */
+  --color-ui-background-layer-00: var(--color-gray-background);
   --color-ui-background-white: var(--color-ui-white);
   --color-ui-background-black: var(--color-ui-black);
   --color-ui-background-primary-overlay: var(--color-teal-900);
@@ -47,7 +48,7 @@
   --color-state-info: #17a2b8;
 
   --color-primary: var(--color-teal-500);
-  --color-primary-light: var(--color-teal-200);
+  --color-primary-light: var(--color-teal-700);
   --color-primary-dark: var(--color-teal-900);
   --color-primary-light-hover: var(--color-teal-400);
   --color-primary-light-faded: var(--color-teal-200);
@@ -56,7 +57,7 @@
   --color-secondary-light: var(--color-yellow-400);
   --color-secondary-dark: var(--color-yellow-400);
   --color-gray-disabled: hsl(200, 14%, 74%);
-  --color-gray-background: hsla(0, 0%, 88%, 0.8);
+  --color-gray-background: #efefef;
   --color-gray-background-faded: hsla(0, 0%, 60%, 0.2);
   --color-gray-helper: hsl(0, 0%, 50%);
   --color-black-text: var(--color-black);

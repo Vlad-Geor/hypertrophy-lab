@@ -1,12 +1,10 @@
 @for (item of items(); track $index) {
-  <div class="text-white flex flex-col gap-1">
+  <div class="text-white w-14 flex flex-col gap-1">
     <img
-      class="shadow-custom-dark rounded-full"
-      [style.height.px]="_size()"
-      [style.width.px]="_size()"
+      class="shadow-custom-dark rounded-full hover:cursor-pointer h-13 w-13"
       [src]="`https://picsum.photos/${200 + $index}`"
       alt="picsum image (dog)"
     />
-    <p class="text-xs">{{ item.label }}</p>
+    <p class="text-xs nowrap-ellipsis">{{ item.label }}</p>
   </div>
 }

@@ -1,36 +1,32 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { IconComponent } from '@ikigaidev/elements';
 import { IconType } from '@ikigaidev/model';
-import { FabNavItem, NavItemType } from '../model/fab-nav-item.model';
-
-type NavItem = {
-  icon: IconType;
-  routerLink: string;
-};
+import { NavItem } from '../model/fab-nav-item.model';
+import { createIconItem } from '../util/create-nav-item.util';
 
 @Component({
   selector: 'lib-navigation',
   standalone: true,
-  imports: [CommonModule, IconComponent],
+  imports: [CommonModule, IconComponent, RouterModule],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss',
 })
 export class NavigationComponent {
   selectedItem = signal<NavItem | null>(null);
 
-  private readonly icons: NavItemType[] = [
-    { icon: 'fitness_center',  },
-    // { icon: 'ramen_dining', routerLink: '' },
-    // { icon: 'person', routerLink: '' },
+  private readonly icons: NavItem[] = [
+    { icon: 'fitness_center' as IconType, link: '', navType: 'workouts' },
+    { icon: 'ramen_dining', link: '', navType: 'nutrition' },
+    { icon: 'person', link: '', navType: 'settings' },
   ];
 
-  navItems: FabNavItem[] = [];
-  // this.icons.map((icon) =>
-  //   createIconItem(icon.icon, icon.routerLink),
-  // );
+  navItems: NavItem[] = this.icons.map((icon) =>
+    createIconItem(icon.icon, icon.link, icon.navType),
+  );
 
-  onNavClick(item: FabNavItem | null): void {
+  onNavClick(item: NavItem | null): void {
     console.log(item);
   }
 }
