@@ -1,8 +1,10 @@
 export type IconType =
   | 'notifications'
   | 'notifications_none'
+  | 'add_a_photo'
   | 'fitness_center'
   | 'ramen_dining'
+  | 'photo_camera'
   | 'favorite'
   | 'filter'
   | 'add'

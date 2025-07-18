@@ -7,22 +7,78 @@
     formControlName="description"
     placeholder="Description"
   ></lib-input>
-  <!-- <lib-select
-    [value]="'Select value'"
-    [options]="[
-      { name: 'option A', target: 'Muscle' },
-      { name: 'Option B', target: 'Memory' },
-    ]"
-  ></lib-select> -->
 
-  <!-- <label></label> -->
-  <!-- <lib-input formControlName="healthTarget"></lib-input>
-  <lib-input formControlName="dosageForm"></lib-input>
-  <lib-input formControlName="standardQuantity"></lib-input>
-  <lib-input formControlName="quantityUnit"></lib-input>
-  <lib-input formControlName="recommendedUsage"></lib-input>
-  <lib-input formControlName="purchaseLinks"></lib-input> -->
+  <div class="flex gap-2">
+    <input
+      formControlName="itemCount"
+      type="number"
+      placeholder="Item Amount"
+      class="flex-1 max-h-12 border-primary-dark rounded-md focus:border-primary-light placeholder:text-sm"
+    />
 
-  <!-- <lib-button type="submit">Submit</lib-button> -->
-  <button lib-button icon="check_circle" type="submit">Submit</button>
+    <mat-form-field>
+      <mat-label>Units</mat-label>
+      <mat-select formControlName="quantityUnit">
+        @for (unit of quantityUnits; track unit) {
+          <mat-option [value]="unit">{{ unit }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="flex gap-2">
+    <input
+      formControlName="servingSize"
+      type="number"
+      placeholder="Amount per serving"
+      class="flex-1 max-h-12 border-primary-dark rounded-md focus:border-primary-light placeholder:text-sm"
+    />
+    <mat-form-field>
+      <mat-label>Target</mat-label>
+      <mat-select formControlName="healthTarget">
+        @for (target of healthTargetKeys; track target) {
+          <mat-option [value]="target">{{ target }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="px-2">
+    <p class="mb-3">Image</p>
+    @if (addedImageUrl()) {
+      <img
+        class="h-40 w-full object-cover object-top rounded-lg"
+        src="/assets/images/login-person-secondary.jpg"
+        alt="Supplement Image"
+      />
+    } @else {
+      <div class="h-40 w-full rounded-lg bg-gray-background p-4 flex">
+        <div
+          class="flex-1 rounded-md flex items-center justify-center hover:bg-gray-200 hover:cursor-pointer transition-all duration-150"
+        >
+          <input
+            type="file"
+            accept="image/*"
+            (change)="onFileInput($event)"
+            #fileInput
+            hidden
+          />
+          <button
+            type="button"
+            class="btn flex items-center gap-4"
+            (click)="fileInput.click()"
+          >
+            Upload image
+            <lib-icon
+              [iconSize]="48"
+              [iconColor]="'black'"
+              [icon]="'add_a_photo'"
+            ></lib-icon>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+  <button lib-button appearance="fill" type="submit">Submit</button>
 </form>

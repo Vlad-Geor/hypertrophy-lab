@@ -10,7 +10,9 @@ export async function up(knex: Knex): Promise<void> {
     table.string('health_target');
     table.string('dosage_form');
     table.string('quantity_unit');
-    table.integer('standard_quantity');
+    table.string('img_url');
+    table.string('brand');
+    table.integer('serving_size');
     table.string('recommended_usage');
     table.specificType('purchase_links', 'text[]');
   });

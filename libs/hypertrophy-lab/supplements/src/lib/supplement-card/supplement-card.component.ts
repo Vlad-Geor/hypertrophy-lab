@@ -14,7 +14,7 @@ export class SupplementCardComponent {
 
   supp: Supplement = {
     name: 'Chrollera',
-    healthTarget: 'heart health',
+    healthTarget: 'heart',
     purchaseLinks: ['www.amazon.com'],
   };
 }

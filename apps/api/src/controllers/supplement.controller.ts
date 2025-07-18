@@ -34,6 +34,8 @@ export class SupplementController {
 
   public static async create(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log(req.body);
+
       const newSupplement = await supplementService.createSupplement(req.body);
       res.status(201).json(newSupplement);
     } catch (error) {

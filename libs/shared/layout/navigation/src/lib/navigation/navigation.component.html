@@ -1,10 +1,11 @@
 <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
 <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
-<nav class="py-4 rounded-[44px] flex bg-primary-dark shadow-md justify-around">
+<nav class="py-4 rounded-[44px] flex bg-primary-darkest shadow-md justify-around">
   <div
     class="nav-item"
-    [ngClass]="{ 'bg-gradient-primary': selectedItem() }"
-    (click)="onNavClick(null)"
+    [routerLink]="'inventory'"
+    routerLinkActive="bg-primary-light"
+    #rla="routerLinkActive"
   >
     <svg
       class="text-white"
@@ -27,8 +28,9 @@
   @for (item of navItems; track $index) {
     <div
       class="nav-item"
-      [ngClass]="{ 'bg-gradient-primary': selectedItem() }"
-      (click)="onNavClick(item)"
+      [ngClass]="{ 'bg-primary-light': selectedItem() === item }"
+      (click)="selectedItem.set(item)"
+      [routerLink]="item.link"
     >
       <lib-icon [icon]="item.icon" [iconSize]="item.iconSize"></lib-icon>
     </div>
