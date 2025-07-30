@@ -1,6 +1,7 @@
 /** @format */
 
 import type { Knex } from 'knex';
+import { knexSnakeCaseMappers } from 'objection';
 import { loadEnv } from './config/env';
 
 const { DB_URL } = loadEnv();
@@ -12,6 +13,7 @@ const knexConfig: { [key: string]: Knex.Config } = {
       connectionString: DB_URL,
       ssl: { rejectUnauthorized: false },
     },
+    ...knexSnakeCaseMappers(),
     migrations: {
       directory: './src/migrations',
       extension: 'ts',
@@ -24,6 +26,7 @@ const knexConfig: { [key: string]: Knex.Config } = {
       connectionString: DB_URL,
       ssl: { rejectUnauthorized: false },
     },
+    ...knexSnakeCaseMappers(),
     migrations: {
       directory: './migrations',
       extension: 'ts',

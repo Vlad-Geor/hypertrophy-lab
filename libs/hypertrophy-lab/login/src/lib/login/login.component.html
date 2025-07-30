@@ -23,6 +23,22 @@
   </div>
 </div>
 
+<button
+  *ngIf="(authService.isAuthenticated$ | async) === false"
+  (click)="authService.loginWithRedirect()"
+  class="btn"
+>
+  Log in
+</button>
+
+<button
+  *ngIf="authService.isAuthenticated$ | async"
+  (click)="authService.logout({ logoutParams: { returnTo: window.location.origin } })"
+  class="btn"
+>
+  Log out
+</button>
+
 <ng-template #vectors>
   <div>
     <svg

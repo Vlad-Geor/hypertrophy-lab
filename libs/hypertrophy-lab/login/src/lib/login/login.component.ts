@@ -1,6 +1,7 @@
 import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, Renderer2, inject } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
 import { TelegramService } from '../telegram/service/telegram.service';
 
 const APP_URL = 'https://68fe-2a06-c701-4cfc-3800-b148-bbd8-477f-cae0.ngrok-free.app';
@@ -15,9 +16,18 @@ const APP_URL = 'https://68fe-2a06-c701-4cfc-3800-b148-bbd8-477f-cae0.ngrok-free
 export class LoginComponent implements AfterViewInit {
   private readonly renderer = inject(Renderer2);
   private readonly http = inject(HttpClient);
-  telegram = inject(TelegramService);
+  readonly authService = inject(AuthService);
+  private readonly telegram = inject(TelegramService);
+
+  window = window;
 
   API_URL = `${APP_URL}/api/v1`;
+
+  constructor() {
+    this.authService.error$.subscribe(console.log);
+    this.authService.user$.subscribe(console.log);
+    // this.authService.
+  }
 
   ngAfterViewInit(): void {
     this.loadTelegramWidget();

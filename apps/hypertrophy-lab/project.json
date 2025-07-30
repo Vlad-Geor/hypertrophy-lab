@@ -67,7 +67,7 @@
           "fileReplacements": [
             {
               "replace": "libs/shared/config/src/lib/env.ts",
-              "with":    "apps/hypertrophy-lab/src/environments/environment.ts"
+              "with": "apps/hypertrophy-lab/src/environments/environment.ts"
             }
           ]
         }
@@ -86,7 +86,11 @@
           "proxyConfig": "apps/hypertrophy-lab/proxy.conf.json"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "hypertrophy-lab:build:development",
+        "proxyConfig": "apps/hypertrophy-lab/proxy.conf.json"
+      }
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",

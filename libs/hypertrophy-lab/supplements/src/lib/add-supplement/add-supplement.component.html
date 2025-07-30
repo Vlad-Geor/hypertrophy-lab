@@ -10,9 +10,9 @@
 
   <div class="flex gap-2">
     <input
-      formControlName="itemCount"
+      formControlName="stockQuantity"
       type="number"
-      placeholder="Item Amount"
+      placeholder="Quantity per bottle"
       class="flex-1 max-h-12 border-primary-dark rounded-md focus:border-primary-light placeholder:text-sm"
     />
 
@@ -45,10 +45,10 @@
 
   <div class="px-2">
     <p class="mb-3">Image</p>
-    @if (addedImageUrl()) {
+    @if (previewUrl()) {
       <img
-        class="h-40 w-full object-cover object-top rounded-lg"
-        src="/assets/images/login-person-secondary.jpg"
+        class="h-40 w-full object-contain object-top rounded-lg"
+        [src]="previewUrl()"
         alt="Supplement Image"
       />
     } @else {
@@ -80,5 +80,14 @@
     }
   </div>
 
-  <button lib-button appearance="fill" type="submit">Submit</button>
+  <div class="flex justify-center gap-3">
+    <button lib-button appearance="transparent" type="submit" (click)="onDiscard()">
+      Discard
+    </button>
+    <div class="bg-red-700 p-4 text-fuchsia-50">
+      NEED TO CHANGE APPROACH - First add all supplements, then relate them to the user.
+      dont 'create' new supplements here
+    </div>
+    <button lib-button appearance="fill" type="submit">Save</button>
+  </div>
 </form>

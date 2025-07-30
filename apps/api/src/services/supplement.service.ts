@@ -1,5 +1,8 @@
 import { Supplement } from '@ikigaidev/hl/model';
-import { SupplementRepository } from '../repositories/supplement.repository';
+import {
+  AddUserSupplementDto,
+  SupplementRepository,
+} from '../repositories/supplements.repository';
 
 export class SupplementService {
   private supplementRepo: SupplementRepository;
@@ -15,6 +18,14 @@ export class SupplementService {
 
   public async getSupplementById(id: number): Promise<Supplement | undefined> {
     return this.supplementRepo.findById(id);
+  }
+
+  // public async getUserSupplements(userId: number): Promise<Supplement[] | undefined> {
+  //   // return this.supplementRepo
+  // }
+
+  public async addUserSupplement(payload: AddUserSupplementDto) {
+    return this.supplementRepo.addUserSupplement(payload);
   }
 
   public async createSupplement(suppData: Partial<Supplement>): Promise<Supplement> {

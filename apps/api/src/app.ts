@@ -1,10 +1,14 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application } from 'express';
+import { auth } from 'express-oauth2-jwt-bearer';
 
+import { loadEnv } from './config/env';
 import { registerRoutes } from './routes/register-routes';
 
 export const app: Application = express();
+
+const env = loadEnv();
 
 app.use(express.json());
 app.use(cookieParser());
@@ -14,6 +18,11 @@ const allowedOrigins = [
   'http://localhost:4200',
   'https://hypertrophy-lab.vercel.app',
 ];
+
+const checkJwt = auth({
+  audience: process.env.AUTH0_AUDIENCE,
+  issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}/`,
+});
 
 app.use(
   cors({
@@ -25,6 +34,7 @@ app.use(
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   }),
+  checkJwt,
 );
 
 registerRoutes(app);

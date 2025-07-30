@@ -28,7 +28,7 @@ export interface Supplement {
   recommendedUsage?: string;
   purchaseLinks?: string[];
   recommendedBrands?: Brand[];
-  img?: string;
+  imgUrl?: string;
 }
 
 export interface Brand {

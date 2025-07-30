@@ -10,5 +10,7 @@ export function loadEnv() {
     TG_BOT_TOKEN: process.env.TG_BOT_TOKEN ?? '',
     JWT_SECRET: process.env.JWT_SECRET ?? '',
     FRONT_URL: process.env.FRONT_URL ?? '',
+    AUTH0_AUDIENCE: process.env.AUTH0_AUDIENCE ?? '',
+    AUTH0_DOMAIN: process.env.AUTH0_DOMAIN ?? '',
   };
 }

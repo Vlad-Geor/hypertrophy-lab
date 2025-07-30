@@ -1,9 +1,15 @@
-
 export type Environment = {
-    production: boolean;
-    API_BASE: string;
-    CLOUD_NAME: string;
-    UPLOAD_PRESET: string;
-    UPLOAD_FOLDER: string;
+  production: boolean;
+  apiBase: string;
+  cloudinary: {
+    cloudName: string;
+    uploadPreset: string;
+    uploadFolder: string;
   };
-  
+  auth: {
+    domain: string;
+    clientId: string;
+    audience: string;
+    redirectUri: string;
+  };
+};

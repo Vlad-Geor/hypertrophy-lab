@@ -4,6 +4,7 @@ module.exports = {
     extend: {
       colors: {
         teal: {
+          650: 'var(--color-teal-650)',
           1000: '#022F2E',
         },
         primary: {
@@ -27,8 +28,10 @@ module.exports = {
           disabled: 'var(--color-gray-disabled)',
           background: {
             DEFAULT: 'var(--color-gray-background)',
+            dark: 'var(--color-gray-dark-background)',
             faded: 'var(--color-gray-background-faded)',
           },
+          text: 'var(--color-white-a80)',
           helper: 'var(--color-gray-helper)',
         },
         neutral: {

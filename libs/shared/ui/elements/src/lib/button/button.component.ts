@@ -23,7 +23,7 @@ import { IconComponent } from '../icon/icon.component';
      py-1 rounded-md hover:cursor-pointer w-fit transition font-medium`,
     '[attr.type]': 'type()',
     '[disabled]': 'disabled()',
-    '[class]': 'appearance() === "fill" ? "bg-red-300" : "bg-primary"',
+    '[class]': 'appearance() === "fill" ? "bg-secondary-light text-primary-dark" : ""',
   },
 })
 export class ButtonComponent extends ThemeColoredComponent {

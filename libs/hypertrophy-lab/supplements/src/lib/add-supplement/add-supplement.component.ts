@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { environment } from '@ikigaidev/config';
-import { CloudinaryService } from '@ikigaidev/data-access';
+import { CloudinaryService, CloudinaryUploadRes } from '@ikigaidev/data-access';
+import { GlobalOverlayDirective } from '@ikigaidev/directive';
 import {
   ButtonComponent,
   IconComponent,
@@ -13,6 +14,8 @@ import {
 } from '@ikigaidev/elements';
 import { HealthTarget, Supplement, quantityUnits } from '@ikigaidev/hl/model';
 import { HEALTH_TARGETS } from '@ikigaidev/model';
+import { toSlug } from '@ikigaidev/util';
+import { switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'hl-add-supplement',
@@ -33,78 +36,80 @@ export class AddSupplementComponent {
   private readonly fb = inject(FormBuilder);
   private readonly http = inject(HttpClient);
   private readonly cnService = inject(CloudinaryService);
+  private readonly overlay = inject(GlobalOverlayDirective);
+  private readonly destroyRef = inject(DestroyRef);
 
   HealthTargets = HEALTH_TARGETS;
   quantityUnits = quantityUnits;
   healthTargetKeys = Object.keys(this.HealthTargets) as HealthTarget[];
 
-  addedImageUrl = signal('');
-  supplementImage = signal<FormData | undefined>(undefined);
+  imageFormData = signal<FormData | undefined>(undefined);
+  previewUrl = signal<string>('');
 
-  readonly form = this.fb.group<Supplement & { itemCount?: number }>({
+  readonly form = this.fb.group<Supplement & { stockQuantity?: number }>({
     name: '',
     description: '',
-    itemCount: undefined,
+    stockQuantity: undefined,
     servingSize: undefined,
     quantityUnit: undefined,
     dosageForm: undefined,
     healthTarget: undefined,
-    img: '',
+    imgUrl: undefined,
   });
 
   constructor() {
-    this.form.valueChanges.subscribe((change) => {
-      if (change.img) {
-        // this.supplementImage.update((fd) => ({ ...fd }));
-        // .this.chosenImage.append('public_id', `supplements/${slug}`);
+    effect(() => console.log(this.imageFormData()));
+    this.destroyRef.onDestroy(() => URL.revokeObjectURL(this.previewUrl()));
+    this.form.valueChanges.subscribe((state) => {
+      console.log(state);
+
+      if (state.imgUrl && state.name) {
+        this.imageFormData.update((fd) => {
+          fd?.append('public_id', `supplements/${toSlug(state.name ?? '')}`);
+          fd?.append('filename_override', `${toSlug(state.name ?? '')}`); // what you want to see in UI
+          return fd;
+        });
       }
     });
   }
 
   onSubmit(): void {
-    const rawFormData = this.form.getRawValue();
-    console.log(rawFormData);
-
-    this.http.post<Supplement[]>('/api/v1/supplement', rawFormData).subscribe();
-    if (this.supplementImage()) {
-      // this.cnService
-      // .uploadImage(this.supplementImage(), environment.CLOUD_NAME)
-      // .subscribe(console.log);
+    const imgData = this.imageFormData();
+    if (imgData) {
+      this.cnService
+        .uploadImage(imgData, environment.cloudinary.cloudName)
+        .pipe(
+          tap(console.log),
+          switchMap((cloudinaryRes: CloudinaryUploadRes) => {
+            this.form.patchValue({ imgUrl: cloudinaryRes.secure_url });
+            return this.http.post<Supplement>(
+              'http://localhost:3333/api/v1/users/1/supplements',
+              this.form.getRawValue(),
+            );
+          }),
+        )
+        .subscribe(console.log);
     }
   }
 
   onFileInput(ev: Event) {
     const file = (ev.target as HTMLInputElement).files![0];
     console.log(file);
-    if (file) {
-      this.handleFiles(file);
-    }
+    if (!file) return;
+    this.previewUrl.set(URL.createObjectURL(file));
+    this.handleFile(file);
   }
 
-  private async handleFiles(file: File) {
+  private async handleFile(file: File) {
     if (!file.type.startsWith('image/')) return;
-    const compressed = await this.downsizeImage(file);
     const form = new FormData();
     form.append('file', file);
-    form.append('upload_preset', environment.UPLOAD_PRESET);
-    form.append('folder', environment.UPLOAD_FOLDER);
-    form.append('overwrite', 'true');
-    this.supplementImage.set(form);
+    form.append('upload_preset', environment.cloudinary.uploadPreset);
+    form.append('folder', environment.cloudinary.uploadFolder + '/supplements');
+    this.imageFormData.set(form);
   }
 
-  private async downsizeImage(file: File): Promise<Blob> {
-    const bitmap = await createImageBitmap(file);
-
-    const MAX = 1080; // long‑edge target (Instagram grid standard)
-    const scale = Math.min(1, MAX / Math.max(bitmap.width, bitmap.height));
-    const w = Math.round(bitmap.width * scale);
-    const h = Math.round(bitmap.height * scale);
-
-    const canvas = new OffscreenCanvas(w, h);
-    const ctx = canvas.getContext('2d')!;
-    ctx.drawImage(bitmap, 0, 0, w, h);
-
-    // WebP has ~25‑30% better compression than JPEG at same perceptual quality
-    return canvas.convertToBlob({ type: 'image/webp', quality: 0.8 });
+  onDiscard(): void {
+    this.overlay.close();
   }
 }

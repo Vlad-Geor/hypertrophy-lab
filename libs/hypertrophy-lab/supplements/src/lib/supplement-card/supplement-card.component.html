@@ -1,13 +1,13 @@
 @let supp = supplement();
 <div>
-  <img src="https://picsum.photos/200" alt="Picsum pic" />
+  <img [src]="supp?.itemData?.imgUrl" alt="Picsum pic" />
 </div>
 <div class="card-wrapper w-1/2 flex flex-col justify-between">
   <div>
     <p class="text-body-sm-semibold pb-1 nowrap-ellipsis font-medium">
       {{ supp?.itemData?.name }}
     </p>
-    <lib-tag [size]="'xs'" [bgColor]="'primary.DEFAULT'">
+    <lib-tag [size]="'xs'">
       {{ supp?.itemData?.healthTarget ?? 'Target' }}
     </lib-tag>
   </div>
