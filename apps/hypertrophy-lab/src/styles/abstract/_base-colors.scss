@@ -1,10 +1,13 @@
 :root {
-  --color-white: #e8e8e8;
-  --color-white-a60: rgba(252, 252, 252, 0.6);
+  --color-white: #eaeaea;
+  --color-white-a80: #eaeaeacc;
+  --color-white-a60: rgba(234, 234, 234, 0.6);
 
   --color-black: #1e1e1e;
   --color-black-ui: #333333;
   --color-black-background: #121212;
+
+  --color-gray-warm: #433b3b;
 
   --color-teal-50: #e6f7f6;
   --color-teal-100: #b0e8e5;
@@ -13,12 +16,14 @@
   --color-teal-400: #33c1bc;
   --color-teal-500: #007a72;
   --color-teal-600: #006e67;
+  --color-teal-650: #063a39;
   --color-teal-700: #00564f;
   --color-teal-800: #00433d;
   --color-teal-800-a80: rgba(0, 67, 61, 0.8);
   --color-teal-800-a20: rgba(0, 67, 61, 0.2);
   --color-teal-900: #021b1b;
   --color-teal-950: #011312;
+  --color-teal-a40: rgba(28, 222, 201, 0.4);
 
   /* Yellow */
   --color-yellow-50: #fffae6;
@@ -26,6 +31,7 @@
   --color-yellow-200: #ffe38d;
   --color-yellow-300: #ffd75a;
   --color-yellow-400: #ffcf39;
+  --color-yellow-400-tw: theme(colors.yellow.400);
   --color-yellow-500: #ffc70f;
   --color-yellow-600: #e8b50e;
   --color-yellow-700: #b58d0b;

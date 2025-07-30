@@ -6,8 +6,10 @@
 
   /* Background */
   --color-ui-background-layer-00: var(--color-gray-background);
+  --color-ui-background-gray-warm: var(--color-gray-warm);
   --color-ui-background-white: var(--color-ui-white);
   --color-ui-background-black: var(--color-ui-black);
+  --color-ui-background-primary-card: var(--color-teal-650);
   --color-ui-background-primary-overlay: var(--color-teal-900);
   --color-ui-background-primary-dark: var(--color-teal-900);
   --color-ui-background-primary-darkest: var(--color-teal-950);
@@ -17,6 +19,7 @@
 
   /* Text */
   --color-ui-text-primary: var(--color-ui-black);
+  --color-ui-text-gray: theme(colors.gray.text);
   --color-ui-text-secondary: var(--color-neutral-600);
   --color-ui-text-on-primary: var(--color-ui-white);
   --color-ui-text-on-secondary: var(--color-ui-black);
@@ -38,6 +41,7 @@
   --color-border-focus: var(--color-teal-300);
   --color-border-divider: var(--color-neutral-100);
   --color-border-subtle: rgba(203, 251, 241, 0.1);
+  --color-border-primary-subtle: var(--color-teal-a40);
   /* UI */
   --color-ui-black: var(--color-black);
 
@@ -54,10 +58,12 @@
   --color-primary-light-faded: var(--color-teal-200);
 
   --color-border-primary: var(--color-teal-700);
-  --color-secondary-light: var(--color-yellow-400);
-  --color-secondary-dark: var(--color-yellow-400);
+  --color-secondary-light: theme(colors.yellow.400);
+  --color-secondary-middle: theme(colors.yellow.500);
+  --color-secondary-dark: theme(colors.yellow.600);
   --color-gray-disabled: hsl(200, 14%, 74%);
   --color-gray-background: #efefef;
+  --color-gray-dark-background: #1e1e1e;
   --color-gray-background-faded: hsla(0, 0%, 60%, 0.2);
   --color-gray-helper: hsl(0, 0%, 50%);
   --color-black-text: var(--color-black);

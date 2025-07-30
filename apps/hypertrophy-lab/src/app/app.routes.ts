@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { AuthGuard } from '@auth0/auth0-angular';
 import { PlaygroundComponent } from '@ikigaidev/playground';
 import { DashboardShellComponent } from './dashboard-shell/shell.component';
 import { FeatureShellComponent } from './feature-shell/feature-shell.component';
@@ -21,6 +22,7 @@ export const appRoutes: Route[] = [
   {
     path: '',
     component: DashboardShellComponent,
+    canActivateChild: [AuthGuard],
     children: [
       {
         path: 'dashboard',
@@ -36,11 +38,17 @@ export const appRoutes: Route[] = [
   {
     path: '',
     component: FeatureShellComponent,
+    canActivateChild: [AuthGuard],
     children: [
       {
         path: 'inventory',
         loadComponent: () =>
           import('@ikigaidev/supplements').then((m) => m.SupplementListComponent),
+      },
+      {
+        path: 'all-supplements',
+        loadComponent: () =>
+          import('@ikigaidev/supplements').then((m) => m.AllSupplementsComponent),
       },
     ],
   },

@@ -23,7 +23,6 @@ export class SupplementController {
   public static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       console.log('getAll');
-      console.log(req.host);
 
       const supplements = await supplementService.getAllSupplements();
       res.send(supplements);
@@ -31,6 +30,23 @@ export class SupplementController {
       res.status(500).json({ error: (error as Error).message });
     }
   }
+
+  public static async addUserSupplement(req: Request, res: Response) {
+    try {
+      console.log(req.body);
+      console.log(req.auth);
+
+      const supplement = await supplementService.addUserSupplement(req.body);
+      res.status(201).json(supplement);
+    } catch (error) {
+      res.status(400).json({ error: (error as Error).message });
+    }
+  }
+
+  // public static async getUserSupplements(req: Request, res: Response) {
+  //   try {
+  //   } catch (error) {}
+  // }
 
   public static async create(req: Request, res: Response, next: NextFunction) {
     try {

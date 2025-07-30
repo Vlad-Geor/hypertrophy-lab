@@ -25,6 +25,7 @@ readdirSync(routesPath)
     }
 
     const routeBase = file.replace('.routes.js', '');
+    console.log(routeBase);
 
     apiRouter.use(`/${routeBase.replace('.routes', '')}`, router);
   });

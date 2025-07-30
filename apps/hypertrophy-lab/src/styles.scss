@@ -10,11 +10,3 @@
     font-family: $font-main;
   }
 }
-
-/* Example for dark theme (optional) */
-[data-theme='dark'] {
-  --color-primary-light: #09202b; /* Adjust for dark theme */
-  --color-secondary-light: #ff8502; /* Adjust for dark theme */
-  --color-gray-background: #121212;
-  --color-black-background: #000000;
-}

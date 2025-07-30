@@ -1,0 +1,27 @@
+:host {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--size-2);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-ui-background-primary-card);
+  border: 1px solid var(--color-border-primary-subtle);
+  padding: var(--size-2) var(--size-3);
+  color: var(--color-ui-text-gray);
+  overflow: hidden;
+}
+
+.supplement-count {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  right: 0;
+  background-color: var(--color-ui-background-gray-warm);
+  width: var(--size-8);
+  height: var(--size-8);
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+  border-bottom-right-radius: 999px;
+}

@@ -1,7 +1,7 @@
 // services/auth.service.ts
 import jwt from 'jsonwebtoken';
 import { loadEnv } from '../config/env';
-import userRepo from '../repositories/user.repository'; // ← your repo
+import userRepo from '../repositories/users.repository'; // ← your repo
 import { verifyTelegram } from '../util/verify-telegram';
 
 const { JWT_SECRET } = loadEnv();

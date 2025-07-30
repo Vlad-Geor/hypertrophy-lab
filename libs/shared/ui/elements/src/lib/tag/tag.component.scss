@@ -1,0 +1,21 @@
+:host {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+
+  &.xs {
+    @apply px-1;
+  }
+
+  &.sm {
+    @apply px-1;
+  }
+
+  &.md {
+    @apply px-2;
+  }
+
+  &.lg {
+    @apply px-2;
+  }
+}
