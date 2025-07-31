@@ -1,14 +1,12 @@
 :host {
-  display: flex;
-  align-items: center;
-  width: fit-content;
+  @apply whitespace-nowrap rounded;
 
   &.xs {
-    @apply px-1;
+    @apply px-1.5 py-0.5 text-xxs leading-tight;
   }
 
   &.sm {
-    @apply px-1;
+    @apply px-1.5 py-0.5 text-xs leading-snug;
   }
 
   &.md {
@@ -17,5 +15,21 @@
 
   &.lg {
     @apply px-2;
+  }
+
+  &.primary {
+    @apply bg-primary text-white;
+  }
+
+  &.secondary {
+    @apply bg-secondary-light text-primary-darkest;
+  }
+
+  &.accent {
+    @apply bg-accent text-white;
+  }
+
+  &.round-chip {
+    @apply rounded-full;
   }
 }

@@ -1,0 +1,4 @@
+@function gradient-primary($angle: 45) {
+  // @if ()
+  @return linear-gradient(#{$angle}deg, #196e66 20%, #ffd600);
+}

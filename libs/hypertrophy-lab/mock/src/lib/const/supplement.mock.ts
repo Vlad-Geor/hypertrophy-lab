@@ -9,11 +9,13 @@ const supplementData: Supplement[] = [
       'Vitamin D is a fat-soluble vitamin that is important for bone health and immune function. It can be obtained from sunlight, food sources, and supplements.',
     purchaseLinks: ['https://www.amazon.com/Vitamin-D-3-5000IU-Softgels/dp/B00I7X2Q4G'],
     quantityUnit: 'mg',
+    packageQuantity: 60,
     dosageForm: 'powder',
     servingSize: 1000,
   },
   {
     name: 'Vitamin C',
+    packageQuantity: 60,
     description:
       'Vitamin C is a water-soluble vitamin that is important for immune function, collagen synthesis, and antioxidant protection. It can be obtained from fruits and vegetables.',
     purchaseLinks: [

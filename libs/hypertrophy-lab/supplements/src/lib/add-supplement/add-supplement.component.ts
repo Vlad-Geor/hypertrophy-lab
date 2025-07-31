@@ -53,8 +53,9 @@ export class AddSupplementComponent {
     servingSize: undefined,
     quantityUnit: undefined,
     dosageForm: undefined,
-    healthTarget: undefined,
+    healthTargets: undefined,
     imgUrl: undefined,
+    packageQuantity: 0,
   });
 
   constructor() {

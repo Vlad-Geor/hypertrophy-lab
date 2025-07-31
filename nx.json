@@ -111,7 +111,7 @@
     "@nx/angular:library": {
       "linter": "eslint",
       "unitTestRunner": "jest",
-      "prefix": "hl",
+      "prefix": "lib",
       "style": "scss"
     },
     "@nx/angular:component": {

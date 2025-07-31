@@ -9,6 +9,8 @@ export type IconType =
   | 'filter'
   | 'add'
   | 'search'
+  | 'chevron_right'
+  | 'chevron_left'
   | 'settings'
   | 'done'
   | 'info'

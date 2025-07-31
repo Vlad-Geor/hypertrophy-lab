@@ -32,6 +32,7 @@
       ],
       "@ikigaidev/fixture": ["libs/shared/fixture/src/index.ts"],
       "@ikigaidev/header": ["libs/shared/layout/header/src/index.ts"],
+      "@ikigaidev/hl-env": ["apps/hypertrophy-lab/src/environments/environment.ts"],
       "@ikigaidev/hl/daily-workout": [
         "libs/hypertrophy-lab/workout/feature/daily-workout/src/index.ts"
       ],
@@ -46,16 +47,14 @@
       "@ikigaidev/mock": ["libs/hypertrophy-lab/mock/src/index.ts"],
       "@ikigaidev/model": ["libs/shared/model/src/index.ts"],
       "@ikigaidev/navigation": ["libs/shared/layout/navigation/src/index.ts"],
+      "@ikigaidev/pagination": ["libs/shared/ui/pagination/src/index.ts"],
       "@ikigaidev/playground": ["libs/playground/src/index.ts"],
       "@ikigaidev/supplements": ["libs/hypertrophy-lab/supplements/src/index.ts"],
       "@ikigaidev/tag": ["libs/shared/ui/tag/src/index.ts"],
       "@ikigaidev/test": ["libs/hypertrophy-lab/ui/test/src/index.ts"],
       "@ikigaidev/tokens": ["libs/shared/tokens/src/index.ts"],
       "@ikigaidev/ui": ["libs/shared/ui/index.ts"],
-      "@ikigaidev/util": ["libs/shared/util/src/index.ts"],
-      "@styles": ["apps/hypertrophy-lab/src/styles.scss"],
-      "@styles/*": ["apps/hypertrophy-lab/src/styles/*"],
-      "hl-env": ["apps/hypertrophy-lab/src/environments/environment.ts"]
+      "@ikigaidev/util": ["libs/shared/util/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"],

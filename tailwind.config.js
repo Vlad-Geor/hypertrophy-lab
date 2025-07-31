@@ -31,7 +31,6 @@ module.exports = {
             dark: 'var(--color-gray-dark-background)',
             faded: 'var(--color-gray-background-faded)',
           },
-          text: 'var(--color-white-a80)',
           helper: 'var(--color-gray-helper)',
         },
         neutral: {
@@ -55,6 +54,7 @@ module.exports = {
         white: {
           DEFAULT: 'var(--color-ui-white)',
           faded: 'var(--color-ui-white-a60)',
+          text: 'var(--color-white-a80)',
         },
         black: {
           text: 'var(--color-black-text)',

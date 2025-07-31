@@ -4,22 +4,26 @@ import { Supplement } from './supplement.model';
 export const supplements: Supplement[] = [
   {
     name: 'Vitamin D',
-    healthTarget: 'brain',
+    healthTargets: ['brain'],
+    packageQuantity: 60,
     recommendedBrands: [{ name: 'California Gold Nutrition' }],
   },
   {
     name: 'Vitamin C',
-    healthTarget: 'heart',
+    healthTargets: ['heart'],
+    packageQuantity: 60,
     recommendedBrands: [{ name: 'California Gold Nutrition' }],
   },
   {
     name: 'Vitamin B',
-    healthTarget: 'hypertrophy',
+    healthTargets: ['hypertrophy'],
+    packageQuantity: 60,
     recommendedBrands: [{ name: 'California Gold Nutrition' }],
   },
   {
     name: 'Chlorella',
-    healthTarget: 'relaxation',
+    healthTargets: ['relaxation'],
+    packageQuantity: 60,
     recommendedBrands: [{ name: 'California Gold Nutrition' }],
   },
 ];
