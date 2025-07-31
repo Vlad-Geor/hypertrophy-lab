@@ -80,7 +80,7 @@ export class SupplementRepository {
         'us.dailyDosage',
         's.name',
         's.imgUrl',
-        's.healthTarget',
+        's.healthTargets',
       )
       .where('us.user_id', userId)
       .andWhere('us.active', true)

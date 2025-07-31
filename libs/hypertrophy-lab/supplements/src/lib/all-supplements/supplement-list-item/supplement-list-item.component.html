@@ -1,19 +1,29 @@
-<div>
+@let data = supplement();
+<div class="gradient-border">
   <img
-    class="h-16 w-16 rounded-full max-w-none object-cover object-left-top"
-    src="/assets/images/login-person-primary.jpg"
+    class="rounded-full max-w-none object-cover object-left-top"
+    [src]="data?.imgUrl ?? '/assets/images/login-person-primary.jpg'"
     alt="Supplement image"
   />
 </div>
 <div class="flex flex-col">
   <header class="flex items-center gap-2 flex-grow">
-    <span class="text-lg text-white">C-1000</span>
-    <span class="text-xxs">Tag</span>
+    <span class="text-lg text-white font-medium">{{ data?.name ?? 'C-1000' }}</span>
+    @if (data?.healthTargets?.length) {
+      <span class="flex items-center gap-1">
+        @for (item of data?.healthTargets; track $index) {
+          <lib-tag size="xs" [theme]="'accent'" [rounded]="true">{{ item }}</lib-tag>
+        }
+      </span>
+    }
   </header>
   <p class="text-xxs line-clamp-3">
-    C-1000 is a slow release vitamin C supplement, used for maintaining elevated blood
+    {{
+      data?.description ??
+        `C-1000 is a slow release vitamin C supplement, used for maintaining elevated blood
     vitamin C levels. Here is some additional text to make it to three rows. And here's
-    the fourth.
+    the fourth.`
+    }}
   </p>
 </div>
-<span class="supplement-count text-sm text-secondary">60</span>
+<span class="supplement-count text-sm text-secondary">{{ data?.packageQuantity }}</span>

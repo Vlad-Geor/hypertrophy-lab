@@ -1,7 +1,7 @@
-<div class="px-3 py-2">
+<div class="">
   <h3 class="text-2xl text-white font-body font-semibold">All Supplements</h3>
 </div>
-<lib-tag>Tag Label</lib-tag>
+<lib-paginator totalPages="7" class="mb-2"></lib-paginator>
 @for (supp of supplements(); track $index) {
   <hl-supplement-list-item [supplement]="supp"></hl-supplement-list-item>
 }

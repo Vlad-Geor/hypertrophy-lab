@@ -20,8 +20,9 @@ export type QuantityUnit = (typeof quantityUnits)[number];
 export interface Supplement {
   id?: number;
   name: string;
+  packageQuantity: number;
   description?: string;
-  healthTarget?: HealthTarget;
+  healthTargets?: HealthTarget[];
   dosageForm?: DosageForm;
   servingSize?: number;
   quantityUnit?: QuantityUnit;

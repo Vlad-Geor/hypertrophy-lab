@@ -1,4 +1,4 @@
-@forward './tokens-default';
+@forward './color-tokens';
 @forward './shadows';
 @forward './size';
 @forward './typography';
@@ -7,3 +7,5 @@
 @forward './tailwind-utilities';
 @forward './base-colors';
 @forward './z-index';
+@forward './functions';
+@forward './variables';

@@ -35,7 +35,7 @@
     />
     <mat-form-field>
       <mat-label>Target</mat-label>
-      <mat-select formControlName="healthTarget">
+      <mat-select formControlName="healthTargets">
         @for (target of healthTargetKeys; track target) {
           <mat-option [value]="target">{{ target }}</mat-option>
         }

@@ -19,7 +19,7 @@
 
   /* Text */
   --color-ui-text-primary: var(--color-ui-black);
-  --color-ui-text-gray: theme(colors.gray.text);
+  --color-ui-text-gray: theme(colors.white.text);
   --color-ui-text-secondary: var(--color-neutral-600);
   --color-ui-text-on-primary: var(--color-ui-white);
   --color-ui-text-on-secondary: var(--color-ui-black);
@@ -30,8 +30,10 @@
   --color-primary-active: var(--color-teal-600);
   --color-primary-selected: var(--color-teal-50);
 
+  --color-accent: theme(colors.pink.900);
+
   /* State */
-  --color-state-error: theme(colors.red.800);
+  --color-state-error: theme(colors.red.700);
   --color-state-success: var(--color-teal-600);
   --color-state-warning: var(--color-yellow-500);
   --color-state-disabled: var(--color-neutral-300);
@@ -46,10 +48,10 @@
   --color-ui-black: var(--color-black);
 
   /* State */
-  --color-state-error: #dc3545;
-  --color-state-warning: #ffc107;
-  --color-state-success: #28a745;
-  --color-state-info: #17a2b8;
+  --color-state-error: theme(colors.red.700);
+  --color-state-warning: theme(colors.orange.300);
+  --color-state-success: theme(colors.green.600);
+  --color-state-info: theme(colors.teal.200);
 
   --color-primary: var(--color-teal-500);
   --color-primary-light: var(--color-teal-700);
@@ -69,9 +71,6 @@
   --color-black-text: var(--color-black);
   // --color-black-ui: #333333;
   --color-black-ui-background: #121212;
-
-  /* Gradient definitions */
-  --gradient-primary: linear-gradient(142.02deg, #081f2a 32.53%, #117465 120%);
 
   /* Sizes */
   --size-tag-max-height: 1.25rem;
