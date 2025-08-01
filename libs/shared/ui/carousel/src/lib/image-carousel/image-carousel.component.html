@@ -8,3 +8,7 @@
     <p class="text-xs nowrap-ellipsis">{{ item.label }}</p>
   </div>
 }
+
+@for (item of healthTargets; track $index) {
+  <hl-health-target-item [target]="item"></hl-health-target-item>
+}

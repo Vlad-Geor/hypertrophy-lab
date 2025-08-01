@@ -1,1 +1,1 @@
-export * from './lib/carousel/carousel.component';
+export * from './lib/image-carousel/image-carousel.component';

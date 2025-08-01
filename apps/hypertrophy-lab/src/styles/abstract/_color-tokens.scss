@@ -10,6 +10,7 @@
   --color-ui-background-white: var(--color-ui-white);
   --color-ui-background-black: var(--color-ui-black);
   --color-ui-background-primary-card: var(--color-teal-650);
+  --color-ui-background-primary-card-hover: var(--color-teal-600);
   --color-ui-background-primary-overlay: var(--color-teal-900);
   --color-ui-background-primary-dark: var(--color-teal-900);
   --color-ui-background-primary-darkest: var(--color-teal-950);
@@ -39,8 +40,9 @@
   --color-state-disabled: var(--color-neutral-300);
 
   /* Border */
-  --color-border-default: var(--color-neutral-200);
-  --color-border-focus: var(--color-teal-300);
+  --color-border-default: var(--color-neutral-200-a40);
+  --color-border-default-subtle: var(--color-neutral-200-a20);
+  --color-border-focus: var(--color-neutral-200);
   --color-border-divider: var(--color-neutral-100);
   --color-border-subtle: rgba(203, 251, 241, 0.1);
   --color-border-primary-subtle: var(--color-teal-a40);

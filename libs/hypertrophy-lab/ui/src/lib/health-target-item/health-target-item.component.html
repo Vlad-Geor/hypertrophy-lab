@@ -1,0 +1,14 @@
+<img
+  class="w-12 h-12 rounded-full"
+  [src]="`/assets/images/category-${target()}.png`"
+  alt=""
+/>
+<span
+  class="health-target-text"
+  [ngClass]="{
+    'text-white font-medium': !active(),
+    'text-secondary font-semibold': active(),
+  }"
+>
+  {{ target() | titlecase }}
+</span>

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { httpResource } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CarouselComponent } from '@ikigaidev/carousel';
+import { ImageCarouselComponent } from '@ikigaidev/carousel';
 import { GlobalOverlayDirective } from '@ikigaidev/directive';
 import { ButtonComponent, IconComponent, TagComponent } from '@ikigaidev/elements';
 import { Supplement } from '@ikigaidev/hl/model';
@@ -18,7 +18,7 @@ import { SupplementCardComponent } from '../supplement-card/supplement-card.comp
     SupplementCardComponent,
     TagComponent,
     IconComponent,
-    CarouselComponent,
+    ImageCarouselComponent,
     ReactiveFormsModule,
     ButtonComponent,
   ],

@@ -2,7 +2,7 @@ import { CommonModule, KeyValuePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { DividerComponent } from '@ikigaidev/elements';
 import { ExerciseListComponent } from '@ikigaidev/exercise-list';
-import { MuscleGroupCardComponent } from '@ikigaidev/hl/ui/muscle-group-card';
+import { MuscleGroupCardComponent } from 'libs/hypertrophy-lab/ui-non-lib/muscle-group-card/src';
 import { muscleGroupExercises } from './muscle-group-exercise.mock';
 
 @Component({
