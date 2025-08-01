@@ -12,8 +12,8 @@ import {
   InputComponent,
   SelectComponent,
 } from '@ikigaidev/elements';
-import { HealthTarget, Supplement, quantityUnits } from '@ikigaidev/hl/model';
-import { HEALTH_TARGETS } from '@ikigaidev/model';
+import {  Supplement, quantityUnits } from '@ikigaidev/hl/model';
+import { HEALTH_TARGETS, HealthTarget } from '@ikigaidev/model';
 import { toSlug } from '@ikigaidev/util';
 import { switchMap, tap } from 'rxjs';
 

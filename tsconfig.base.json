@@ -38,11 +38,7 @@
       ],
       "@ikigaidev/hl/model": ["libs/hypertrophy-lab/model/index.ts"],
       "@ikigaidev/hl/shared": ["libs/hypertrophy-lab/shared/src/index.ts"],
-      "@ikigaidev/hl/ui": ["libs/hypertrophy-lab/ui/index.js"],
-      "@ikigaidev/hl/ui/muscle-group-card": [
-        "libs/hypertrophy-lab/ui/muscle-group-card/src/index.ts"
-      ],
-      "@ikigaidev/hl/ui/pipe": ["libs/hypertrophy-lab/ui/pipe/src/index.ts"],
+      "@ikigaidev/hl/ui": ["libs/hypertrophy-lab/ui/src/index.ts"],
       "@ikigaidev/login": ["libs/hypertrophy-lab/login/src/index.ts"],
       "@ikigaidev/mock": ["libs/hypertrophy-lab/mock/src/index.ts"],
       "@ikigaidev/model": ["libs/shared/model/src/index.ts"],

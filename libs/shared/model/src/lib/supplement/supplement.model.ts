@@ -1,13 +1,4 @@
-export const healthTargets = [
-  'energy',
-  'heart',
-  'immunity',
-  'brain',
-  'hypertrophy',
-  'relaxation',
-] as const;
-
-export type HealthTarget = (typeof healthTargets)[number];
+import { HealthTarget } from "./health-target";
 
 export const dosageForms = ['pill', 'powder', 'liquid'] as const;
 
