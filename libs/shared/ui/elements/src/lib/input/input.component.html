@@ -9,7 +9,7 @@
   "
 >
   <input
-    class="input-element placeholder:text-xs placeholder:text-white-faded outline-none text-white text-sm"
+    class="input-element placeholder:text-xs placeholder:text-white-faded outline-none text-sm"
     [value]="_value() || ''"
     [placeholder]="placeholder() || ''"
     [type]="type()"
@@ -20,6 +20,6 @@
   />
 
   @if (withSearch()) {
-    <lib-icon [iconSize]="16" icon="search"></lib-icon>
+    <lib-icon [iconSize]="12" [icon]="'magnifying-glass-solid'"></lib-icon>
   }
 </div>

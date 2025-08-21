@@ -10,6 +10,7 @@ import { Size } from '@ikigaidev/model';
   `,
   styleUrl: './tag.component.scss',
   host: {
+    class: 'font-medium',
     '[class]': '[size(), brigtness(), theme()]',
     '[class.round-chip]': 'rounded()',
   },

@@ -34,13 +34,14 @@ const TABLE_NAME = 'supplements';
 export type AddUserSupplementDto = {
   userId: number;
   supplementId: number;
-  stockQuantity: number;
+  itemCount: number;
   quantityUnit: QuantityUnit;
   dailyDosage: number | null;
 };
 
 export class SupplementRepository {
   public async findAll(): Promise<Supplement[]> {
+    'supp find all';
     return db(TABLE_NAME).select('*');
   }
 
@@ -49,18 +50,18 @@ export class SupplementRepository {
   }
 
   public async addUserSupplement(options: AddUserSupplementDto): Promise<Supplement> {
-    const { dailyDosage, quantityUnit, stockQuantity, supplementId, userId } = options;
+    const { dailyDosage, quantityUnit, itemCount, supplementId, userId } = options;
     const [row] = await db('user_supplements')
       .insert({
         dailyDosage,
         quantityUnit,
-        stockQuantity,
+        itemCount,
         supplementId,
         userId,
       })
       .onConflict(['user_id', 'supplement_id'])
       .merge({
-        stockQuantity: db.raw('?? + ?', ['stock_quantity', stockQuantity]),
+        itemCount: db.raw('?? + ?', ['item_count', itemCount]),
         dailyDosage,
         quantityUnit,
         active: true,

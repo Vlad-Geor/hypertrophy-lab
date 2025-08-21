@@ -22,9 +22,7 @@ type InputType = string | number;
     },
   ],
 })
-export class InputComponent<
-  T extends InputType = string,
-> extends FormControlComponent<T> {
+export class InputComponent<T extends InputType = string,> extends FormControlComponent<T> {
   transparent = input<boolean>();
   type = input<T>();
   withSearch = input<boolean>(false);

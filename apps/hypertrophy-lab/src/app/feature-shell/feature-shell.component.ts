@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ImageCarouselComponent } from '@ikigaidev/carousel';
+import { HealthTargetCarouselComponent } from '@ikigaidev/carousel';
 import { InputComponent } from '@ikigaidev/elements';
+import { HealthTarget, HealthTargetCarouselItem, healthTargets } from '@ikigaidev/model';
 import { NavigationComponent } from '@ikigaidev/navigation';
 
 @Component({
@@ -13,7 +14,7 @@ import { NavigationComponent } from '@ikigaidev/navigation';
     RouterOutlet,
     InputComponent,
     NavigationComponent,
-    ImageCarouselComponent,
+    HealthTargetCarouselComponent,
   ],
   templateUrl: './feature-shell.component.html',
   styleUrl: './feature-shell.component.scss',
@@ -21,4 +22,10 @@ import { NavigationComponent } from '@ikigaidev/navigation';
     style: 'display:flex; justify-content: center;',
   },
 })
-export class FeatureShellComponent {}
+export class FeatureShellComponent {
+  healthTargets: HealthTarget[] = [...healthTargets];
+
+  carouselData = this.healthTargets.map(
+    (t, i) => ({ index: i, target: t }) as HealthTargetCarouselItem,
+  );
+}

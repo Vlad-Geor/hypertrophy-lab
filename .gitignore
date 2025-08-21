@@ -2,6 +2,8 @@
 
 apps/api/.env
 
+.utils
+
 # compiled output
 dist
 tmp

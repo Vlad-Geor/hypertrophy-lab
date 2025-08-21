@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
@@ -12,10 +11,11 @@ import {
   InputComponent,
   SelectComponent,
 } from '@ikigaidev/elements';
-import {  Supplement, quantityUnits } from '@ikigaidev/hl/model';
+import { Supplement, quantityUnits } from '@ikigaidev/hl/model';
 import { HEALTH_TARGETS, HealthTarget } from '@ikigaidev/model';
 import { toSlug } from '@ikigaidev/util';
 import { switchMap, tap } from 'rxjs';
+import { SupplementService } from '../data-access/supplement.service';
 
 @Component({
   selector: 'hl-add-supplement',
@@ -30,12 +30,12 @@ import { switchMap, tap } from 'rxjs';
   ],
   templateUrl: './add-supplement.component.html',
   styleUrl: './add-supplement.component.scss',
-  providers: [CloudinaryService],
+  providers: [CloudinaryService, SupplementService],
 })
 export class AddSupplementComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly http = inject(HttpClient);
   private readonly cnService = inject(CloudinaryService);
+  private readonly supplementService = inject(SupplementService);
   private readonly overlay = inject(GlobalOverlayDirective);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -46,16 +46,15 @@ export class AddSupplementComponent {
   imageFormData = signal<FormData | undefined>(undefined);
   previewUrl = signal<string>('');
 
-  readonly form = this.fb.group<Supplement & { stockQuantity?: number }>({
+  readonly form = this.fb.nonNullable.group<Supplement>({
     name: '',
     description: '',
-    stockQuantity: undefined,
     servingSize: undefined,
     quantityUnit: undefined,
     dosageForm: undefined,
     healthTargets: undefined,
     imgUrl: undefined,
-    packageQuantity: 0,
+    itemCount: 0,
   });
 
   constructor() {
@@ -83,10 +82,19 @@ export class AddSupplementComponent {
           tap(console.log),
           switchMap((cloudinaryRes: CloudinaryUploadRes) => {
             this.form.patchValue({ imgUrl: cloudinaryRes.secure_url });
-            return this.http.post<Supplement>(
-              'http://localhost:3333/api/v1/users/1/supplements',
-              this.form.getRawValue(),
-            );
+            const v = this.form.getRawValue();
+            console.log(v);
+
+            return this.supplementService.addSupplement({
+              itemCount: v.itemCount ?? 0,
+              name: v.name,
+              description: v.description ?? '',
+              dosageForm: v.dosageForm,
+              healthTargets: v.healthTargets,
+              imgUrl: v.imgUrl,
+              quantityUnit: v.quantityUnit,
+              servingSize: v.servingSize,
+            });
           }),
         )
         .subscribe(console.log);

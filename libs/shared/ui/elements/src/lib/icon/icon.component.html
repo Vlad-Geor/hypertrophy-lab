@@ -1,19 +1,10 @@
-@let badge = badgeData();
-
-<mat-icon
-  aria-hidden="false"
-  aria-label="iconType"
-  [fontIcon]="icon() || ''"
-  [ngStyle]="{
-    'font-size.px': iconSize() || 24,
-    color: iconColor() || 'white',
+<svg-icon
+  svgClass="w-6 h-6"
+  [svgStyle]="{
+    color: color(),
+    width: iconSize(),
+    height: iconSize(),
+    fill: 'currentColor',
   }"
-></mat-icon>
-
-@if (badge) {
-  <span
-    class="absolute flex-center -top-1 -right-1 w-5 h-5 rounded-full bg-secondary-light text-primary-dark text-sm font-bold"
-  >
-    {{ badge }}
-  </span>
-}
+  [src]="'shared-assets/icons/' + icon() + '.svg'"
+></svg-icon>

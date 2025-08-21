@@ -1,19 +1,21 @@
-<button
-  class="flex items-center disabled:bg-gray-500 disabled:rounded-full"
-  (click)="previousPage()"
-  [disabled]="atFirstPage()"
->
-  <lib-icon [icon]="'chevron_left'"></lib-icon>
+<button class="flex items-center" (click)="previousPage()" [disabled]="atFirstPage()">
+  <lib-icon
+    [icon]="'chevron-left-solid-full'"
+    [color]="
+      atFirstPage() ? 'var(--color-state-disabled)' : 'var(--color-secondary-light)'
+    "
+  ></lib-icon>
 </button>
 @for (_ of _paginatorButtonCount(); track $index) {
   <lib-paginator-page-button [active]="$index === activePage() - 1" [index]="$index">
     {{ $index + 1 }}
   </lib-paginator-page-button>
 }
-<button
-  class="flex items-center disabled:bg-gray-500 disabled:rounded-full"
-  (click)="nextPage()"
-  [disabled]="atLastPage()"
->
-  <lib-icon [icon]="'chevron_right'"></lib-icon>
+<button class="flex items-center" (click)="nextPage()" [disabled]="atLastPage()">
+  <lib-icon
+    [icon]="'chevron-right-solid-full'"
+    [color]="
+      atLastPage() ? 'var(--color-state-disabled)' : 'var(--color-secondary-light)'
+    "
+  ></lib-icon>
 </button>

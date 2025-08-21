@@ -10,7 +10,7 @@
 
   <div class="flex gap-2">
     <input
-      formControlName="stockQuantity"
+      formControlName="itemCount"
       type="number"
       placeholder="Quantity per bottle"
       class="flex-1 max-h-12 border-primary-dark rounded-md focus:border-primary-light placeholder:text-sm"
@@ -35,7 +35,7 @@
     />
     <mat-form-field>
       <mat-label>Target</mat-label>
-      <mat-select formControlName="healthTargets">
+      <mat-select formControlName="healthTargets" multiple="true">
         @for (target of healthTargetKeys; track target) {
           <mat-option [value]="target">{{ target }}</mat-option>
         }
@@ -69,11 +69,7 @@
             (click)="fileInput.click()"
           >
             Upload image
-            <lib-icon
-              [iconSize]="48"
-              [iconColor]="'black'"
-              [icon]="'add_a_photo'"
-            ></lib-icon>
+            <lib-icon [iconSize]="48" [icon]="'apple-whole-solid'"></lib-icon>
           </button>
         </div>
       </div>

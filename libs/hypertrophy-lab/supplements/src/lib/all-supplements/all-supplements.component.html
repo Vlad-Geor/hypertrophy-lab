@@ -1,7 +1,22 @@
-<div class="">
-  <h3 class="text-2xl text-white font-body font-semibold">All Supplements</h3>
+<div class="flex justify-between items-center">
+  <h3 class="text-xl text-white font-body font-semibold">All Supplements</h3>
+
+  <div class="flex gap-2">
+    @if (suppData.value()?.length) {
+      <span class="text-caption-sm-semibold text-white-text self-end">
+        {{ suppData.value()?.length }} Total
+      </span>
+    }
+
+    <lib-stateful-icon
+      [icon]="'filter-solid'"
+      [iconSize]="16"
+      color="var(--color-secondary-light)"
+      [badgeTheme]="'accent'"
+    ></lib-stateful-icon>
+  </div>
 </div>
 <lib-paginator totalPages="7" class="mb-2"></lib-paginator>
-@for (supp of supplements(); track $index) {
+@for (supp of suppData.value(); track $index) {
   <hl-supplement-list-item [supplement]="supp"></hl-supplement-list-item>
 }

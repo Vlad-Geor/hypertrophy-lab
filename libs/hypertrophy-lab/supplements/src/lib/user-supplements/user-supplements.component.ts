@@ -2,9 +2,14 @@ import { CommonModule } from '@angular/common';
 import { httpResource } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ImageCarouselComponent } from '@ikigaidev/carousel';
+import { HealthTargetCarouselComponent } from '@ikigaidev/carousel';
 import { GlobalOverlayDirective } from '@ikigaidev/directive';
-import { ButtonComponent, IconComponent, TagComponent } from '@ikigaidev/elements';
+import {
+  ButtonComponent,
+  IconComponent,
+  StatefulIconComponent,
+  TagComponent,
+} from '@ikigaidev/elements';
 import { Supplement } from '@ikigaidev/hl/model';
 import { API_BASE_URL } from '@ikigaidev/hl/shared';
 import { categories } from '@ikigaidev/mock';
@@ -18,22 +23,20 @@ import { SupplementCardComponent } from '../supplement-card/supplement-card.comp
     SupplementCardComponent,
     TagComponent,
     IconComponent,
-    ImageCarouselComponent,
+    StatefulIconComponent,
+    HealthTargetCarouselComponent,
     ReactiveFormsModule,
     ButtonComponent,
   ],
   templateUrl: './user-supplements.component.html',
   styleUrl: './user-supplements.component.scss',
-  host: {
-    style: 'display:inline-flex; flex-direction: column',
-  },
   providers: [GlobalOverlayDirective],
 })
 export class SupplementListComponent {
   private readonly globalOverlay = inject(GlobalOverlayDirective);
   private readonly API_BASE = inject(API_BASE_URL);
 
-  supplements = httpResource<Supplement[]>(`${this.API_BASE}/supplements`);
+  supplements = httpResource<Supplement[]>(() => `${this.API_BASE}/supplements`);
 
   categories = categories;
 

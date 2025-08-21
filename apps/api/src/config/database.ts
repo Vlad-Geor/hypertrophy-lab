@@ -1,6 +1,6 @@
 /** @format */
 
-import knex, { Knex } from 'knex';
+import knex, { Knex,  } from 'knex';
 import knexConfig from '../knexfile.js';
 
 const { NODE_ENV = 'development' } = process.env;

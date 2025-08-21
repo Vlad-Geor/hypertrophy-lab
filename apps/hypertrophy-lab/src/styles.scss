@@ -9,4 +9,10 @@
   html {
     font-family: $font-main;
   }
+
+  *,
+  *::before,
+  *::after {
+    @apply transition-all duration-100;
+  }
 }
