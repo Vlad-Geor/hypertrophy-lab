@@ -1,4 +1,4 @@
-import { HealthTarget } from "./health-target";
+import { HealthTarget } from './health-target';
 
 export const dosageForms = ['pill', 'powder', 'liquid'] as const;
 
@@ -11,7 +11,7 @@ export type QuantityUnit = (typeof quantityUnits)[number];
 export interface Supplement {
   id?: number;
   name: string;
-  packageQuantity: number;
+  itemCount: number;
   description?: string;
   healthTargets?: HealthTarget[];
   dosageForm?: DosageForm;

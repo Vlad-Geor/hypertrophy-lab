@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 // import { Icon } from '@shared/nds/model/icon.type';
 
 @Component({
@@ -7,24 +7,20 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
   selector: 'range-icon',
   imports: [CommonModule],
   templateUrl: './icon-button.component.html',
-  host: {
-    '[style.height]': 'hostSize()',
-    '[style.width]': 'hostSize()',
-  },
+  host: {},
   styles: [
     `
       :host {
-        display: flex;
+        display: inline-flex;
       }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IconComponent {
+export class IconButtonComponent {
   // name = input.required<Icon | undefined>();
   // color = input<ThemeOrColor | undefined>();
   // colorToken = input<string>();
   // size = input<IconSize>('sm');
-
   // hostSize = computed(() => `${mapSize(this.size())}px`);
 }

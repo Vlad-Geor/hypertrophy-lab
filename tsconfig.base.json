@@ -19,6 +19,7 @@
       "@ikigaidev/accordion": ["libs/shared/ui/accordion/src/index.ts"],
       "@ikigaidev/carousel": ["libs/shared/ui/carousel/src/index.ts"],
       "@ikigaidev/config": ["libs/shared/config/src/index.ts"],
+      "@ikigaidev/core": ["libs/hypertrophy-lab/core/src/index.ts"],
       "@ikigaidev/dashboard": ["libs/hypertrophy-lab/dashboard/src/index.ts"],
       "@ikigaidev/data-access": ["libs/shared/data-access/src/index.ts"],
       "@ikigaidev/decorators": ["libs/shared/decorators/src/index.ts"],

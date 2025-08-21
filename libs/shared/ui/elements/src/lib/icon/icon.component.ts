@@ -1,30 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, InputSignal, InputSignalWithTransform, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { IconType, ThemeColorToken } from '@ikigaidev/model';
-import { getColorValue } from '@ikigaidev/util';
+import { IconType } from '@ikigaidev/model';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 
 @Component({
   selector: 'lib-icon',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, AngularSvgIconModule],
   templateUrl: './icon.component.html',
   host: {
     style: 'display:inline-flex;',
   },
-  styles: [
-    '.mat-icon { display: flex; justify-content: center; align-items: center; width: fit-content; height: fit-content;}',
-  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IconComponent {
   icon = input.required<IconType | undefined>();
-  iconColor: InputSignalWithTransform<string | undefined, ThemeColorToken> = input(
-    'white',
-    {
-      transform: (value: ThemeColorToken) => getColorValue(value),
-    },
-  );
-  // iconColor = input<string | ThemeColor>();
+  color = input<string>('inherit');
   iconSize = input<number>();
-  badgeData: InputSignal<number | string | undefined> = input();
 }

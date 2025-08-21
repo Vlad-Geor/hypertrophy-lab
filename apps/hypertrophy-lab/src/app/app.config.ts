@@ -1,6 +1,7 @@
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
   ApplicationConfig,
+  importProvidersFrom,
   inject,
   provideAppInitializer,
   provideZoneChangeDetection,
@@ -8,6 +9,7 @@ import {
 import { provideRouter } from '@angular/router';
 import { AuthService, authHttpInterceptorFn, provideAuth0 } from '@auth0/auth0-angular';
 import { API_BASE_URL } from '@ikigaidev/hl/shared';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 import { environment } from '../environments/environment';
 import { appRoutes } from './app.routes';
 
@@ -27,6 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     provideHttpClient(withInterceptors([authHttpInterceptorFn])),
+    importProvidersFrom(AngularSvgIconModule.forRoot()),
     provideAuth0({
       clientId: environment.auth.clientId,
       domain: environment.auth.domain,

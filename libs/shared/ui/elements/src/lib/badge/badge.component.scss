@@ -1,0 +1,23 @@
+:host {
+  @apply inline-flex rounded-full;
+
+  &.status {
+    @apply w-2 h-2;
+  }
+
+  &.counter {
+    @apply w-3 h-3;
+  }
+
+  &.primary {
+    @apply bg-primary;
+  }
+
+  &.secondary {
+    @apply bg-secondary-light;
+  }
+
+  &.accent {
+    @apply bg-accent;
+  }
+}

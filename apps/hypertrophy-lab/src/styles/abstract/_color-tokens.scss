@@ -37,7 +37,7 @@
   --color-state-error: theme(colors.red.700);
   --color-state-success: var(--color-teal-600);
   --color-state-warning: var(--color-yellow-500);
-  --color-state-disabled: var(--color-neutral-300);
+  --color-state-disabled: theme(colors.gray.400 / 0.6);
 
   /* Border */
   --color-border-default: var(--color-neutral-200-a40);

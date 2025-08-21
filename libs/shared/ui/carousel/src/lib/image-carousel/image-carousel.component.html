@@ -1,14 +1,18 @@
-@for (item of items(); track $index) {
+<!-- @for (item of items(); track $index) {
   <div class="text-white w-14 flex flex-col gap-1">
     <img
       class="shadow-custom-dark rounded-full hover:cursor-pointer h-13 w-13"
       [src]="`https://picsum.photos/${200 + $index}`"
       alt="picsum image (dog)"
     />
-    <p class="text-xs nowrap-ellipsis">{{ item.label }}</p>
+    <p class="text-xs nowrap-ellipsis">{{ item?.target }}</p>
   </div>
-}
+} -->
 
-@for (item of healthTargets; track $index) {
-  <hl-health-target-item [target]="item"></hl-health-target-item>
+@for (item of items(); track $index) {
+  <hl-health-target-item
+    (click)="onCarouselItemClick(item)"
+    [active]="item.index === selectedIndex()"
+    [target]="item.target"
+  ></hl-health-target-item>
 }

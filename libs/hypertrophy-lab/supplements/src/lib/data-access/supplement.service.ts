@@ -1,10 +1,20 @@
-import { Injectable } from "@angular/core";
-import { Supplement } from "@ikigaidev/hl/model";
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Supplement } from '@ikigaidev/hl/model';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class SupplementService {
+  private readonly http = inject(HttpClient);
 
-    getAllSupplements(): Supplement[] {
-        return [];
-    }
+  addSupplement(bodyPayload: Supplement): Observable<Supplement> {
+    return this.http.post<Supplement>(
+      'http://localhost:3333/api/v1/supplements',
+      bodyPayload,
+    );
+  }
+
+  getAllSupplements(): Supplement[] {
+    return [];
+  }
 }

@@ -30,6 +30,11 @@
             "glob": "**/*",
             "input": "apps/hypertrophy-lab/src/assets",
             "output": "assets"
+          },
+          {
+            "glob": "**/*",
+            "input": "libs/shared/assets/src/assets",
+            "output": "shared-assets"
           }
         ],
         "styles": [

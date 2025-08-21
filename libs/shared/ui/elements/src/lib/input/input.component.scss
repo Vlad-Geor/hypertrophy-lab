@@ -1,5 +1,5 @@
 :host {
-  gap: 4px;
+  @apply gap-1 text-white;
   &.vertical {
     align-items: center;
     flex-direction: column;

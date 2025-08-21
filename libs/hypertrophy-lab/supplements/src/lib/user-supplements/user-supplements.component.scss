@@ -1,6 +1,5 @@
 :host {
-  max-width: 100%;
-  padding-top: 0.5rem;
+  @apply max-w-full pt-3 inline-flex flex-col w-full;
 }
 
 .category-carousel {

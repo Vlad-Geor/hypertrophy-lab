@@ -1,18 +1,26 @@
-<!-- eslint-disable @angular-eslint/template/elements-content -->
-<section class="supplement-inventory-header mb-3">
-  <div class="flex items-center gap-2">
+<section class="supplement-inventory-header mb-3 w-full">
+  <div class="flex items-center gap-2 relative">
     <h5 class="text-body-semibold mb-1 text-white text-xl">Inventory</h5>
-    <lib-tag bgColor="">Memory</lib-tag>
+    <lib-tag class="absolute -right-4 -top-1" [rounded]="true" theme="accent">
+      Memory
+    </lib-tag>
   </div>
-  <button
-    class="hover:bg-primary-light justify-self-end"
+  <!-- <button
+    class="hover:bg-primary-light justify-self-end text-secondary-light"
     lib-button
-    [icon]="'add'"
+    [icon]="'filter-solid'"
     (click)="addSupp()"
-  ></button>
+  ></button> -->
+  <lib-stateful-icon
+    class="text-secondary"
+    [icon]="'filter-solid'"
+    [iconSize]="16"
+    [badgeTheme]="'accent'"
+    (click)="addSupp()"
+  ></lib-stateful-icon>
 </section>
 <section class="category-carousel p-1">
-  <lib-image-carousel [items]="categories" [size]="'xl'"></lib-image-carousel>
+  <lib-image-carousel [items]="[]" [size]="'xl'"></lib-image-carousel>
 </section>
 
 <div class="supplement-inventory-cards">

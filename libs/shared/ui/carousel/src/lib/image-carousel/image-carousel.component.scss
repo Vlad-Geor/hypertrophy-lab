@@ -1,5 +1,5 @@
 :host {
-  overflow: scroll;
+  @apply overflow-scroll max-w-full;
 }
 
 img {

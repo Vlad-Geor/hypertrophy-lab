@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, signal } from '@angular/core';
 import { HealthTargetItemComponent } from '@ikigaidev/hl/ui';
-import { CarouselItem, HealthTarget, Size } from '@ikigaidev/model';
+import { HealthTargetCarouselItem, Size } from '@ikigaidev/model';
 
 export const carouselSizing: Record<Extract<Size, 'sm' | 'md' | 'lg' | 'xl'>, number> = {
   sm: 24,
@@ -20,19 +20,14 @@ export const carouselSizing: Record<Extract<Size, 'sm' | 'md' | 'lg' | 'xl'>, nu
     class: 'flex gap-2',
   },
 })
-export class ImageCarouselComponent {
+export class HealthTargetCarouselComponent {
   size = input<Extract<Size, 'sm' | 'md' | 'lg' | 'xl'>>('md');
   _size = computed(() => carouselSizing[this.size()]);
 
-  items = input<CarouselItem[]>([]);
+  items = input<HealthTargetCarouselItem[]>([]);
+  selectedIndex = signal<number | null>(null);
 
-  healthTargets: HealthTarget[] = [
-    'arteries',
-    'brain',
-    'digestion',
-    'energy',
-    'veins',
-    'relaxation',
-    'immune',
-  ];
+  onCarouselItemClick(item: HealthTargetCarouselItem): void {
+    this.selectedIndex.update((i) => (i === item.index ? null : item.index));
+  }
 }

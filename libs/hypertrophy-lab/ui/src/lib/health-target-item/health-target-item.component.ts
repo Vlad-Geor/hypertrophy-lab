@@ -12,6 +12,6 @@ import { HealthTarget } from '@ikigaidev/model';
   imports: [TitleCasePipe, NgClass],
 })
 export class HealthTargetItemComponent {
-  active = input<boolean>(true);
+  active = input<boolean>();
   target = input<HealthTarget>('brain');
 }
