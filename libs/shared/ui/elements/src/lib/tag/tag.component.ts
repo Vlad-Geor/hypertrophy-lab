@@ -1,12 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, TemplateRef, input, viewChild } from '@angular/core';
 import { Size } from '@ikigaidev/model';
 
 @Component({
   selector: 'lib-tag',
   imports: [CommonModule],
   template: `
-    <ng-content></ng-content>
+    <ng-template>
+      <ng-content></ng-content>
+    </ng-template>
+    <ng-container
+      [ngTemplateOutlet]="inputContent() || (content() ?? null)"
+    ></ng-container>
   `,
   styleUrl: './tag.component.scss',
   host: {
@@ -21,4 +26,7 @@ export class TagComponent {
   brigtness = input<'dark' | 'default' | 'light'>('default');
   size = input<Extract<Size, 'xs' | 'sm' | 'md' | 'lg'>>('sm');
   rounded = input<boolean>(false);
+  content = viewChild<TemplateRef<unknown>>(TemplateRef);
+
+  inputContent = input<TemplateRef<unknown>>();
 }

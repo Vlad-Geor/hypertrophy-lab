@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ButtonComponent, TagComponent } from '@ikigaidev/elements';
 import { SupplementInventoryItem } from '@ikigaidev/hl/model';
 
@@ -11,10 +11,4 @@ import { SupplementInventoryItem } from '@ikigaidev/hl/model';
 })
 export class SupplementCardComponent {
   supplement = input<SupplementInventoryItem>();
-
-  constructor() {
-    effect(() => {
-      console.log(this.supplement());
-    });
-  }
 }

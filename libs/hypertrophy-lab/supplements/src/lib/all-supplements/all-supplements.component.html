@@ -1,5 +1,5 @@
 <div class="flex justify-between items-center">
-  <h3 class="text-xl text-white font-body font-semibold">All Supplements</h3>
+  <h3 class="text-xl text-white font-body font-semibold">Marketplace</h3>
 
   <div class="flex gap-2">
     @if (suppData.value()?.length) {
@@ -16,7 +16,10 @@
     ></lib-stateful-icon>
   </div>
 </div>
-<lib-paginator totalPages="7" class="mb-2"></lib-paginator>
+@if ((suppData.value()?.length || 0) > 5) {
+  <lib-paginator totalPages="1" class="mb-2"></lib-paginator>
+}
+
 @for (supp of suppData.value(); track $index) {
   <hl-supplement-list-item [supplement]="supp"></hl-supplement-list-item>
 }

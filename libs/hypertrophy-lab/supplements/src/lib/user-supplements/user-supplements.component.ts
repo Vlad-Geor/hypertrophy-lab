@@ -9,6 +9,7 @@ import {
   IconComponent,
   StatefulIconComponent,
   TagComponent,
+  TagGroupComponent,
 } from '@ikigaidev/elements';
 import { Supplement } from '@ikigaidev/hl/model';
 import { API_BASE_URL } from '@ikigaidev/hl/shared';
@@ -27,6 +28,7 @@ import { SupplementCardComponent } from '../supplement-card/supplement-card.comp
     HealthTargetCarouselComponent,
     ReactiveFormsModule,
     ButtonComponent,
+    TagGroupComponent
   ],
   templateUrl: './user-supplements.component.html',
   styleUrl: './user-supplements.component.scss',
