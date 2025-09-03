@@ -1,6 +1,6 @@
 <section class="supplement-inventory-header mb-3 w-full">
   <div class="flex items-center gap-2 relative">
-    <h5 class="text-body-semibold mb-1 text-white text-xl">Inventory</h5>
+    <h5 class="text-body-semibold mb-1 text-white text-xl">My Stack</h5>
     <lib-tag class="absolute -right-4 -top-1" [rounded]="true" theme="accent">
       Memory
     </lib-tag>
@@ -18,9 +18,6 @@
     [badgeTheme]="'accent'"
     (click)="addSupp()"
   ></lib-stateful-icon>
-</section>
-<section class="category-carousel p-1">
-  <lib-image-carousel [items]="[]" [size]="'xl'"></lib-image-carousel>
 </section>
 
 <div class="supplement-inventory-cards">

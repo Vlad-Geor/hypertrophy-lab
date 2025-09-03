@@ -1,7 +1,7 @@
 {
-  "name": "api",
+  "name": "hypertrophy-lab-api",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/api/src",
+  "sourceRoot": "apps/hypertrophy-lab-api/src",
   "projectType": "application",
   "tags": [],
   "targets": {
@@ -11,12 +11,12 @@
       "defaultConfiguration": "production",
       "options": {
         "platform": "node",
-        "outputPath": "dist/apps/api",
+        "outputPath": "dist/apps/hypertrophy-lab-api",
         "format": ["cjs"],
         "bundle": false,
-        "main": "apps/api/src/main.ts",
-        "tsConfig": "apps/api/tsconfig.app.json",
-        "assets": ["apps/api/src/assets"],
+        "main": "apps/hypertrophy-lab-api/src/main.ts",
+        "tsConfig": "apps/hypertrophy-lab-api/tsconfig.app.json",
+        "assets": ["apps/hypertrophy-lab-api/src/assets"],
         "generatePackageJson": true,
         "esbuildOptions": {
           "sourcemap": true,
@@ -42,15 +42,15 @@
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
-        "buildTarget": "api:build",
+        "buildTarget": "hypertrophy-lab-api:build",
         "runBuildTargetDependencies": false
       },
       "configurations": {
         "development": {
-          "buildTarget": "api:build:development"
+          "buildTarget": "hypertrophy-lab-api:build:development"
         },
         "production": {
-          "buildTarget": "api:build:production"
+          "buildTarget": "hypertrophy-lab-api:build:production"
         }
       }
     }
