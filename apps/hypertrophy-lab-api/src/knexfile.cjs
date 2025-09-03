@@ -1,5 +1,5 @@
 require('ts-node').register({
-  project: __dirname + '/../tsconfig.app.json',
+  project: __dirname + './../tsconfig.tools.json',
   transpileOnly: true,
 });
 
