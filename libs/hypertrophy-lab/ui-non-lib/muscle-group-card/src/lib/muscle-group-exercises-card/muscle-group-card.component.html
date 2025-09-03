@@ -4,7 +4,7 @@
 <div class="w-80 h-36 lg:w-52 px-3 py-2 rounded-2xl text-white relative">
   <!-- Add wrapping div to apply relavite + z-index on all children -->
   <div class="relative z-20">
-    <h2 class="font-heading text-xl mb-2" [style.color]="colors.neutral[900]">
+    <h2 class="font-heading text-xl mb-2 text-neutral-900">
       {{ muscleGroupedExercise?.targetMuscle | titlecase }}
     </h2>
     @for (exercise of groupedExercises; track $index) {
