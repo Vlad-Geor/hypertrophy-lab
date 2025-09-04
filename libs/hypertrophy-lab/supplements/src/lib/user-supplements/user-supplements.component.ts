@@ -28,7 +28,7 @@ import { SupplementCardComponent } from '../supplement-card/supplement-card.comp
     HealthTargetCarouselComponent,
     ReactiveFormsModule,
     ButtonComponent,
-    TagGroupComponent
+    TagGroupComponent,
   ],
   templateUrl: './user-supplements.component.html',
   styleUrl: './user-supplements.component.scss',

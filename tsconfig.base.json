@@ -31,13 +31,12 @@
       "@ikigaidev/exercise-list": [
         "libs/hypertrophy-lab/workout/ui/exercise-list/src/index.ts"
       ],
-      "@ikigaidev/fixture": ["libs/shared/fixture/src/index.ts"],
       "@ikigaidev/header": ["libs/shared/layout/header/src/index.ts"],
       "@ikigaidev/hl-env": ["apps/hypertrophy-lab/src/environments/environment.ts"],
       "@ikigaidev/hl/daily-workout": [
         "libs/hypertrophy-lab/workout/feature/daily-workout/src/index.ts"
       ],
-      "@ikigaidev/hl/model": ["libs/hypertrophy-lab/model/index.ts"],
+      "@ikigaidev/hl/model": ["libs/hypertrophy-lab/shared/src/lib/model/index.ts"],
       "@ikigaidev/hl/shared": ["libs/hypertrophy-lab/shared/src/index.ts"],
       "@ikigaidev/hl/ui": ["libs/hypertrophy-lab/ui/src/index.ts"],
       "@ikigaidev/login": ["libs/hypertrophy-lab/login/src/index.ts"],

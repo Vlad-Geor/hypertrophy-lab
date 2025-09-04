@@ -1,5 +1,3 @@
-@use '../../../../../../apps/hypertrophy-lab/src/styles/abstract/z-index' as *;
-
 :host {
   display: flex;
   justify-content: center;
@@ -27,17 +25,17 @@
     }
 
     .login-image-primary {
+      @apply z-50;
       position: absolute;
       left: 36%;
       top: 25%;
-      z-index: $z-50;
     }
 
     .login-image-secondary {
+      @apply z-40;
       position: absolute;
       left: 19%;
       top: 7%;
-      z-index: $z-40;
     }
 
     .svg {

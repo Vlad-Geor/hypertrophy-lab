@@ -40,9 +40,11 @@
     "jsonwebtoken": "^9.0.2",
     "objection": "^3.1.5",
     "rxjs": "~7.8.1",
+    "zod": "^4.1.5",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
+    "@anatine/zod-mock": "^3.14.0",
     "@angular-devkit/build-angular": "^20.2.0",
     "@angular-devkit/core": "^20.2.0",
     "@angular-devkit/schematics": "^20.2.0",
@@ -50,6 +52,7 @@
     "@angular/compiler-cli": "^20.2.0",
     "@angular/language-service": "^20.2.0",
     "@eslint/js": "^9.17.0",
+    "@faker-js/faker": "^10.0.0",
     "@nx/angular": "21.4.1",
     "@nx/cypress": "21.4.1",
     "@nx/esbuild": "21.4.1",

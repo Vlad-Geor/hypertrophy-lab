@@ -1,4 +1,4 @@
-import { IconType, ThemeColorToken } from '@ikigaidev/model';
+import { IconType } from '@ikigaidev/model';
 
 export type NavItemType = 'inventory' | 'workouts' | 'settings' | 'nutrition';
 
@@ -7,5 +7,5 @@ export type NavItem = {
   link: string;
   navType: NavItemType;
   iconSize?: number;
-  iconColor?: ThemeColorToken;
+  iconColor?: any;
 };

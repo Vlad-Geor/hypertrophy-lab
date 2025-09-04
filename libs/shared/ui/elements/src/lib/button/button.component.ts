@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { ThemeColoredComponent } from '@ikigaidev/directive';
-import { BadgeConfig, IconType, ThemeColorToken } from '@ikigaidev/model';
+import { BadgeConfig, IconType } from '@ikigaidev/model';
 import { IconComponent } from '../icon/icon.component';
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -26,8 +25,8 @@ import { IconComponent } from '../icon/icon.component';
     '[class]': 'appearance() === "fill" ? "bg-secondary-light text-primary-dark" : ""',
   },
 })
-export class ButtonComponent extends ThemeColoredComponent {
-  bgColor = input<ThemeColorToken>('primary.DEFAULT');
+export class ButtonComponent {
+  bgColor = input<any>('primary.DEFAULT');
   badge = input<BadgeConfig>();
   icon = input<IconType>();
   iconSize = input<number>();
