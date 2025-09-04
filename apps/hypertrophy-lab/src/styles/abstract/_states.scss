@@ -1,0 +1,47 @@
+:root {
+  --a-ghost: 0.08; /* faint */
+  --a-subtle: 0.12; /* list chips, badges */
+  --a-soft: 0.2; /* stronger chips */
+  --a-hover: 0.26; /* hover on chips */
+  --a-active: 0.32; /* active on chips */
+  --a-ring: 0.55; /* focus ring/outline */
+
+  --primary-ghost: hsl(var(--primary-hsl) / var(--a-ghost));
+  --primary-subtle: hsl(var(--primary-hsl) / var(--a-subtle));
+  --primary-soft: hsl(var(--primary-hsl) / var(--a-soft));
+  --primary-hover: hsl(var(--primary-hsl) / var(--a-hover));
+  --primary-active: hsl(var(--primary-hsl) / var(--a-active));
+  --primary-ring: hsl(var(--primary-hsl) / var(--a-ring));
+
+  /* Success */
+  --success-ghost: hsl(var(--success-hsl) / var(--a-ghost));
+  --success-subtle: hsl(var(--success-hsl) / var(--a-subtle));
+  --success-soft: hsl(var(--success-hsl) / var(--a-soft));
+  --success-hover: hsl(var(--success-hsl) / var(--a-hover));
+  --success-active: hsl(var(--success-hsl) / var(--a-active));
+  --success-ring: hsl(var(--success-hsl) / var(--a-ring));
+
+  /* Warning */
+  --warning-ghost: hsl(var(--warning-hsl) / var(--a-ghost));
+  --warning-subtle: hsl(var(--warning-hsl) / var(--a-subtle));
+  --warning-soft: hsl(var(--warning-hsl) / var(--a-soft));
+  --warning-hover: hsl(var(--warning-hsl) / var(--a-hover));
+  --warning-active: hsl(var(--warning-hsl) / var(--a-active));
+  --warning-ring: hsl(var(--warning-hsl) / var(--a-ring));
+
+  /* Danger */
+  --danger-ghost: hsl(var(--danger-hsl) / var(--a-ghost));
+  --danger-subtle: hsl(var(--danger-hsl) / var(--a-subtle));
+  --danger-soft: hsl(var(--danger-hsl) / var(--a-soft));
+  --danger-hover: hsl(var(--danger-hsl) / var(--a-hover));
+  --danger-active: hsl(var(--danger-hsl) / var(--a-active));
+  --danger-ring: hsl(var(--danger-hsl) / var(--a-ring));
+
+  /* Info */
+  --info-ghost: hsl(var(--info-hsl) / var(--a-ghost));
+  --info-subtle: hsl(var(--info-hsl) / var(--a-subtle));
+  --info-soft: hsl(var(--info-hsl) / var(--a-soft));
+  --info-hover: hsl(var(--info-hsl) / var(--a-hover));
+  --info-active: hsl(var(--info-hsl) / var(--a-active));
+  --info-ring: hsl(var(--info-hsl) / var(--a-ring));
+}

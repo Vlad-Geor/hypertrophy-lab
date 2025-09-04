@@ -1,0 +1,16 @@
+:root {
+  --color-bg: hsl(var(--bg-hsl));
+  --color-surface: hsl(var(--surface-hsl));
+  --color-surface-2: hsl(var(--surface-variant-hsl));
+  --color-border: hsl(0 0% var(--border-l));
+  --color-text: hsl(var(--txt1-hsl));
+  --color-text-secondary: hsl(var(--txt2-hsl));
+  --color-text-muted: hsl(var(--txt3-hsl));
+  --color-text-inverse: hsl(0 0% var(--l-text-inverse));
+
+  --color-primary: hsl(var(--primary-hsl));
+  --color-success: hsl(var(--success-hsl));
+  --color-warning: hsl(var(--warning-hsl));
+  --color-danger: hsl(var(--danger-hsl));
+  --color-info: hsl(var(--info-hsl));
+}

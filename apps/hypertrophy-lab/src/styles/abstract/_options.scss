@@ -1,0 +1,33 @@
+:root {
+  --h-bg: 222; --s-bg: 64%; --l-bg: 16%;        /* ≈ hsl(222,64%,16%) */
+  --h-surface: 216; --s-surface: 51%; --l-surface: 22%; /* ≈ hsl(216,51%,22%) */
+  --h-surface-variant: 218; --s-surface-variant: 48%; --l-surface-variant: 25%;
+  --border-l: 12%; /* deep border/shadow baseline */
+
+  /* Text scale (from screenshot) */
+  --h-text: 0;   --s-text: 0%;  --l-text-1: 98%; /* primary */
+  --l-text-2: 78%; /* secondary (derived) */
+  --l-text-3: 62%; /* muted (derived) */
+  --l-text-inverse: 12%;
+
+  /* Brand / semantic bases (from screenshot + minor fills) */
+  --h-primary: 198; --s-primary: 66%; --l-primary: 30%;  /* teal */
+  --h-success: 177; --s-success: 49%; --l-success: 32%;  /* green */
+  --h-warning: 55;  --s-warning: 31%; --l-warning: 30%;  /* amber, muted/dark */
+  --h-danger: 345;  --s-danger: 75%; --l-danger: 50%;    /* red (rare in shot) */
+  --h-info: 260;    --s-info: 60%; --l-info: 55%;        /* violet (icons/chips) */
+
+  /* Pack convenience HSL triples */
+  --bg-hsl: var(--h-bg) var(--s-bg) var(--l-bg);
+  --surface-hsl: var(--h-surface) var(--s-surface) var(--l-surface);
+  --surface-variant-hsl: var(--h-surface-variant) var(--s-surface-variant) var(--l-surface-variant);
+  --txt1-hsl: var(--h-text) var(--s-text) var(--l-text-1);
+  --txt2-hsl: var(--h-text) var(--s-text) var(--l-text-2);
+  --txt3-hsl: var(--h-text) var(--s-text) var(--l-text-3);
+
+  --primary-hsl: var(--h-primary) var(--s-primary) var(--l-primary);
+  --success-hsl: var(--h-success) var(--s-success) var(--l-success);
+  --warning-hsl: var(--h-warning) var(--s-warning) var(--l-warning);
+  --danger-hsl:  var(--h-danger)  var(--s-danger)  var(--l-danger);
+  --info-hsl:    var(--h-info)    var(--s-info)    var(--l-info);
+}

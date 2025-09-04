@@ -1,5 +1,3 @@
-@use 'abstract/_mixin.scss' as *;
-
 .mobile-emulator {
   width: 385px;
   display: flex;
@@ -12,7 +10,7 @@
   .shell-header {
     // background-color: var(--color-layer-01);
     backdrop-filter: blur(12px);
-    @include flex-center();
+    @apply flex items-center justify-center;
     border-top-left-radius: var(--border-radius-mobile-corner);
     border-top-right-radius: var(--border-radius-mobile-corner);
 

@@ -3,7 +3,6 @@ export * from './lib/badge/badge.component';
 export * from './lib/button/button.component';
 export * from './lib/divider/divider.component';
 export * from './lib/form-control/form-control.component';
-export * from './lib/icon-text/icon-text.component';
 export * from './lib/icon/icon.component';
 export * from './lib/input/input.component';
 export * from './lib/search/search.component';

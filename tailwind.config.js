@@ -3,110 +3,116 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        teal: {
-          650: 'var(--color-teal-650)',
-          1000: '#022F2E',
+        // Surfaces
+        bg: 'hsl(var(--bg-hsl) / <alpha-value>)',
+        surface: 'hsl(var(--surface-hsl) / <alpha-value>)',
+        surface2: 'hsl(var(--surface-variant-hsl) / <alpha-value>)',
+        border: 'hsl(0 0% var(--border-l) / <alpha-value>)',
+
+        // Text scale
+        text: {
+          DEFAULT: 'hsl(var(--txt1-hsl) / <alpha-value>)',
+          primary: 'hsl(var(--txt1-hsl) / <alpha-value>)',
+          secondary: 'hsl(var(--txt2-hsl) / <alpha-value>)',
+          muted: 'hsl(var(--txt3-hsl) / <alpha-value>)',
+          inverse: 'hsl(0 0% var(--l-text-inverse) / <alpha-value>)',
         },
-        primary: {
-          DEFAULT: 'var(--color-primary)',
-          light: {
-            DEFAULT: 'var(--color-primary-light)',
-            hover: 'var(--color-primary-light-hover)',
-            faded: 'var(--color-primary-light-faded)',
-          },
-          dark: 'var(--color-primary-dark)',
-          darkest: 'var(--color-ui-background-primary-darkest)',
-        },
-        secondary: {
-          light: 'var(--color-secondary-light)',
-          dark: 'var(--color-secondary-dark)',
-        },
-        accent: {
-          DEFAULT: 'var(--color-accent)',
-        },
-        gray: {
-          disabled: 'var(--color-gray-disabled)',
-          background: {
-            DEFAULT: 'var(--color-gray-background)',
-            dark: 'var(--color-gray-dark-background)',
-            faded: 'var(--color-gray-background-faded)',
-          },
-          helper: 'var(--color-gray-helper)',
-        },
-        neutral: {
-          50: 'var(--color-neutral-50)',
-          100: 'var(--color-neutral-100)',
-          200: 'var(--color-neutral-200)',
-          300: 'var(--color-neutral-300)',
-          400: 'var(--color-neutral-400)',
-          500: 'var(--color-neutral-500)',
-          600: 'var(--color-neutral-600)',
-          700: 'var(--color-neutral-700)',
-          800: 'var(--color-neutral-800)',
-          900: 'var(--color-neutral-900)',
-        },
-        state: {
-          error: 'var(--color-state-error)',
-          warning: 'var(--color-state-warning)',
-          success: 'var(--color-state-success)',
-          info: 'var(--color-state-info)',
-        },
-        white: {
-          DEFAULT: 'var(--color-ui-white)',
-          faded: 'var(--color-ui-white-a60)',
-          text: 'var(--color-white-a80)',
-        },
-        black: {
-          text: 'var(--color-black-text)',
-          ui: 'var(--color-ui-black)',
-          background: 'var(--color-black-background)',
-        },
-        border: {
-          default: 'var(--color-border-default)',
-          primary: 'var(--color-border-primary)',
-          focus: 'var(--color-border-focus)',
-          divider: 'var(--color-border-divider)',
-          subtle: 'var(--color-border-subtle)',
-        },
+
+        // Semantic bases
+        primary: 'hsl(var(--primary-hsl) / <alpha-value>)',
+        success: 'hsl(var(--success-hsl) / <alpha-value>)',
+        warning: 'hsl(var(--warning-hsl) / <alpha-value>)',
+        danger: 'hsl(var(--danger-hsl)  / <alpha-value>)',
+        info: 'hsl(var(--info-hsl)    / <alpha-value>)',
+
+        // Semantic states (so you can do bg-primary-hover, etc.)
+        'primary-hover': 'var(--primary-hover)',
+        'primary-active': 'var(--primary-active)',
+        'primary-ring': 'var(--primary-ring)',
+        'primary-subtle': 'var(--primary-subtle)',
+        'primary-soft': 'var(--primary-soft)',
+        'primary-ghost': 'var(--primary-ghost)',
+
+        'success-hover': 'var(--success-hover)',
+        'success-active': 'var(--success-active)',
+        'success-ring': 'var(--success-ring)',
+        'success-subtle': 'var(--success-subtle)',
+        'success-soft': 'var(--success-soft)',
+        'success-ghost': 'var(--success-ghost)',
+
+        'warning-hover': 'var(--warning-hover)',
+        'warning-active': 'var(--warning-active)',
+        'warning-ring': 'var(--warning-ring)',
+        'warning-subtle': 'var(--warning-subtle)',
+        'warning-soft': 'var(--warning-soft)',
+        'warning-ghost': 'var(--warning-ghost)',
+
+        'danger-hover': 'var(--danger-hover)',
+        'danger-active': 'var(--danger-active)',
+        'danger-ring': 'var(--danger-ring)',
+        'danger-subtle': 'var(--danger-subtle)',
+        'danger-soft': 'var(--danger-soft)',
+        'danger-ghost': 'var(--danger-ghost)',
+
+        'info-hover': 'var(--info-hover)',
+        'info-active': 'var(--info-active)',
+        'info-ring': 'var(--info-ring)',
+        'info-subtle': 'var(--info-subtle)',
+        'info-soft': 'var(--info-soft)',
+        'info-ghost': 'var(--info-ghost)',
       },
-      fontFamily: {
-        heading: ['var(--font-heading)', 'sans-serif'],
-        body: ['var(--font-body)', 'serif'],
+
+      // (Optional) map default ring/border/background to our tokens
+      ringColor: {
+        DEFAULT: 'var(--primary-ring)',
+        primary: 'var(--primary-ring)',
+        success: 'var(--success-ring)',
+        warning: 'var(--warning-ring)',
+        danger: 'var(--danger-ring)',
+        info: 'var(--info-ring)',
+      },
+      borderColor: {
+        DEFAULT: 'hsl(0 0% var(--border-l) / 1)',
       },
       fontSize: {
         xxs: '10px',
       },
-      backgroundImage: {
-        'gradient-primary': 'var(--gradient-primary)',
+      backgroundColor: {
+        skin: {
+          bg: 'hsl(var(--bg-hsl) / <alpha-value>)',
+          surface: 'hsl(var(--surface-hsl) / <alpha-value>)',
+          surface2: 'hsl(var(--surface-variant-hsl) / <alpha-value>)',
+        },
       },
+      textColor: {
+        skin: {
+          base: 'hsl(var(--txt1-hsl) / <alpha-value>)',
+          muted: 'hsl(var(--txt3-hsl) / <alpha-value>)',
+          inverse: 'hsl(0 0% var(--l-text-inverse) / <alpha-value>)',
+        },
+      },
+      outlineColor: {
+        DEFAULT: 'var(--primary-ring)',
+        primary: 'var(--primary-ring)',
+        success: 'var(--success-ring)',
+        warning: 'var(--warning-ring)',
+        danger: 'var(--danger-ring)',
+        info: 'var(--info-ring)',
+      },
+      borderRadius: { '2xl': '1rem' }, // matches your rounded chips/cards
+      ringWidth: { DEFAULT: '2px' }, // consistent focus thickness
       boxShadow: {
-        'hl-light':
-          '0 1px 1px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14), 0 1px 5px rgba(0, 0, 0, 0.12)',
-        'custom-dark': '0 4px 6px rgba(0, 0, 0, 0.3)',
+        // optional, but nice for your UI
+        surface: '0 1px 2px 0 hsl(0 0% 0% / 0.2), 0 8px 24px -6px hsl(0 0% 0% / 0.35)',
       },
-      gradientColorStops: (theme) => ({
-        primary: theme('colors.primary'),
-        secondary: theme('colors.secondary'),
+      ringOffsetColor: {
+        DEFAULT: 'hsl(var(--surface-hsl) / 1)',
+      },
+      stroke: (theme) => theme('colors'), // enables stroke-primary, etc.
+      fill: (theme) => theme('colors'), // enables fill-warning, etc.
+      divideColor: (theme) => ({
+        DEFAULT: theme('colors.border'),
       }),
-      keyframes: {
-        wiggle: {
-          '0%, 100%': { transform: 'rotate(-9deg)' },
-          '50%': { transform: 'rotate(9deg)' },
-        },
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        slideUp: {
-          '0%': { transform: 'translateY(20px)' },
-          '100%': { transform: 'translateY(0)' },
-        },
-      },
-      animation: {
-        wiggle: 'wiggle 1s ease-in-out infinite',
-        'fade-in': 'fadeIn 0.5s ease-in-out',
-        'slide-up': 'slideUp 0.3s ease-out',
-      },
     },
   },
   plugins: [require('@tailwindcss/forms')],

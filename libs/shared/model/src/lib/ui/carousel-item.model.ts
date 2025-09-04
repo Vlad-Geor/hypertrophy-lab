@@ -1,4 +1,4 @@
-import { HealthTarget } from "../supplement/health-target";
+import { HealthTarget } from '../../../../../hypertrophy-lab/shared/src/lib/model/supplement/health-target';
 
 export type CarouselItem = {
   imageSrc: string;
@@ -8,4 +8,4 @@ export type CarouselItem = {
 export type HealthTargetCarouselItem = {
   index: number;
   target: HealthTarget;
-}
+};
