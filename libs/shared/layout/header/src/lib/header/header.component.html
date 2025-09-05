@@ -1,43 +1,18 @@
 <header
-  class="min-h-48 w-full bg-gradient-primary rounded-[44px] text-white p-5 pb-2 relative"
+  class="bg-surface rounded-t-[44px] py-4 px-7 text-white relative flex items-center justify-between border-b border-b-gray-soft"
 >
-  <div class="flex justify-between">
-    <!-- <lib-button icon="notifications" [iconSize]="20"></lib-button> -->
-    <div class="flex items-center flex-col mb-12">
-      <p class="text-sm font-normal">Good Morning,</p>
-      <h1 class="font-heading text-3xl text-secondary-light tracking-wide leading-5">
-        Vlad Geor
-      </h1>
-    </div>
-    <!-- <lib-button icon="settings" [iconSize]="20"></lib-button> -->
+  <div class="flex items-center gap-1">
+    <lib-icon-button [icon]="'menu-solid'"></lib-icon-button>
+    <h2 class="text-heading-md h-fit">Supplement</h2>
   </div>
-
-  <div class="flex justify-between px-4">
-    <!-- <lib-icon-text
-      [iconType]="'face-sad-tear-solid'"
-      textPosition="UP"
-      iconColorTheme="secondary.light"
-      adjacentText="3 / week"
-      [iconSize]="32"
-    ></lib-icon-text>
-    <lib-icon-text
-      iconType="bowl-food-solid"
-      textPosition="UP"
-      adjacentText="2300 cal"
-      iconColorTheme="secondary.light"
-      [iconSize]="32"
-    ></lib-icon-text> -->
-  </div>
-
-  <div
-    class="rounded-full flex-center absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[30%] border-4 border-gray-background"
-  >
-    <!-- TBD link real profile picture of users -->
-
-    <img
-      class="w-40 h-40 rounded-full"
-      src="https://r2.erweima.ai/imgcompressed/img/compressed_8696f1bbcef64a24a6b160beb551eb27.webp"
-      alt="Trainee's Profile Pic"
-    />
+  <div>
+    <lib-icon-button
+      [icon]="'search-solid'"
+      [inheritIconFillColor]="false"
+    ></lib-icon-button>
+    <lib-stateful-icon-button
+      [icon]="'bell-solid'"
+      class="text-secondary"
+    ></lib-stateful-icon-button>
   </div>
 </header>

@@ -8,7 +8,7 @@ import { PaginatorComponent } from '../paginator.component';
     <button
       class="w-8 h-8 flex-shrink-0 rounded-full text-sm font-medium"
       [class.bg-white]="!active()"
-      [class.bg-secondary-light]="active()"
+      [class.bg-secondary]="active()"
     >
       <ng-content></ng-content>
     </button>

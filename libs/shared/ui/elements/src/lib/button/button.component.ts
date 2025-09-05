@@ -3,15 +3,14 @@ import { Component, input } from '@angular/core';
 import { BadgeConfig, IconType } from '@ikigaidev/model';
 import { IconComponent } from '../icon/icon.component';
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'button[lib-button]',
+  selector: 'lib-button',
   imports: [CommonModule, IconComponent],
   template: `
     @if (icon()) {
       <lib-icon
-        [ngClass]="{ 'bg-secondary-light text-white': appearance() === 'fill' }"
+        [ngClass]="{ 'bg-secondary text-white': appearance() === 'fill' }"
         [icon]="icon()"
-        [iconSize]="iconSize()"
+        [inheritCurrentColor]="inheritIconFillColor()"
       ></lib-icon>
     }
 
@@ -21,16 +20,15 @@ import { IconComponent } from '../icon/icon.component';
     class: `text-caption inline-flex justify-center items-center gap-1 px-2
      py-1 rounded-md hover:cursor-pointer w-fit transition font-medium`,
     '[attr.type]': 'type()',
-    '[disabled]': 'disabled()',
-    '[class]': 'appearance() === "fill" ? "bg-secondary-light text-primary-dark" : ""',
+    '[class]': 'appearance() === "fill" ? "bg-secondary text-primary" : ""',
+    '[class.disabled]': 'disabled()',
   },
 })
 export class ButtonComponent {
-  bgColor = input<any>('primary.DEFAULT');
   badge = input<BadgeConfig>();
   icon = input<IconType>();
-  iconSize = input<number>();
   disabled = input<boolean>();
   appearance = input<'transparent' | 'fill'>('transparent');
   type = input<'button' | 'submit'>('button');
+  inheritIconFillColor = input(false);
 }

@@ -15,20 +15,22 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@api-knexfile": ["apps/api/knexfile.ts"],
+      "@hl/api-knexfile": ["apps/api/knexfile.ts"],
       "@ikigaidev/accordion": ["libs/shared/ui/accordion/src/index.ts"],
       "@ikigaidev/carousel": ["libs/shared/ui/carousel/src/index.ts"],
       "@ikigaidev/config": ["libs/shared/config/src/index.ts"],
-      "@ikigaidev/core": ["libs/hypertrophy-lab/core/src/index.ts"],
-      "@ikigaidev/dashboard": ["libs/hypertrophy-lab/dashboard/src/index.ts"],
+      "@ikigaidev/contracts": ["libs/shared/contracts/src/index.ts"],
+      "@ikigaidev/hl/core": ["libs/hypertrophy-lab/core/src/index.ts"],
+      "@ikigaidev/hl/dashboard": ["libs/hypertrophy-lab/dashboard/src/index.ts"],
       "@ikigaidev/data-access": ["libs/shared/data-access/src/index.ts"],
       "@ikigaidev/decorators": ["libs/shared/decorators/src/index.ts"],
       "@ikigaidev/directive": ["libs/shared/directive/src/index.ts"],
       "@ikigaidev/elements": ["libs/shared/ui/elements/src/index.ts"],
-      "@ikigaidev/exercise-details-card": [
+      "@ikigaidev/shared/contracts": ["libs/shared/contracts/src/index.ts"],
+      "@ikigaidev/hl/exercise-details-card": [
         "libs/hypertrophy-lab/workout/ui/exercise-details-card/src/index.ts"
       ],
-      "@ikigaidev/exercise-list": [
+      "@ikigaidev/hl/exercise-list": [
         "libs/hypertrophy-lab/workout/ui/exercise-list/src/index.ts"
       ],
       "@ikigaidev/header": ["libs/shared/layout/header/src/index.ts"],
@@ -39,15 +41,15 @@
       "@ikigaidev/hl/model": ["libs/hypertrophy-lab/shared/src/lib/model/index.ts"],
       "@ikigaidev/hl/shared": ["libs/hypertrophy-lab/shared/src/index.ts"],
       "@ikigaidev/hl/ui": ["libs/hypertrophy-lab/ui/src/index.ts"],
-      "@ikigaidev/login": ["libs/hypertrophy-lab/login/src/index.ts"],
-      "@ikigaidev/mock": ["libs/hypertrophy-lab/mock/src/index.ts"],
+      "@ikigaidev/hl/login": ["libs/hypertrophy-lab/login/src/index.ts"],
+      "@ikigaidev/hl/mock": ["libs/hypertrophy-lab/mock/src/index.ts"],
       "@ikigaidev/model": ["libs/shared/model/src/index.ts"],
       "@ikigaidev/navigation": ["libs/shared/layout/navigation/src/index.ts"],
       "@ikigaidev/pagination": ["libs/shared/ui/pagination/src/index.ts"],
       "@ikigaidev/playground": ["libs/playground/src/index.ts"],
-      "@ikigaidev/supplements": ["libs/hypertrophy-lab/supplements/src/index.ts"],
+      "@ikigaidev/hl/supplements": ["libs/hypertrophy-lab/supplements/src/index.ts"],
       "@ikigaidev/tag": ["libs/shared/ui/tag/src/index.ts"],
-      "@ikigaidev/test": ["libs/hypertrophy-lab/ui/test/src/index.ts"],
+      "@ikigaidev/hl/test": ["libs/hypertrophy-lab/ui/test/src/index.ts"],
       "@ikigaidev/ui": ["libs/shared/ui/index.ts"],
       "@ikigaidev/util": ["libs/shared/util/src/index.ts"]
     }

@@ -22,11 +22,11 @@
   }
 
   &.secondary {
-    @apply bg-secondary-light text-primary-darkest;
+    @apply bg-secondary text-primary;
   }
 
   &.accent {
-    @apply bg-accent text-white;
+    @apply bg-accent-purple text-white;
   }
 
   &.round-chip {
