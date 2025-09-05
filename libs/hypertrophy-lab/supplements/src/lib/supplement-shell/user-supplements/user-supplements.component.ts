@@ -11,11 +11,11 @@ import {
   TagComponent,
   TagGroupComponent,
 } from '@ikigaidev/elements';
+import { categories } from '@ikigaidev/hl/mock';
 import { Supplement } from '@ikigaidev/hl/model';
 import { API_BASE_URL } from '@ikigaidev/hl/shared';
-import { categories } from '@ikigaidev/mock';
-import { AddSupplementComponent } from '../add-supplement/add-supplement.component';
-import { SupplementCardComponent } from '../supplement-card/supplement-card.component';
+import { AddSupplementComponent } from '../../add-supplement/add-supplement.component';
+import { SupplementCardComponent } from '../../supplement-card/supplement-card.component';
 
 @Component({
   selector: 'hl-user-supplements',

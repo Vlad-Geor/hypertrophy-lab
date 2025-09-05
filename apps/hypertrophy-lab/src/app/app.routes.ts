@@ -1,8 +1,7 @@
 import { Route } from '@angular/router';
 import { AuthGuard } from '@auth0/auth0-angular';
 import { PlaygroundComponent } from '@ikigaidev/playground';
-import { DashboardShellComponent } from './dashboard-shell/shell.component';
-import { FeatureShellComponent } from './feature-shell/feature-shell.component';
+import { ShellComponent } from './shell/shell.component';
 
 export const appRoutes: Route[] = [
   {
@@ -12,7 +11,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'login',
-    loadComponent: () => import('@ikigaidev/login').then((m) => m.LoginComponent),
+    loadComponent: () => import('@ikigaidev/hl/login').then((m) => m.LoginComponent),
   },
   {
     path: 'login-success',
@@ -21,34 +20,28 @@ export const appRoutes: Route[] = [
   },
   {
     path: '',
-    component: DashboardShellComponent,
+    component: ShellComponent,
     canActivateChild: [AuthGuard],
     children: [
       {
         path: 'dashboard',
-        loadChildren: () => import('@ikigaidev/dashboard').then((m) => m.dashboardRoutes),
+        loadChildren: () =>
+          import('@ikigaidev/hl/dashboard').then((m) => m.dashboardRoutes),
       },
       {
         path: 'workout',
         loadComponent: () =>
           import('@ikigaidev/hl/daily-workout').then((m) => m.DailyWorkoutComponent),
       },
-    ],
-  },
-  {
-    path: '',
-    component: FeatureShellComponent,
-    canActivateChild: [AuthGuard],
-    children: [
       {
         path: 'inventory',
         loadComponent: () =>
-          import('@ikigaidev/supplements').then((m) => m.SupplementListComponent),
+          import('@ikigaidev/hl/supplements').then((m) => m.SupplementListComponent),
       },
       {
-        path: 'all-supplements',
-        loadComponent: () =>
-          import('@ikigaidev/supplements').then((m) => m.AllSupplementsComponent),
+        path: 'supplements',
+        loadChildren: () =>
+          import('@ikigaidev/hl/supplements').then((m) => m.supplementRoutes),
       },
     ],
   },

@@ -1,10 +1,10 @@
 <svg-icon
-  svgClass="w-6 h-6"
+  class="w-full flex items-center justify-center"
   [svgStyle]="{
     color: color(),
-    width: iconSize(),
-    height: iconSize(),
-    fill: 'currentColor',
+    width: iconSize() ?? 20,
+    height: iconSize() ?? 20,
+    fill: inheritCurrentColor() ? 'currentColor' : '',
   }"
   [src]="'shared-assets/icons/' + icon() + '.svg'"
 ></svg-icon>

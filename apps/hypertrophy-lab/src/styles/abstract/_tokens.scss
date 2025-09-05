@@ -1,0 +1,154 @@
+:root {
+  --a-ghost: 0.08; /* faint */
+  --a-subtle: 0.12; /* list chips, badges */
+  --a-soft: 0.2; /* stronger chips */
+  --a-hover: 0.26; /* hover */
+  --a-active: 0.32; /* active */
+  --a-ring: 0.55; /* focus ring */
+
+  /* ===== Neutrals (background / surfaces / border) ===== */
+  --bg: #0f172a;
+  --surface-1: #1b2637;
+  --surface-2: #212c3e;
+  --border: hsl(0 0% 12%);
+
+  /* (optional synonyms if you already use --color-*) */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+
+  /* ===== Text ramp (premium cool whites) ===== */
+  /* One knob per app to warm/cool the whole ramp */
+  --white-h: 214;
+
+  /* curated ramp from the UI */
+  --white-1-hsl: var(--white-h) 3% 98%; /* headings / high-emphasis */
+  --white-2-hsl: var(--white-h) 3% 93%; /* large body */
+  --white-3-hsl: var(--white-h) 1% 90%; /* body */
+  --white-4-hsl: var(--white-h) 4% 88%; /* subdued body */
+  --white-5-hsl: var(--white-h) 6% 78%; /* muted */
+  --white-6-hsl: var(--white-h) 17% 71%; /* captions/disabled */
+
+  /* actual color tokens */
+  --text-1: hsl(var(--white-1-hsl));
+  --text-2: hsl(var(--white-3-hsl));
+  --text-3: hsl(var(--white-5-hsl));
+  --text-inverse: hsl(0 0% 12%); /* dark text on bright chips */
+
+  /* (optional synonyms if you already use these names) */
+  --text-heading-01: var(--white-1-hsl);
+  --text-heading-02: var(--white-2-hsl);
+  --text-body-01: var(--white-3-hsl);
+  --text-body-02: var(--white-4-hsl);
+  --text-muted-01: var(--white-5-hsl);
+  --text-muted-02: var(--white-6-hsl);
+
+  /* White/black anchors + handy overlays */
+  --white: hsl(214 3% 98%);
+  --black: hsl(0 0% 0%);
+  --white-ghost: hsl(var(--white) / 0.08);
+  --white-subtle: hsl(var(--white) / 0.12);
+  --white-soft: hsl(var(--white) / 0.2);
+
+  /* ===== Brand & Status (solids) ===== */
+  --primary: #00786f;
+  --secondary: #ffc710;
+  --warning: hsl(33 96% 52%); /* orange status */
+  --success: hsl(177 49% 32%); /* green */
+  --danger: hsl(345 75% 50%); /* red */
+  --info: hsl(260 60% 55%); /* violet */
+  --gray: #475569;
+
+  /* (optional synonyms if you already use --color-*) */
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+  --color-gray: var(--gray);
+
+  /* ===== Accents (5% of UI) ===== */
+  --accent-purple: #8a36ea;
+  --accent-pink: #b6005d;
+  --accent-magenta: #850044;
+
+  /* ===== State variants (alpha-overlay model) ===== */
+  /* Primary */
+  --primary-ghost: hsl(from var(--primary) h s l / var(--a-ghost));
+  --primary-subtle: hsl(from var(--primary) h s l / var(--a-subtle));
+  --primary-soft: hsl(from var(--primary) h s l / var(--a-soft));
+  --primary-hover: hsl(from var(--primary) h s l / var(--a-hover));
+  --primary-active: hsl(from var(--primary) h s l / var(--a-active));
+  --primary-ring: hsl(from var(--primary) h s l / var(--a-ring));
+
+  /* Secondary (brand yellow) */
+  --secondary-ghost: hsl(from var(--secondary) h s l / var(--a-ghost));
+  --secondary-subtle: hsl(from var(--secondary) h s l / var(--a-subtle));
+  --secondary-soft: hsl(from var(--secondary) h s l / var(--a-soft));
+  --secondary-hover: hsl(from var(--secondary) h s l / var(--a-hover));
+  --secondary-active: hsl(from var(--secondary) h s l / var(--a-active));
+  --secondary-ring: hsl(from var(--secondary) h s l / var(--a-ring));
+
+  /* Warning (orange status) */
+  --warning-ghost: hsl(from var(--warning) h s l / var(--a-ghost));
+  --warning-subtle: hsl(from var(--warning) h s l / var(--a-subtle));
+  --warning-soft: hsl(from var(--warning) h s l / var(--a-soft));
+  --warning-hover: hsl(from var(--warning) h s l / var(--a-hover));
+  --warning-active: hsl(from var(--warning) h s l / var(--a-active));
+  --warning-ring: hsl(from var(--warning) h s l / var(--a-ring));
+
+  /* Success */
+  --success-ghost: hsl(from var(--success) h s l / var(--a-ghost));
+  --success-subtle: hsl(from var(--success) h s l / var(--a-subtle));
+  --success-soft: hsl(from var(--success) h s l / var(--a-soft));
+  --success-hover: hsl(from var(--success) h s l / var(--a-hover));
+  --success-active: hsl(from var(--success) h s l / var(--a-active));
+  --success-ring: hsl(from var(--success) h s l / var(--a-ring));
+
+  /* Danger */
+  --danger-ghost: hsl(from var(--danger) h s l / var(--a-ghost));
+  --danger-subtle: hsl(from var(--danger) h s l / var(--a-subtle));
+  --danger-soft: hsl(from var(--danger) h s l / var(--a-soft));
+  --danger-hover: hsl(from var(--danger) h s l / var(--a-hover));
+  --danger-active: hsl(from var(--danger) h s l / var(--a-active));
+  --danger-ring: hsl(from var(--danger) h s l / var(--a-ring));
+
+  /* Info */
+  --info-ghost: hsl(from var(--info) h s l / var(--a-ghost));
+  --info-subtle: hsl(from var(--info) h s l / var(--a-subtle));
+  --info-soft: hsl(from var(--info) h s l / var(--a-soft));
+  --info-hover: hsl(from var(--info) h s l / var(--a-hover));
+  --info-active: hsl(from var(--info) h s l / var(--a-active));
+  --info-ring: hsl(from var(--info) h s l / var(--a-ring));
+
+  --gray-ghost: hsl(from var(--gray) h s l / var(--a-ghost));
+  --gray-subtle: hsl(from var(--gray) h s l / var(--a-subtle));
+  --gray-soft: hsl(from var(--gray) h s l / var(--a-soft));
+  --gray-hover: hsl(from var(--gray) h s l / var(--a-hover));
+  --gray-active: hsl(from var(--gray) h s l / var(--a-active));
+  --gray-ring: hsl(from var(--gray) h s l / var(--a-ring));
+
+  /* Accents */
+  --accent-purple-ghost: hsl(from var(--accent-purple) h s l / var(--a-ghost));
+  --accent-purple-subtle: hsl(from var(--accent-purple) h s l / var(--a-subtle));
+  --accent-purple-soft: hsl(from var(--accent-purple) h s l / var(--a-soft));
+  --accent-purple-hover: hsl(from var(--accent-purple) h s l / var(--a-hover));
+  --accent-purple-active: hsl(from var(--accent-purple) h s l / var(--a-active));
+  --accent-purple-ring: hsl(from var(--accent-purple) h s l / var(--a-ring));
+
+  --accent-pink-ghost: hsl(from var(--accent-pink) h s l / var(--a-ghost));
+  --accent-pink-subtle: hsl(from var(--accent-pink) h s l / var(--a-subtle));
+  --accent-pink-soft: hsl(from var(--accent-pink) h s l / var(--a-soft));
+  --accent-pink-hover: hsl(from var(--accent-pink) h s l / var(--a-hover));
+  --accent-pink-active: hsl(from var(--accent-pink) h s l / var(--a-active));
+  --accent-pink-ring: hsl(from var(--accent-pink) h s l / var(--a-ring));
+
+  --accent-magenta-ghost: hsl(from var(--accent-magenta) h s l / var(--a-ghost));
+  --accent-magenta-subtle: hsl(from var(--accent-magenta) h s l / var(--a-subtle));
+  --accent-magenta-soft: hsl(from var(--accent-magenta) h s l / var(--a-soft));
+  --accent-magenta-hover: hsl(from var(--accent-magenta) h s l / var(--a-hover));
+  --accent-magenta-active: hsl(from var(--accent-magenta) h s l / var(--a-active));
+  --accent-magenta-ring: hsl(from var(--accent-magenta) h s l / var(--a-ring));
+}

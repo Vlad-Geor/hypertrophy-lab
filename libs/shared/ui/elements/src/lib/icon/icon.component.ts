@@ -17,5 +17,6 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 export class IconComponent {
   icon = input.required<IconType | undefined>();
   color = input<string>('inherit');
-  iconSize = input<number>();
+  iconSize = input<number>(20);
+  inheritCurrentColor = input(true);
 }

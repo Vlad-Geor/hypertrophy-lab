@@ -1,6 +1,7 @@
 export * from './lib/avatar/avatar.component';
 export * from './lib/badge/badge.component';
 export * from './lib/button/button.component';
+export * from './lib/button/icon-button/icon-button.component';
 export * from './lib/divider/divider.component';
 export * from './lib/form-control/form-control.component';
 export * from './lib/icon/icon.component';

@@ -1,6 +1,6 @@
 import { CommonModule, KeyValuePipe } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { ExerciseBreakdownComponent } from '@ikigaidev/exercise-details-card';
+import { ExerciseBreakdownComponent } from '@ikigaidev/hl/exercise-details-card';
 import { MuscleGroupExercises } from '@ikigaidev/hl/model';
 
 @Component({

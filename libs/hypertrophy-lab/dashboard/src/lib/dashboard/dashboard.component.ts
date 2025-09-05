@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LoginComponent } from '@ikigaidev/login';
+import { LoginComponent } from '@ikigaidev/hl/login';
 
 @Component({
   selector: 'hl-dashboard',
@@ -13,6 +13,6 @@ export class DashboardComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    console.log(this.route.routeConfig?.data?.['loginSuccess']);
+    // throw new Error('Not Implemented');
   }
 }

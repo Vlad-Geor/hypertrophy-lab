@@ -128,6 +128,10 @@ export const iconType = [
   'weight-scale-solid',
   'wrench-solid',
   'xmark-solid',
+  'menu-solid',
+  'search-solid',
+  'cart-liner',
+  'book-liner',
 ] as const;
 
 export type IconType = (typeof iconType)[number];
