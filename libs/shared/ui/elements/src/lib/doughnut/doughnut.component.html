@@ -1,0 +1,19 @@
+<svg viewBox="0 0 200 200" [style.width.px]="sizePx()" [style.height.px]="sizePx()">
+  <!-- track -->
+  <circle class="track" cx="100" cy="100" r="90" [attr.stroke-width]="stroke()" />
+  <!-- progress -->
+  <circle
+    class="progress"
+    cx="100"
+    cy="100"
+    r="90"
+    [attr.stroke-width]="stroke()"
+    [attr.stroke-dasharray]="CIRC()"
+    [attr.stroke-dashoffset]="offset()"
+    [attr.stroke-linecap]="'round'"
+  />
+</svg>
+
+<div class="absolute-centered-content p-3">
+  <ng-content></ng-content>
+</div>

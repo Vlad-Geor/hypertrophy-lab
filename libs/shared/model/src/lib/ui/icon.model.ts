@@ -132,6 +132,7 @@ export const iconType = [
   'search-solid',
   'cart-liner',
   'book-liner',
+  'filter-liner'
 ] as const;
 
 export type IconType = (typeof iconType)[number];

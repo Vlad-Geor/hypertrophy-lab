@@ -1,15 +1,20 @@
 @if (label()) {
-  <label [for]="id()" style="flex: 1">{{ label() }}:</label>
+  <label [for]="id()" class="flex-grow">{{ label() }}:</label>
 }
 
 <div
-  class="input-container flex items-center"
-  [style.border-radius]="
-    rounded() ? 'var(--border-radius-full)' : 'var(--border-radius-md)'
-  "
+  class="input-container flex items-center gap-2 w-full"
+  [ngClass]="rounded() ? 'rounded-full' : 'rounded-md'"
 >
+  @if (withSearch()) {
+    <lib-icon
+      [iconSize]="16"
+      [icon]="'search-solid'"
+      [inheritCurrentColor]="false"
+    ></lib-icon>
+  }
   <input
-    class="input-element placeholder:text-xs placeholder:text-white-faded outline-none text-sm"
+    class="text-sm w-full bg-transparent border-0 p-0 placeholder:text-gray-text focus:ring-0"
     [value]="_value() || ''"
     [placeholder]="placeholder() || ''"
     [type]="type()"
@@ -18,8 +23,4 @@
     (input)="onInputChange($event)"
     (blur)="onBlur()"
   />
-
-  @if (withSearch()) {
-    <lib-icon [iconSize]="12" [icon]="'magnifying-glass-solid'"></lib-icon>
-  }
 </div>

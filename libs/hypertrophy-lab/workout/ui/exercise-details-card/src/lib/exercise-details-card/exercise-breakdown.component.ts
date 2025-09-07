@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { IconComponent } from '@ikigaidev/elements';
-import { ExerciseDetails, MuscleGroup } from '@ikigaidev/hl/model';
 import {
   AccordionBodyComponent,
   AccordionComponent,
   AccordionHeaderComponent,
-  TagComponent,
-} from '@ikigaidev/ui';
+} from '@ikigaidev/accordion';
+import { IconComponent, TagComponent } from '@ikigaidev/elements';
+import { ExerciseDetails, MuscleGroup } from '@ikigaidev/hl/model';
 
 @Component({
   selector: 'hl-exercise-breakdown',

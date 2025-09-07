@@ -1,24 +1,3 @@
 :host {
-  @apply max-w-full pt-3 inline-flex flex-col w-full;
-}
-
-.category-carousel {
-  overflow-x: scroll;
-  // background-color: var(--color-ui-background-black);
-  padding-inline: var(--size-3);
-  padding-bottom: var(--size-3);
-  margin-bottom: var(--size-3);
-}
-
-.supplement-inventory-header {
-  padding-inline: var(--size-3);
-  display: flex;
-  justify-content: space-between;
-}
-
-.supplement-inventory-cards {
-  padding-inline: var(--size-3);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--size-2);
+  @apply max-w-full p-2 grid grid-cols-2 gap-1.5 w-full bg-surface border border-gray-soft rounded-lg shadow-xl;
 }

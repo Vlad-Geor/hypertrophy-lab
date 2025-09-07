@@ -1,31 +1,7 @@
-<section class="supplement-inventory-header mb-3 w-full">
-  <div class="flex items-center gap-2 relative">
-    <h5 class="text-body-semibold mb-1 text-white text-xl">My Stack</h5>
-    <lib-tag class="absolute -right-4 -top-1" [rounded]="true" theme="accent">
-      Memory
-    </lib-tag>
-  </div>
-  <!-- <button
-    class="hover:bg-primary-light justify-self-end text-secondary-light"
-    lib-button
-    [icon]="'filter-solid'"
-    (click)="addSupp()"
-  ></button> -->
-  <lib-stateful-icon-button
-    class="text-secondary"
-    [icon]="'filter-solid'"
-    [iconSize]="16"
-    [badgeTheme]="'accent'"
-    (click)="addSupp()"
-  ></lib-stateful-icon-button>
-</section>
-
-<div class="supplement-inventory-cards">
-  @if (supplements.hasValue()) {
-    @for (supp of supplements.value(); track $index) {
-      <hl-supplement-card
-        [supplement]="{ quantityLeft: 0, consumptionDaysLeft: 0, itemData: supp }"
-      ></hl-supplement-card>
-    }
+@if (supplements.hasValue()) {
+  @for (supp of supplements.value(); track $index) {
+    <hl-supplement-card
+      [supplement]="{ quantityLeft: 0, consumptionDaysLeft: 0, itemData: supp }"
+    ></hl-supplement-card>
   }
-</div>
+}

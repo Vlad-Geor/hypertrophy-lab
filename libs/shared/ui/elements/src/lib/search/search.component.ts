@@ -6,7 +6,13 @@ import { InputComponent } from '../input/input.component';
 @Component({
   selector: 'lib-search',
   imports: [CommonModule, ReactiveFormsModule, InputComponent],
-  templateUrl: './search.component.html',
-  styleUrl: './search.component.scss',
+  template: `
+    <lib-input
+      type="text"
+      [withSearch]="true"
+      placeholder="Search..."
+    ></lib-input>
+  `,
 })
-export class SearchComponent {}
+export class SearchComponent {
+}

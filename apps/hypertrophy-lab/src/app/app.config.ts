@@ -15,7 +15,6 @@ import { appRoutes } from './app.routes';
 
 export const handleAuthError = () => {
   const auth = inject(AuthService);
-  console.log('app initializer handling');
 
   auth.error$.subscribe((err) => {
     console.log(err);

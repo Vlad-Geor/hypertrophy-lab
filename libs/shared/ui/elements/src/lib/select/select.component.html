@@ -1,9 +1,3 @@
-<!-- <label></label> -->
-<mat-form-field [formControl]="selectControl">
-  <mat-label>Favorite food</mat-label>
-  <mat-select>
-    @for (option of options(); track option) {
-      <mat-option [value]="option.name">{{ option.target }}</mat-option>
-    }
-  </mat-select>
-</mat-form-field>
+<lib-icon [icon]="'filter-liner'"></lib-icon>
+<span>{{ placeholder() || 'Select' }}</span>
+<lib-icon [icon]="'chevron-down-solid'" [iconSize]="12"></lib-icon>

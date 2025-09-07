@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, TemplateRef, input, viewChild } from '@angular/core';
-import { Size } from '@ikigaidev/model';
+import { Size, Theme } from '@ikigaidev/model';
 
 @Component({
   selector: 'lib-tag',
@@ -15,15 +15,14 @@ import { Size } from '@ikigaidev/model';
   `,
   styleUrl: './tag.component.scss',
   host: {
-    class: 'font-medium',
-    '[class]': '[size(), brigtness(), theme()]',
+    class: `text-token font-medium bg-token-soft border border-token-active`,
+    '[class]': '[size(), theme()]',
     '[class.round-chip]': 'rounded()',
+    '[attr.data-tone]': 'theme()',
   },
 })
 export class TagComponent {
-  theme = input<'primary' | 'secondary' | 'accent'>('primary');
-  // Future support. ALlows for brighter / darker hues of primary - secondary - accent
-  brigtness = input<'dark' | 'default' | 'light'>('default');
+  theme = input<Theme>('primary');
   size = input<Extract<Size, 'xs' | 'sm' | 'md' | 'lg'>>('sm');
   rounded = input<boolean>(false);
   content = viewChild<TemplateRef<unknown>>(TemplateRef);

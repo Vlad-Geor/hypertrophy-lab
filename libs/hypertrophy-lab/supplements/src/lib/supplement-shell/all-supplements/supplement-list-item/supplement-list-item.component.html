@@ -1,19 +1,20 @@
 @let data = supplement();
-<div class="gradient-border">
+
+<div>
   <img
-    class="rounded-full max-w-none object-cover object-left-top"
+    class="rounded-full min-h-16 max-h-16 min-w-16 object-cover object-left-top border border-gradient-primary"
     [src]="data?.imgUrl ?? '/assets/images/login-person-primary.jpg'"
     alt="Supplement image"
   />
 </div>
 <div class="flex flex-col">
   <header class="flex items-start gap-2 flex-grow">
-    <span class="text-lg text-white font-medium w-min">{{ data?.name ?? 'C-1000' }}</span>
-    @if (data?.healthTargets?.length) {
+    <span class="text-lg text-white font-medium w-max">{{ data?.name ?? 'C-1000' }}</span>
+    @if (data?.healthTargets?.length || true) {
       <span class="flex items-center gap-1 pt-1.5">
         <lib-tag-group>
-          @for (item of data?.healthTargets; track $index) {
-            <lib-tag size="xs" [theme]="'accent'" [rounded]="true">
+          @for (item of data?.healthTargets ?? ['heart', 'skeleton']; track $index) {
+            <lib-tag size="xs" [theme]="'primary'" [rounded]="true">
               {{ item | titlecase }}
             </lib-tag>
           }
@@ -21,7 +22,8 @@
       </span>
     }
   </header>
-  <p class="text-xxs line-clamp-3">
+  <p class="text-xxs text-gray-text mb-1">500ml</p>
+  <p class="text-xs line-clamp-3 text-text-3">
     {{
       data?.description ??
         `C-1000 is a slow release vitamin C supplement, used for maintaining elevated blood
@@ -30,4 +32,9 @@
     }}
   </p>
 </div>
-<span class="supplement-count text-sm text-secondary">{{ data?.itemCount }}</span>
+<lib-doughnut [sizePx]="56" [progress]="50"><p class="text-xs text-white text-center">3 units</p></lib-doughnut>
+<div
+  class="absolute p-1 text-xs top-0 left-0 -translate-x-1/4 -translate-y-1/4 bg-secondary-soft border border-secondary-soft text-secondary rounded-full"
+>
+  $15
+</div>

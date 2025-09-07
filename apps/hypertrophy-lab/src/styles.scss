@@ -1,5 +1,5 @@
+@use '../../../libs/shared/design-tokens/src/index.scss' as *;
 @use './styles/main.scss' as *;
-@forward './styles/main.scss';
 
 @tailwind base;
 @tailwind components;
@@ -7,6 +7,6 @@
 
 @layer base {
   html {
-    font-family: $font-main;
+    font-family: 'Poppins';
   }
 }

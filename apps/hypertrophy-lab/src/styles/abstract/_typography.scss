@@ -9,14 +9,6 @@ $lh-loose: 1.6;
   font-family: 'Rubik Glitch';
 }
 
-.text-primary {
-  color: var(--color-teal-700);
-}
-
-.text-secondary {
-  color: var(--color-yellow-600);
-}
-
 .text-caption-sm {
   font-size: 10px;
   line-height: $lh-base;
@@ -213,8 +205,4 @@ $lh-loose: 1.6;
   line-height: $lh-tight;
   font-family: $font-accent;
   font-weight: 800;
-}
-
-.no-wrap {
-  white-space: nowrap;
 }

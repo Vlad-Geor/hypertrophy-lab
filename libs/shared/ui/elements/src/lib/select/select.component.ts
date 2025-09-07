@@ -1,24 +1,21 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, linkedSignal } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatSelectModule } from '@angular/material/select';
+import { ReactiveFormsModule } from '@angular/forms';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'lib-select',
-  imports: [CommonModule, MatSelectModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, IconComponent],
   templateUrl: './select.component.html',
   styleUrl: './select.component.scss',
-  host: {
-    '[class.minimal]': 'appearance() === "minimal"',
-  },
 })
-export class SelectComponent {
-  value = input<any>();
-  options = input<any[]>();
-  _value = linkedSignal(() => this.value());
+export class SelectComponent <T> {
+  value = input<T>();
+  options = input.required<T[]>();
   appearance = input<'default' | 'minimal'>('default');
-
-  selectControl = new FormControl('');
+  placeholder = input('');
+  _value = linkedSignal(() => this.value());
+  
 
   constructor() {
     // this.selectControl.valueChanges.subscribe(console.log);
