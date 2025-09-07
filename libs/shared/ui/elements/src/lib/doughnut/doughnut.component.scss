@@ -1,0 +1,19 @@
+:host {
+  @apply inline-flex w-fit relative;
+}
+
+.track {
+  @apply fill-none stroke-secondary-active
+    // fill: none;
+    // stroke: var(--color-semantic-bg-primary-subtle);;;;;
+}
+
+.progress {
+  @apply fill-none stroke-secondary -rotate-90;
+  transform-origin: 50% 50%;
+  transition: stroke-dashoffset 0.6s ease-in-out;
+}
+
+.absolute-centered-content {
+  @apply absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center;
+}

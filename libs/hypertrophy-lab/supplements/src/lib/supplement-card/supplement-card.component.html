@@ -1,18 +1,29 @@
 @let supp = supplement();
-<div>
-  <img [src]="supp?.itemData?.imgUrl" alt="Picsum pic" />
+<div class="w-2/5 relative">
+  <img
+    class="h-full w-full object-cover rounded"
+    [src]="supp?.itemData?.imgUrl"
+    alt="Picsum pic"
+  />
+  <div
+    class="absolute text-xxs font-light p-1 rounded bottom-0 flex flex-col gap-1 w-full bg-black/50 backdrop-blur-[2px]"
+  >
+    <p class="text-white text-center">2 units remaining</p>
+    <p class="text-secondary text-center">(62 days)</p>
+  </div>
 </div>
-<div class="card-wrapper w-1/2 flex flex-col justify-between">
-  <div>
-    <p class="text-body-sm-semibold pb-1 nowrap-ellipsis font-medium">
+<div class="overflow-hidden whitespace-nowrap w-1/2 flex flex-col justify-between flex-1">
+  <div class="flex flex-col">
+    <p
+      class="text-body-sm-semibold pb-1 font-medium text-primary-bright text-wrap text-sm line-clamp-2"
+    >
       {{ supp?.itemData?.name }}
     </p>
-    <lib-tag [size]="'xs'">
-      {{ supp?.itemData?.healthTargets ?? 'Target' }}
+    <lib-tag [size]="'xs'" [theme]="'secondary'" [rounded]="true">
+      {{ (supp?.itemData?.healthTargets ?? [])[0] }}
     </lib-tag>
   </div>
-  <div class="flex flex-col card-actions">
-    <a class="text-caption-sm-semibold text-underline text-primary pointer">Buy here</a>
-    <lib-button>Edit</lib-button>
+  <div class="flex flex-col mb-1 gap-2">
+    <lib-button [size]="'md'" class="text-white text-xs">Update</lib-button>
   </div>
 </div>

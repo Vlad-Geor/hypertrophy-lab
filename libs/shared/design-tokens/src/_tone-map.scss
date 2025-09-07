@@ -1,0 +1,83 @@
+[data-tone='primary'] {
+  --tone: var(--primary);
+  --tone-ghost: var(--primary-ghost);
+  --tone-subtle: var(--primary-subtle);
+  --tone-soft: var(--primary-soft);
+  --tone-hover: var(--primary-hover);
+  --tone-active: var(--primary-active);
+  --tone-ring: var(--primary-ring);
+}
+[data-tone='secondary'] {
+  --tone: var(--secondary);
+  --tone-ghost: var(--secondary-ghost);
+  --tone-subtle: var(--secondary-subtle);
+  --tone-soft: var(--secondary-soft);
+  --tone-hover: var(--secondary-hover);
+  --tone-active: var(--secondary-active);
+  --tone-ring: var(--secondary-ring);
+}
+[data-tone='warning'] {
+  --tone: var(--warning);
+  --tone-ghost: var(--warning-ghost);
+  --tone-subtle: var(--warning-subtle);
+  --tone-soft: var(--warning-soft);
+  --tone-hover: var(--warning-hover);
+  --tone-active: var(--warning-active);
+  --tone-ring: var(--warning-ring);
+}
+[data-tone='success'] {
+  --tone: var(--success);
+  --tone-ghost: var(--success-ghost);
+  --tone-subtle: var(--success-subtle);
+  --tone-soft: var(--success-soft);
+  --tone-hover: var(--success-hover);
+  --tone-active: var(--success-active);
+  --tone-ring: var(--success-ring);
+}
+[data-tone='danger'] {
+  --tone: var(--danger);
+  --tone-ghost: var(--danger-ghost);
+  --tone-subtle: var(--danger-subtle);
+  --tone-soft: var(--danger-soft);
+  --tone-hover: var(--danger-hover);
+  --tone-active: var(--danger-active);
+  --tone-ring: var(--danger-ring);
+}
+[data-tone='info'] {
+  --tone: var(--info);
+  --tone-ghost: var(--info-ghost);
+  --tone-subtle: var(--info-subtle);
+  --tone-soft: var(--info-soft);
+  --tone-hover: var(--info-hover);
+  --tone-active: var(--info-active);
+  --tone-ring: var(--info-ring);
+}
+
+/* Accents */
+[data-tone='accent-purple'] {
+  --tone: var(--accent-purple);
+  --tone-ghost: var(--accent-purple-ghost);
+  --tone-subtle: var(--accent-purple-subtle);
+  --tone-soft: var(--accent-purple-soft);
+  --tone-hover: var(--accent-purple-hover);
+  --tone-active: var(--accent-purple-active);
+  --tone-ring: var(--accent-purple-ring);
+}
+[data-tone='accent-pink'] {
+  --tone: var(--accent-pink);
+  --tone-ghost: var(--accent-pink-ghost);
+  --tone-subtle: var(--accent-pink-subtle);
+  --tone-soft: var(--accent-pink-soft);
+  --tone-hover: var(--accent-pink-hover);
+  --tone-active: var(--accent-pink-active);
+  --tone-ring: var(--accent-pink-ring);
+}
+[data-tone='accent-magenta'] {
+  --tone: var(--accent-magenta);
+  --tone-ghost: var(--accent-magenta-ghost);
+  --tone-subtle: var(--accent-magenta-subtle);
+  --tone-soft: var(--accent-magenta-soft);
+  --tone-hover: var(--accent-magenta-hover);
+  --tone-active: var(--accent-magenta-active);
+  --tone-ring: var(--accent-magenta-ring);
+}

@@ -5,13 +5,14 @@ import { FormControlComponent } from '../form-control/form-control.component';
 import { IconComponent } from '../icon/icon.component';
 
 type InputType = string | number;
+
 @Component({
   selector: 'lib-input',
   imports: [CommonModule, IconComponent],
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
   host: {
-    style: 'border:none; display: inline-flex; padding: 0;',
+    class: 'inline-flex p-0',
     '[class.vertical]': 'orientation() === "vertical"',
   },
   providers: [
@@ -22,7 +23,9 @@ type InputType = string | number;
     },
   ],
 })
-export class InputComponent<T extends InputType = string,> extends FormControlComponent<T> {
+export class InputComponent<
+  T extends InputType = string,
+> extends FormControlComponent<T> {
   transparent = input<boolean>();
   type = input<T>();
   withSearch = input<boolean>(false);

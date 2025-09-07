@@ -3,6 +3,7 @@ import {
   Component,
   TemplateRef,
   contentChildren,
+  input,
   signal,
   viewChild,
 } from '@angular/core';
@@ -14,15 +15,16 @@ import { TagComponent } from '../tag.component';
     <ng-template><ng-content></ng-content></ng-template>
     @for (tag of visibleTags(); track $index) {
       <lib-tag
-        [brigtness]="tag.brigtness()"
         [rounded]="tag.rounded()"
         [size]="tag.size()"
         [theme]="tag.theme()"
         [inputContent]="tag.content()"
       ></lib-tag>
     }
-    @if (tags().length > 2) {
-      <span class="text-center text-xs">{{ '+' + (tags().length - 2) + ' more' }}</span>
+    @if (tags().length > (visibleChipCount() ?? 2)) {
+      <span class="text-center text-xxs text-white">
+        {{ '+' + (tags().length - (visibleChipCount() ?? 2)) + ' more' }}
+      </span>
     }
   `,
   styleUrl: './tag-group.component.scss',
@@ -31,11 +33,14 @@ import { TagComponent } from '../tag.component';
 export class TagGroupComponent implements AfterViewInit {
   tpl = viewChild(TemplateRef);
   tags = contentChildren(TagComponent);
+  visibleChipCount = input<number>();
   visibleTags = signal<readonly TagComponent[] | null>(null);
 
   ngAfterViewInit(): void {
-    console.log(this.tpl());
-    console.log(this.tags());
-    this.visibleTags.set(this.tags().length > 2 ? this.tags().slice(0, 2) : this.tags());
+    this.visibleTags.set(
+      this.tags().length > (this.visibleChipCount() ?? 2)
+        ? this.tags().slice(0, this.visibleChipCount() ?? 2)
+        : this.tags(),
+    );
   }
 }

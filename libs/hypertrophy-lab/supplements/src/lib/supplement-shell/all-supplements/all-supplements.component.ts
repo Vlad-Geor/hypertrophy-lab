@@ -1,6 +1,6 @@
 import { httpResource } from '@angular/common/http';
-import { Component, effect, inject, input } from '@angular/core';
-import { StatefulIconComponent, TagComponent } from '@ikigaidev/elements';
+import { Component, inject, input } from '@angular/core';
+import { IconComponent, StatefulIconComponent, TagComponent, ButtonComponent, SearchComponent, SelectComponent } from '@ikigaidev/elements';
 import { Supplement } from '@ikigaidev/hl/model';
 import { API_BASE_URL } from '@ikigaidev/hl/shared';
 import { PaginatorComponent } from '@ikigaidev/pagination';
@@ -11,11 +11,7 @@ import { SupplementListItemComponent } from './supplement-list-item/supplement-l
   templateUrl: './all-supplements.component.html',
   styleUrl: './all-supplements.component.scss',
   imports: [
-    TagComponent,
-    StatefulIconComponent,
-    SupplementListItemComponent,
-    PaginatorComponent,
-    PaginatorComponent,
+    SupplementListItemComponent
   ],
 })
 export class AllSupplementsComponent {
@@ -28,8 +24,4 @@ export class AllSupplementsComponent {
   ]);
 
   suppData = httpResource<Supplement[]>(() => `${this.API_BASE}/supplements`);
-
-  constructor() {
-    effect(() => console.log(this.suppData.value()));
-  }
 }

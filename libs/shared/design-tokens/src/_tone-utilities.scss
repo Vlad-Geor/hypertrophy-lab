@@ -1,0 +1,44 @@
+@layer utilities {
+  .bg-token {
+    background-color: var(--tone);
+  }
+  .bg-token-ghost {
+    background-color: var(--tone-ghost);
+  }
+  .bg-token-subtle {
+    background-color: var(--tone-subtle);
+  }
+  .bg-token-soft {
+    background-color: var(--tone-soft);
+  }
+  .bg-token-hover {
+    background-color: var(--tone-hover);
+  }
+  .bg-token-active {
+    background-color: var(--tone-active);
+  }
+  .text-token {
+    color: var(--tone);
+  }
+  .border-token {
+    border-color: var(--tone);
+  }
+  .border-token-soft {
+    border-color: var(--tone-soft);
+  }
+  .border-token-active {
+    border-color: var(--tone-active);
+  }
+  .border-token-subtle {
+    border-color: var(--tone-subtle);
+  }
+  .ring-token {
+    --tw-ring-color: var(--tone-ring);
+  }
+  .fill-token {
+    fill: var(--tone);
+  }
+  .stroke-token {
+    stroke: var(--tone);
+  }
+}

@@ -1,1 +1,9 @@
-export type Theme = 'primary' | 'secondary' | 'accent';
+export type Theme =
+  | 'primary'
+  | 'secondary'
+  | 'accent-pink'
+  | 'accent-purple'
+  | 'accent-magenta'
+  | 'warning'
+  | 'danger'
+  | 'info';

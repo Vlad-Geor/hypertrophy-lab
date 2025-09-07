@@ -1,48 +1,5 @@
-@use 'abstract/_functions.scss' as *;
-
 :host {
-  @apply relative flex items-start gap-2 rounded-lg py-2 px-3 overflow-hidden transition-colors duration-100;
-  border-radius: var(--border-radius-md);
-  background-color: var(--color-ui-background-primary-card);
-  border: 1px solid var(--color-border-primary-subtle);
-  color: var(--color-ui-text-gray);
-
-  &:hover {
-    @apply hover:cursor-pointer;
-    background-color: var(--color-ui-background-primary-card-hover);
-  }
-}
-
-.supplement-count {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  right: 0;
-  background-color: var(--color-ui-background-gray-warm);
-  width: var(--size-8);
-  height: var(--size-8);
-  border-top-left-radius: 999px;
-  border-bottom-left-radius: 999px;
-  border-bottom-right-radius: 999px;
-}
-
-.gradient-border {
-  flex-basis: 64px;
-  flex-shrink: 0;
-  height: 64px;
-  padding: 1px; /* Thickness of the gradient border */
-  border-radius: 999px;
-  background: gradient-primary();
-  // background: linear-gradient(135deg, #ffd600 0%, #196e66 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.gradient-border img {
-  width: 100%;
-  height: 100%;
-  border-radius: 999px;
+  @apply relative overflow-visible flex items-center gap-2 rounded-lg py-2
+  px-3 bg-surface-2 overflow-hidden transition-colors
+  duration-100 hover:cursor-pointer hover:bg-surface-3 border border-gray-soft;
 }

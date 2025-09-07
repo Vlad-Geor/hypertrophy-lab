@@ -1,5 +1,5 @@
 :host {
-  @apply whitespace-nowrap rounded;
+  @apply whitespace-nowrap rounded w-fit;
 
   &.xs {
     @apply px-1.5 py-0.5 text-xxs leading-tight;
@@ -15,18 +15,6 @@
 
   &.lg {
     @apply px-2;
-  }
-
-  &.primary {
-    @apply bg-primary text-white;
-  }
-
-  &.secondary {
-    @apply bg-secondary text-primary;
-  }
-
-  &.accent {
-    @apply bg-accent-purple text-white;
   }
 
   &.round-chip {

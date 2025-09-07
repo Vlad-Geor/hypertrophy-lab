@@ -1,3 +1,36 @@
+/** @type {import('tailwindcss').Config} */
+
+const gradientBorderPlugin = ({ addUtilities }) => {
+  const tones = [
+    'primary',
+    'secondary',
+    'warning',
+    'success',
+    'danger',
+    'info',
+    'accent-purple',
+    'accent-pink',
+    'accent-magenta',
+  ];
+  const utils = Object.fromEntries(
+    tones.map((t) => [
+      `.border-gradient-${t}`,
+      {
+        border: 'var(--b,1px) solid transparent',
+        backgroundImage: `linear-gradient(var(--bg-fill, var(--surface)), var(--bg-fill, var(--surface)))`,
+        backgroundClip: 'padding-box, border-box',
+        backgroundOrigin: 'border-box',
+        '--_grad': `linear-gradient(var(--g-deg,90deg),
+             var(--${t}),
+             hsl(from var(--${t}) h s calc(l * 0.3)))`,
+        background: `linear-gradient(var(--bg-primary, var(--surface-1)), var(--bg-primary, var(--surface-1))) padding-box,
+           var(--_grad) border-box`,
+      },
+    ]),
+  );
+  addUtilities(utils);
+};
+
 module.exports = {
   content: ['./apps/**/*.{html,ts}', './libs/**/*.{html,ts}'],
   theme: {
@@ -7,6 +40,7 @@ module.exports = {
         bg: 'var(--bg)',
         surface: 'var(--surface-1)',
         'surface-2': 'var(--surface-2)',
+        'surface-3': 'var(--surface-3)',
         border: 'var(--border)',
 
         /* Premium whites & helpers */
@@ -21,6 +55,7 @@ module.exports = {
         'text-2': 'var(--text-2)', // secondary
         'text-3': 'var(--text-3)', // muted
         'text-inverse': 'var(--text-inverse)', // on bright chips
+        'gray-text': 'var(--gray-bright)',
 
         // If you still use the old heading/body names, point them to HSL triples:
         'heading-01': 'hsl(var(--text-heading-01))',
@@ -37,6 +72,7 @@ module.exports = {
         success: 'var(--success)',
         danger: 'var(--danger)',
         info: 'var(--info)',
+        gray: 'var(--gray)',
 
         /* ===== State variants (alpha-overlay) ===== */
         // Primary
@@ -46,6 +82,7 @@ module.exports = {
         'primary-hover': 'var(--primary-hover)',
         'primary-active': 'var(--primary-active)',
         'primary-ring': 'var(--primary-ring)',
+        'primary-bright': 'var(--primary-bright)',
         // Secondary
         'secondary-ghost': 'var(--secondary-ghost)',
         'secondary-subtle': 'var(--secondary-subtle)',
@@ -151,6 +188,28 @@ module.exports = {
       ringOffsetColor: {
         DEFAULT: 'var(--surface)',
       },
+      backgroundImage: {
+        'gradient-primary':
+          'linear-gradient(270deg, var(--primary), hsl(from var(--primary) h s calc(l * 0.5)))',
+        'gradient-secondary':
+          'linear-gradient(270deg, var(--secondary), hsl(from var(--secondary) h s calc(l * 0.5)))',
+        'gradient-warning':
+          'linear-gradient(270deg, var(--warning), hsl(from var(--warning) h s calc(l * 0.5)))',
+        'gradient-success':
+          'linear-gradient(270deg, var(--success), hsl(from var(--success) h s calc(l * 0.5)))',
+        'gradient-danger':
+          'linear-gradient(270deg, var(--danger), hsl(from var(--danger) h s calc(l * 0.5)))',
+        'gradient-info':
+          'linear-gradient(270deg, var(--info), hsl(from var(--info) h s calc(l * 0.5)))',
+
+        // accents
+        'gradient-accent-purple':
+          'linear-gradient(270deg, var(--accent-purple), hsl(from var(--accent-purple) h s calc(l * 0.5)))',
+        'gradient-accent-pink':
+          'linear-gradient(270deg, var(--accent-pink), hsl(from var(--accent-pink) h s calc(l * 0.5)))',
+        'gradient-accent-magenta':
+          'linear-gradient(270deg, var(--accent-magenta), hsl(from var(--accent-magenta) h s calc(l * 0.5)))',
+      },
 
       /* Allow SVGs and dividers use the same palette */
       stroke: (theme) => theme('colors'),
@@ -160,5 +219,9 @@ module.exports = {
       }),
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/line-clamp'),
+    gradientBorderPlugin,
+  ],
 };
