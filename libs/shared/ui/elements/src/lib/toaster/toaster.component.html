@@ -1,0 +1,44 @@
+@let conf = config;
+<div
+  [@fadeTranslate]="animationState()"
+  (@fadeTranslate.done)="onAnimateDone($event)"
+  class="toaster"
+  [class.show]="animationState() === 'animate-in'"
+  [class]="[conf.type ?? 'info', conf.contentType ?? 'standard']"
+>
+  <section class="content-wrapper">
+    <div class="icon-text-wrapper">
+      <lib-icon icon="shekel-sign-solid"></lib-icon>
+      <div
+        class="toaster-message body2-regular"
+        [class.ellipsis]="conf.contentType !== 'overflow'"
+      >
+        {{ conf.message }}
+      </div>
+    </div>
+
+    @if (!!conf.linkLabel) {
+      <a
+        tabindex="0"
+        class="toaster-link ellipsis link-14-regular"
+        (click)="onLinkClicked()"
+        (keypress.enter)="onLinkClicked()"
+      >
+        {{ conf.linkLabel }}
+      </a>
+    }
+    @if (conf.buttonLabel) {
+      <lib-button class="toaster-button" (click)="onButtonClicked()">
+        conf.buttonLabel
+      </lib-button>
+    }
+  </section>
+  @if ((conf.showCloseBtn !== null && conf.showCloseBtn) || true) {
+    <div class="divider">
+      <lib-divider orientation="vertical" size="sm" opacity="low"></lib-divider>
+    </div>
+    <div class="close-btn-wrapper">
+      <lib-icon icon="atom-solid" class="close-btn" (click)="onClose()"></lib-icon>
+    </div>
+  }
+</div>

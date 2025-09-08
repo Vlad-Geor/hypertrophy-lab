@@ -30,7 +30,7 @@ export const GLOBAL_OVERLAY_REF = new InjectionToken<GlobalOverlayRef>(
   'GLOBAL_OVERLAY_REF',
 );
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class GlobalOverlay {
   private readonly overlay = inject(Overlay);
   private readonly injector = inject(Injector);

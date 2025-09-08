@@ -3,7 +3,6 @@ import { httpResource } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HealthTargetCarouselComponent } from '@ikigaidev/carousel';
-import { GlobalOverlayDirective } from '@ikigaidev/directive';
 import {
   ButtonComponent,
   IconComponent,
@@ -14,6 +13,7 @@ import {
 import { categories } from '@ikigaidev/hl/mock';
 import { Supplement } from '@ikigaidev/hl/model';
 import { API_BASE_URL } from '@ikigaidev/hl/shared';
+import { GlobalOverlay } from '@ikigaidev/overlay';
 import { AddSupplementComponent } from '../../add-supplement/add-supplement.component';
 import { SupplementCardComponent } from '../../supplement-card/supplement-card.component';
 
@@ -32,10 +32,9 @@ import { SupplementCardComponent } from '../../supplement-card/supplement-card.c
   ],
   templateUrl: './user-supplements.component.html',
   styleUrl: './user-supplements.component.scss',
-  providers: [GlobalOverlayDirective],
 })
 export class SupplementListComponent {
-  private readonly globalOverlay = inject(GlobalOverlayDirective);
+  private readonly globalOverlay = inject(GlobalOverlay);
   private readonly API_BASE = inject(API_BASE_URL);
 
   supplements = httpResource<Supplement[]>(() => `${this.API_BASE}/supplements`);
@@ -43,6 +42,6 @@ export class SupplementListComponent {
   categories = categories;
 
   addSupp(): void {
-    this.globalOverlay.open(AddSupplementComponent, [], {});
+    this.globalOverlay.openComponent(AddSupplementComponent, {});
   }
 }

@@ -4,9 +4,9 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { environment } from '@ikigaidev/config';
 import { CloudinaryService, CloudinaryUploadRes } from '@ikigaidev/data-access';
-import { GlobalOverlayDirective } from '@ikigaidev/directive';
 import {
   ButtonComponent,
+  IconButtonComponent,
   IconComponent,
   InputComponent,
   SelectComponent,
@@ -27,6 +27,7 @@ import { SupplementService } from '../data-access/supplement.service';
     ButtonComponent,
     MatSelectModule,
     IconComponent,
+    IconButtonComponent,
   ],
   templateUrl: './add-supplement.component.html',
   styleUrl: './add-supplement.component.scss',
@@ -36,7 +37,6 @@ export class AddSupplementComponent {
   private readonly fb = inject(FormBuilder);
   private readonly cnService = inject(CloudinaryService);
   private readonly supplementService = inject(SupplementService);
-  private readonly overlay = inject(GlobalOverlayDirective);
   private readonly destroyRef = inject(DestroyRef);
 
   HealthTargets = HEALTH_TARGETS;
@@ -118,7 +118,7 @@ export class AddSupplementComponent {
     this.imageFormData.set(form);
   }
 
-  onDiscard(): void {
-    this.overlay.close();
+  onClose(): void {
+    // this.overlay.close();
   }
 }

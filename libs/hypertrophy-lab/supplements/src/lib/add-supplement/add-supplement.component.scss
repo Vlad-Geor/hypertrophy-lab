@@ -1,4 +1,4 @@
 :host {
   display: block;
-  @apply rounded-md bg-white shadow-lg p-3;
+  @apply max-w-[320px] bg-surface-2 p-3 rounded-2xl border border-gray-active shadow-2xl;
 }

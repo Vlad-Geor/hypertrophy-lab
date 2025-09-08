@@ -1,4 +1,14 @@
-<p class="text-xl font-semibold text-center mb-2">Add new Supplement</p>
+<div class="flex items-center justify-between">
+  <p
+    tabindex="0"
+    class="text-xl font-semibold text-white"
+    (click)="onClose()"
+    (keypress.enter)="onClose()"
+  >
+    Add to Inventory
+  </p>
+  <lib-icon-button class="text-text-3" [icon]="'xmark-solid'"></lib-icon-button>
+</div>
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
   <lib-input formControlName="name" placeholder="Supp name"></lib-input>
@@ -77,7 +87,7 @@
   </div>
 
   <div class="flex justify-center gap-3">
-    <lib-button appearance="transparent" type="submit" (click)="onDiscard()">
+    <lib-button appearance="transparent" type="submit" (click)="onClose()">
       Discard
     </lib-button>
     <div class="bg-red-700 p-4 text-fuchsia-50">

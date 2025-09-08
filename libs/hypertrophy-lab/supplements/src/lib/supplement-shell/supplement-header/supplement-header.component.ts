@@ -1,11 +1,13 @@
 import { TitleCasePipe } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import {
   ButtonComponent,
   IconComponent,
   SearchComponent,
   SelectComponent,
 } from '@ikigaidev/elements';
+import { GlobalOverlay } from '@ikigaidev/overlay';
+import { AddSupplementComponent } from '../../add-supplement/add-supplement.component';
 
 @Component({
   selector: 'hl-supplement-header',
@@ -26,7 +28,7 @@ import {
           </p>
         </div>
         @if (headerFor() === 'inventory') {
-          <lib-button [size]="'xl'" class="text-white">
+          <lib-button [size]="'xl'" class="text-white" (click)="onAddInventoryItem()">
             <lib-icon [icon]="'plus-solid'" left [iconSize]="16"></lib-icon>
             Add
           </lib-button>
@@ -51,5 +53,13 @@ import {
   ],
 })
 export class SupplementHeaderComponent {
+  private readonly overlay = inject(GlobalOverlay);
+
   headerFor = input.required<'inventory' | 'catalog'>();
+
+  onAddInventoryItem(): void {
+    this.overlay.openComponent(AddSupplementComponent, {
+      overlayConfig: { hasBackdrop: true },
+    });
+  }
 }
