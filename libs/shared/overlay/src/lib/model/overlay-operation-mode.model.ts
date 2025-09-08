@@ -1,0 +1,1 @@
+export type OverlayOperationMode = 'hover' | 'mouseOrigin' | 'click' | 'code';

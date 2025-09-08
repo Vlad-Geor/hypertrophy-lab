@@ -41,4 +41,13 @@
   .stroke-token {
     stroke: var(--tone);
   }
+  .stroke-token-ghost {
+    stroke: var(--tone-ghost);
+  }
+  .stroke-token-soft {
+    stroke: var(--tone-soft);
+  }
+  .stroke-token-active {
+    stroke: var(--tone-active);
+  }
 }

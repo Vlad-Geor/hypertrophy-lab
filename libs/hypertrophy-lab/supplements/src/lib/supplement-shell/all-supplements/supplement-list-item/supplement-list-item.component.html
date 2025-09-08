@@ -7,32 +7,42 @@
     alt="Supplement image"
   />
 </div>
-<div class="flex flex-col">
-  <header class="flex items-start gap-2 flex-grow">
-    <span class="text-lg text-white font-medium w-max">{{ data?.name ?? 'C-1000' }}</span>
-    @if (data?.healthTargets?.length || true) {
-      <span class="flex items-center gap-1 pt-1.5">
-        <lib-tag-group>
-          @for (item of data?.healthTargets ?? ['heart', 'skeleton']; track $index) {
-            <lib-tag size="xs" [theme]="'primary'" [rounded]="true">
-              {{ item | titlecase }}
-            </lib-tag>
-          }
-        </lib-tag-group>
+<div class="flex items-stretch gap-3 flex-1">
+  <div class="flex flex-col flex-1">
+    <header class="flex items-start gap-2">
+      <span class="text-lg text-white font-medium w-max">
+        {{ data?.name ?? 'C-1000' }}
       </span>
-    }
-  </header>
-  <p class="text-xxs text-gray-text mb-1">500ml</p>
-  <p class="text-xs line-clamp-3 text-text-3">
-    {{
-      data?.description ??
-        `C-1000 is a slow release vitamin C supplement, used for maintaining elevated blood
-    vitamin C levels. Here is some additional text to make it to three rows. And here's
-    the fourth.`
-    }}
-  </p>
+      @if (data?.healthTargets?.length) {
+        <span class="flex items-center gap-1 pt-1.5">
+          <!-- <lib-tag-group> -->
+          <!-- @for (item of data?.healthTargets ?? ['heart', 'skeleton']; track $index) { -->
+          <lib-tag size="xs" [theme]="'primary'" [rounded]="true">
+            {{ (data?.healthTargets ?? [])[0] | titlecase }}
+          </lib-tag>
+          <!-- } -->
+          <!-- </lib-tag-group> -->
+        </span>
+      }
+    </header>
+    <p class="text-xxs text-gray-text mb-1">500ml</p>
+    <p class="text-xs line-clamp-3 text-text-3">
+      {{
+        data?.description ??
+          `C-1000 is a slow release vitamin C supplement, used for maintaining elevated blood
+      vitamin C levels. Here is some additional text to make it to three rows. And here's
+      the fourth.`
+      }}
+    </p>
+  </div>
+  <lib-divider></lib-divider>
+  <div class="flex flex-col gap-3 w-min">
+    <lib-doughnut [sizePx]="48" [stroke]="16" [progress]="50">
+      <p class="text-xxs text-white text-center">3 units</p>
+    </lib-doughnut>
+    <p class="text-xs text-text-2 text-center">43 days left</p>
+  </div>
 </div>
-<lib-doughnut [sizePx]="56" [progress]="50"><p class="text-xs text-white text-center">3 units</p></lib-doughnut>
 <div
   class="absolute p-1 text-xs top-0 left-0 -translate-x-1/4 -translate-y-1/4 bg-secondary-soft border border-secondary-soft text-secondary rounded-full"
 >

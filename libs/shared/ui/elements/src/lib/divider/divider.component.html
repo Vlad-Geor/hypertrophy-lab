@@ -1,8 +1,7 @@
-<hr
-  class="rounded-xl h-1 w-2/5 m-auto"
+<div
+  class="bg-gray-active"
   [ngClass]="{
-    'h3 bg-primary-light': type() === 'normal',
-    'h2 bg-primary-light': type() === 'thick',
-    'h-[2px] bg-gray-disabled opacity-50': type() === 'transparent',
+    'h-full w-[1px]': orientation() === 'vertical',
+    'w-full h-[1px]': orientation() === 'horizontal',
   }"
-/>
+></div>

@@ -3,13 +3,13 @@
 }
 
 .track {
-  @apply fill-none stroke-secondary-active
-    // fill: none;
-    // stroke: var(--color-semantic-bg-primary-subtle);;;;;
+  // @apply fill-none stroke-secondary-active;
+  // fill: none;
+  // stroke: var(--color-semantic-bg-primary-subtle);;;;;
 }
 
 .progress {
-  @apply fill-none stroke-secondary -rotate-90;
+  @apply fill-none -rotate-90;
   transform-origin: 50% 50%;
   transition: stroke-dashoffset 0.6s ease-in-out;
 }

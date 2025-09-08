@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 
+export type Orientation = 'vertical' | 'horizontal';
+
 @Component({
   selector: 'lib-divider',
   standalone: true,
@@ -8,6 +10,7 @@ import { Component, input } from '@angular/core';
   templateUrl: './divider.component.html',
 })
 export class DividerComponent {
+  orientation = input<Orientation>('vertical');
   type = input<'normal' | 'thick' | 'transparent'>('normal');
-  marginBottom = input<'mb-0' | 'mb-2' | 'mb-4' | 'mb-8'>('mb-4');
+  marginBottom = input<'mb-0' | 'mb-2' | 'mb-4' | 'mb-8'>('mb-0');
 }

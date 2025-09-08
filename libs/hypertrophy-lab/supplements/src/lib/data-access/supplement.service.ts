@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Supplement } from '@ikigaidev/hl/model';
 import { Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class SupplementService {
   private readonly http = inject(HttpClient);
 

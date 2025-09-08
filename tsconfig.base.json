@@ -46,6 +46,7 @@
       "@ikigaidev/hl/ui": ["libs/hypertrophy-lab/ui/src/index.ts"],
       "@ikigaidev/model": ["libs/shared/model/src/index.ts"],
       "@ikigaidev/navigation": ["libs/shared/layout/navigation/src/index.ts"],
+      "@ikigaidev/overlay": ["libs/shared/overlay/src/index.ts"],
       "@ikigaidev/pagination": ["libs/shared/ui/pagination/src/index.ts"],
       "@ikigaidev/playground": ["libs/playground/src/index.ts"],
       "@ikigaidev/shared/contracts": ["libs/shared/contracts/src/index.ts"],
