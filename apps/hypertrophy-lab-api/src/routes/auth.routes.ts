@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { logout, telegramCallback } from '../controllers/auth.controller';
+import { getOrCreateAuth0User, logout } from '../controllers/auth.controller';
 
 const router = Router();
 
-router.get('/telegram', telegramCallback); // Telegram hits this
-router.post('/logout', logout); // optional
+router.get('/me', getOrCreateAuth0User);
+// router.get('/telegram', telegramCallback); // Telegram hits this
+router.post('/logout', logout);
 
 export default router;

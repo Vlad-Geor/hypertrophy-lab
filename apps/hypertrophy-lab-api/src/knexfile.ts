@@ -15,7 +15,7 @@ const knexConfig: { [key: string]: Knex.Config } = {
     },
     ...knexSnakeCaseMappers(),
     migrations: {
-      directory: './src/migrations',
+      directory: './migrations',
       extension: 'ts',
     },
     debug: true,
