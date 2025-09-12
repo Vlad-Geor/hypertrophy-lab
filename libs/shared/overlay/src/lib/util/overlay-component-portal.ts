@@ -1,17 +1,24 @@
 import { OverlayConfig } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { inject, Injector, Provider, runInInjectionContext, Type, ViewContainerRef } from '@angular/core';
-import { RangeConnectedOverlayDirective } from '../connected-overlay/connected-overlay.directive';
+import {
+  inject,
+  Injector,
+  Provider,
+  runInInjectionContext,
+  Type,
+  ViewContainerRef,
+} from '@angular/core';
+import { ConnectedOverlayDirective } from '../connected-overlay/connected-overlay.directive';
 
 export function useOverlayComponentPortal<T>(
   component: Type<T> | null,
   providers: Provider[],
   injector: Injector,
-  overlayConfiguration?: OverlayConfig
-): RangeConnectedOverlayDirective | undefined {
-  let overlayDirectiveRef: RangeConnectedOverlayDirective | undefined;
+  overlayConfiguration?: OverlayConfig,
+): ConnectedOverlayDirective | undefined {
+  let overlayDirectiveRef: ConnectedOverlayDirective | undefined;
   runInInjectionContext(injector, () => {
-    const overlayDirective = inject(RangeConnectedOverlayDirective);
+    const overlayDirective = inject(ConnectedOverlayDirective);
     const viewContainerRef = inject(ViewContainerRef);
     const parentInjector = inject(Injector);
 
@@ -25,7 +32,11 @@ export function useOverlayComponentPortal<T>(
       parent: parentInjector,
     });
 
-    const componentPortal = new ComponentPortal(component, viewContainerRef, portalInjector);
+    const componentPortal = new ComponentPortal(
+      component,
+      viewContainerRef,
+      portalInjector,
+    );
 
     overlayDirective._componentPortal.set(componentPortal);
 

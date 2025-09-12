@@ -1,10 +1,12 @@
 import { TitleCasePipe } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import {
   ButtonComponent,
+  CellConfig,
   IconComponent,
-  SearchComponent,
+  InputComponent,
   SelectComponent,
+  SelectOptionComponent,
 } from '@ikigaidev/elements';
 import { GlobalOverlay } from '@ikigaidev/overlay';
 import { AddSupplementComponent } from '../../add-supplement/add-supplement.component';
@@ -36,8 +38,8 @@ import { AddSupplementComponent } from '../../add-supplement/add-supplement.comp
       </div>
 
       <div class="flex flex-col gap-3">
-        <lib-search></lib-search>
-        <lib-select [options]="[]"></lib-select>
+        <lib-input [withSearch]="true" placeholder="Search..."></lib-input>
+        <lib-select [options]="options()" placeholder="All Categories"></lib-select>
       </div>
     </div>
   `,
@@ -45,21 +47,28 @@ import { AddSupplementComponent } from '../../add-supplement/add-supplement.comp
     class: 'w-full',
   },
   imports: [
-    SearchComponent,
+    InputComponent,
     SelectComponent,
     ButtonComponent,
     IconComponent,
     TitleCasePipe,
+    SelectOptionComponent,
   ],
 })
 export class SupplementHeaderComponent {
   private readonly overlay = inject(GlobalOverlay);
 
+  readonly options = signal<CellConfig[]>([
+    { displayText: 'A' },
+    { displayText: 'B', icon: 'check-solid', selected: true },
+    { displayText: 'C' },
+  ]);
+
   headerFor = input.required<'inventory' | 'catalog'>();
 
   onAddInventoryItem(): void {
     this.overlay.openComponent(AddSupplementComponent, {
-      overlayConfig: { hasBackdrop: true },
+      overlayConfig: { hasBackdrop: true, backdropClass: 'bg-black/60' },
     });
   }
 }

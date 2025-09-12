@@ -14,7 +14,7 @@ import {
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'range-nds-toaster',
+  selector: 'lib-nds-toaster',
   templateUrl: './toaster.component.html',
   styleUrls: ['./toaster.component.scss'],
   imports: [CommonModule, IconComponent, ButtonComponent, DividerComponent],

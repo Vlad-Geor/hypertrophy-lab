@@ -7,51 +7,36 @@
   >
     Add to Inventory
   </p>
-  <lib-icon-button class="text-text-3" [icon]="'xmark-solid'"></lib-icon-button>
+  <lib-icon-button
+    class="text-text-3"
+    [icon]="'xmark-solid'"
+    (click)="onClose()"
+  ></lib-icon-button>
 </div>
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
-  <lib-input formControlName="name" placeholder="Supp name"></lib-input>
-  <lib-input
-    orientation="vertical"
-    formControlName="description"
-    placeholder="Description"
-  ></lib-input>
-
-  <div class="flex gap-2">
-    <input
-      formControlName="itemCount"
+  <div class="flex items-center gap-3">
+    <lib-input
       type="number"
-      placeholder="Quantity per bottle"
-      class="flex-1 max-h-12 border-primary-dark rounded-md focus:border-primary-light placeholder:text-sm"
-    />
-
-    <mat-form-field>
-      <mat-label>Units</mat-label>
-      <mat-select formControlName="quantityUnit">
-        @for (unit of quantityUnits; track unit) {
-          <mat-option [value]="unit">{{ unit }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+      label="Cost($)"
+      formControlName="name"
+      placeholder="Supp name"
+    ></lib-input>
+    <lib-date-picker formControlName="date" label="Expiry Date"></lib-date-picker>
   </div>
 
-  <div class="flex gap-2">
-    <input
-      formControlName="servingSize"
-      type="number"
-      placeholder="Amount per serving"
-      class="flex-1 max-h-12 border-primary-dark rounded-md focus:border-primary-light placeholder:text-sm"
-    />
-    <mat-form-field>
-      <mat-label>Target</mat-label>
-      <mat-select formControlName="healthTargets" multiple="true">
-        @for (target of healthTargetKeys; track target) {
-          <mat-option [value]="target">{{ target }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-  </div>
+  <lib-input formControlName="description" placeholder="Description"></lib-input>
+
+  <lib-select
+    [options]="[
+      { displayText: 'A' },
+      { displayText: 'B', icon: 'check-solid' },
+      { displayText: 'C' },
+    ]"
+    placeholder="All Categories"
+  ></lib-select>
+
+  <lib-slide-toggle formControlName="reminders"></lib-slide-toggle>
 
   <div class="px-2">
     <p class="mb-3">Image</p>
@@ -85,15 +70,9 @@
       </div>
     }
   </div>
-
-  <div class="flex justify-center gap-3">
-    <lib-button appearance="transparent" type="submit" (click)="onClose()">
-      Discard
-    </lib-button>
-    <div class="bg-red-700 p-4 text-fuchsia-50">
-      NEED TO CHANGE APPROACH - First add all supplements, then relate them to the user.
-      dont 'create' new supplements here
-    </div>
-    <lib-button appearance="fill" type="submit">Save</lib-button>
-  </div>
 </form>
+
+<div class="flex justify-center gap-3">
+  <lib-button appearance="transparent" (click)="onClose()">Discard</lib-button>
+  <lib-button (click)="onSubmit()">Save</lib-button>
+</div>

@@ -1,12 +1,13 @@
-import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { DOCUMENT, Injectable, inject } from '@angular/core';
 
 @Injectable()
 export class TelegramService {
+  private readonly _document = inject(DOCUMENT);
+
   private window: any;
   tg: any;
 
-  constructor(@Inject(DOCUMENT) private _document: Document) {
+  constructor() {
     this.window = this._document?.defaultView;
     this.tg = this.window?.Telegram?.WebApp;
   }

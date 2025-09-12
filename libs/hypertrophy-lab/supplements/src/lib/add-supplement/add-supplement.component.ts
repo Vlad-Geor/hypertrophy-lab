@@ -1,33 +1,48 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { environment } from '@ikigaidev/config';
 import { CloudinaryService, CloudinaryUploadRes } from '@ikigaidev/data-access';
 import {
   ButtonComponent,
+  DatePickerComponent,
   IconButtonComponent,
   IconComponent,
   InputComponent,
   SelectComponent,
+  SelectOptionComponent,
+  SlideToggleComponent,
 } from '@ikigaidev/elements';
 import { Supplement, quantityUnits } from '@ikigaidev/hl/model';
 import { HEALTH_TARGETS, HealthTarget } from '@ikigaidev/model';
+import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
 import { toSlug } from '@ikigaidev/util';
-import { switchMap, tap } from 'rxjs';
+import { switchMap } from 'rxjs';
 import { SupplementService } from '../data-access/supplement.service';
 
 @Component({
   selector: 'hl-add-supplement',
   imports: [
     CommonModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatFormFieldModule,
     ReactiveFormsModule,
-    SelectComponent,
+    MatNativeDateModule,
     InputComponent,
     ButtonComponent,
     MatSelectModule,
     IconComponent,
     IconButtonComponent,
+    DatePickerComponent,
+    SelectComponent,
+    SelectOptionComponent,
+    SlideToggleComponent,
   ],
   templateUrl: './add-supplement.component.html',
   styleUrl: './add-supplement.component.scss',
@@ -38,6 +53,7 @@ export class AddSupplementComponent {
   private readonly cnService = inject(CloudinaryService);
   private readonly supplementService = inject(SupplementService);
   private readonly destroyRef = inject(DestroyRef);
+  protected globalOverlayRef = inject<GlobalOverlayRef>(GLOBAL_OVERLAY_REF);
 
   HealthTargets = HEALTH_TARGETS;
   quantityUnits = quantityUnits;
@@ -46,8 +62,11 @@ export class AddSupplementComponent {
   imageFormData = signal<FormData | undefined>(undefined);
   previewUrl = signal<string>('');
 
-  readonly form = this.fb.nonNullable.group<Supplement>({
+  readonly form = this.fb.nonNullable.group<
+    Supplement & { date: Date; reminders: boolean }
+  >({
     name: '',
+    date: new Date(),
     description: '',
     servingSize: undefined,
     quantityUnit: undefined,
@@ -55,14 +74,12 @@ export class AddSupplementComponent {
     healthTargets: undefined,
     imgUrl: undefined,
     itemCount: 0,
+    reminders: false,
   });
 
   constructor() {
-    effect(() => console.log(this.imageFormData()));
     this.destroyRef.onDestroy(() => URL.revokeObjectURL(this.previewUrl()));
     this.form.valueChanges.subscribe((state) => {
-      console.log(state);
-
       if (state.imgUrl && state.name) {
         this.imageFormData.update((fd) => {
           fd?.append('public_id', `supplements/${toSlug(state.name ?? '')}`);
@@ -79,11 +96,9 @@ export class AddSupplementComponent {
       this.cnService
         .uploadImage(imgData, environment.cloudinary.cloudName)
         .pipe(
-          tap(console.log),
           switchMap((cloudinaryRes: CloudinaryUploadRes) => {
             this.form.patchValue({ imgUrl: cloudinaryRes.secure_url });
             const v = this.form.getRawValue();
-            console.log(v);
 
             return this.supplementService.addSupplement({
               itemCount: v.itemCount ?? 0,
@@ -97,13 +112,12 @@ export class AddSupplementComponent {
             });
           }),
         )
-        .subscribe(console.log);
+        .subscribe();
     }
   }
 
   onFileInput(ev: Event) {
     const file = (ev.target as HTMLInputElement).files![0];
-    console.log(file);
     if (!file) return;
     this.previewUrl.set(URL.createObjectURL(file));
     this.handleFile(file);
@@ -119,6 +133,6 @@ export class AddSupplementComponent {
   }
 
   onClose(): void {
-    // this.overlay.close();
+    this.globalOverlayRef.close();
   }
 }

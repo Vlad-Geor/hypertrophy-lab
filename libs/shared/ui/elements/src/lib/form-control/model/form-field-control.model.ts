@@ -2,7 +2,7 @@ import { InjectionToken, InputSignal } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-export type InputTypeOption = 'text' | 'number' | 'email';
+export type InputTypeOption = 'text' | 'number' | 'email' | 'date';
 
 export interface FormFieldControl<T = any> {
   value: T | null | InputSignal<T>;

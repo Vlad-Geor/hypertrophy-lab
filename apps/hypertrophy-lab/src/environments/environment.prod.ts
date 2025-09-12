@@ -12,6 +12,6 @@ export const environment: Environment = {
     audience: 'https://api.hypertrophy-lab.dev',
     clientId: 'ShNzibPYxu034WL1xb7yReBUr9R51yJA',
     domain: 'dev-uy7xbj3vls2cy6je.us.auth0.com',
-    redirectUri: window.location.origin,
+    redirectUri: `${window.location.origin}/auth/callback`,
   },
 };

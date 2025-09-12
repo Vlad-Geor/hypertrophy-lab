@@ -1,26 +1,27 @@
-@if (label()) {
-  <label [for]="id()" class="flex-grow">{{ label() }}:</label>
-}
-
-<div
-  class="input-container flex items-center gap-2 w-full"
-  [ngClass]="rounded() ? 'rounded-full' : 'rounded-md'"
+<lib-form-control-wrapper
+  [control]="control"
+  errorMessage="Invalid input"
+  [label]="label()"
 >
-  @if (withSearch()) {
-    <lib-icon
-      [iconSize]="16"
-      [icon]="'search-solid'"
-      [inheritCurrentColor]="false"
-    ></lib-icon>
-  }
-  <input
-    class="text-sm w-full bg-transparent border-0 p-0 placeholder:text-gray-text focus:ring-0"
-    [value]="_value() || ''"
-    [placeholder]="placeholder() || ''"
-    [type]="type()"
-    [disabled]="disabled()"
-    [id]="id() || 'input'"
-    (input)="onInputChange($event)"
-    (blur)="onBlur()"
-  />
-</div>
+  <div
+    class="inline-flex items-center px-3 py-1.5 gap-2 text-text-2 w-full bg-surface-2 border border-gray-ring rounded-md"
+  >
+    @if (withSearch()) {
+      <lib-icon
+        [iconSize]="16"
+        [icon]="'search-solid'"
+        [inheritCurrentColor]="false"
+      ></lib-icon>
+    }
+    <input
+      class="text-sm text-white w-full bg-transparent border-0 p-0 placeholder:text-gray focus:outline-none focus:ring-0"
+      [value]="_value() || ''"
+      [placeholder]="placeholder() || ''"
+      [type]="type()"
+      [disabled]="disabled()"
+      [id]="id() || 'input'"
+      (input)="onInputChange($event)"
+      (blur)="onBlur()"
+    />
+  </div>
+</lib-form-control-wrapper>

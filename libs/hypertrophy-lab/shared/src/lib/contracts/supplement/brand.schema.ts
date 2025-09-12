@@ -9,4 +9,7 @@ export const brandSchema = z.object({
   updatedAt: isoDateTime,
 });
 
+export const listBrandsResponse = z.array(brandSchema);
+
 export type Brand = z.infer<typeof brandSchema>;
+export type ListBrandsResponse = z.infer<typeof listBrandsResponse>;

@@ -96,7 +96,7 @@ const OVERLAY_POSITION_LEFT: Record<PositionAxisY, ConnectedPosition> = {
   },
 };
 
-const OVERLAY_POSITION_BOTTOM: Record<PositionAxisX, ConnectedPosition> = {
+export const OVERLAY_POSITION_BOTTOM: Record<PositionAxisX, ConnectedPosition> = {
   center: {
     originX: 'center',
     originY: 'bottom',
@@ -142,6 +142,8 @@ export const OVERLAY_POSITIONS = {
 } as const;
 
 export type OverlayDirection = keyof typeof OVERLAY_POSITIONS;
+
+export const FALLBACK_POSITION: ConnectedPosition = OVERLAY_POSITION_RIGHT.center;
 
 export const DEFAULT_POSITIONS: ConnectedPosition[] = [
   ...getPositionsFor('right'),

@@ -11,12 +11,17 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'login',
-    loadComponent: () => import('@ikigaidev/hl/login').then((m) => m.LoginComponent),
+    loadComponent: () => import('@ikigaidev/hl/login').then((m) => m.LoginPageComponent),
   },
   {
     path: 'login-success',
     redirectTo: 'inventory',
     // loadComponent: () => import('@ikigaidev/dashboard').then((m) => m.DashboardComponent),
+  },
+  {
+    path: 'auth/callback',
+    loadComponent: () =>
+      import('@ikigaidev/hl/login').then((m) => m.LoginSuccessCallbackComponent),
   },
   {
     path: '',

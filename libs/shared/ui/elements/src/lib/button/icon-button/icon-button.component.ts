@@ -17,9 +17,19 @@ import { IconComponent } from '../../icon/icon.component';
   `,
   styles: `
     :host {
-      @apply inline-flex hover:cursor-pointer rounded-full hover:bg-gray-soft;
+      @apply inline-flex rounded-full hover:cursor-pointer;
+      &.color-on-hover {
+        @apply hover:text-primary-bright;
+      }
+      &.highlight-on-hover {
+        @apply hover:bg-gray-soft;
+      }
     }
   `,
+  host: {
+    '[class.color-on-hover]': 'onHoverEffect() === "color"',
+    '[class.highlight-on-hover]': 'onHoverEffect() === "highlight"',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IconButtonComponent {
@@ -29,4 +39,5 @@ export class IconButtonComponent {
   appearance = input<'transparent' | 'fill'>('transparent');
   type = input<'button' | 'submit'>('button');
   inheritIconFillColor = input(true);
+  onHoverEffect = input<'highlight' | 'color'>('highlight');
 }

@@ -1,3 +1,17 @@
-<lib-icon [icon]="'filter-liner'"></lib-icon>
+<!-- <lib-icon [icon]="'filter-liner'"></lib-icon>
 <span>{{ placeholder() || 'Select' }}</span>
-<lib-icon [icon]="'chevron-down-solid'" [iconSize]="12"></lib-icon>
+<lib-icon [icon]="'chevron-down-solid'" [iconSize]="12"></lib-icon> -->
+
+@if (icon()) {
+  <lib-icon [icon]="icon()"></lib-icon>
+}
+
+<span class="text-white font-light text-ellipsis">
+  {{ _value()?.displayText || placeholder() }}
+</span>
+
+@if (tagLabel()) {
+  <lib-tag>{{ tagLabel() }}</lib-tag>
+}
+
+<lib-icon [iconSize]="12" [icon]="'chevron-down-solid'"></lib-icon>

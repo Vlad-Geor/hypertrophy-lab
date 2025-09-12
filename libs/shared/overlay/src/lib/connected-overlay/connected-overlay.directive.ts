@@ -26,7 +26,12 @@ import {
 } from '@angular/core';
 import { DirectiveCompositionConfig } from '../model/directive-composition.model';
 import { OverlayOperationMode } from '../model/overlay-operation-mode.model';
-import { DEFAULT_POSITIONS, OverlayPositionKey } from '../model/overlay-position.model';
+import {
+  DEFAULT_POSITIONS,
+  FALLBACK_POSITION,
+  OVERLAY_POSITION_BOTTOM,
+  OverlayPositionKey,
+} from '../model/overlay-position.model';
 import {
   addOverlayClass,
   chevronPositionBasedClass,
@@ -36,7 +41,7 @@ import {
 import { coercePositionKey } from './util/coerce-position';
 
 export const OVERLAY_HOST_DEFAULTS: DirectiveCompositionConfig = {
-  directive: forwardRef(() => RangeConnectedOverlayDirective),
+  directive: forwardRef(() => ConnectedOverlayDirective),
   inputs: [
     'overlayPosition',
     'overlayOffsetX',
@@ -51,18 +56,25 @@ export const OVERLAY_HOST_DEFAULTS: DirectiveCompositionConfig = {
   outputs: ['overlayClosed'],
 };
 
+const FALLBACK_ORIGIN_POINT: Point & { width: number; height: number } = {
+  height: 20,
+  width: 20,
+  x: 0,
+  y: 0,
+};
+
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[rangeOverlay]',
 })
-export class RangeConnectedOverlayDirective {
+export class ConnectedOverlayDirective {
   overlay = inject(Overlay);
   triggerElementRef = inject(ElementRef);
   viewContainerRef = inject(ViewContainerRef);
 
   private static activeOverlay: OverlayRef | null;
 
-  overlayMode = input<OverlayOperationMode | null>('hover');
+  overlayMode = input<OverlayOperationMode>('hover');
   overlayTheme = input<'dark' | 'light'>('light');
   hideChevron = input<boolean>(false);
   delayClose = input<boolean>(true);
@@ -90,36 +102,20 @@ export class RangeConnectedOverlayDirective {
   _componentPortal = signal<ComponentPortal<unknown> | null>(null);
   _componentRef = signal<ComponentRef<any> | undefined>(undefined);
 
-  positions = computed<ConnectedPosition[]>(() => {
-    const m = this._mode();
-    if (m) {
-      return m === 'mouseOrigin'
-        ? [
-            {
-              originX: 'start',
-              originY: 'bottom',
-              overlayX: 'start',
-              overlayY: 'top',
-              offsetY: 16,
-            },
-          ]
-        : (this._overlayPosition() ?? ({} as ConnectedPosition))
-          ? [this._overlayPosition() ?? ({} as ConnectedPosition), ...DEFAULT_POSITIONS]
-          : [...DEFAULT_POSITIONS];
-    }
-    return [];
-  });
+  positions = computed<ConnectedPosition[]>(() =>
+    this._mode() === 'mouseOrigin'
+      ? [{ ...OVERLAY_POSITION_BOTTOM['protrude-right'], offsetY: 16 }]
+      : (this._overlayPosition() ?? FALLBACK_POSITION)
+        ? [this._overlayPosition() ?? FALLBACK_POSITION, ...DEFAULT_POSITIONS]
+        : [...DEFAULT_POSITIONS],
+  );
 
   flexiblePositionStrategy = computed<FlexibleConnectedPositionStrategy>(() =>
     this.overlay
       .position()
       .flexibleConnectedTo(
         this._mode() === 'mouseOrigin'
-          ? (this.originEntrypoint() ??
-              ({} as Point & {
-                width: number;
-                height: number;
-              }))
+          ? (this.originEntrypoint() ?? FALLBACK_ORIGIN_POINT)
           : this.anchorRef() || this.triggerElementRef,
       )
       .withPositions(
@@ -136,14 +132,14 @@ export class RangeConnectedOverlayDirective {
   private hideTimer!: ReturnType<typeof setTimeout>;
   private _overlayRef!: OverlayRef | null;
 
-  private _open(): OverlayRef | undefined {
+  private _open(): OverlayRef | null {
     if (!this.templateRef() && !this._componentPortal()) {
-      return;
+      return null;
     }
 
-    if (RangeConnectedOverlayDirective.activeOverlay?.hasAttached()) {
-      RangeConnectedOverlayDirective.activeOverlay.detach();
-      RangeConnectedOverlayDirective.activeOverlay = null;
+    if (ConnectedOverlayDirective.activeOverlay?.hasAttached()) {
+      ConnectedOverlayDirective.activeOverlay.detach();
+      ConnectedOverlayDirective.activeOverlay = null;
     }
 
     if (!this._overlayRef) {
@@ -160,21 +156,22 @@ export class RangeConnectedOverlayDirective {
     }
 
     this._overlayRef.detachments().subscribe(() => {
-      if (RangeConnectedOverlayDirective.activeOverlay === this._overlayRef) {
-        RangeConnectedOverlayDirective.activeOverlay = null;
+      if (ConnectedOverlayDirective.activeOverlay === this._overlayRef) {
+        ConnectedOverlayDirective.activeOverlay = null;
       }
     });
 
     if (!this._overlayRef.hasAttached()) {
-      const tplRef = this.templateRef();
-      if (tplRef) {
-        const portal = this.templateRef()
-          ? new TemplatePortal(tplRef, this.viewContainerRef)
-          : this._componentPortal();
-        const ref: ComponentRef<unknown> = this._overlayRef.attach(portal);
-        this._componentRef.set(ref);
-        this.componentAttached.emit(ref);
-      }
+      const portal = this.templateRef()
+        ? new TemplatePortal(
+            this.templateRef() ?? new TemplateRef(),
+            this.viewContainerRef,
+          )
+        : this._componentPortal();
+
+      const ref: ComponentRef<unknown> = this._overlayRef.attach(portal);
+      this._componentRef.set(ref);
+      this.componentAttached.emit(ref);
     }
 
     this._overlayRef.overlayElement.addEventListener('mouseenter', () => {
@@ -190,6 +187,11 @@ export class RangeConnectedOverlayDirective {
 
     this.flexiblePositionStrategy().positionChanges.subscribe(
       (pos: ConnectedOverlayPositionChange) => {
+        // const triggerRect = this.triggerElementRef.nativeElement.getBoundingClientRect();
+        // TBD use for calculated heights
+        // const chevronY = (triggerRect.height - 12) / 2;
+        // const chevronX = (triggerRect.width - 12) / 2;
+        // this.overlayElement.nativeElement.style.setProperty('--chevron-top', `${chevronTop}px`);
         if (this._overlayRef) {
           addOverlayClass(this._overlayRef, chevronPositionBasedClass(pos) ?? '');
           this._overlayRef.overlayElement.style.setProperty(
@@ -199,11 +201,6 @@ export class RangeConnectedOverlayDirective {
               : `var(${this._theme() === 'dark' ? '--color-layers-01-PERMA-DARK' : '--color-layers-02'})`,
           );
         }
-        // const triggerRect = this.triggerElementRef.nativeElement.getBoundingClientRect();
-        // TBD use for calculated heights
-        // const chevronY = (triggerRect.height - 12) / 2;
-        // const chevronX = (triggerRect.width - 12) / 2;
-        // this.overlayElement.nativeElement.style.setProperty('--chevron-top', `${chevronTop}px`);
       },
     );
 
@@ -215,11 +212,11 @@ export class RangeConnectedOverlayDirective {
 
     this._overlayRef.backdropClick().subscribe(() => this.close());
 
-    RangeConnectedOverlayDirective.activeOverlay = this._overlayRef;
+    ConnectedOverlayDirective.activeOverlay = this._overlayRef;
     return this._overlayRef;
   }
 
-  public open(): OverlayRef | undefined {
+  public open(): OverlayRef | null {
     if (this._mode() !== 'code') {
       throw Error('Overlay.open() requires mode to be set to "code".');
     }
@@ -252,7 +249,7 @@ export class RangeConnectedOverlayDirective {
     if (
       !openOverlayContains(
         event.relatedTarget as Node,
-        RangeConnectedOverlayDirective.activeOverlay,
+        ConnectedOverlayDirective.activeOverlay,
       )
     ) {
       this.handleClose();
@@ -270,8 +267,8 @@ export class RangeConnectedOverlayDirective {
   close(): void {
     if (this._overlayRef?.hasAttached()) {
       this._overlayRef.detach();
-      if (RangeConnectedOverlayDirective.activeOverlay === this._overlayRef) {
-        RangeConnectedOverlayDirective.activeOverlay = null;
+      if (ConnectedOverlayDirective.activeOverlay === this._overlayRef) {
+        ConnectedOverlayDirective.activeOverlay = null;
       }
     }
     this.overlayClosed.emit();

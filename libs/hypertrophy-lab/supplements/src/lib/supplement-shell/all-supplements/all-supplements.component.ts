@@ -1,18 +1,14 @@
 import { httpResource } from '@angular/common/http';
 import { Component, inject, input } from '@angular/core';
-import { IconComponent, StatefulIconComponent, TagComponent, ButtonComponent, SearchComponent, SelectComponent } from '@ikigaidev/elements';
 import { Supplement } from '@ikigaidev/hl/model';
 import { API_BASE_URL } from '@ikigaidev/hl/shared';
-import { PaginatorComponent } from '@ikigaidev/pagination';
 import { SupplementListItemComponent } from './supplement-list-item/supplement-list-item.component';
 
 @Component({
   selector: 'hl-all-supplements',
   templateUrl: './all-supplements.component.html',
   styleUrl: './all-supplements.component.scss',
-  imports: [
-    SupplementListItemComponent
-  ],
+  imports: [SupplementListItemComponent],
 })
 export class AllSupplementsComponent {
   private readonly API_BASE = inject(API_BASE_URL);

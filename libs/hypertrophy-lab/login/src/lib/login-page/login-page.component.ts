@@ -9,11 +9,11 @@ const APP_URL = 'https://68fe-2a06-c701-4cfc-3800-b148-bbd8-477f-cae0.ngrok-free
 @Component({
   selector: 'hl-login',
   imports: [CommonModule, NgTemplateOutlet],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  templateUrl: './login-page.component.html',
+  styleUrl: './login-page.component.scss',
   providers: [TelegramService],
 })
-export class LoginComponent implements AfterViewInit {
+export class LoginPageComponent implements AfterViewInit {
   private readonly renderer = inject(Renderer2);
   private readonly http = inject(HttpClient);
   readonly authService = inject(AuthService);
@@ -30,6 +30,7 @@ export class LoginComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.authService.user$.subscribe(console.log);
     this.loadTelegramWidget();
   }
 

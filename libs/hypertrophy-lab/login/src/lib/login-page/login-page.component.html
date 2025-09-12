@@ -33,7 +33,9 @@
 
 <button
   *ngIf="authService.isAuthenticated$ | async"
-  (click)="authService.logout({ logoutParams: { returnTo: window.location.origin } })"
+  (click)="
+    authService.logout({ logoutParams: { returnTo: `${window.location.origin}/login` } })
+  "
   class="btn"
 >
   Log out

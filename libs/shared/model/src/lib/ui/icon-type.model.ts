@@ -11,13 +11,12 @@ export const iconType = [
   'bell-solid',
   'bolt-lightning-solid',
   'bolt-solid',
+  'calendar-liner',
   'bookmark-solid',
   'bowl-food-solid',
   'bowl-rice-solid',
   'brain-solid',
   'calculator-solid',
-  'calendar-day-solid',
-  'calendar-solid',
   'capsules-solid',
   'caret-up-solid',
   'cart-plus-solid',
@@ -132,7 +131,9 @@ export const iconType = [
   'search-solid',
   'cart-liner',
   'book-liner',
-  'filter-liner'
+  'filter-liner',
+  'alert-triangle-liner',
+  'alert-circle-liner',
 ] as const;
 
 export type IconType = (typeof iconType)[number];

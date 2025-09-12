@@ -1,7 +1,7 @@
-import { Directive, input, linkedSignal } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import { Directive, inject, input, linkedSignal } from '@angular/core';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
 
-@Directive({})
+@Directive()
 export abstract class FormControlComponent<T> implements ControlValueAccessor {
   value = input<T>();
   _value = linkedSignal(() => this.value());
@@ -12,8 +12,20 @@ export abstract class FormControlComponent<T> implements ControlValueAccessor {
   disabled = input<boolean>();
   _disabled = linkedSignal(() => this.disabled());
   hasError = input<boolean>();
+  uiLayerClass = input<'surface' | 'surface-1' | 'surface-2'>('surface-1');
 
-  protected onChange!: (value: T | null | undefined) => void;
+  protected ngControl = inject(NgControl, { self: true, optional: true });
+
+  constructor() {
+    if (this.ngControl) this.ngControl.valueAccessor = this;
+  }
+
+  get control() {
+    return this.ngControl?.control ?? null;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  protected onChange: (v: T | null | undefined) => void = () => {};
 
   protected onTouched!: () => void;
 

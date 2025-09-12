@@ -1,16 +1,29 @@
-<button class="relative group" (click)="toggleSlide()">
+<span class="text-text-2 text-sm">{{ isActive() ? 'On' : 'Off' }}</span>
+<button
+  class="relative group w-16 h-8 rounded-full border px-1"
+  [ngClass]="{
+    'bg-secondary-subtle border-secondary-active': isActive(),
+    'bg-gray-soft border-gray-active': !isActive(),
+  }"
+  (click)="toggleSlide()"
+>
   <div
-    class="w-9 h-[14px] opacity-30 rounded-full"
+    class="h-6 w-6 rounded-full border transition-all duration-100"
+    [ngClass]="{
+      'translate-x-8 bg-secondary border-none': isActive(),
+      'bg-gray border-gray-subtle ': !isActive(),
+    }"
+  ></div>
+  <!-- <div
+    class="w-14 h-8 opacity-30 rounded-full"
     [class.bg-gray-700]="!isActive()"
     [class.bg-primary]="isActive()"
   ></div>
   <div
-    class="h-5 w-5 rounded-full absolute top-0 -translate-y-[3px] transition-all
-     ease-in duration-150 shadow-hl-light group-hover:ring-8"
-     [ngClass]="{
+    class="h-6 w-6 rounded-full absolute top-0 translate-y-1 transition-all ease-in duration-150 shadow-hl-light group-hover:ring-8"
+    [ngClass]="{
       'bg-white left-0 group-hover:ring-gray-background-faded': !isActive(),
-      'bg-primary right-0 group-hover:ring-primary-light-faded': isActive()
-     }"
-    
-  ></div>
+      'bg-primary right-0 group-hover:ring-primary-light-faded': isActive(),
+    }"
+  ></div> -->
 </button>

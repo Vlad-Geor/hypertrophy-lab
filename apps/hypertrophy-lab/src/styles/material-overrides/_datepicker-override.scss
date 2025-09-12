@@ -1,0 +1,16 @@
+:root {
+  --mat-sys-body-medium-font: 'Poppins';
+  --mat-sys-label-large-font: 'Poppins';
+  --mat-sys-surface-container-high: var(--bg);
+  --mat-sys-inverse-surface: var(--primary);
+  --mat-sys-inverse-on-surface: var(--white);
+  --mat-sys-body-small-font: 'Poppins';
+  --mat-sys-body-small-size: 12px;
+  --mat-sys-body-small-weight: 500;
+  --mat-sys-primary: var(--secondary-soft);
+  --mat-sys-on-primary: var(--secondary);
+}
+
+mat-datepicker-content.mat-datepicker-content {
+    @apply border border-gray-active;
+}

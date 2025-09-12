@@ -7,10 +7,10 @@ import { Observable } from 'rxjs';
 export class SupplementService {
   private readonly http = inject(HttpClient);
 
-  addSupplement(bodyPayload: Supplement): Observable<Supplement> {
+  addSupplement(payload: Supplement): Observable<Supplement> {
     return this.http.post<Supplement>(
       'http://localhost:3333/api/v1/supplements',
-      bodyPayload,
+      payload,
     );
   }
 

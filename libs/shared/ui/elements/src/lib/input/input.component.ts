@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, forwardRef, input } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, input } from '@angular/core';
+import { FormControlWrapperComponent } from '../form-control/form-control-wrapper.component';
 import { FormControlComponent } from '../form-control/form-control.component';
 import { IconComponent } from '../icon/icon.component';
 
@@ -8,29 +8,18 @@ type InputType = string | number;
 
 @Component({
   selector: 'lib-input',
-  imports: [CommonModule, IconComponent],
+  imports: [CommonModule, IconComponent, FormControlWrapperComponent],
   templateUrl: './input.component.html',
-  styleUrl: './input.component.scss',
   host: {
-    class: 'inline-flex p-0',
-    '[class.vertical]': 'orientation() === "vertical"',
+    class: 'bg-transparent border-none p-0',
   },
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputComponent),
-      multi: true,
-    },
-  ],
 })
 export class InputComponent<
   T extends InputType = string,
 > extends FormControlComponent<T> {
-  transparent = input<boolean>();
   type = input<T>();
   withSearch = input<boolean>(false);
   rounded = input<boolean>(false);
-  orientation = input<'vertical' | 'horizontal'>();
 
   override writeValue(value: T): void {
     if (value) {

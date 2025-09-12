@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LoginComponent } from '@ikigaidev/hl/login';
+import { LoginPageComponent } from '@ikigaidev/hl/login';
 
 @Component({
   selector: 'hl-dashboard',
-  imports: [CommonModule, LoginComponent],
+  imports: [CommonModule, LoginPageComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
