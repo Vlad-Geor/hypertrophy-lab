@@ -23,14 +23,7 @@ export class LoginPageComponent implements AfterViewInit {
 
   API_URL = `${APP_URL}/api/v1`;
 
-  constructor() {
-    this.authService.error$.subscribe(console.log);
-    this.authService.user$.subscribe(console.log);
-    // this.authService.
-  }
-
   ngAfterViewInit(): void {
-    this.authService.user$.subscribe(console.log);
     this.loadTelegramWidget();
   }
 
@@ -53,7 +46,6 @@ export class LoginPageComponent implements AfterViewInit {
   }
 
   onTelegramAuth(authData: any) {
-    console.log('entered onTelegramAuth');
     this.http
       .post(`${this.API_URL}/login-success`, authData)
       .subscribe((response: any) => {

@@ -1,9 +1,4 @@
-import {
-  isoDateTime,
-  pageMeta,
-  paginationQuery,
-  uuid,
-} from '@ikigaidev/shared/contracts';
+import { isoDateTime, pageMeta, paginationQuery, uuid } from '@ikigaidev/contracts';
 import { z } from 'zod';
 
 export const supplementFormSchema = z.enum([

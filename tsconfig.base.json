@@ -17,6 +17,7 @@
     "paths": {
       "@hl/api-knexfile": ["apps/api/knexfile.ts"],
       "@ikigaidev/accordion": ["libs/shared/ui/accordion/src/index.ts"],
+      "@ikigaidev/api": ["libs/hypertrophy-lab/api/src/index.ts"],
       "@ikigaidev/carousel": ["libs/shared/ui/carousel/src/index.ts"],
       "@ikigaidev/config": ["libs/shared/config/src/index.ts"],
       "@ikigaidev/contracts": ["libs/shared/contracts/src/index.ts"],
@@ -26,6 +27,9 @@
       "@ikigaidev/elements": ["libs/shared/ui/elements/src/index.ts"],
       "@ikigaidev/header": ["libs/shared/layout/header/src/index.ts"],
       "@ikigaidev/hl-env": ["apps/hypertrophy-lab/src/environments/environment.ts"],
+      "@ikigaidev/hl/contracts": [
+        "libs/hypertrophy-lab/shared/src/lib/contracts/index.ts"
+      ],
       "@ikigaidev/hl/core": ["libs/hypertrophy-lab/core/src/index.ts"],
       "@ikigaidev/hl/daily-workout": [
         "libs/hypertrophy-lab/workout/feature/daily-workout/src/index.ts"
@@ -49,7 +53,7 @@
       "@ikigaidev/overlay": ["libs/shared/overlay/src/index.ts"],
       "@ikigaidev/pagination": ["libs/shared/ui/pagination/src/index.ts"],
       "@ikigaidev/playground": ["libs/playground/src/index.ts"],
-      "@ikigaidev/shared/contracts": ["libs/shared/contracts/src/index.ts"],
+      "@ikigaidev/service": ["libs/shared/layout/service/src/index.ts"],
       "@ikigaidev/tag": ["libs/shared/ui/tag/src/index.ts"],
       "@ikigaidev/tw-preset": ["libs/shared/tw-preset/src/index.ts"],
       "@ikigaidev/util": ["libs/shared/util/src/index.ts"]

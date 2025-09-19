@@ -14,8 +14,8 @@ export interface User {
   telegramPhotoUrl?: string;
   telegramAuthDate?: Date;
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Userr {

@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { InputComponent } from '@ikigaidev/elements';
 import { HeaderComponent } from '@ikigaidev/header';
 import { HealthTarget, HealthTargetCarouselItem, healthTargets } from '@ikigaidev/model';
-import { NavigationComponent } from '@ikigaidev/navigation';
+import { SidenavComponent } from '@ikigaidev/navigation';
+import { ViewportService } from '@ikigaidev/service';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -14,6 +15,7 @@ import { NavigationComponent } from '@ikigaidev/navigation';
     RouterOutlet,
     InputComponent,
     HeaderComponent,
+    SidenavComponent,
   ],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
@@ -22,7 +24,12 @@ import { NavigationComponent } from '@ikigaidev/navigation';
   },
 })
 export class ShellComponent {
+  private readonly vpService = inject(ViewportService);
   healthTargets: HealthTarget[] = [...healthTargets];
+
+  constructor() {
+    effect(() => console.log(this.vpService.platform()));
+  }
 
   carouselData = this.healthTargets.map(
     (t, i) => ({ index: i, target: t }) as HealthTargetCarouselItem,

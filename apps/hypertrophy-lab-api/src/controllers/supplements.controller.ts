@@ -1,89 +1,45 @@
-/** @format */
+import { createCatalogRequest } from '@ikigaidev/hl/contracts';
+import { Request, RequestHandler } from 'express';
+import * as svc from '../services/supplement.service';
 
-import { NextFunction, Request, Response } from 'express';
-import { SupplementService } from '../services/supplement.service';
+export const listCatalog: RequestHandler = async (req: Request, res) => {
+  const { brandId, targetId, q, includeUser } = req.query as any;
+  const page = Number(req.query.page ?? 1);
+  const limit = Number(req.query.limit ?? 20);
+  console.log('req.user: ', req.user);
+  console.log('includeUser: ', req.query);
 
-const supplementService = new SupplementService();
+  const userId = includeUser ? req.user?.id : undefined;
+  res.json(await svc.listCatalog({ brandId, targetId, q, page, limit }, userId));
+};
 
-export class SupplementController {
-  public static async getOne(req: Request, res: Response, next: NextFunction) {
-    try {
-      const id = parseInt(req.params.id, 10);
-      const supplement = await supplementService.getSupplementById(id);
+export const getCatalogById: RequestHandler<{ id: string }> = async (req, res) => {
+  const data = await svc.getCatalogById(req.params.id);
+  if (!data) return res.sendStatus(404);
+  res.json(data);
+};
 
-      if (!supplement) {
-        res.status(404).json({ message: 'Supplement not found' });
-      }
-      res.json(supplement);
-    } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
-    }
-  }
+export const createCatalog: RequestHandler = async (req: Request, res) => {
+  // validate with your zod createCatalogRequest.parse(req.body)
+  createCatalogRequest.parse(req.body);
+  const result = await svc.createCatalog(req.body, req.user.id);
+  res.status(201).json(result);
+};
 
-  public static async getAll(req: Request, res: Response, next: NextFunction) {
-    try {
-      console.log('getAll');
+export const updateCatalog: RequestHandler<{ id: string }> = async (
+  req: Request,
+  res,
+) => {
+  const rows = await svc.updateOwnCatalog(req.user.id, req.params.id, req.body);
+  if (!rows?.length) return res.sendStatus(404);
+  res.sendStatus(204);
+};
 
-      const supplements = await supplementService.getAllSupplements();
-      res.send(supplements);
-    } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
-    }
-  }
-
-  public static async addUserSupplement(req: Request, res: Response) {
-    try {
-      console.log(req.body);
-      console.log(req.auth);
-
-      const supplement = await supplementService.addUserSupplement(req.body);
-      res.status(201).json(supplement);
-    } catch (error) {
-      res.status(400).json({ error: (error as Error).message });
-    }
-  }
-
-  // public static async getUserSupplements(req: Request, res: Response) {
-  //   try {
-  //   } catch (error) {}
-  // }
-
-  public static async create(req: Request, res: Response, next: NextFunction) {
-    try {
-      console.log(req.body);
-
-      const newSupplement = await supplementService.createSupplement(req.body);
-      res.status(201).json(newSupplement);
-    } catch (error) {
-      res.status(400).json({ error: (error as Error).message });
-    }
-  }
-
-  public static async update(req: Request, res: Response) {
-    try {
-      const id = parseInt(req.params.id, 10);
-      const updatedSupplement = await supplementService.updateSupplement(id, req.body);
-
-      if (!updatedSupplement) {
-        res.status(404).json({ message: 'Supplement not found' });
-      }
-      res.json(updatedSupplement);
-    } catch (error) {
-      res.status(400).json({ error: (error as Error).message });
-    }
-  }
-
-  public static async delete(req: Request, res: Response) {
-    try {
-      const id = parseInt(req.params.id, 10);
-      const success = await supplementService.deleteSupplement(id);
-
-      if (!success) {
-        res.status(404).json({ message: 'Supplement not found' });
-      }
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
-    }
-  }
-}
+export const deleteCatalog: RequestHandler<{ id: string }> = async (
+  req: Request,
+  res,
+) => {
+  const n = await svc.deleteOwnCatalog(req.user.id, req.params.id);
+  if (!n) return res.sendStatus(404);
+  res.sendStatus(204);
+};

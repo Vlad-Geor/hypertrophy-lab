@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { filter, switchMap } from 'rxjs';
+import {environment} from '@ikigaidev/config';
 
 @Component({ template: `` })
 export class LoginSuccessCallbackComponent implements OnInit {
@@ -15,7 +16,7 @@ export class LoginSuccessCallbackComponent implements OnInit {
         switchMap(() =>
           this.auth.user$.pipe(
             filter(Boolean),
-            switchMap(() => this.http.get('http://localhost:3333/api/v1/auth/me')),
+            switchMap(() => this.http.get(`${environment.apiBase}/auth/me`)),
           ),
         ),
       )

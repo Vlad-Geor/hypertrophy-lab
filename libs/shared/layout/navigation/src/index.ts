@@ -1,1 +1,1 @@
-export * from './lib/navigation/navigation.component';
+export * from './lib/sidenav/sidenav.component';

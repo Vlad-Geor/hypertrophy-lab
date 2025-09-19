@@ -18,7 +18,7 @@ const buttonSizeMap: Record<Extract<Size, 'sm' | 'md' | 'lg' | 'xl'>, string> = 
       <lib-icon
         [ngClass]="{ 'bg-secondary text-white': appearance() === 'fill' }"
         [icon]="icon()"
-        [inheritCurrentColor]="inheritIconFillColor()"
+        [fillContainer]="inheritIconFillColor()"
       ></lib-icon>
     }
     <ng-content select="lib-icon[left]"></ng-content>

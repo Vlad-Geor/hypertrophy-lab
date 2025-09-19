@@ -52,7 +52,7 @@ export const inventoryItemSummary = userSupplementSchema
     createdAt: true,
     updatedAt: true,
   })
-  .extend(inventoryComputed);
+  .and(inventoryComputed);
 
 export const listInventoryResponse = z.object({
   items: z.array(inventoryItemSummary),
@@ -60,8 +60,8 @@ export const listInventoryResponse = z.object({
 });
 
 export const getInventoryItemResponse = userSupplementSchema
-  .extend(inventoryComputed)
-  .extend({ batches: z.array(batchSchema).default([]) });
+  .extend({ batches: z.array(batchSchema).default([]) })
+  .and(inventoryComputed);
 
 // POST /inventory — discriminated union
 const commonAdd = {
@@ -154,14 +154,39 @@ export const updateBatchResponse = batchSchema;
 
 export const deleteBatchResponse = z.object({ ok: z.boolean() });
 
+export const listExpiringSoonResponse = z.array(inventoryItemSummary);
+
+const bulkExistingItem = z.object({
+  catalogId: uuid,
+  nickname: z.string().optional(),
+  lowStockThresholdUnits: z.number().int().min(0).default(0),
+  initialBatch: z
+    .object({
+      quantityUnits: z.number().int().min(0),
+      expiresOn: isoDate.nullable().optional(),
+      receivedAt: isoDateTime.nullable().optional(),
+      costCents: z.number().int().nullable().optional(),
+    })
+    .optional(),
+  settings: z
+    .object({
+      lowStockAlertsEnabled: z.boolean().optional(),
+      reorderReminderDays: z.number().int().min(0).optional(),
+      intakeRemindersEnabled: z.boolean().optional(),
+    })
+    .default({}),
+});
+export const addInventoryBulkExistingRequest = z.array(bulkExistingItem).max(50);
+export const addInventoryBulkExistingResponse = z.object({
+  results: z.array(z.object({ index: z.number(), userSupplementId: uuid })),
+});
+
 // Helpers
 export const listLowStockResponse = z.array(inventoryItemSummary);
 
 export const listExpiringSoonQuery = z.object({
   withinDays: z.coerce.number().int().min(1).max(365).default(30),
 });
-
-export const listExpiringSoonResponse = z.array(inventoryItemSummary);
 
 export type UserSupplement = z.infer<typeof userSupplementSchema>;
 export type ListInventoryQuery = z.infer<typeof listInventoryQuery>;

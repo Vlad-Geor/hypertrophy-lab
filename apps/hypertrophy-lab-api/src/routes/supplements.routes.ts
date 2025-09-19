@@ -1,15 +1,21 @@
 /** @format */
 
 import { Router } from 'express';
-import { SupplementController } from '../controllers/supplements.controller';
+import * as brands from '../controllers/brand.controller';
+import * as ctl from '../controllers/supplements.controller';
+import * as targets from '../controllers/target.controller';
 
-const supplementRouter = Router();
+const r = Router();
 
-supplementRouter.get('/', SupplementController.getAll);
-supplementRouter.get('/:id', SupplementController.getOne);
-supplementRouter.post('/', SupplementController.create);
-supplementRouter.post('/:id', SupplementController.addUserSupplement);
-supplementRouter.put('/:id', SupplementController.update);
-supplementRouter.delete('/:id', SupplementController.delete);
+r.get('/', ctl.listCatalog);
+r.get('/:id', ctl.getCatalogById);
+r.post('/', ctl.createCatalog);
 
-export default supplementRouter;
+r.get('/targets', targets.listTargets);
+r.post('/targets', targets.createTarget);
+
+r.get('/brands', brands.listBrands);
+r.post('/brands', brands.createBrand);
+
+export default r;
+//

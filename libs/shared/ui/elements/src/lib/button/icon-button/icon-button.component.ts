@@ -12,14 +12,14 @@ import { IconComponent } from '../../icon/icon.component';
       class="h-11 w-11"
       [ngClass]="{ 'bg-secondary text-white': appearance() === 'fill' }"
       [icon]="icon()"
-      [inheritCurrentColor]="inheritIconFillColor()"
+      [fillContainer]="inheritIconFillColor()"
     ></lib-icon>
   `,
   styles: `
     :host {
-      @apply inline-flex rounded-full hover:cursor-pointer;
+      @apply inline-flex rounded-full hover:cursor-pointer h-fit;
       &.color-on-hover {
-        @apply hover:text-primary-bright;
+        @apply hover:text-text-3;
       }
       &.highlight-on-hover {
         @apply hover:bg-gray-soft;
@@ -39,5 +39,5 @@ export class IconButtonComponent {
   appearance = input<'transparent' | 'fill'>('transparent');
   type = input<'button' | 'submit'>('button');
   inheritIconFillColor = input(true);
-  onHoverEffect = input<'highlight' | 'color'>('highlight');
+  onHoverEffect = input<'highlight' | 'color'>('color');
 }

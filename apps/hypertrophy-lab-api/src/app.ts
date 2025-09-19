@@ -4,6 +4,7 @@ import express, { Application } from 'express';
 import { auth } from 'express-oauth2-jwt-bearer';
 
 import { loadEnv } from './config/env';
+import { hydrateUser } from './repositories/users.repo';
 import { registerRoutes } from './routes/register-routes';
 
 export const app: Application = express();
@@ -38,5 +39,6 @@ app.use(
 );
 
 app.use(checkJwt);
+app.use(hydrateUser);
 
 registerRoutes(app);

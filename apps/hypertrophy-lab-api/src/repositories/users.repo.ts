@@ -1,4 +1,5 @@
 // repositories/user.repository.ts
+import { Request, RequestHandler } from 'express';
 import { db } from '../config/database';
 
 const USER_TABLE = 'users';
@@ -108,3 +109,30 @@ export async function upsertByTelegramId(data: {
     .returning('id');
   return { id, ...data };
 }
+
+export const hydrateUser: RequestHandler = async (req: Request, _res, next) => {
+  try {
+    if (!req.auth?.payload?.sub) return next();
+
+    const sub = req.auth.payload.sub;
+
+    const row = await db('core.auth_identities as ai')
+      .join('core.users as u', 'u.id', 'ai.user_id')
+      .select(
+        'u.id',
+        'u.email',
+        'u.display_name as displayName',
+        'u.nickname',
+        'u.picture_url as pictureUrl',
+        'u.tz',
+        'u.locale',
+      )
+      .where('ai.external_id', sub)
+      .first();
+
+    if (row) req.user = row;
+    next();
+  } catch (err) {
+    next(err);
+  }
+};

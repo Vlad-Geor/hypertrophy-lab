@@ -3,12 +3,13 @@ import { Component, inject, input } from '@angular/core';
 import { Supplement } from '@ikigaidev/hl/model';
 import { API_BASE_URL } from '@ikigaidev/hl/shared';
 import { SupplementListItemComponent } from './supplement-list-item/supplement-list-item.component';
+import { InifinityLoaderComponent } from '@ikigaidev/elements';
 
 @Component({
   selector: 'hl-all-supplements',
   templateUrl: './all-supplements.component.html',
   styleUrl: './all-supplements.component.scss',
-  imports: [SupplementListItemComponent],
+  imports: [SupplementListItemComponent, InifinityLoaderComponent],
 })
 export class AllSupplementsComponent {
   private readonly API_BASE = inject(API_BASE_URL);

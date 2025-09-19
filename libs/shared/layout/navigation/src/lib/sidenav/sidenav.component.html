@@ -1,0 +1,82 @@
+<header class="flex justify-between p-4 text-white border-b border-gray-active">
+  <div class="flex gap-3 items-center">
+    <div class="max-w-16">
+      <img
+        class="rounded-full"
+        src="/assets/images/hl-logo-solid-transparent.png"
+        alt="Primary Image"
+      />
+    </div>
+    <div class="flex flex-col gap-1">
+      <h1 class="text-lg font-medium">Health Lab</h1>
+      <p class="text-xs text-gray-text font-medium">Precision health made simple</p>
+    </div>
+  </div>
+  <lib-icon-button
+    [icon]="'xmark-solid'"
+    (click)="onCloseClick()"
+    aria-label="Close navigation"
+  ></lib-icon-button>
+</header>
+
+<div class="text-text-3 flex-1">
+  <ul class="flex p-4 flex-col gap-3">
+    @for (item of menuItems(); track $index) {
+      <li
+        class="py-3 px-4 border border-transparent rounded hover:cursor-pointer [&:hover:not(.active)]:bg-surface-2 [&:hover:not(.active)]:border-gray-active transition-all duration-100"
+        [class.active]="item.isActive"
+        tabindex="0"
+        (click)="navigateTo(item.route)"
+        (keypress.enter)="navigateTo(item.route)"
+      >
+        <a class="flex items-center gap-3" [attr.aria-label]="item.label">
+          <lib-icon
+            [iconSize]="20"
+            class="text-white"
+            [icon]="item.icon"
+            [fillContainer]="false"
+          ></lib-icon>
+          <span class="menu-label">{{ item.label }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+</div>
+
+<footer class="p-4 border-t border-gray-active">
+  <div
+    class="flex items-center justify-between gap-3 py-3 px-4 bg-surface-2 border border-gray-active rounded-xl"
+  >
+    <div class="flex items-center min-w-0 flex-shrink gap-3">
+      <div>
+        @if (user().avatarUrl) {
+          <img
+            [src]="user().avatarUrl"
+            [alt]="user().displayName + ' avatar'"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"
+          />
+        } @else {
+          <div
+            class="flex items-center justify-center w-10 h-10 rounded-full bg-white-subtle"
+          >
+            <lib-icon
+              class="text-white"
+              [fillContainer]="false"
+              [icon]="'person-liner'"
+            ></lib-icon>
+          </div>
+        }
+      </div>
+      <div class="min-w-0 flex-shrink">
+        <h3 class="text-white text-sm font-medium">{{ user().displayName }}</h3>
+        <p class="text-gray-text text-xs truncate">{{ APP_MODE }}</p>
+      </div>
+    </div>
+    <lib-icon-button
+      class="text-gray-text"
+      [icon]="'gear-liner'"
+      (click)="onSettingsClick()"
+      aria-label="Settings"
+    ></lib-icon-button>
+  </div>
+</footer>

@@ -1,55 +1,74 @@
-import { Supplement } from '@ikigaidev/hl/model';
-import {
-  AddUserSupplementDto,
-  SupplementRepository,
-} from '../repositories/supplements.repository';
+import { createCatalogRequest, CreateCatalogRequest } from '@ikigaidev/hl/contracts';
+import {} from '../repositories/supplements.repo';
 
-export class SupplementService {
-  private supplementRepo: SupplementRepository;
+import * as repo from '../repositories/supplements.repo';
 
-  constructor() {
-    this.supplementRepo = new SupplementRepository();
-  }
+export const listBrands = () => repo.listBrands();
+export const listTargets = () => repo.listTargets();
 
-  public async getAllSupplements(): Promise<Supplement[]> {
-    // Additional business rules could go here
-    return this.supplementRepo.findAll();
-  }
+export async function listCatalog(
+  params: {
+    brandId?: string;
+    targetId?: string;
+    q?: string;
+    page?: number;
+    limit?: number;
+  },
+  userId?: string,
+) {
+  const page = Math.max(params.page ?? 1, 1);
+  const limit = Math.min(Math.max(params.limit ?? 20, 1), 100);
+  const offset = (page - 1) * limit;
+  console.log('userId!: ', userId);
 
-  public async getSupplementById(id: number): Promise<Supplement | undefined> {
-    return this.supplementRepo.findById(id);
-  }
+  const [total, items] = await Promise.all([
+    repo.countCatalog({
+      brandId: params.brandId,
+      targetId: params.targetId,
+      q: params.q,
+    }),
+    repo.listCatalog({
+      brandId: params.brandId,
+      targetId: params.targetId,
+      q: params.q,
+      limit,
+      offset,
+      userId,
+    }),
+  ]);
 
-  // public async getUserSupplements(userId: number): Promise<Supplement[] | undefined> {
-  //   // return this.supplementRepo
-  // }
-
-  public async addUserSupplement(payload: AddUserSupplementDto) {
-    return this.supplementRepo.addUserSupplement(payload);
-  }
-
-  public async createSupplement(suppData: Partial<Supplement>): Promise<Supplement> {
-    // Validate input, transform data, etc.
-    if (!suppData.name) {
-      throw new Error('Supplement name is required');
-    }
-
-    return this.supplementRepo.create(suppData);
-  }
-
-  public async updateSupplement(
-    id: number,
-    suppData: Partial<Supplement>,
-  ): Promise<Supplement | undefined> {
-    // Example rule: disallow updating name to empty
-    if (suppData.name === '') {
-      throw new Error('Name cannot be empty');
-    }
-
-    return this.supplementRepo.update(id, suppData);
-  }
-
-  public async deleteSupplement(id: number): Promise<boolean> {
-    return this.supplementRepo.delete(id);
-  }
+  return {
+    items: items.map((i) => ({
+      ...i,
+      images: i.images ?? [],
+      hasInventory:
+        Array.isArray(i.userSupplementIds.length) && i.userSupplementIds.length > 0,
+    })),
+    page: { page, limit, total },
+  };
 }
+
+export async function getCatalogById(id: string) {
+  const item = await repo.getCatalogById(id);
+  if (!item) return null;
+  const targets = await repo.getCatalogTargets(id);
+  return { ...item, images: item.images ?? [], targets };
+}
+
+export async function createCatalog(payload: CreateCatalogRequest, userId?: string) {
+  createCatalogRequest.parse(payload);
+  const brandId = await repo.ensureBrand(
+    payload.brandId ?? null,
+    payload.brandName ?? null,
+  );
+  payload.brandId = brandId;
+  const id = await repo.createCatalog(payload, userId);
+  await repo.attachTargets(id, payload.targetIds ?? []);
+  return { id };
+}
+
+export const updateOwnCatalog = (userId: string, id: string, patch: any) =>
+  repo.updateCatalogForOwner(id, userId, patch);
+
+export const deleteOwnCatalog = (userId: string, id: string) =>
+  repo.deleteCatalogForOwner(id, userId);

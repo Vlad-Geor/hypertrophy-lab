@@ -1,6 +1,6 @@
 // services/auth.service.ts
 import { loadEnv } from '../config/env';
-import { Claims, upsertUserFromAuth0 } from '../repositories/users.repository'; // ← your repo
+import { Claims, upsertUserFromAuth0 } from '../repositories/users.repo'; // ← your repo
 
 const { JWT_SECRET } = loadEnv();
 
