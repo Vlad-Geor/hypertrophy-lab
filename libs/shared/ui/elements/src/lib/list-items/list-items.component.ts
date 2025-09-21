@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, input, linkedSignal, output } from '@angular/core';
 import { CellConfig } from '@ikigaidev/model';
-import { DropdownV2 } from '../dropdown/dropdown-v2.component';
+import { Dropdown } from '../dropdown/dropdown.component';
 import { ListItemComponent } from './list-item.component';
 
 @Component({
@@ -23,7 +23,7 @@ import { ListItemComponent } from './list-item.component';
   imports: [CommonModule, ListItemComponent],
 })
 export class ListItemsComponent {
-  private readonly dropdownRef = inject(DropdownV2);
+  private readonly dropdownRef = inject(Dropdown);
 
   options = input.required<CellConfig[]>();
   _options = linkedSignal(() => this.options());

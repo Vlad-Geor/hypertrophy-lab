@@ -17,8 +17,7 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { CellConfig, IconType, Size } from '@ikigaidev/model';
 import { ConnectedOverlayDirective, useOverlayComponentPortal } from '@ikigaidev/overlay';
-import { DropdownV2 } from '../dropdown/dropdown-v2.component';
-import { DropdownComponent } from '../dropdown/dropdown.component';
+import { Dropdown } from '../dropdown/dropdown.component';
 import { DROPDOWN_CONFIG } from '../dropdown/model/dropdown-model';
 import { FormControlComponent } from '../form-control/form-control.component';
 import { IconComponent } from '../icon/icon.component';
@@ -37,7 +36,7 @@ type DropdownSize = 'sm' | 'md' | 'lg';
 export class SelectComponent extends FormControlComponent<CellConfig> implements OnInit {
   private readonly injector = inject(Injector);
   private readonly overlayDirectiveRef = inject(ConnectedOverlayDirective);
-  private readonly dropdownCompRef = signal<ComponentRef<DropdownComponent> | undefined>(
+  private readonly dropdownCompRef = signal<ComponentRef<Dropdown> | undefined>(
     undefined,
   );
 
@@ -96,7 +95,7 @@ export class SelectComponent extends FormControlComponent<CellConfig> implements
   constructor() {
     super();
     effect(() => {
-      useOverlayComponentPortal(DropdownV2, this.providers(), this.injector);
+      useOverlayComponentPortal(Dropdown, this.providers(), this.injector);
       configCommonDropdownOverlay(this.overlayDirectiveRef);
     });
     // effect(() => {

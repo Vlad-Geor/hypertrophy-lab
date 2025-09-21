@@ -6,13 +6,12 @@ import { ListItemsComponent } from '../list-items/list-items.component';
 import { DROPDOWN_CONFIG } from './model/dropdown-model';
 
 @Component({
+  selector: 'lib-dropdown',
   templateUrl: './dropdown.component.html',
   styleUrl: './dropdown.component.scss',
   imports: [NgClass, ButtonComponent, ListItemsComponent],
 })
-export class DropdownComponent {
-  // Current usage of component is programmatic.
-  // Incase manual, selector based usage is needed, inputs and html must be updated.
+export class Dropdown {
   config = inject(DROPDOWN_CONFIG, { optional: true });
 
   hasSelection = signal(false);
