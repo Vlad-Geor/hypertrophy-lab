@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 import { AuthGuard } from '@auth0/auth0-angular';
 import { PlaygroundComponent } from '@ikigaidev/playground';
-import { ShellComponent } from './shell/shell.component';
+import { Shell } from './shell/shell.component';
 
 export const appRoutes: Route[] = [
   {
@@ -11,7 +11,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'login',
-    loadComponent: () => import('@ikigaidev/hl/login').then((m) => m.LoginPageComponent),
+    loadComponent: () => import('@ikigaidev/hl/login').then((m) => m.LoginPage),
   },
   {
     path: 'login-success',
@@ -21,11 +21,11 @@ export const appRoutes: Route[] = [
   {
     path: 'auth/callback',
     loadComponent: () =>
-      import('@ikigaidev/hl/login').then((m) => m.LoginSuccessCallbackComponent),
+      import('@ikigaidev/hl/login').then((m) => m.LoginSuccessCallback),
   },
   {
     path: '',
-    component: ShellComponent,
+    component: Shell,
     canActivateChild: [AuthGuard],
     children: [
       {
@@ -36,17 +36,29 @@ export const appRoutes: Route[] = [
       {
         path: 'workout',
         loadComponent: () =>
-          import('@ikigaidev/hl/daily-workout').then((m) => m.DailyWorkoutComponent),
+          import('@ikigaidev/hl/daily-workout').then((m) => m.DailyWorkout),
       },
       {
         path: 'inventory',
         loadComponent: () =>
-          import('@ikigaidev/hl/supplements').then((m) => m.SupplementListComponent),
+          import('@ikigaidev/hl/supplements').then((m) => m.SupplementList),
       },
       {
         path: 'supplements',
         loadChildren: () =>
           import('@ikigaidev/hl/supplements').then((m) => m.supplementRoutes),
+      },
+      {
+        path: 'orders',
+        loadComponent: () => import('@ikigaidev/hl/orders').then((m) => m.Orders),
+      },
+      {
+        path: 'routine',
+        loadComponent: () => import('@ikigaidev/hl/routine').then((m) => m.Routine),
+      },
+      {
+        path: 'schedule',
+        loadComponent: () => import('@ikigaidev/hl/schedule').then((m) => m.Schedule),
       },
     ],
   },

@@ -14,6 +14,7 @@ export * from './lib/list-items/list-item.component';
 export * from './lib/list-items/list-items.component';
 export * from './lib/loader/bouncing-loader.component';
 export * from './lib/loader/infinity-loader.component';
+export * from './lib/select/mock/select-options.mock';
 export * from './lib/select/select-option/select-option.component';
 export * from './lib/select/select.component';
 export * from './lib/slide-toggle/slide-toggle.component';

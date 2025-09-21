@@ -1,5 +1,5 @@
 @if (supplements.hasValue()) {
-  @for (supp of supplements.value(); track $index) {
+  @for (supp of supplements.value()?.items ?? []; track $index) {
     <hl-supplement-card
       [supplement]="{ quantityLeft: 0, consumptionDaysLeft: 0, itemData: supp }"
     ></hl-supplement-card>

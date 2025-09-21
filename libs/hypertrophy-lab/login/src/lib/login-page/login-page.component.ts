@@ -13,7 +13,7 @@ const APP_URL = 'https://68fe-2a06-c701-4cfc-3800-b148-bbd8-477f-cae0.ngrok-free
   styleUrl: './login-page.component.scss',
   providers: [TelegramService],
 })
-export class LoginPageComponent implements AfterViewInit {
+export class LoginPage implements AfterViewInit {
   private readonly renderer = inject(Renderer2);
   private readonly http = inject(HttpClient);
   readonly authService = inject(AuthService);

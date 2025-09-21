@@ -16,7 +16,7 @@ import { muscleGroupExercises } from './muscle-group-exercise.mock';
   ],
   templateUrl: './daily-workout.component.html',
 })
-export class DailyWorkoutComponent {
+export class DailyWorkout {
   // 1. Get trainee workout for the day
   // 2. Loop through Exercises
   // TBD think through the design of muscleGroupExercises, along it's usage.

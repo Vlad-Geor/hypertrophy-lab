@@ -1,14 +1,14 @@
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+import { CellConfig } from '@ikigaidev/model';
 import { ButtonComponent } from '../button/button.component';
 import { ListItemsComponent } from '../list-items/list-items.component';
-import { CellConfig } from '../select/select.component';
 import { DROPDOWN_CONFIG } from './model/dropdown-model';
 
 @Component({
   templateUrl: './dropdown.component.html',
   styleUrl: './dropdown.component.scss',
-  imports: [NgClass, ButtonComponent, NgTemplateOutlet, ListItemsComponent],
+  imports: [NgClass, ButtonComponent, ListItemsComponent],
 })
 export class DropdownComponent {
   // Current usage of component is programmatic.

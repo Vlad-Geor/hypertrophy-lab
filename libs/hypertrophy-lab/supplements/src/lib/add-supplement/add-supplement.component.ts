@@ -53,7 +53,9 @@ export class AddSupplementComponent {
   private readonly cnService = inject(CloudinaryService);
   private readonly supplementService = inject(SupplementService);
   private readonly destroyRef = inject(DestroyRef);
-  protected globalOverlayRef = inject<GlobalOverlayRef>(GLOBAL_OVERLAY_REF);
+  protected globalOverlayRef = inject<GlobalOverlayRef>(GLOBAL_OVERLAY_REF, {
+    optional: true,
+  });
 
   HealthTargets = HEALTH_TARGETS;
   quantityUnits = quantityUnits;
@@ -133,6 +135,6 @@ export class AddSupplementComponent {
   }
 
   onClose(): void {
-    this.globalOverlayRef.close();
+    if (this.globalOverlayRef) this.globalOverlayRef.close();
   }
 }

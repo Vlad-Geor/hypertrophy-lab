@@ -9,27 +9,27 @@ export const createMenuItems: () => MenuItem[] = () => [
   {
     icon: 'clock-solid',
     label: 'Schedule',
-    route: '/dashboard',
+    route: '/schedule',
   },
   {
     icon: 'list-check-liner',
     label: 'My Routine',
-    route: '/dashboard',
+    route: '/routine',
     isActive: true,
   },
   {
     icon: 'box-liner',
-    label: 'Inventory',
+    label: 'Supplements',
     route: '/supplements',
   },
   {
     icon: 'plus-solid',
     label: 'Add Supplement',
-    route: '/dashboard',
+    route: '/supplements/create',
   },
   {
     icon: 'cart-liner',
     label: 'Orders',
-    route: '/dashboard',
+    route: '/orders',
   },
 ];

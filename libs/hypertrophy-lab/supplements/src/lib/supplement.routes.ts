@@ -19,7 +19,14 @@ export const supplementRoutes: Route[] = [
         path: 'inventory',
         loadComponent: () =>
           import('./supplement-shell/user-supplements/user-supplements.component').then(
-            (m) => m.SupplementListComponent,
+            (m) => m.SupplementList,
+          ),
+      },
+      {
+        path: 'create',
+        loadComponent: () =>
+          import('./add-supplement/add-supplement.component').then(
+            (m) => m.AddSupplementComponent,
           ),
       },
     ],
@@ -28,7 +35,7 @@ export const supplementRoutes: Route[] = [
     path: 'inventory',
     loadComponent: () =>
       import('./supplement-shell/user-supplements/user-supplements.component').then(
-        (m) => m.SupplementListComponent,
+        (m) => m.SupplementList,
       ),
   },
 ];

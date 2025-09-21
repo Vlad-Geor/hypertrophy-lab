@@ -1,6 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { Size } from '@ikigaidev/model';
-import { CellConfig } from '../../select/select.component';
+import { CellConfig, Size } from '@ikigaidev/model';
 
 export const DROPDOWN_CONFIG = new InjectionToken<DropdownConfig<unknown>>(
   'DROPDOWN_DATA',

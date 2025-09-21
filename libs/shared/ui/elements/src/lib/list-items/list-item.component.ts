@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, input, output } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
+import { CellConfig } from '@ikigaidev/model';
 import { IconComponent } from '../icon/icon.component';
-import { CellConfig } from '../select/select.component';
 import { ListItemsComponent } from './list-items.component';
 
 @Component({

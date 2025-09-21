@@ -36,4 +36,6 @@ export class ViewportService {
   readonly isTablet = computed(() => this.platform() === 'tablet');
   readonly isLaptop = computed(() => this.platform() === 'laptop');
   readonly isDesktop = computed(() => this.platform() === 'desktop');
+
+  readonly isFullView = computed(() => !this.isMobile() && !this.isTablet());
 }

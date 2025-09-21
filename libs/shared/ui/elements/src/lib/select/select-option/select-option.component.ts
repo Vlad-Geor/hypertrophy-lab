@@ -1,5 +1,5 @@
 import { Component, TemplateRef, input, viewChild } from '@angular/core';
-import { CellConfig } from '../select.component';
+import { CellConfig } from '@ikigaidev/model';
 
 @Component({
   selector: 'lib-select-option',

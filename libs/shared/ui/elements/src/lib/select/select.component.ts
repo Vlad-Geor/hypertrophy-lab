@@ -1,4 +1,4 @@
-import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
+import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -15,8 +15,9 @@ import {
   signal,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { IconType, Size } from '@ikigaidev/model';
+import { CellConfig, IconType, Size } from '@ikigaidev/model';
 import { ConnectedOverlayDirective, useOverlayComponentPortal } from '@ikigaidev/overlay';
+import { DropdownV2 } from '../dropdown/dropdown-v2.component';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 import { DROPDOWN_CONFIG } from '../dropdown/model/dropdown-model';
 import { FormControlComponent } from '../form-control/form-control.component';
@@ -25,14 +26,6 @@ import { TagComponent } from '../tag/tag.component';
 import { configCommonDropdownOverlay } from './dropdown-overlay.util';
 
 type DropdownSize = 'sm' | 'md' | 'lg';
-
-export type CellConfig = {
-  icon?: IconType;
-  displayText: string;
-  imageUrl?: string;
-  selected?: boolean;
-  data?: Record<string, any>;
-};
 
 @Component({
   selector: 'lib-select',
@@ -56,9 +49,9 @@ export class SelectComponent extends FormControlComponent<CellConfig> implements
   tagLabel = input('');
   hint = input('');
   selectedCount = input(0, { transform: coerceNumberProperty });
-  open = input(false, { transform: coerceBooleanProperty });
+  // open = input(false, { transform: coerceBooleanProperty });
 
-  _open = linkedSignal(() => this.open());
+  // _open = linkedSignal(() => this.open());
 
   override writeValue(value: CellConfig | null): void {
     if (value) {
@@ -78,12 +71,12 @@ export class SelectComponent extends FormControlComponent<CellConfig> implements
     this._disabled.set(isDisabled);
   }
 
-  toggleDropdown(): void {
-    if (this.disabled()) {
-      return;
-    }
-    this._open.set(!this._open());
-  }
+  // toggleDropdown(): void {
+  // if (this.disabled()) {
+  // return;
+  // }
+  // this._open.set(!this._open());
+  // }
 
   providers = computed<Provider[]>(() => [
     {
@@ -103,19 +96,19 @@ export class SelectComponent extends FormControlComponent<CellConfig> implements
   constructor() {
     super();
     effect(() => {
-      useOverlayComponentPortal(DropdownComponent, this.providers(), this.injector);
+      useOverlayComponentPortal(DropdownV2, this.providers(), this.injector);
       configCommonDropdownOverlay(this.overlayDirectiveRef);
     });
-    effect(() => {
-      const cmp = this.dropdownCompRef();
-      if (cmp && cmp.instance.selectedItem()) {
-        this._value.set(cmp.instance.selectedItem());
-        this._options.update((opts) =>
-          opts.map((op) => ({ ...op, selected: op === cmp.instance.selectedItem() })),
-        );
-        this.selectionChange.emit(cmp.instance.selectedItem() ?? ({} as CellConfig));
-      }
-    });
+    // effect(() => {
+    //   const cmp = this.dropdownCompRef();
+    //   if (cmp && cmp.instance.selectedItem()) {
+    //     this._value.set(cmp.instance.selectedItem());
+    //     this._options.update((opts) =>
+    //       opts.map((op) => ({ ...op, selected: op === cmp.instance.selectedItem() })),
+    //     );
+    //     this.selectionChange.emit(cmp.instance.selectedItem() ?? ({} as CellConfig));
+    //   }
+    // });
   }
 
   ngOnInit(): void {

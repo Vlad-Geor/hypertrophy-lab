@@ -16,6 +16,7 @@ import { API_BASE_URL } from '@ikigaidev/hl/shared';
 import { GlobalOverlay } from '@ikigaidev/overlay';
 import { AddSupplementComponent } from '../../add-supplement/add-supplement.component';
 import { SupplementCardComponent } from '../../supplement-card/supplement-card.component';
+import { PaginatedDataResponse } from '../all-supplements/all-supplements.component';
 
 @Component({
   selector: 'hl-user-supplements',
@@ -33,11 +34,11 @@ import { SupplementCardComponent } from '../../supplement-card/supplement-card.c
   templateUrl: './user-supplements.component.html',
   styleUrl: './user-supplements.component.scss',
 })
-export class SupplementListComponent {
+export class SupplementList {
   private readonly globalOverlay = inject(GlobalOverlay);
   private readonly API_BASE = inject(API_BASE_URL);
 
-  supplements = httpResource<Supplement[]>(() => `${this.API_BASE}/supplements`);
+  supplements = httpResource<PaginatedDataResponse<Supplement>>(() => `${this.API_BASE}/supplements`);
 
   categories = categories;
 

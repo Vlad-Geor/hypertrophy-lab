@@ -1,8 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { afterNextRender, Component, inject, signal } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Component, effect, inject, linkedSignal, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { AuthService } from '@auth0/auth0-angular';
 import { IconButtonComponent, IconComponent } from '@ikigaidev/elements';
-import { User } from '@ikigaidev/model';
+import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
+import { ViewportService } from '@ikigaidev/service';
+import { filter, map, startWith } from 'rxjs';
 import { MenuItem } from '../model/menu-item.model';
 import { createMenuItems } from '../util/create-menu-items';
 
@@ -13,38 +17,49 @@ import { createMenuItems } from '../util/create-menu-items';
   templateUrl: './sidenav.component.html',
   host: {
     role: 'navigation',
-    class: 'flex flex-col bg-surface h-full max-w-[302px]',
+    class: 'flex flex-col bg-surface h-dvh max-w-[302px]',
   },
   styleUrl: './sidenav.component.scss',
 })
 export class SidenavComponent {
   private readonly router = inject(Router);
+  readonly vpService = inject(ViewportService);
+  readonly overlayRef = inject<GlobalOverlayRef>(GLOBAL_OVERLAY_REF, { optional: true });
+
   // TBD should be injected, app wide. Differentiates between nutrition and fitness
   readonly APP_MODE = 'Supplement Management';
 
-  selectedItem = signal<MenuItem | null>(null);
-  user = signal<User>({
-    id: 123123,
-    displayName: 'Vlad Geor',
-  });
+  readonly user = toSignal(inject(AuthService).user$);
+  readonly url = toSignal(
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      map(() => this.router.url),
+      startWith(this.router.url),
+    ),
+  );
   menuItems = signal<MenuItem[]>(createMenuItems());
+  selectedItem = linkedSignal<MenuItem | undefined>(() =>
+    this.menuItems().find((i) => i.route === this.url()),
+  );
+  _menuItems = linkedSignal(() =>
+    this.menuItems().map((i) => ({
+      ...i,
+      isActive: i.route === this.selectedItem()?.route,
+    })),
+  );
 
   constructor() {
-    afterNextRender({
-      read: () => this.updateActiveMenuItem(),
+    effect(() => {
+      console.log(this.selectedItem());
+
+      console.log('url: ', this.url());
     });
   }
 
-  navigateTo(route: string): void {
-    this.router.navigate([route]);
-    this.updateActiveMenuItem();
-  }
-
-  private updateActiveMenuItem(): void {
-    const currentRoute = this.router.url;
-    this.menuItems().forEach((item) => {
-      item.isActive = item.route === currentRoute;
-    });
+  navigateTo(item: MenuItem): void {
+    this.router.navigate([item.route]);
+    // this.selectedItem.set(item);
+    // this.updateActiveMenuItem();
   }
 
   onSettingsClick(): void {
@@ -53,7 +68,6 @@ export class SidenavComponent {
   }
 
   onCloseClick(): void {
-    // Handle close/collapse sidenav
-    console.log('Close clicked');
+    if (this.overlayRef) this.overlayRef.close();
   }
 }

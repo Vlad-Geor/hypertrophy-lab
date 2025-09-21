@@ -1,5 +1,6 @@
+import { CdkDragPlaceholder } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject } from '@angular/core';
+import { Component, inject, isDevMode, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { InputComponent } from '@ikigaidev/elements';
 import { HeaderComponent } from '@ikigaidev/header';
@@ -16,20 +17,18 @@ import { ViewportService } from '@ikigaidev/service';
     InputComponent,
     HeaderComponent,
     SidenavComponent,
+    CdkDragPlaceholder,
   ],
   templateUrl: './shell.component.html',
-  styleUrl: './shell.component.scss',
   host: {
-    style: 'display:flex; justify-content: center;',
+    class: 'relative flex',
+    '[class.pt-10]': 'devMode() && !vpService.isFullView',
   },
 })
-export class ShellComponent {
-  private readonly vpService = inject(ViewportService);
+export class Shell {
+  readonly vpService = inject(ViewportService);
+  readonly devMode = signal(isDevMode());
   healthTargets: HealthTarget[] = [...healthTargets];
-
-  constructor() {
-    effect(() => console.log(this.vpService.platform()));
-  }
 
   carouselData = this.healthTargets.map(
     (t, i) => ({ index: i, target: t }) as HealthTargetCarouselItem,

@@ -9,7 +9,7 @@ export type OverlayPosition = {
 
 export function buildPosition(overlay: Overlay, position?: OverlayPosition) {
   const strategy = overlay.position().global();
-  if (!position?.left && !position?.right) {
+  if (position?.left === undefined && position?.right === undefined) {
     strategy.centerHorizontally();
   } else {
     if (position?.left != null) {
@@ -20,7 +20,7 @@ export function buildPosition(overlay: Overlay, position?: OverlayPosition) {
     }
   }
 
-  if (!position?.top && !position?.bottom) {
+  if (position?.top === undefined && position?.bottom === undefined) {
     strategy.centerVertically();
   } else {
     if (position?.top != null) {

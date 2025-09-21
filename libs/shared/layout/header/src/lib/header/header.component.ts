@@ -1,15 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import {
-  IconButtonComponent,
-  IconComponent,
-  StatefulIconComponent,
-} from '@ikigaidev/elements';
+import { Component, inject } from '@angular/core';
+import { IconButtonComponent, IconComponent, StatefulIconComponent, InputComponent } from '@ikigaidev/elements';
+import { SidenavComponent } from '@ikigaidev/navigation';
+import { GlobalOverlay } from '@ikigaidev/overlay';
+import { ViewportService } from '@ikigaidev/service';
 
 @Component({
   selector: 'lib-header',
   standalone: true,
-  imports: [CommonModule, IconComponent, IconButtonComponent, StatefulIconComponent],
+  imports: [CommonModule, IconComponent, IconButtonComponent, StatefulIconComponent, InputComponent],
   templateUrl: './header.component.html',
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  private readonly overlay = inject(GlobalOverlay);
+  readonly vpService = inject(ViewportService);
+
+  toggleSidebar(): void {
+    this.overlay.openComponent(SidenavComponent, {
+      position: { left: 0, top: 0 },
+      overlayConfig: {
+        hasBackdrop: true,
+      },
+    });
+  }
+}

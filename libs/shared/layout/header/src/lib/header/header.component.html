@@ -1,15 +1,22 @@
 <header
-  class="bg-surface rounded-t-[44px] py-4 px-7 text-white relative flex items-center justify-between border-b border-b-gray-soft"
+  class="bg-surface py-4 px-7 text-white relative flex items-center justify-between border-b border-b-gray-soft"
 >
   <div class="flex items-center gap-1">
-    <lib-icon-button [icon]="'menu-solid'"></lib-icon-button>
+    @if (!vpService.isFullView()) {
+      <lib-icon-button (click)="toggleSidebar()" [icon]="'menu-solid'"></lib-icon-button>
+    }
     <h2 class="text-heading-md h-fit">Supplements</h2>
   </div>
-  <div>
-    <lib-icon-button
-      [icon]="'search-solid'"
-      [inheritIconFillColor]="false"
-    ></lib-icon-button>
+  <div class="flex gap-4">
+    @if (vpService.isFullView()) {
+      <lib-input [withSearch]="true" placeholder="Search..."></lib-input>
+    } @else {
+      <lib-icon-button
+        [icon]="'search-solid'"
+        [inheritIconFillColor]="false"
+      ></lib-icon-button>
+    }
+
     <lib-stateful-icon-button
       [icon]="'bell-solid'"
       class="text-secondary"

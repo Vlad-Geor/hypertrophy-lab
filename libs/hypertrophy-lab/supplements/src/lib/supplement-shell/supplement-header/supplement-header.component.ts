@@ -2,12 +2,12 @@ import { TitleCasePipe } from '@angular/common';
 import { Component, inject, input, signal } from '@angular/core';
 import {
   ButtonComponent,
-  CellConfig,
   IconComponent,
   InputComponent,
   SelectComponent,
   SelectOptionComponent,
 } from '@ikigaidev/elements';
+import { CellConfig } from '@ikigaidev/model';
 import { GlobalOverlay } from '@ikigaidev/overlay';
 import { AddSupplementComponent } from '../../add-supplement/add-supplement.component';
 
@@ -29,12 +29,10 @@ import { AddSupplementComponent } from '../../add-supplement/add-supplement.comp
             5 of 5 supplements
           </p>
         </div>
-        @if (headerFor() === 'inventory') {
-          <lib-button [size]="'xl'" class="text-white" (click)="onAddInventoryItem()">
-            <lib-icon [icon]="'plus-solid'" left [iconSize]="16"></lib-icon>
-            Add
-          </lib-button>
-        }
+        <lib-button [size]="'xl'" class="text-white" (click)="onAddInventoryItem()">
+          <lib-icon [icon]="'plus-solid'" left [iconSize]="16"></lib-icon>
+          Add
+        </lib-button>
       </div>
 
       <div class="flex flex-col gap-3">

@@ -4,7 +4,7 @@ export const dashboardRoutes: Route[] = [
   {
     path: '',
     loadComponent: () =>
-      import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),
+      import('./dashboard/dashboard.component').then((m) => m.Dashboard),
     title: 'Personal Dashboard',
   },
   // This is incorrect. Should show a different component with workout statistics, analytics, etc.
@@ -12,7 +12,7 @@ export const dashboardRoutes: Route[] = [
   {
     path: 'workouts',
     loadComponent: () =>
-      import('@ikigaidev/hl/daily-workout').then((m) => m.DailyWorkoutComponent),
+      import('@ikigaidev/hl/daily-workout').then((m) => m.DailyWorkout),
     title: 'Workouts Overview',
   },
 ];

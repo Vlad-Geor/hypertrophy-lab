@@ -1,8 +1,18 @@
-<lib-sidenav></lib-sidenav>
-<!-- <div class="mobile-emulator border border-gray-hover"> -->
+@if (devMode() && !vpService.isFullView()) {
+  <div
+    id="iphone-bezel"
+    class="h-10 w-full bg-slate-800 rounded-t-[36px] absolute top-0"
+  ></div>
+}
+
+@if (!vpService.isMobile() && !vpService.isTablet()) {
+  <lib-sidenav></lib-sidenav>
+}
+<div id="layout-right" class="flex-1 text-white">
+  <!-- This should span the 'remaining' space. When sidebar exists, it shrinks to fit whatever
+     is left. When sidebar doesn't exist, it takes up 100% of the width. -->
   <lib-header></lib-header>
   <div id="main-content-shell" class="flex-1 bg-bg px-4 pt-4">
     <router-outlet></router-outlet>
   </div>
-<!-- </div> -->
-
+</div>

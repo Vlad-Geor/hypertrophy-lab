@@ -1,9 +1,12 @@
 import { httpResource } from '@angular/common/http';
 import { Component, inject, input } from '@angular/core';
+import { PageMeta } from '@ikigaidev/contracts';
+import { InifinityLoaderComponent } from '@ikigaidev/elements';
 import { Supplement } from '@ikigaidev/hl/model';
 import { API_BASE_URL } from '@ikigaidev/hl/shared';
 import { SupplementListItemComponent } from './supplement-list-item/supplement-list-item.component';
-import { InifinityLoaderComponent } from '@ikigaidev/elements';
+
+export type PaginatedDataResponse<T> = { items: T[]; page: PageMeta };
 
 @Component({
   selector: 'hl-all-supplements',
@@ -20,5 +23,7 @@ export class AllSupplementsComponent {
     { name: 'Creatine', itemCount: 60 },
   ]);
 
-  suppData = httpResource<Supplement[]>(() => `${this.API_BASE}/supplements`);
+  suppData = httpResource<PaginatedDataResponse<Supplement>>(
+    () => `${this.API_BASE}/supplements`,
+  );
 }
