@@ -5,7 +5,9 @@
     @if (!vpService.isFullView()) {
       <lib-icon-button (click)="toggleSidebar()" [icon]="'menu-solid'"></lib-icon-button>
     }
-    <h2 class="text-heading-md h-fit">Supplements</h2>
+    <h2 class="text-heading-md h-fit">
+      {{ this.routerService.pageHeader() | titlecase }}
+    </h2>
   </div>
   <div class="flex gap-4">
     @if (vpService.isFullView()) {

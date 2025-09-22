@@ -22,13 +22,6 @@ export const supplementRoutes: Route[] = [
             (m) => m.SupplementList,
           ),
       },
-      {
-        path: 'create',
-        loadComponent: () =>
-          import('./add-supplement/add-supplement.component').then(
-            (m) => m.AddSupplementComponent,
-          ),
-      },
     ],
   },
   {

@@ -58,7 +58,7 @@ export class SupplementHeaderComponent {
 
   readonly options = signal<CellConfig[]>([
     { displayText: 'A' },
-    { displayText: 'B', icon: 'check-solid', selected: true },
+    { displayText: 'B', icon: 'check-solid' },
     { displayText: 'C' },
   ]);
 

@@ -43,6 +43,13 @@ export const supplementCatalogSummary = supplementCatalogSchema.pick({
   images: true,
 });
 
+export const supplementCatalogItem = supplementCatalogSchema.omit({
+  ean: true,
+  upc: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export const listCatalogQuery = paginationQuery.extend({
   q: z.string().trim().min(1).optional(),
   brandId: uuid.optional(),
@@ -50,7 +57,7 @@ export const listCatalogQuery = paginationQuery.extend({
 });
 
 export const listCatalogResponse = z.object({
-  items: z.array(supplementCatalogSummary),
+  items: z.array(supplementCatalogItem),
   page: pageMeta,
 });
 
@@ -79,6 +86,7 @@ export const createCatalogResponse = z.object({ id: uuid });
 export type CreateCatalogRequest = z.infer<typeof createCatalogRequest>;
 export type CreateCatalogResponse = z.infer<typeof createCatalogResponse>;
 export type SupplementCatalog = z.infer<typeof supplementCatalogSchema>;
+export type SupplementCatalogItem = z.infer<typeof supplementCatalogItem>;
 export type SupplementForm = z.infer<typeof supplementFormSchema>;
 export type CatalogTarget = z.infer<typeof catalogTargetSchema>;
 export type GetCatalogResponse = z.infer<typeof getCatalogResponse>;

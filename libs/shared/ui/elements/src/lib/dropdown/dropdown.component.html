@@ -27,6 +27,7 @@
 @if (config?.options) {
   <lib-list-items
     [options]="config?.options ?? []"
+    [selectedItem]="config?.selectedCell ?? null"
     (itemSelected)="onItemSelected($event)"
   ></lib-list-items>
 }

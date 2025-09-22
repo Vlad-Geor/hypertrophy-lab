@@ -1,6 +1,7 @@
-import { Route } from '@angular/router';
+import { ActivatedRouteSnapshot, Route } from '@angular/router';
 import { AuthGuard } from '@auth0/auth0-angular';
 import { PlaygroundComponent } from '@ikigaidev/playground';
+import { route } from '@ikigaidev/router';
 import { Shell } from './shell/shell.component';
 
 export const appRoutes: Route[] = [
@@ -32,6 +33,13 @@ export const appRoutes: Route[] = [
         path: 'dashboard',
         loadChildren: () =>
           import('@ikigaidev/hl/dashboard').then((m) => m.dashboardRoutes),
+        data: {
+          meta: {
+            breadcrumb: (s: ActivatedRouteSnapshot) => s.params['id'],
+            header: 'Dashboard',
+            icon: 'pen-liner',
+          },
+        },
       },
       {
         path: 'workout',
@@ -48,6 +56,12 @@ export const appRoutes: Route[] = [
         loadChildren: () =>
           import('@ikigaidev/hl/supplements').then((m) => m.supplementRoutes),
       },
+      route({
+        path: 'new-supplement',
+        loadComponent: () =>
+          import('@ikigaidev/hl/supplements').then((m) => m.AddSupplementComponent),
+        data: { meta: { header: 'Add Supplement' } },
+      }),
       {
         path: 'orders',
         loadComponent: () => import('@ikigaidev/hl/orders').then((m) => m.Orders),

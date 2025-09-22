@@ -3,7 +3,7 @@ import { Component, inject, input } from '@angular/core';
 import { PageMeta } from '@ikigaidev/contracts';
 import { InifinityLoaderComponent } from '@ikigaidev/elements';
 import { Supplement } from '@ikigaidev/hl/model';
-import { API_BASE_URL } from '@ikigaidev/hl/shared';
+import { API_BASE_URL, ListCatalogResponse } from '@ikigaidev/hl/shared';
 import { SupplementListItemComponent } from './supplement-list-item/supplement-list-item.component';
 
 export type PaginatedDataResponse<T> = { items: T[]; page: PageMeta };
@@ -23,7 +23,7 @@ export class AllSupplementsComponent {
     { name: 'Creatine', itemCount: 60 },
   ]);
 
-  suppData = httpResource<PaginatedDataResponse<Supplement>>(
+  suppData = httpResource<ListCatalogResponse>(
     () => `${this.API_BASE}/supplements`,
   );
 }

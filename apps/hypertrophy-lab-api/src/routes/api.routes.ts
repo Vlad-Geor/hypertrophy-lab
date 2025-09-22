@@ -1,37 +1,24 @@
 import { Router } from 'express';
 import { readdirSync } from 'fs';
-import { join } from 'path';
+import { basename, join } from 'path';
 
 const apiRouter = Router();
-
-// Path to routes directory
 const routesPath = join(__dirname);
 
-readdirSync(routesPath)
-  .filter((file) => {
-    return file.endsWith('.routes.js') && file !== 'api.routes.js';
-  })
-  .forEach((file) => {
-    console.log(`Loading router: ${file}`);
-    const route = require(`./${file}`);
-    const router = route.default;
+for (const file of readdirSync(routesPath)) {
+  if (!file.endsWith('.routes.js') || file === 'api.routes.js') continue;
 
-    if (!router) {
-      throw new Error(`❌ Missing default export in ${file}`);
-    }
+  console.log(`Loading router: ${basename(file, '.js')}`);
 
-    if (typeof router !== 'function' || typeof router.use !== 'function') {
-      throw new Error(`❌ Default export in ${file} is not a valid Express Router`);
-    }
+  const modPath = join(routesPath, file);
+  const mod = require(modPath);
+  const router = mod.default ?? mod;
 
-    const routeBase = file.replace('.routes.js', '');
-    console.log(routeBase);
+  if (!router?.use) throw new Error(`❌ Not an Express Router: ${file}`);
 
-    apiRouter.use(`/${routeBase.replace('.routes', '')}`, router);
-  });
+  const base = file.replace('.routes.js', '').replace('.routes', '');
+  apiRouter.use(`/${base}`, router);
+}
 
-apiRouter.get('/health', (_req, res) => {
-  res.send('API is healthy!');
-});
-
+apiRouter.get('/health', (_req, res) => res.send('API is healthy!'));
 export default apiRouter;

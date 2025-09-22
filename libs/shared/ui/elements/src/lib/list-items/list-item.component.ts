@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { CellConfig } from '@ikigaidev/model';
 import { IconComponent } from '../icon/icon.component';
 import { ListItemsComponent } from './list-items.component';
@@ -7,26 +7,34 @@ import { ListItemsComponent } from './list-items.component';
 @Component({
   selector: 'lib-list-item',
   template: `
-    @if (config()?.icon) {
-      <lib-icon
-        class="[&:hover:not(.disabled)]:bg-red-500"
-        [iconSize]="12"
-        [icon]="config()?.icon"
-      ></lib-icon>
+    <div class="flex gap-3">
+      @if (config()?.icon) {
+        <lib-icon [iconSize]="12" [icon]="config()?.icon"></lib-icon>
+      }
+      <span>{{ config()?.displayText }}</span>
+    </div>
+    @if (selected()) {
+      <lib-icon [iconSize]="12" [icon]="'check-solid'"></lib-icon>
     }
-    {{ config()?.displayText }}
   `,
   imports: [CommonModule, IconComponent],
   host: {
-    class: 'flex items-center gap-2 py-2 px-3 rounded',
+    class: 'flex items-center justify-between gap-2 py-2 px-3 rounded',
     '[class]': 'classes()',
-    '[class.selected]': 'config()?.selected',
+    '[class.selected]': 'selected()',
     '[attr.tabindex]': '0',
     '(click)': 'onSelfClick()',
   },
+  styles: `
+    :host {
+      &.selected {
+        @apply bg-surface-2;
+      }
+    }
+  `,
 })
 export class ListItemComponent {
-  private readonly ListItemsRef = inject(ListItemsComponent);
+  private readonly listItemsRef = inject(ListItemsComponent);
 
   config = input<CellConfig>();
   selectable = input(true);
@@ -34,10 +42,10 @@ export class ListItemComponent {
 
   computedClasses = computed(() => {
     const selectableClasses = this.selectable()
-      ? ['hover:cursor-pointer', '[&:hover:not(.selected)]:bg-surface-2']
+      ? ['hover:cursor-pointer', '[&:hover:not(.selected)]:bg-gray-hover']
       : [''];
-    const selectedClasses = this.config()?.selected
-      ? ['bg-primary-subtle', 'text-primary']
+    const selectedClasses = this.selected()
+      ? ['bg-secondary-subtle', 'text-secondary']
       : [''];
 
     return selectableClasses.concat(selectedClasses);
@@ -51,7 +59,7 @@ export class ListItemComponent {
     if (this.selectable()) {
       const c = this.config();
       if (c) {
-        this.ListItemsRef.selectItem(c);
+        this.listItemsRef.onItemSelected(c);
       }
     }
   }

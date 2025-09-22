@@ -22,8 +22,6 @@ export const getOne: RequestHandler<{ id: string }> = async (req: Request, res) 
 
 export const add: RequestHandler = async (req: Request, res) => {
   addInventoryRequest.parse(req.body);
-  console.log(req.headers);
-
   const result = await svc.add(req.user.id, req.body);
   res.status(201).json(result);
 };

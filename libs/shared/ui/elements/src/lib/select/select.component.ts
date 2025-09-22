@@ -17,6 +17,7 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { CellConfig, IconType, Size } from '@ikigaidev/model';
 import { ConnectedOverlayDirective, useOverlayComponentPortal } from '@ikigaidev/overlay';
+import { v5 as uuidv5 } from 'uuid';
 import { Dropdown } from '../dropdown/dropdown.component';
 import { DROPDOWN_CONFIG } from '../dropdown/model/dropdown-model';
 import { FormControlComponent } from '../form-control/form-control.component';
@@ -25,10 +26,15 @@ import { TagComponent } from '../tag/tag.component';
 import { configCommonDropdownOverlay } from './dropdown-overlay.util';
 
 type DropdownSize = 'sm' | 'md' | 'lg';
+export const NAMESPACE = '2b2f9e1a-1d1d-4e88-9c5a-9a5b4c9f2c11';
+
+export function stableCellId(key: string) {
+  return uuidv5(key, NAMESPACE);
+}
 
 @Component({
   selector: 'lib-select',
-  imports: [CommonModule, ReactiveFormsModule, IconComponent, TagComponent],
+  imports: [CommonModule, IconComponent, ReactiveFormsModule, TagComponent],
   templateUrl: './select.component.html',
   styleUrl: './select.component.scss',
   hostDirectives: [ConnectedOverlayDirective],
@@ -41,7 +47,12 @@ export class SelectComponent extends FormControlComponent<CellConfig> implements
   );
 
   readonly options = input<CellConfig[]>([]);
-  readonly _options = linkedSignal(() => this.options());
+  readonly _options = linkedSignal(() =>
+    this.options().map((opt) => ({
+      ...opt,
+      id: stableCellId(`${opt.displayText}|${opt.data}`),
+    })),
+  );
 
   icon = input<IconType>();
   size = input<Extract<Size, 'sm' | 'md' | 'lg'>>('md');
@@ -84,7 +95,7 @@ export class SelectComponent extends FormControlComponent<CellConfig> implements
         type: 'single',
         dropdownSize: this.size(),
         options: this._options(),
-        selectedCell: this._value(),
+        selectedCell: this._value,
       },
     },
   ]);
@@ -98,16 +109,20 @@ export class SelectComponent extends FormControlComponent<CellConfig> implements
       useOverlayComponentPortal(Dropdown, this.providers(), this.injector);
       configCommonDropdownOverlay(this.overlayDirectiveRef);
     });
-    // effect(() => {
-    //   const cmp = this.dropdownCompRef();
-    //   if (cmp && cmp.instance.selectedItem()) {
-    //     this._value.set(cmp.instance.selectedItem());
-    //     this._options.update((opts) =>
-    //       opts.map((op) => ({ ...op, selected: op === cmp.instance.selectedItem() })),
-    //     );
-    //     this.selectionChange.emit(cmp.instance.selectedItem() ?? ({} as CellConfig));
-    //   }
-    // });
+    effect(() => {
+      const cmp = this.dropdownCompRef();
+      if (cmp) {
+        cmp.instance.itemSelected.subscribe((cell) => {
+          this._value.set(cell);
+          this.selectionChange.emit(cell);
+          this.overlayDirectiveRef.close();
+        });
+      }
+    });
+    effect(() => {
+      this.writeValue(this._value() ?? null);
+      this.onChange(this._value() ?? null);
+    });
   }
 
   ngOnInit(): void {

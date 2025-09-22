@@ -82,6 +82,8 @@ export class AddSupplementComponent {
   constructor() {
     this.destroyRef.onDestroy(() => URL.revokeObjectURL(this.previewUrl()));
     this.form.valueChanges.subscribe((state) => {
+      console.log(state);
+
       if (state.imgUrl && state.name) {
         this.imageFormData.update((fd) => {
           fd?.append('public_id', `supplements/${toSlug(state.name ?? '')}`);

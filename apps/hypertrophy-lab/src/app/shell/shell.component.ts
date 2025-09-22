@@ -21,7 +21,7 @@ import { ViewportService } from '@ikigaidev/service';
   ],
   templateUrl: './shell.component.html',
   host: {
-    class: 'relative flex',
+    class: 'relative flex min-h-dvh',
     '[class.pt-10]': 'devMode() && !vpService.isFullView',
   },
 })

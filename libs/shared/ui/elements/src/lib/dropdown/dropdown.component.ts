@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { CellConfig } from '@ikigaidev/model';
 import { ButtonComponent } from '../button/button.component';
 import { ListItemsComponent } from '../list-items/list-items.component';
@@ -15,12 +15,11 @@ export class Dropdown {
   config = inject(DROPDOWN_CONFIG, { optional: true });
 
   hasSelection = signal(false);
-  initialValue = signal<CellConfig | undefined>(undefined);
-  selectedItem = signal<CellConfig | undefined>(undefined);
+  signalFallback = signal([]);
+  itemSelected = output<CellConfig>();
 
   onItemSelected(cell: CellConfig): void {
-    if (!this.initialValue()) this.initialValue.set(cell);
-    this.selectedItem.set(cell);
+    this.itemSelected.emit(cell);
   }
 
   toggleSelectAll(): void {

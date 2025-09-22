@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, linkedSignal, signal } from '@angular/core';
+import { Component, inject, linkedSignal, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
@@ -17,7 +17,7 @@ import { createMenuItems } from '../util/create-menu-items';
   templateUrl: './sidenav.component.html',
   host: {
     role: 'navigation',
-    class: 'flex flex-col bg-surface h-dvh max-w-[302px]',
+    class: 'flex flex-col bg-surface h-dvh max-w-[302px] border-r border-gray-active',
   },
   styleUrl: './sidenav.component.scss',
 })
@@ -48,16 +48,9 @@ export class SidenavComponent {
     })),
   );
 
-  constructor() {
-    effect(() => {
-      console.log(this.selectedItem());
-
-      console.log('url: ', this.url());
-    });
-  }
-
   navigateTo(item: MenuItem): void {
     this.router.navigate([item.route]);
+    this.overlayRef?.close();
     // this.selectedItem.set(item);
     // this.updateActiveMenuItem();
   }

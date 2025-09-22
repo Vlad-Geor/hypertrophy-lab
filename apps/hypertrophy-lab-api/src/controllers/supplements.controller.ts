@@ -6,8 +6,6 @@ export const listCatalog: RequestHandler = async (req: Request, res) => {
   const { brandId, targetId, q, includeUser } = req.query as any;
   const page = Number(req.query.page ?? 1);
   const limit = Number(req.query.limit ?? 20);
-  console.log('req.user: ', req.user);
-  console.log('includeUser: ', req.query);
 
   const userId = includeUser ? req.user?.id : undefined;
   res.json(await svc.listCatalog({ brandId, targetId, q, page, limit }, userId));

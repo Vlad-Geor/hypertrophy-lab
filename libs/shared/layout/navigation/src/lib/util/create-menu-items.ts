@@ -25,7 +25,7 @@ export const createMenuItems: () => MenuItem[] = () => [
   {
     icon: 'plus-solid',
     label: 'Add Supplement',
-    route: '/supplements/create',
+    route: '/new-supplement',
   },
   {
     icon: 'cart-liner',

@@ -19,7 +19,6 @@ export async function listCatalog(
   const page = Math.max(params.page ?? 1, 1);
   const limit = Math.min(Math.max(params.limit ?? 20, 1), 100);
   const offset = (page - 1) * limit;
-  console.log('userId!: ', userId);
 
   const [total, items] = await Promise.all([
     repo.countCatalog({

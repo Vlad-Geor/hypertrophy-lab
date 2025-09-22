@@ -13,6 +13,10 @@ type CatalogRow = {
   onHand: number;
   earliestExpiry: string | null;
   userSupplementIds: string[];
+  unitLabel: string;
+  unitsPerContainer: number;
+  servingUnits: number;
+  hasInventory: boolean;
 };
 
 export const listBrands = () =>
@@ -120,6 +124,9 @@ export async function listCatalog(params: {
       'c.form',
       'c.images',
       'b.name as brandName',
+      'c.unit_label as unitLabel',
+      'c.units_per_container as unitsPerContainer',
+      'c.serving_units as servingUnits'
     )
     .orderByRaw('lower(c.name) asc')
     .limit(params.limit)

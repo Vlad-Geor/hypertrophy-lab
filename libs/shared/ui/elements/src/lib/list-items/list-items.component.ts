@@ -1,16 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, linkedSignal, output } from '@angular/core';
+import { Component, input, output, Signal } from '@angular/core';
 import { CellConfig } from '@ikigaidev/model';
-import { Dropdown } from '../dropdown/dropdown.component';
 import { ListItemComponent } from './list-item.component';
 
 @Component({
   selector: 'lib-list-items',
   template: `
-    @if (options()?.length) {
-      @for (option of _options(); track $index) {
+    @if (options().length) {
+      @for (option of options(); track $index) {
         <lib-list-item
-          [selected]="selectedItem() === option"
+          [selected]="selectedItem()?.()?.id === option.id"
           [config]="option"
           [selectable]="selectable()"
         ></lib-list-item>
@@ -23,20 +22,13 @@ import { ListItemComponent } from './list-item.component';
   imports: [CommonModule, ListItemComponent],
 })
 export class ListItemsComponent {
-  private readonly dropdownRef = inject(Dropdown);
-
   options = input.required<CellConfig[]>();
-  _options = linkedSignal(() => this.options());
   selectable = input(true);
-  selectedItem = linkedSignal<CellConfig | null>(
-    () => this.options().find((o) => o.selected) ?? null,
-  );
+  selectedItem = input<Signal<CellConfig> | null>(null);
 
   itemSelected = output<CellConfig>();
 
-  selectItem(c: CellConfig): void {
-    this._options.update((ops) => ops.map((o) => ({ ...o, selected: o === c })));
-    this.selectedItem.set(c);
-    this.dropdownRef.selectedItem.set(c);
+  onItemSelected(c: CellConfig): void {
+    this.itemSelected.emit(c);
   }
 }
