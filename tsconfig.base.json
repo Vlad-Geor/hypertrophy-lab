@@ -55,6 +55,7 @@
       "@ikigaidev/navigation": ["libs/shared/layout/navigation/src/index.ts"],
       "@ikigaidev/overlay": ["libs/shared/overlay/src/index.ts"],
       "@ikigaidev/pagination": ["libs/shared/ui/pagination/src/index.ts"],
+      "@ikigaidev/pipe": ["libs/shared/pipe/src/index.ts"],
       "@ikigaidev/playground": ["libs/playground/src/index.ts"],
       "@ikigaidev/router": ["libs/shared/router/src/index.ts"],
       "@ikigaidev/service": ["libs/shared/layout/service/src/index.ts"],

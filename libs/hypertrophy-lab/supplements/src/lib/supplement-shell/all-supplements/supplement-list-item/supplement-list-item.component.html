@@ -18,14 +18,16 @@
           <!-- <lib-tag-group> -->
           <!-- @for (item of data?.healthTargets ?? ['heart', 'skeleton']; track $index) { -->
           <lib-tag size="xs" [theme]="'primary'" [rounded]="true">
-            {{ (data?.targets ?? [])[0].slug | titlecase }}
+            {{ (data?.targets ?? [])[0].name | firstWord | titlecase}}
           </lib-tag>
           <!-- } -->
           <!-- </lib-tag-group> -->
         </span>
       }
     </header>
-    <p class="text-xxs text-gray-text mb-1">{{ 's' }}</p>
+    <p class="text-xxs text-gray-text mb-1">
+      {{ data?.unitsPerContainer }} {{ data?.form }}(s)
+    </p>
     <p class="text-xs line-clamp-3 text-text-3">
       {{
         data?.description ??

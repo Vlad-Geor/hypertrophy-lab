@@ -6,8 +6,8 @@ import {
   TagComponent,
   TagGroupComponent,
 } from '@ikigaidev/elements';
-import { SupplementCatalog, SupplementCatalogItem } from '@ikigaidev/hl/contracts';
-import { Supplement } from '@ikigaidev/hl/model';
+import { SupplementCatalogItem } from '@ikigaidev/hl/contracts';
+import { FirstWordPipe } from '@ikigaidev/pipe';
 
 @Component({
   selector: 'hl-supplement-list-item',
@@ -15,6 +15,7 @@ import { Supplement } from '@ikigaidev/hl/model';
   styleUrl: './supplement-list-item.component.scss',
   imports: [
     TagComponent,
+    FirstWordPipe,
     TagGroupComponent,
     TitleCasePipe,
     DoughnutComponent,

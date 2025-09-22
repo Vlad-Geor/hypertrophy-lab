@@ -25,6 +25,7 @@ export const supplementCatalogSchema = z.object({
   targetIds: z.array(uuid),
   targets: z.array(targetSchema),
   name: z.string().min(1),
+  description: z.string(),
   form: supplementFormSchema.nullable().optional(),
   unitsPerContainer: z.number().int().positive().nullable().optional(),
   unitLabel: z.string().nullable().optional(),

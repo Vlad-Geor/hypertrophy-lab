@@ -1,8 +1,8 @@
 export default {
-  displayName: 'test',
-  preset: '../../../../jest.preset.js',
+  displayName: 'pipe',
+  preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/hypertrophy-lab/ui/test',
+  coverageDirectory: '../../../coverage/libs/shared/pipe',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
