@@ -69,6 +69,27 @@ export async function listCatalog(params: {
   offset: number;
   userId?: string; // if present: include user overlay + show private items owned by user
 }): Promise<CatalogRow[]> {
+  // aggregate targets per catalog
+  const ctAgg = db('nutrition.catalog_targets as ct')
+    .leftJoin('nutrition.targets as t', 't.id', 'ct.target_id')
+    .groupBy('ct.catalog_id')
+    .select({
+      catalog_id: 'ct.catalog_id',
+    })
+    .select(
+      db.raw(
+        'COALESCE(ARRAY_AGG(DISTINCT ct.target_id), ARRAY[]::uuid[]) as "targetIds"',
+      ),
+      db.raw(
+        `COALESCE(
+           JSON_AGG(DISTINCT JSONB_BUILD_OBJECT('id', t.id, 'slug', t.slug, 'name', t.name))
+           FILTER (WHERE t.id IS NOT NULL),
+           '[]'::json
+         ) as "targets"`,
+      ),
+    )
+    .as('ct_agg');
+
   const q = db<CatalogRow>('nutrition.supplement_catalog as c')
     .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
     .modify((qb) => {
@@ -80,6 +101,7 @@ export async function listCatalog(params: {
 
       if (params.brandId) qb.andWhere('c.brand_id', params.brandId);
       if (params.q) qb.andWhereILike('c.name', `%${params.q}%`);
+
       if (params.targetId) {
         qb.whereExists(
           db('nutrition.catalog_targets as ct')
@@ -87,6 +109,12 @@ export async function listCatalog(params: {
             .andWhere('ct.target_id', params.targetId),
         );
       }
+
+      // always join aggregated targets so they are selectable
+      qb.leftJoin(ctAgg, 'ct_agg.catalog_id', 'c.id').select(
+        db.raw('COALESCE(ct_agg."targetIds", ARRAY[]::uuid[]) as "targetIds"'),
+        db.raw(`COALESCE(ct_agg."targets", '[]'::json) as "targets"`),
+      );
 
       // user overlay (onHand, earliestExpiry, userSupplementIds)
       if (params.userId) {
@@ -126,7 +154,8 @@ export async function listCatalog(params: {
       'b.name as brandName',
       'c.unit_label as unitLabel',
       'c.units_per_container as unitsPerContainer',
-      'c.serving_units as servingUnits'
+      'c.serving_units as servingUnits',
+      'c.description',
     )
     .orderByRaw('lower(c.name) asc')
     .limit(params.limit)

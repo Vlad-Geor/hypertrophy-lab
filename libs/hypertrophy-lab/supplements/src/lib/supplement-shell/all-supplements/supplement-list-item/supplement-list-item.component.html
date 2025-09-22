@@ -3,7 +3,7 @@
 <div>
   <img
     class="rounded-full min-h-16 max-h-16 min-w-16 object-cover object-left-top border border-gradient-primary"
-    [src]="data?.imgUrl ?? '/assets/images/login-person-primary.jpg'"
+    [src]="data?.productUrl ?? '/assets/images/login-person-primary.jpg'"
     alt="Supplement image"
   />
 </div>
@@ -13,12 +13,12 @@
       <span class="text-lg text-white font-medium w-max">
         {{ data?.name ?? 'C-1000' }}
       </span>
-      @if (data?.healthTargets?.length) {
+      @if (data?.targets) {
         <span class="flex items-center gap-1 pt-1.5">
           <!-- <lib-tag-group> -->
           <!-- @for (item of data?.healthTargets ?? ['heart', 'skeleton']; track $index) { -->
           <lib-tag size="xs" [theme]="'primary'" [rounded]="true">
-            {{ (data?.healthTargets ?? [])[0] | titlecase }}
+            {{ (data?.targets ?? [])[0].slug | titlecase }}
           </lib-tag>
           <!-- } -->
           <!-- </lib-tag-group> -->

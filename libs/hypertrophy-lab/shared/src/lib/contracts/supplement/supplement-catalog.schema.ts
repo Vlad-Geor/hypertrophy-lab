@@ -1,5 +1,6 @@
 import { isoDateTime, pageMeta, paginationQuery, uuid } from '@ikigaidev/contracts';
 import { z } from 'zod';
+import { targetSchema } from './target.schema';
 
 export const supplementFormSchema = z.enum([
   'capsule',
@@ -21,6 +22,8 @@ export const catalogTargetSchema = z.object({
 export const supplementCatalogSchema = z.object({
   id: uuid,
   brandId: uuid.nullable().optional(),
+  targetIds: z.array(uuid),
+  targets: z.array(targetSchema),
   name: z.string().min(1),
   form: supplementFormSchema.nullable().optional(),
   unitsPerContainer: z.number().int().positive().nullable().optional(),
