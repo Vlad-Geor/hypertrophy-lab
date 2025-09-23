@@ -23,7 +23,7 @@ import { Size, Theme } from '@ikigaidev/model';
 })
 export class TagComponent {
   theme = input<Theme>('primary');
-  size = input<Extract<Size, 'xs' | 'sm' | 'md' | 'lg'>>('sm');
+  size = input<Extract<Size, 'xs' | 'sm' | 'md' | 'lg'>>('md');
   rounded = input<boolean>(false);
   content = viewChild<TemplateRef<unknown>>(TemplateRef);
 

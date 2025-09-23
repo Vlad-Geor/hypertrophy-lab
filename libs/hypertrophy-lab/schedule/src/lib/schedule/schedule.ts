@@ -1,9 +1,54 @@
+import { DatePipe, TitleCasePipe } from '@angular/common';
 import { Component } from '@angular/core';
+import { ButtonComponent, IconComponent, IconTile, Pill } from '@ikigaidev/elements';
+import { SurfaceCard } from '@ikigaidev/hl/ui';
+import { IconType } from '@ikigaidev/model';
+import { DayPartOverview } from '../ui/day-part-overview/day-part-overview.component';
+import { IntakeLogCard } from '../ui/intake-log-card/intake-log-card.component';
+
+export type Daypart = 'morning' | 'afternoon' | 'evening' | 'night';
 
 @Component({
-  selector: 'lib-schedule',
-  imports: [],
+  selector: 'hl-schedule',
+  imports: [
+    IconComponent,
+    ButtonComponent,
+    DatePipe,
+    Pill,
+    SurfaceCard,
+    IconTile,
+    TitleCasePipe,
+    IntakeLogCard,
+    DayPartOverview,
+  ],
   templateUrl: './schedule.html',
-  styleUrl: './schedule.scss',
+  host: {
+    class: 'flex flex-col gap-4',
+  },
 })
-export class Schedule {}
+export class Schedule {
+  today = new Date();
+
+  pillData: { text: Daypart; icon: IconType; iconClass: string }[] = [
+    {
+      text: 'morning',
+      icon: 'sunrise-liner',
+      iconClass: 'text-orange-400',
+    },
+    {
+      text: 'afternoon',
+      icon: 'sun-liner',
+      iconClass: 'text-secondary',
+    },
+    {
+      text: 'evening',
+      icon: 'sunset-liner',
+      iconClass: 'text-accent-purple',
+    },
+    {
+      text: 'night',
+      icon: 'moon-liner',
+      iconClass: 'text-blue-400',
+    },
+  ];
+}

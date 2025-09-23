@@ -6,6 +6,7 @@ import * as repo from '../repositories/supplements.repo';
 export const listBrands = () => repo.listBrands();
 export const listTargets = () => repo.listTargets();
 
+// service
 export async function listCatalog(
   params: {
     brandId?: string;
@@ -16,32 +17,25 @@ export async function listCatalog(
   },
   userId?: string,
 ) {
-  const page = Math.max(params.page ?? 1, 1);
-  const limit = Math.min(Math.max(params.limit ?? 20, 1), 100);
+  const page = Math.max(1, Number(params.page ?? 1));
+  const limit = Math.min(Math.max(Number(params.limit ?? 20), 1), 100);
   const offset = (page - 1) * limit;
 
-  const [total, items] = await Promise.all([
-    repo.countCatalog({
-      brandId: params.brandId,
-      targetId: params.targetId,
-      q: params.q,
-    }),
-    repo.listCatalog({
-      brandId: params.brandId,
-      targetId: params.targetId,
-      q: params.q,
-      limit,
-      offset,
-      userId,
-    }),
-  ]);
+  const { total, items } = await repo.listCatalog({
+    brandId: params.brandId,
+    targetId: params.targetId,
+    q: params.q,
+    userId,
+    limit,
+    offset,
+  });
 
   return {
     items: items.map((i) => ({
       ...i,
-      images: i.images ?? [],
-      hasInventory:
-        Array.isArray(i.userSupplementIds.length) && i.userSupplementIds.length > 0,
+      images: Array.isArray(i.images) ? i.images : [],
+      hasInventory: Array.isArray(i.userSupplementIds) && i.userSupplementIds.length > 0,
+      onHand: typeof i.onHand === 'string' ? Number(i.onHand) : (i.onHand ?? 0),
     })),
     page: { page, limit, total },
   };

@@ -61,15 +61,24 @@ export async function countCatalog(filters: {
   return Number(row?.cnt ?? 0);
 }
 
-export async function listCatalog(params: {
+// STEP 3 — base + targets + user overlay
+export async function listCatalog_overlay(params: {
   brandId?: string;
   targetId?: string;
   q?: string;
+  userId?: string; // include to get overlay
   limit: number;
   offset: number;
-  userId?: string; // include private owned items + overlay
-}): Promise<CatalogRow[]> {
-  // targets agg
+}) {
+  const baseRows = await db('nutrition.supplement_catalog as c')
+    .where((w) => {
+      w.where('c.visibility', 'public');
+      if (params.userId) w.orWhere('c.owner_user_id', params.userId);
+    })
+    .select('c.id', 'c.name', 'c.visibility', 'c.owner_user_id');
+
+  console.log('GPT log: ', baseRows);
+
   const ctAgg = db('nutrition.catalog_targets as ct')
     .leftJoin('nutrition.targets as t', 't.id', 'ct.target_id')
     .groupBy('ct.catalog_id')
@@ -88,24 +97,8 @@ export async function listCatalog(params: {
     )
     .as('ct_agg');
 
-  // overlay per-user (only when userId provided)
-  const uroll = params.userId
-    ? db('nutrition.user_supplements as us')
-        .leftJoin('nutrition.batches as b2', 'b2.user_supplement_id', 'us.id')
-        .where('us.user_id', params.userId)
-        .whereNotNull('us.catalog_id') // avoid custom/null
-        .whereNotNull('us.archived_at') // optional hardening
-        .groupBy('us.catalog_id')
-        .select({
-          catalog_id: 'us.catalog_id',
-          on_hand: db.raw('COALESCE(SUM(b2.quantity_units), 0)'),
-          earliest_expiry: db.raw('MIN(b2.expires_on)'),
-          user_supplement_ids: db.raw('ARRAY_AGG(DISTINCT us.id)'),
-        })
-        .as('uroll')
-    : null;
+  console.log('params passed: ', params);
 
-  // 1) filtered base ids (apply ALL predicates here)
   const base = db('nutrition.supplement_catalog as c')
     .where((w) => {
       w.where('c.visibility', 'public');
@@ -125,9 +118,24 @@ export async function listCatalog(params: {
     .select('c.id')
     .as('base');
 
-  // 2) page query anchored on base
+  const uroll = params.userId
+    ? db('nutrition.user_supplements as us')
+        .leftJoin('nutrition.batches as b2', 'b2.user_supplement_id', 'us.id')
+        .where('us.user_id', params.userId)
+        .whereNotNull('us.catalog_id')
+        .whereNull('us.archived_at') // optional
+        .groupBy('us.catalog_id')
+        .select({
+          catalog_id: 'us.catalog_id',
+          on_hand: db.raw('COALESCE(SUM(b2.quantity_units), 0)'),
+          earliest_expiry: db.raw('MIN(b2.expires_on)'),
+          user_supplement_ids: db.raw('ARRAY_AGG(DISTINCT us.id)'),
+        })
+        .as('uroll')
+    : null;
+
   const rows = await db('nutrition.supplement_catalog as c')
-    .join(base, 'base.id', 'c.id') // guarantees same filtered set
+    .join(base, 'base.id', 'c.id')
     .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
     .leftJoin(ctAgg, 'ct_agg.catalog_id', 'c.id')
     .modify((qb) => {
@@ -146,10 +154,213 @@ export async function listCatalog(params: {
           db.raw('ARRAY[]::uuid[] as "userSupplementIds"'),
         );
       }
-      qb.select(
-        db.raw('COALESCE(ct_agg."targetIds", ARRAY[]::uuid[]) as "targetIds"'),
-        db.raw(`COALESCE(ct_agg."targets", '[]'::json) as "targets"`),
-      );
+    })
+    .select(
+      'c.id',
+      'c.name',
+      'c.form',
+      'c.images',
+      'b.name as brandName',
+      'c.unit_label as unitLabel',
+      'c.units_per_container as unitsPerContainer',
+      'c.serving_units as servingUnits',
+      db.raw('COALESCE(ct_agg."targetIds", ARRAY[]::uuid[]) as "targetIds"'),
+      db.raw(`COALESCE(ct_agg."targets", '[]'::json) as "targets"`),
+    )
+    .orderByRaw('lower(c.name) asc')
+    .limit(params.limit)
+    .offset(params.offset);
+
+  return rows;
+}
+
+// STEP 2 — base + targets (no user overlay yet)
+export async function listCatalog_targets(params: {
+  brandId?: string;
+  targetId?: string;
+  q?: string;
+  userId?: string; // include to see owned private items
+  limit: number;
+  offset: number;
+}) {
+  const ctAgg = db('nutrition.catalog_targets as ct')
+    .leftJoin('nutrition.targets as t', 't.id', 'ct.target_id')
+    .groupBy('ct.catalog_id')
+    .select({ catalog_id: 'ct.catalog_id' })
+    .select(
+      db.raw(
+        'COALESCE(ARRAY_AGG(DISTINCT ct.target_id), ARRAY[]::uuid[]) as "targetIds"',
+      ),
+      db.raw(
+        `COALESCE(
+           JSON_AGG(DISTINCT JSONB_BUILD_OBJECT('id', t.id, 'slug', t.slug, 'name', t.name))
+           FILTER (WHERE t.id IS NOT NULL),
+           '[]'::json
+         ) as "targets"`,
+      ),
+    )
+    .as('ct_agg');
+
+  const base = db('nutrition.supplement_catalog as c')
+    .where((w) => {
+      w.where('c.visibility', 'public');
+      if (params.userId) w.orWhere('c.owner_user_id', params.userId);
+    })
+    .modify((qb) => {
+      if (params.brandId) qb.andWhere('c.brand_id', params.brandId);
+      if (params.q) qb.andWhereILike('c.name', `%${params.q}%`);
+      if (params.targetId) {
+        qb.whereExists(
+          db('nutrition.catalog_targets as ct')
+            .whereRaw('ct.catalog_id = c.id')
+            .andWhere('ct.target_id', params.targetId),
+        );
+      }
+    })
+    .select('c.id')
+    .as('base');
+
+  const rows = await db('nutrition.supplement_catalog as c')
+    .join(base, 'base.id', 'c.id')
+    .leftJoin(ctAgg, 'ct_agg.catalog_id', 'c.id')
+    .select(
+      'c.id',
+      'c.name',
+      db.raw('COALESCE(ct_agg."targetIds", ARRAY[]::uuid[]) as "targetIds"'),
+      db.raw(`COALESCE(ct_agg."targets", '[]'::json) as "targets"`),
+    )
+    .orderByRaw('lower(c.name) asc')
+    .limit(params.limit)
+    .offset(params.offset);
+
+  return rows;
+}
+
+export async function listCatalog_base(params: {
+  brandId?: string;
+  targetId?: string;
+  q?: string;
+  userId?: string;
+  limit: number;
+  offset: number;
+}) {
+  const rows = await db('nutrition.supplement_catalog as c')
+    // visibility/ownership
+    .where((w) => {
+      w.where('c.visibility', 'public');
+      if (params.userId) w.orWhere('c.owner_user_id', params.userId);
+    })
+    // optional filters
+    .modify((qb) => {
+      if (params.brandId) qb.andWhere('c.brand_id', params.brandId);
+      if (params.q) qb.andWhereILike('c.name', `%${params.q}%`);
+      if (params.targetId) {
+        qb.whereExists(
+          db('nutrition.catalog_targets as ct')
+            .whereRaw('ct.catalog_id = c.id')
+            .andWhere('ct.target_id', params.targetId),
+        );
+      }
+    })
+    .select('c.id', 'c.name') // minimal payload for verification
+    .orderByRaw('lower(c.name) asc')
+    .limit(params.limit)
+    .offset(params.offset);
+
+  return rows;
+}
+
+// repo
+export async function listCatalog(params: {
+  brandId?: string;
+  targetId?: string;
+  q?: string;
+  userId?: string;
+  limit: number;
+  offset: number;
+}): Promise<{ total: number; items: CatalogRow[] }> {
+  const ctAgg = db('nutrition.catalog_targets as ct')
+    .leftJoin('nutrition.targets as t', 't.id', 'ct.target_id')
+    .groupBy('ct.catalog_id')
+    .select({ catalog_id: 'ct.catalog_id' })
+    .select(
+      db.raw(
+        'COALESCE(ARRAY_AGG(DISTINCT ct.target_id), ARRAY[]::uuid[]) as "targetIds"',
+      ),
+      db.raw(`COALESCE(
+        JSON_AGG(DISTINCT JSONB_BUILD_OBJECT('id', t.id, 'slug', t.slug, 'name', t.name))
+        FILTER (WHERE t.id IS NOT NULL),'[]'::json) as "targets"`),
+    )
+    .as('ct_agg');
+
+  const base = db('nutrition.supplement_catalog as c')
+    .where((w) => {
+      w.where('c.visibility', 'public');
+      if (params.userId) {
+        w.orWhere('c.owner_user_id', params.userId);
+        w.orWhereExists(
+          db('nutrition.user_supplements as us')
+            .whereRaw('us.catalog_id = c.id')
+            .andWhere('us.user_id', params.userId),
+        );
+      }
+    })
+    .modify((qb) => {
+      if (params.brandId) qb.andWhere('c.brand_id', params.brandId);
+      if (params.q) qb.andWhereILike('c.name', `%${params.q}%`);
+      if (params.targetId) {
+        qb.whereExists(
+          db('nutrition.catalog_targets as ct')
+            .whereRaw('ct.catalog_id = c.id')
+            .andWhere('ct.target_id', params.targetId),
+        );
+      }
+    })
+    .select('c.id')
+    .as('base');
+
+  const totalRow = await db
+    .from(base)
+    .countDistinct<{ total: string }>({ total: 'id' })
+    .first();
+  const total = Number(totalRow?.total ?? 0);
+
+  const uroll = params.userId
+    ? db('nutrition.user_supplements as us')
+        .leftJoin('nutrition.batches as b2', 'b2.user_supplement_id', 'us.id')
+        .where('us.user_id', params.userId)
+        .whereNotNull('us.catalog_id')
+        .whereNull('us.archived_at')
+        .groupBy('us.catalog_id')
+        .select({
+          catalog_id: 'us.catalog_id',
+          on_hand: db.raw('COALESCE(SUM(b2.quantity_units), 0)::int'),
+          earliest_expiry: db.raw('MIN(b2.expires_on)'),
+          user_supplement_ids: db.raw('ARRAY_AGG(DISTINCT us.id)'),
+        })
+        .as('uroll')
+    : null;
+
+  const items = await db('nutrition.supplement_catalog as c')
+    .join(base, 'base.id', 'c.id')
+    .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
+    .leftJoin(ctAgg, 'ct_agg.catalog_id', 'c.id')
+    .modify((qb) => {
+      if (uroll) {
+        qb.leftJoin(uroll, 'uroll.catalog_id', 'c.id').select(
+          db.raw('COALESCE(uroll.on_hand, 0)::int as "onHand"'),
+          db.raw('uroll.earliest_expiry as "earliestExpiry"'),
+          db.raw(
+            'COALESCE(uroll.user_supplement_ids, ARRAY[]::uuid[]) as "userSupplementIds"',
+          ),
+        );
+      } else {
+        qb.select(
+          db.raw('0::int as "onHand"'),
+          db.raw('NULL::date as "earliestExpiry"'),
+          db.raw('ARRAY[]::uuid[] as "userSupplementIds"'),
+        );
+      }
     })
     .select(
       'c.id',
@@ -162,12 +373,14 @@ export async function listCatalog(params: {
       'c.units_per_container as unitsPerContainer',
       'c.serving_units as servingUnits',
       'c.description',
+      db.raw('COALESCE(ct_agg."targetIds", ARRAY[]::uuid[]) as "targetIds"'),
+      db.raw(`COALESCE(ct_agg."targets", '[]'::json) as "targets"`),
     )
     .orderByRaw('lower(c.name) asc')
     .limit(params.limit)
     .offset(params.offset);
 
-  return rows ?? [];
+  return { total, items };
 }
 
 export const getCatalogById = (id: string) =>

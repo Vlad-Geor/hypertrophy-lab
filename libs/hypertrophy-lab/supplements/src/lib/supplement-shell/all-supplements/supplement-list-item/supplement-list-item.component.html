@@ -1,9 +1,11 @@
-@let data = supplement();
+@let data = _supplement();
 
 <div>
   <img
-    class="rounded-full min-h-16 max-h-16 min-w-16 object-cover object-left-top border border-gradient-primary"
-    [src]="data?.productUrl ?? '/assets/images/login-person-primary.jpg'"
+    libImagePlaceholder
+    [placeholderTarget]="'supplement'"
+    class="rounded-full min-h-16 max-h-16 min-w-16 object-cover border border-gradient-primary"
+    [src]="data?.images?.[0]"
     alt="Supplement image"
   />
 </div>
@@ -18,15 +20,15 @@
           <!-- <lib-tag-group> -->
           <!-- @for (item of data?.healthTargets ?? ['heart', 'skeleton']; track $index) { -->
           <lib-tag size="xs" [theme]="'primary'" [rounded]="true">
-            {{ (data?.targets ?? [])[0].name | firstWord | titlecase}}
+            {{ (data?.targets ?? [])[0].name | firstWord | titlecase }}
           </lib-tag>
           <!-- } -->
           <!-- </lib-tag-group> -->
         </span>
       }
     </header>
-    <p class="text-xxs text-gray-text mb-1">
-      {{ data?.unitsPerContainer }} {{ data?.form }}(s)
+    <p class="text-xxs text-gray-text mb-1.5">
+      {{ data?.brandName }}, {{ data?.unitsPerContainer }} {{ data?.form }}
     </p>
     <p class="text-xs line-clamp-3 text-text-3">
       {{
@@ -37,13 +39,17 @@
       }}
     </p>
   </div>
-  <lib-divider></lib-divider>
-  <div class="flex flex-col gap-3 w-min">
-    <lib-doughnut [sizePx]="48" [stroke]="16" [progress]="50">
-      <p class="text-xxs text-white text-center">3 units</p>
-    </lib-doughnut>
-    <p class="text-xs text-text-2 text-center">43 days left</p>
-  </div>
+  @if (data?.hasInventory) {
+    <lib-divider></lib-divider>
+    <div class="flex flex-col gap-3 w-min">
+      <lib-doughnut [sizePx]="48" [stroke]="16" [progress]="stockLeftPercentage()">
+        <p class="text-xxs text-white text-center">{{ data?.onHand }} units</p>
+      </lib-doughnut>
+      <p class="text-xs text-text-2 text-center">
+        {{ (data?.onHand ?? 0) / (data?.servingUnits ?? 0) }} days left
+      </p>
+    </div>
+  }
 </div>
 <div
   class="absolute p-1 text-xs top-0 left-0 -translate-x-1/4 -translate-y-1/4 bg-secondary-soft border border-secondary-soft text-secondary rounded-full"

@@ -47,15 +47,20 @@
   /* White/black anchors + handy overlays */
   --white: #f1f5f9;
   --black: hsl(0 0% 0%);
-  --white-ghost: hsl(from var(--white) h s l / 0.08);
-  --white-subtle: hsl(from var(--white) h s l / 0.12);
-  --white-soft: hsl(from var(--white) h s l / 0.2);
+
+  --white-ghost: hsl(from var(--white) h s l / var(--a-ghost));
+  --white-subtle: hsl(from var(--white) h s l / var(--a-subtle));
+  --white-soft: hsl(from var(--white) h s l / var(--a-soft));
+  --white-hover: hsl(from var(--white) h s l / var(--a-hover));
+  --white-active: hsl(from var(--white) h s l / var(--a-active));
+  --white-ring: hsl(from var(--white) h s l / var(--a-ring));
 
   /* ===== Brand & Status (solids) ===== */
   --primary: #00786f;
   --secondary: #ffc710;
   --warning: hsl(33 96% 52%); /* orange status */
-  --success: hsl(177 49% 32%); /* green */
+  --success: #14A525; /* green */
+  --success-bright: #4ADE80;
   --danger: hsl(345 75% 50%); /* red */
   --info: hsl(260 60% 55%); /* violet */
   --gray: #475569;
@@ -98,6 +103,14 @@
   --success-hover: hsl(from var(--success) h s l / var(--a-hover));
   --success-active: hsl(from var(--success) h s l / var(--a-active));
   --success-ring: hsl(from var(--success) h s l / var(--a-ring));
+
+  /* Success Bright */
+  --success-bright-ghost: hsl(from var(--success-bright) h s l / var(--a-ghost));
+  --success-bright-subtle: hsl(from var(--success-bright) h s l / var(--a-subtle));
+  --success-bright-soft: hsl(from var(--success-bright) h s l / var(--a-soft));
+  --success-bright-hover: hsl(from var(--success-bright) h s l / var(--a-hover));
+  --success-bright-active: hsl(from var(--success-bright) h s l / var(--a-active));
+  --success-bright-ring: hsl(from var(--success-bright) h s l / var(--a-ring));
 
   /* Danger */
   --danger-ghost: hsl(from var(--danger) h s l / var(--a-ghost));

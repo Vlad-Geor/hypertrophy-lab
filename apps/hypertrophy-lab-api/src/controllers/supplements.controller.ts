@@ -1,14 +1,20 @@
 import { createCatalogRequest } from '@ikigaidev/hl/contracts';
 import { Request, RequestHandler } from 'express';
+import { ZodError } from 'zod';
 import * as svc from '../services/supplement.service';
 
+// controller
 export const listCatalog: RequestHandler = async (req: Request, res) => {
-  const { brandId, targetId, q, includeUser } = req.query as any;
-  const page = Number(req.query.page ?? 1);
-  const limit = Number(req.query.limit ?? 20);
+  const page = Math.max(1, Number(req.query.page ?? 1));
+  const limit = Math.min(Math.max(Number(req.query.limit ?? 20), 1), 100);
 
+  const includeUser = req.query.includeUser === '1' || req.query.includeUser === 'true';
   const userId = includeUser ? req.user?.id : undefined;
-  res.json(await svc.listCatalog({ brandId, targetId, q, page, limit }, userId));
+
+  const { brandId, targetId, q } = req.query as any;
+
+  const result = await svc.listCatalog({ brandId, targetId, q, page, limit }, userId);
+  res.json(result);
 };
 
 export const getCatalogById: RequestHandler<{ id: string }> = async (req, res) => {
@@ -18,19 +24,37 @@ export const getCatalogById: RequestHandler<{ id: string }> = async (req, res) =
 };
 
 export const createCatalog: RequestHandler = async (req: Request, res) => {
-  // validate with your zod createCatalogRequest.parse(req.body)
-  createCatalogRequest.parse(req.body);
-  const result = await svc.createCatalog(req.body, req.user.id);
-  res.status(201).json(result);
+  const includeUser = req.query.includeUser === '1' || req.query.includeUser === 'true';
+  const userId = includeUser ? req.user?.id : undefined;
+
+  try {
+    const dto = createCatalogRequest.parse(req.body);
+    const result = await svc.createCatalog(dto, userId);
+    res.status(201).json(result);
+  } catch (err) {
+    if (err instanceof ZodError) {
+      return res.status(400).json({
+        errors: err.issues.map((issue) => ({
+          field: issue.path.join('.'),
+          message: issue.message,
+        })),
+      });
+    }
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
 export const updateCatalog: RequestHandler<{ id: string }> = async (
   req: Request,
   res,
 ) => {
-  const rows = await svc.updateOwnCatalog(req.user.id, req.params.id, req.body);
-  if (!rows?.length) return res.sendStatus(404);
-  res.sendStatus(204);
+  try {
+    const rows = await svc.updateOwnCatalog(req.user.id, req.params.id, req.body);
+    if (!rows?.length) return res.sendStatus(404);
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error', message: error });
+  }
 };
 
 export const deleteCatalog: RequestHandler<{ id: string }> = async (

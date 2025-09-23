@@ -1,0 +1,14 @@
+:host {
+
+  &.sm {
+    @apply text-xs px-3 py-1;
+  }
+
+  &.md {
+    @apply text-sm px-4 py-2;
+  }
+
+  &.lg {
+    @apply px-5 py-3;
+  }
+}

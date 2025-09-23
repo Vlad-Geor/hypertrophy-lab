@@ -1,26 +1,32 @@
 @let supp = supplement();
 <div class="w-2/5 relative">
   <img
+    libImagePlaceholder
+    [placeholderTarget]="'supplement'"
     class="h-full w-full object-cover rounded"
-    [src]="supp?.itemData?.imgUrl"
+    [src]="supp?.images?.[0]"
     alt="Picsum pic"
   />
-  <div
-    class="absolute text-xxs font-light p-1 rounded bottom-0 flex flex-col gap-1 w-full bg-black/50 backdrop-blur-[2px]"
-  >
-    <p class="text-white text-center">2 units remaining</p>
-    <p class="text-secondary text-center">(62 days)</p>
-  </div>
+  @if (supp?.onHand) {
+    <div
+      class="absolute text-xxs font-light p-1 rounded bottom-0 flex flex-col gap-1 w-full bg-black/50 backdrop-blur-[2px]"
+    >
+      <p class="text-white text-center">{{ supp?.onHand }} units remaining</p>
+      <p class="text-secondary text-center">
+        ({{ (supp?.unitsPerContainer ?? 0) / (supp?.onHand ?? 0) }} days)
+      </p>
+    </div>
+  }
 </div>
 <div class="overflow-hidden whitespace-nowrap w-1/2 flex flex-col justify-between flex-1">
   <div class="flex flex-col">
     <p
       class="text-body-sm-semibold pb-1 font-medium text-primary-bright text-wrap text-sm line-clamp-2"
     >
-      {{ supp?.itemData?.name }}
+      {{ supp?.name }}
     </p>
     <lib-tag [size]="'xs'" [theme]="'secondary'" [rounded]="true">
-      {{ (supp?.itemData?.healthTargets ?? [])[0] }}
+      {{ supp?.targets?.[0]?.name }}
     </lib-tag>
   </div>
   <div class="flex flex-col mb-1 gap-2">

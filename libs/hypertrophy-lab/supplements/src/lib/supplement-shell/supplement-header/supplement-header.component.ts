@@ -29,7 +29,7 @@ import { AddSupplementComponent } from '../../add-supplement/add-supplement.comp
             5 of 5 supplements
           </p>
         </div>
-        <lib-button [size]="'xl'" class="text-white" (click)="onAddInventoryItem()">
+        <lib-button [size]="'lg'" class="text-white" (click)="onAddInventoryItem()">
           <lib-icon [icon]="'plus-solid'" left [iconSize]="16"></lib-icon>
           Add
         </lib-button>

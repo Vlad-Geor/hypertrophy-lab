@@ -22,6 +22,7 @@ export const catalogTargetSchema = z.object({
 export const supplementCatalogSchema = z.object({
   id: uuid,
   brandId: uuid.nullable().optional(),
+  brandName: z.string().nullable().optional(),
   targetIds: z.array(uuid),
   targets: z.array(targetSchema),
   name: z.string().min(1),
@@ -47,12 +48,14 @@ export const supplementCatalogSummary = supplementCatalogSchema.pick({
   images: true,
 });
 
-export const supplementCatalogItem = supplementCatalogSchema.omit({
-  ean: true,
-  upc: true,
-  createdAt: true,
-  updatedAt: true,
-});
+export const supplementCatalogItem = supplementCatalogSchema
+  .omit({
+    ean: true,
+    upc: true,
+    createdAt: true,
+    updatedAt: true,
+  })
+  .extend({ onHand: z.number().optional(), hasInventory: z.boolean().optional() });
 
 export const listCatalogQuery = paginationQuery.extend({
   q: z.string().trim().min(1).optional(),

@@ -1,14 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, effect, input } from '@angular/core';
+import { ImagePlaceholderDirective } from '@ikigaidev/directive';
 import { ButtonComponent, TagComponent, TagGroupComponent } from '@ikigaidev/elements';
-import { SupplementInventoryItem } from '@ikigaidev/hl/model';
+import { SupplementCatalogItem } from '@ikigaidev/hl/contracts';
 
 @Component({
   selector: 'hl-supplement-card',
-  imports: [CommonModule, TagComponent, ButtonComponent, TagGroupComponent],
+  imports: [
+    CommonModule,
+    TagComponent,
+    ButtonComponent,
+    TagGroupComponent,
+    ImagePlaceholderDirective,
+  ],
   templateUrl: './supplement-card.component.html',
   styleUrl: './supplement-card.component.scss',
 })
 export class SupplementCardComponent {
-  supplement = input<SupplementInventoryItem>();
+  supplement = input<SupplementCatalogItem>();
+
+  constructor() {
+    effect(() => console.log(this.supplement()));
+  }
 }

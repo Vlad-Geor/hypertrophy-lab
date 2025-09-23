@@ -2,7 +2,7 @@
   "name": "schedule",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/hypertrophy-lab/schedule/src",
-  "prefix": "lib",
+  "prefix": "hl",
   "projectType": "library",
   "tags": [],
   "targets": {

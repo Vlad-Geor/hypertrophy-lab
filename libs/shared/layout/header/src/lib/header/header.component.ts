@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   IconButtonComponent,
   IconComponent,
@@ -35,11 +35,5 @@ export class HeaderComponent {
         hasBackdrop: true,
       },
     });
-  }
-
-  constructor() {
-    effect(() =>
-      console.log(this.routerService.backTarget()),
-    );
   }
 }

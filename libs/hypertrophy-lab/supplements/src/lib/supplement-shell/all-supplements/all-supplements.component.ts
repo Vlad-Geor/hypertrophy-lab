@@ -24,6 +24,6 @@ export class AllSupplementsComponent {
   ]);
 
   suppData = httpResource<ListCatalogResponse>(
-    () => `${this.API_BASE}/supplements`,
+    () => `${this.API_BASE}/supplements?includeUser=true`,
   );
 }

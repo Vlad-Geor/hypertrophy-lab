@@ -18,5 +18,5 @@ export class IconComponent {
   icon = input.required<IconType | undefined>();
   color = input<string>('inherit');
   iconSize = input<number>(20);
-  fillContainer = input(true);
+  fillContainer = input(false);
 }
