@@ -9,6 +9,7 @@ const { DB_URL } = loadEnv();
 const knexConfig: { [key: string]: Knex.Config } = {
   development: {
     client: 'pg',
+    searchPath: ['nutrition', 'core', 'fitness', 'public'],
     connection: {
       connectionString: DB_URL,
       ssl: { rejectUnauthorized: false },

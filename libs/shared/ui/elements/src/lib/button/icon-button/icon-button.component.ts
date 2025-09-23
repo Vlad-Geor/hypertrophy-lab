@@ -12,6 +12,7 @@ import { IconComponent } from '../../icon/icon.component';
       class="h-11 w-11"
       [ngClass]="{ 'bg-secondary text-white': appearance() === 'fill' }"
       [icon]="icon()"
+      [iconSize]="iconSize() ?? 16"
       [fillContainer]="inheritIconFillColor()"
     ></lib-icon>
   `,
@@ -35,6 +36,7 @@ import { IconComponent } from '../../icon/icon.component';
 export class IconButtonComponent {
   badge = input<BadgeConfig>();
   icon = input.required<IconType>();
+  iconSize = input<number>();
   disabled = input<boolean>();
   appearance = input<'transparent' | 'fill'>('transparent');
   type = input<'button' | 'submit'>('button');

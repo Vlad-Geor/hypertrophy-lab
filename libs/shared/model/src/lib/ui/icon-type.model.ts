@@ -5,6 +5,7 @@ export const iconType = [
   'arrow-up-solid',
   'atom-solid',
   'award-solid',
+  'edit-liner',
   'bag-shopping-solid',
   'bars-solid',
   'bed-solid',

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, effect, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { BadgeConfig, IconType, Size, Theme } from '@ikigaidev/model';
 
 @Component({
@@ -49,8 +49,4 @@ export class ButtonComponent {
       .filter(Boolean)
       .join(' ');
   });
-
-  constructor() {
-    effect(() => console.log(this.themeClasses()));
-  }
 }

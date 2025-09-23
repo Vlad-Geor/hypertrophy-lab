@@ -1,6 +1,6 @@
 import { DatePipe, TitleCasePipe } from '@angular/common';
 import { Component } from '@angular/core';
-import { ButtonComponent, IconComponent, IconTile, Pill } from '@ikigaidev/elements';
+import { ButtonComponent, DateRangePicker, IconComponent, IconTile, Pill, TagComponent } from '@ikigaidev/elements';
 import { SurfaceCard } from '@ikigaidev/hl/ui';
 import { IconType } from '@ikigaidev/model';
 import { DayPartOverview } from '../ui/day-part-overview/day-part-overview.component';
@@ -16,11 +16,12 @@ export type Daypart = 'morning' | 'afternoon' | 'evening' | 'night';
     DatePipe,
     Pill,
     SurfaceCard,
-    IconTile,
     TitleCasePipe,
     IntakeLogCard,
     DayPartOverview,
-  ],
+    TagComponent,
+    DateRangePicker
+],
   templateUrl: './schedule.html',
   host: {
     class: 'flex flex-col gap-4',

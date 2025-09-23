@@ -1,10 +1,9 @@
 import {
-  createLogResponse,
   createPlanResponse,
   dayScheduleResponse,
   listPlansResponse,
 } from '@ikigaidev/hl/contracts';
-import { Request, Response } from 'express';
+import { Request, RequestHandler, Response } from 'express';
 import * as svc from '../services/schedule.service';
 
 export async function getDayView(req: Request, res: Response) {
@@ -54,16 +53,29 @@ export async function deletePlan(req: Request, res: Response) {
   res.sendStatus(204);
 }
 
-export async function createLog(req: Request, res: Response) {
-  const userId = req.user.id;
-  const log = await svc.createLog({ userId, payload: req.body });
-  const parsed = createLogResponse.safeParse(log);
-  if (!parsed.success)
-    return res
-      .status(500)
-      .json({ error: 'Invalid response', issues: parsed.error.issues });
-  res.status(201).json(parsed.data);
-}
+// export async function createLog(req: Request, res: Response) {
+//   const userId = req.user.id;
+//   const log = await svc.createLog({ userId, payload: req.body });
+//   const parsed = createLogResponse.safeParse(log);
+//   if (!parsed.success)
+//     return res
+//       .status(500)
+//       .json({ error: 'Invalid response', issues: parsed.error.issues });
+//   res.status(201).json(parsed.data);
+// }
+
+export const createLog: RequestHandler = async (req: Request, res, next) => {
+  try {
+    const created = await svc.createLog(req.user.id, req.body);
+    res.status(201).json(created);
+  } catch (e: any) {
+    if (/already exists/i.test(e.message))
+      return res.status(409).json({ error: e.message });
+    if (/not found|mismatch/i.test(e.message))
+      return res.status(400).json({ error: e.message });
+    next(e);
+  }
+};
 
 export async function patchLog(req: Request, res: Response) {
   const userId = req.user.id;

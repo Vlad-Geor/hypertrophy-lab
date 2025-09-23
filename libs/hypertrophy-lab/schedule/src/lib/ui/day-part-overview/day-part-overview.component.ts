@@ -9,7 +9,7 @@ import { IntakeLogCard } from '../intake-log-card/intake-log-card.component';
   `,
   imports: [IntakeLogCard],
   host: {
-    class: 'py-4 px-3 flex flex-col gap-3'
+    class: 'py-4 px-3 flex flex-col gap-3 border border-gray-active rounded-xl'
   }
 })
 export class DayPartOverview {}

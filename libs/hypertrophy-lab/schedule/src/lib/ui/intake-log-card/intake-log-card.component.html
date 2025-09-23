@@ -1,0 +1,40 @@
+<div class="flex items-start gap-3">
+  <lib-icon-tile [icon]="'box-liner'"></lib-icon-tile>
+  <div class="flex flex-col gap-1.5 flex-grow">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+          <span class="text-sm font-medium">Omega 3</span>
+          <lib-tag [rounded]="true" [size]="'md'" [theme]="'secondary'">1 unit</lib-tag>
+      </div>
+      <lib-icon [icon]="'edit-liner'"></lib-icon>
+    </div>
+    <div class="flex flex-col gap-0.5">
+        <p class="text-gray-text font-medium text-xs truncate">
+          Take with breakfast for better absorption
+        </p>
+        <p class="text-xs text-gray-dark">Stock: 27 remaining</p>
+    </div>
+  </div>
+</div>
+@if (!logState()) {
+  <div class="flex gap-3 justify-between">
+    <lib-button appearance="outline" [fillContainer]="true">
+      <lib-icon [icon]="'close-circle-liner'"></lib-icon>
+      Skip
+    </lib-button>
+    <lib-button theme="success-bright" [fillContainer]="true">
+      <lib-icon [icon]="'check-circle-broken-liner'"></lib-icon>
+      Take
+    </lib-button>
+  </div>
+} @else if (logState() === 'taken') {
+    <lib-button theme="white" [fillContainer]="true" appearance="outline">
+      <lib-icon class="text-success-bright" [icon]="'check-circle-broken-liner'"></lib-icon>
+      Taken
+    </lib-button>
+} @else {
+    <lib-button theme="white" [fillContainer]="true" appearance="outline">
+      <lib-icon class="text-danger" [icon]="'close-circle-liner'"></lib-icon>
+      Skipped
+    </lib-button>
+}

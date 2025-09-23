@@ -38,10 +38,25 @@
   titleSize="lg"
   [cardTitleIcon]="'clock-solid'"
   cardTitleIconClass="text-primary"
-  cardSubtitle="Subtitle"
 >
+  @for (item of [1,2,3]; track $index) {
   <hl-day-part-overview>
-    <div dayPartOverviewHeader>header</div>
-    <hl-intake-action-card></hl-intake-action-card>
+    <div dayPartOverviewHeader class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <lib-icon class="text-orange-400" [icon]="'sunrise-liner'"></lib-icon>
+        <span>Morning</span>
+      </div>
+      <lib-tag [rounded]="true" theme="white" size="lg">3 supplements</lib-tag>
+    </div>
+    <hl-intake-action-card logState="skipped"></hl-intake-action-card>
   </hl-day-part-overview>
+  }
+</hl-surface-card>
+
+<hl-surface-card
+  cardTitle="Weekly Overview"
+  cardTitleIcon="calendar-liner"
+  cardTitleIconClass="text-primary"
+>
+  <lib-date-range-picker></lib-date-range-picker>
 </hl-surface-card>

@@ -6,6 +6,7 @@ const gradientBorderPlugin = ({ addUtilities }) => {
     'secondary',
     'warning',
     'success',
+    'success-bright',
     'danger',
     'info',
     'accent-purple',
@@ -56,6 +57,7 @@ module.exports = {
         'text-3': 'var(--text-3)', // muted
         'text-inverse': 'var(--text-inverse)', // on bright chips
         'gray-text': 'var(--gray-bright)',
+        'gray-dark': 'var(--gray-dark)',
 
         // If you still use the old heading/body names, point them to HSL triples:
         'heading-01': 'hsl(var(--text-heading-01))',
@@ -70,6 +72,7 @@ module.exports = {
         secondary: 'var(--secondary)', // brand yellow (not warning)
         warning: 'var(--warning)', // orange status
         success: 'var(--success)',
+        'success-bright': 'var(--success-bright)',
         danger: 'var(--danger)',
         info: 'var(--info)',
         gray: 'var(--gray)',
@@ -104,6 +107,13 @@ module.exports = {
         'success-hover': 'var(--success-hover)',
         'success-active': 'var(--success-active)',
         'success-ring': 'var(--success-ring)',
+        // Success Bright
+        'success-bright-ghost': 'var(--success-bright-ghost)',
+        'success-bright-subtle': 'var(--success-bright-subtle)',
+        'success-bright-soft': 'var(--success-bright-soft)',
+        'success-bright-hover': 'var(--success-bright-hover)',
+        'success-bright-active': 'var(--success-bright-active)',
+        'success-bright-ring': 'var(--success-bright-ring)',
         // Danger
         'danger-ghost': 'var(--danger-ghost)',
         'danger-subtle': 'var(--danger-subtle)',
@@ -156,6 +166,7 @@ module.exports = {
         secondary: 'var(--secondary-ring)',
         warning: 'var(--warning-ring)',
         success: 'var(--success-ring)',
+        'success-bright': 'var(--success-bright-ring)',
         danger: 'var(--danger-ring)',
         info: 'var(--info-ring)',
       },
@@ -176,6 +187,7 @@ module.exports = {
         secondary: 'var(--secondary-ring)',
         warning: 'var(--warning-ring)',
         success: 'var(--success-ring)',
+        'success-bright': 'var(--success-bright-ring)',
         danger: 'var(--danger-ring)',
         info: 'var(--info-ring)',
       },

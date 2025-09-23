@@ -7,7 +7,7 @@ import { Knex } from 'knex';
 import { db } from '../config/database';
 
 export async function listPlans(userId: string) {
-  return db('schedule_plans')
+  return db('nutrition.schedule_plans')
     .select('*')
     .where({ user_id: userId })
     .orderBy([
@@ -18,7 +18,7 @@ export async function listPlans(userId: string) {
 }
 
 export async function createPlan(params: { userId: string; payload: CreatePlanRequest }) {
-  const [row] = await db('schedule_plans')
+  const [row] = await db('nutrition.schedule_plans')
     .insert({
       user_id: params.userId,
       user_supplement_id: params.payload.userSupplementId,
@@ -45,13 +45,13 @@ export async function updatePlan(params: {
   if (params.patch.notes !== undefined) patch.notes = params.patch.notes;
   if (params.patch.active !== undefined) patch.active = params.patch.active;
 
-  await db('schedule_plans')
+  await db('nutrition.schedule_plans')
     .update(patch)
     .where({ id: params.planId, user_id: params.userId });
 }
 
 export async function softDeletePlan(params: { userId: string; planId: string }) {
-  await db('schedule_plans')
+  await db('nutrition.schedule_plans')
     .update({ active: false })
     .where({ id: params.planId, user_id: params.userId });
 }
@@ -71,7 +71,7 @@ export async function createLog(
     )) ??
     0;
 
-  const [row] = await trx('schedule_logs')
+  const [row] = await trx('nutrition.schedule_logs')
     .insert({
       user_id: params.userId,
       user_supplement_id: params.payload.userSupplementId,
@@ -92,7 +92,7 @@ export async function getPlanUnitsOrDefault(
   userSupplementId?: string,
 ) {
   if (maybePlanId) {
-    const row = await trx('schedule_plans')
+    const row = await trx('nutrition.schedule_plans')
       .select('units_per_dose')
       .where({ id: maybePlanId })
       .first();
@@ -114,12 +114,12 @@ export async function recordConsumption(
 }
 
 export async function getLogById(trx: Knex, id: string) {
-  const row = await trx('schedule_logs').select('*').where({ id }).first();
+  const row = await trx('nutrition.schedule_logs').select('*').where({ id }).first();
   return mapLogRow(row);
 }
 
 export async function updateLog(params: { userId: string; logId: string; patch: any }) {
-  await db('schedule_logs')
+  await db('nutrition.schedule_logs')
     .update(params.patch)
     .where({ id: params.logId, user_id: params.userId });
 }
@@ -133,7 +133,7 @@ export async function deleteLogConsumptions(trx: Knex, logId: string) {
 }
 
 export async function deleteLog(trx: Knex, userId: string, logId: string) {
-  await trx('schedule_logs').where({ id: logId, user_id: userId }).del();
+  await trx('nutrition.schedule_logs').where({ id: logId, user_id: userId }).del();
 }
 
 // ---------- Day View ----------
@@ -145,7 +145,7 @@ export async function buildDayView(params: { userId: string; date: string }) {
   const weekdayIndex = new Date(date + 'T00:00:00Z').getUTCDay();
 
   // get plans
-  const plans = await db('schedule_plans as p')
+  const plans = await db('nutrition.schedule_plans as p')
     .select(
       'p.id as plan_id',
       'p.user_supplement_id',
@@ -165,7 +165,9 @@ export async function buildDayView(params: { userId: string; date: string }) {
     .andWhereRaw('? = ANY(p.days_of_week)', [weekdayIndex]);
 
   // logs for that date
-  const logs = await db('schedule_logs').select('*').where({ user_id: userId, date });
+  const logs = await db('nutrition.schedule_logs')
+    .select('*')
+    .where({ user_id: userId, date });
 
   // stock snapshot per user_supplement
   const stocks = await db('nutrition.batches')
@@ -282,4 +284,108 @@ function mapLogRow(r: any) {
     createdAt: r.created_at,
     updatedAt: r.updated_at,
   };
+}
+
+export const getPlanForUser = (userId: string, planId: string) =>
+  db('nutrition.schedule_plans')
+    .select(
+      'id',
+      'user_supplement_id as userSupplementId',
+      'units_per_dose as unitsPerDose',
+      'time_of_day as timeOfDay',
+      'days_of_week as daysOfWeek',
+      'active',
+    )
+    .where({ id: planId, user_id: userId })
+    .first();
+
+export const ensureUserSupplement = (userId: string, userSupplementId: string) =>
+  db('nutrition.user_supplements')
+    .where({ id: userSupplementId, user_id: userId })
+    .first();
+
+export const getExistingLog = (
+  userId: string,
+  userSupplementId: string,
+  date: string,
+  timeOfDay: string,
+) =>
+  db('nutrition.schedule_logs')
+    .where({
+      user_id: userId,
+      user_supplement_id: userSupplementId,
+      date,
+      time_of_day: timeOfDay,
+    })
+    .first();
+
+export const insertLogTx = (
+  trx: any,
+  log: {
+    userId: string;
+    userSupplementId: string;
+    planId?: string | null;
+    date: string;
+    timeOfDay: string;
+    status: 'taken' | 'skipped';
+    quantityUnits: number;
+    note?: string | null;
+  },
+) =>
+  trx('nutrition.schedule_logs')
+    .insert({
+      user_id: log.userId,
+      user_supplement_id: log.userSupplementId,
+      plan_id: log.planId ?? null,
+      date: log.date,
+      time_of_day: log.timeOfDay,
+      status: log.status,
+      quantity_units: log.quantityUnits,
+      note: log.note ?? null,
+    })
+    .returning([
+      'id',
+      'user_id as userId',
+      'user_supplement_id as userSupplementId',
+      'plan_id as planId',
+      'date',
+      'time_of_day as timeOfDay',
+      'status',
+      'quantity_units as quantityUnits',
+      'note',
+      'created_at as createdAt',
+      'updated_at as updatedAt',
+    ])
+    .then((r) => r[0]);
+
+export const selectFifoBatchesTx = (trx: any, userSupplementId: string) =>
+  trx('nutrition.batches')
+    .select('id', 'quantity_units')
+    .where({ user_supplement_id: userSupplementId })
+    .andWhere('quantity_units', '>', 0)
+    .orderByRaw('expires_on IS NULL, expires_on ASC, created_at ASC');
+
+export async function consumeStockTx(
+  trx: any,
+  logId: string,
+  userSupplementId: string,
+  units: number,
+) {
+  let remaining = units;
+  const batches = await selectFifoBatchesTx(trx, userSupplementId);
+  for (const b of batches) {
+    if (remaining <= 0) break;
+    const use = Math.min(remaining, Number(b.quantity_units));
+    if (use <= 0) continue;
+    await trx('nutrition.batches')
+      .update({ quantity_units: trx.raw('quantity_units - ?', [use]) })
+      .where({ id: b.id });
+    await trx('schedule_log_consumptions').insert({
+      log_id: logId,
+      batch_id: b.id,
+      units: use,
+    });
+    remaining -= use;
+  }
+  return units - remaining; // consumed
 }
