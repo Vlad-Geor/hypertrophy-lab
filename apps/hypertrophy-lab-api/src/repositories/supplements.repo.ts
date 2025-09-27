@@ -20,12 +20,12 @@ type CatalogRow = {
 };
 
 export const listBrands = () =>
-  db('nutrition.brands')
+  db('brands')
     .select('id', 'name', 'site', 'created_at as createdAt', 'updated_at as updatedAt')
     .orderBy('name', 'asc');
 
 export const listTargets = () =>
-  db('nutrition.targets')
+  db('targets')
     .select(
       'id',
       'slug',
@@ -43,12 +43,12 @@ export async function countCatalog(filters: {
   targetId?: string;
   q?: string;
 }): Promise<number> {
-  const base = db('nutrition.supplement_catalog as c').modify((qb) => {
+  const base = db('supplement_catalog as c').modify((qb) => {
     if (filters.brandId) qb.where('c.brand_id', filters.brandId);
     if (filters.q) qb.whereILike('c.name', `%${filters.q}%`);
     if (filters.targetId)
       qb.whereExists(
-        db('nutrition.catalog_targets as ct')
+        db('catalog_targets as ct')
           .whereRaw('ct.catalog_id = c.id')
           .andWhere('ct.target_id', filters.targetId),
       );
@@ -70,7 +70,7 @@ export async function listCatalog_overlay(params: {
   limit: number;
   offset: number;
 }) {
-  const baseRows = await db('nutrition.supplement_catalog as c')
+  const baseRows = await db('supplement_catalog as c')
     .where((w) => {
       w.where('c.visibility', 'public');
       if (params.userId) w.orWhere('c.owner_user_id', params.userId);
@@ -79,8 +79,8 @@ export async function listCatalog_overlay(params: {
 
   console.log('GPT log: ', baseRows);
 
-  const ctAgg = db('nutrition.catalog_targets as ct')
-    .leftJoin('nutrition.targets as t', 't.id', 'ct.target_id')
+  const ctAgg = db('catalog_targets as ct')
+    .leftJoin('targets as t', 't.id', 'ct.target_id')
     .groupBy('ct.catalog_id')
     .select({ catalog_id: 'ct.catalog_id' })
     .select(
@@ -99,7 +99,7 @@ export async function listCatalog_overlay(params: {
 
   console.log('params passed: ', params);
 
-  const base = db('nutrition.supplement_catalog as c')
+  const base = db('supplement_catalog as c')
     .where((w) => {
       w.where('c.visibility', 'public');
       if (params.userId) w.orWhere('c.owner_user_id', params.userId);
@@ -109,7 +109,7 @@ export async function listCatalog_overlay(params: {
       if (params.q) qb.andWhereILike('c.name', `%${params.q}%`);
       if (params.targetId) {
         qb.whereExists(
-          db('nutrition.catalog_targets as ct')
+          db('catalog_targets as ct')
             .whereRaw('ct.catalog_id = c.id')
             .andWhere('ct.target_id', params.targetId),
         );
@@ -119,8 +119,8 @@ export async function listCatalog_overlay(params: {
     .as('base');
 
   const uroll = params.userId
-    ? db('nutrition.user_supplements as us')
-        .leftJoin('nutrition.batches as b2', 'b2.user_supplement_id', 'us.id')
+    ? db('user_supplements as us')
+        .leftJoin('batches as b2', 'b2.user_supplement_id', 'us.id')
         .where('us.user_id', params.userId)
         .whereNotNull('us.catalog_id')
         .whereNull('us.archived_at') // optional
@@ -134,9 +134,9 @@ export async function listCatalog_overlay(params: {
         .as('uroll')
     : null;
 
-  const rows = await db('nutrition.supplement_catalog as c')
+  const rows = await db('supplement_catalog as c')
     .join(base, 'base.id', 'c.id')
-    .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
+    .leftJoin('brands as b', 'b.id', 'c.brand_id')
     .leftJoin(ctAgg, 'ct_agg.catalog_id', 'c.id')
     .modify((qb) => {
       if (uroll) {
@@ -183,8 +183,8 @@ export async function listCatalog_targets(params: {
   limit: number;
   offset: number;
 }) {
-  const ctAgg = db('nutrition.catalog_targets as ct')
-    .leftJoin('nutrition.targets as t', 't.id', 'ct.target_id')
+  const ctAgg = db('catalog_targets as ct')
+    .leftJoin('targets as t', 't.id', 'ct.target_id')
     .groupBy('ct.catalog_id')
     .select({ catalog_id: 'ct.catalog_id' })
     .select(
@@ -201,7 +201,7 @@ export async function listCatalog_targets(params: {
     )
     .as('ct_agg');
 
-  const base = db('nutrition.supplement_catalog as c')
+  const base = db('supplement_catalog as c')
     .where((w) => {
       w.where('c.visibility', 'public');
       if (params.userId) w.orWhere('c.owner_user_id', params.userId);
@@ -211,7 +211,7 @@ export async function listCatalog_targets(params: {
       if (params.q) qb.andWhereILike('c.name', `%${params.q}%`);
       if (params.targetId) {
         qb.whereExists(
-          db('nutrition.catalog_targets as ct')
+          db('catalog_targets as ct')
             .whereRaw('ct.catalog_id = c.id')
             .andWhere('ct.target_id', params.targetId),
         );
@@ -220,7 +220,7 @@ export async function listCatalog_targets(params: {
     .select('c.id')
     .as('base');
 
-  const rows = await db('nutrition.supplement_catalog as c')
+  const rows = await db('supplement_catalog as c')
     .join(base, 'base.id', 'c.id')
     .leftJoin(ctAgg, 'ct_agg.catalog_id', 'c.id')
     .select(
@@ -244,7 +244,7 @@ export async function listCatalog_base(params: {
   limit: number;
   offset: number;
 }) {
-  const rows = await db('nutrition.supplement_catalog as c')
+  const rows = await db('supplement_catalog as c')
     // visibility/ownership
     .where((w) => {
       w.where('c.visibility', 'public');
@@ -256,7 +256,7 @@ export async function listCatalog_base(params: {
       if (params.q) qb.andWhereILike('c.name', `%${params.q}%`);
       if (params.targetId) {
         qb.whereExists(
-          db('nutrition.catalog_targets as ct')
+          db('catalog_targets as ct')
             .whereRaw('ct.catalog_id = c.id')
             .andWhere('ct.target_id', params.targetId),
         );
@@ -279,8 +279,8 @@ export async function listCatalog(params: {
   limit: number;
   offset: number;
 }): Promise<{ total: number; items: CatalogRow[] }> {
-  const ctAgg = db('nutrition.catalog_targets as ct')
-    .leftJoin('nutrition.targets as t', 't.id', 'ct.target_id')
+  const ctAgg = db('catalog_targets as ct')
+    .leftJoin('targets as t', 't.id', 'ct.target_id')
     .groupBy('ct.catalog_id')
     .select({ catalog_id: 'ct.catalog_id' })
     .select(
@@ -293,13 +293,13 @@ export async function listCatalog(params: {
     )
     .as('ct_agg');
 
-  const base = db('nutrition.supplement_catalog as c')
+  const base = db('supplement_catalog as c')
     .where((w) => {
       w.where('c.visibility', 'public');
       if (params.userId) {
         w.orWhere('c.owner_user_id', params.userId);
         w.orWhereExists(
-          db('nutrition.user_supplements as us')
+          db('user_supplements as us')
             .whereRaw('us.catalog_id = c.id')
             .andWhere('us.user_id', params.userId),
         );
@@ -310,7 +310,7 @@ export async function listCatalog(params: {
       if (params.q) qb.andWhereILike('c.name', `%${params.q}%`);
       if (params.targetId) {
         qb.whereExists(
-          db('nutrition.catalog_targets as ct')
+          db('catalog_targets as ct')
             .whereRaw('ct.catalog_id = c.id')
             .andWhere('ct.target_id', params.targetId),
         );
@@ -326,8 +326,8 @@ export async function listCatalog(params: {
   const total = Number(totalRow?.total ?? 0);
 
   const uroll = params.userId
-    ? db('nutrition.user_supplements as us')
-        .leftJoin('nutrition.batches as b2', 'b2.user_supplement_id', 'us.id')
+    ? db('user_supplements as us')
+        .leftJoin('batches as b2', 'b2.user_supplement_id', 'us.id')
         .where('us.user_id', params.userId)
         .whereNotNull('us.catalog_id')
         .whereNull('us.archived_at')
@@ -341,9 +341,9 @@ export async function listCatalog(params: {
         .as('uroll')
     : null;
 
-  const items = await db('nutrition.supplement_catalog as c')
+  const items = await db('supplement_catalog as c')
     .join(base, 'base.id', 'c.id')
-    .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
+    .leftJoin('brands as b', 'b.id', 'c.brand_id')
     .leftJoin(ctAgg, 'ct_agg.catalog_id', 'c.id')
     .modify((qb) => {
       if (uroll) {
@@ -384,8 +384,8 @@ export async function listCatalog(params: {
 }
 
 export const getCatalogById = (id: string) =>
-  db('nutrition.supplement_catalog as c')
-    .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
+  db('supplement_catalog as c')
+    .leftJoin('brands as b', 'b.id', 'c.brand_id')
     .select(
       'c.id',
       'c.brand_id as brandId',
@@ -408,15 +408,15 @@ export const getCatalogById = (id: string) =>
     .first();
 
 export const getCatalogTargets = (catalogId: string) =>
-  db('nutrition.catalog_targets as ct')
-    .join('nutrition.targets as t', 't.id', 'ct.target_id')
+  db('catalog_targets as ct')
+    .join('targets as t', 't.id', 'ct.target_id')
     .select('t.id', 't.slug', 't.name')
     .where('ct.catalog_id', catalogId);
 
 export async function ensureBrand(brandId?: string | null, brandName?: string | null) {
   if (brandId) return brandId;
   if (!brandName) return null;
-  const [b] = await db('nutrition.brands')
+  const [b] = await db('brands')
     .insert({ name: brandName })
     .onConflict('name')
     .merge()
@@ -431,7 +431,7 @@ export async function createCatalog(
   createCatalogRequest.parse(req);
   const imagesJsonb = db.raw('?::jsonb', [JSON.stringify(req.images ?? [])]);
 
-  const [row] = await db('nutrition.supplement_catalog')
+  const [row] = await db('supplement_catalog')
     .insert({
       brand_id: req.brandId ?? null,
       name: req.name,
@@ -461,14 +461,14 @@ export function updateCatalogForOwner(id: string, ownerId: string, patch: any) {
     safety_notes: patch.safetyNotes ?? null,
     images: patch.images ?? [],
   };
-  return db('nutrition.supplement_catalog')
+  return db('supplement_catalog')
     .where({ id, owner_user_id: ownerId }) // guard
     .update(data)
     .returning(['id']);
 }
 
 export function deleteCatalogForOwner(id: string, ownerId: string) {
-  return db('nutrition.supplement_catalog')
+  return db('supplement_catalog')
     .where({ id, owner_user_id: ownerId }) // guard
     .del();
 }
@@ -476,7 +476,7 @@ export function deleteCatalogForOwner(id: string, ownerId: string) {
 export const attachTargets = (catalogId: string, targetIds: string[]) =>
   targetIds.length
     ? db.batchInsert(
-        'nutrition.catalog_targets',
+        'catalog_targets',
         targetIds.map((t) => ({ catalog_id: catalogId, target_id: t })),
         100,
       )

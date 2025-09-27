@@ -1,23 +1,29 @@
-import {
-  createPlanResponse,
-  dayScheduleResponse,
-  listPlansResponse,
-} from '@ikigaidev/hl/contracts';
+import { createPlanResponse, listPlansResponse } from '@ikigaidev/hl/contracts';
 import { Request, RequestHandler, Response } from 'express';
 import * as svc from '../services/schedule.service';
 
-export async function getDayView(req: Request, res: Response) {
-  const userId = req.user.id;
-  const date = String(req.query.date);
-  const data = await svc.getDayView({ userId, date });
-  // runtime guard (dev safety)
-  const parsed = dayScheduleResponse.safeParse(data);
-  if (!parsed.success)
-    return res
-      .status(500)
-      .json({ error: 'Invalid response shape', issues: parsed.error.issues });
-  res.json(parsed.data);
-}
+// export async function getDayView(req: Request, res: Response) {
+//   const userId = req.user.id;
+//   const date = String(req.query.date);
+//   const data = await svc.getDayView({ userId, date });
+//   // runtime guard (dev safety)
+//   const parsed = dayScheduleResponse.safeParse(data);
+//   if (!parsed.success)
+//     return res
+//       .status(500)
+//       .json({ error: 'Invalid response shape', issues: parsed.error.issues });
+//   res.json(parsed.data);
+// }
+
+export const getDayView: RequestHandler = async (req: Request, res, next) => {
+  try {
+    const { date } = req.query as { date: string };
+    const view = await svc.getDayView(req.user.id, date);
+    res.json(view);
+  } catch (e) {
+    next(e);
+  }
+};
 
 export async function listPlans(req: Request, res: Response) {
   const userId = req.user.id;
@@ -79,8 +85,8 @@ export const createLog: RequestHandler = async (req: Request, res, next) => {
 
 export async function patchLog(req: Request, res: Response) {
   const userId = req.user.id;
-  await svc.patchLog({ userId, logId: req.params.id, patch: req.body });
-  res.sendStatus(204);
+  const patchRes = await svc.patchLog({ userId, logId: req.params.id, patch: req.body });
+  res.status(200).json(patchRes);
 }
 
 export async function deleteLog(req: Request, res: Response) {

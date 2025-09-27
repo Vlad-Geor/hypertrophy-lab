@@ -1,12 +1,19 @@
 import { DatePipe, TitleCasePipe } from '@angular/common';
-import { Component } from '@angular/core';
-import { ButtonComponent, DateRangePicker, IconComponent, IconTile, Pill, TagComponent } from '@ikigaidev/elements';
+import { httpResource } from '@angular/common/http';
+import { Component, inject, signal } from '@angular/core';
+import {
+  BouncingLoaderComponent,
+  ButtonComponent,
+  DateRangePicker,
+  IconComponent,
+  Pill,
+  TagComponent,
+} from '@ikigaidev/elements';
+import { API_BASE_URL, DayScheduleResponse } from '@ikigaidev/hl/shared';
 import { SurfaceCard } from '@ikigaidev/hl/ui';
-import { IconType } from '@ikigaidev/model';
 import { DayPartOverview } from '../ui/day-part-overview/day-part-overview.component';
 import { IntakeLogCard } from '../ui/intake-log-card/intake-log-card.component';
-
-export type Daypart = 'morning' | 'afternoon' | 'evening' | 'night';
+import { dayPartFilters } from './day-section-pills';
 
 @Component({
   selector: 'hl-schedule',
@@ -20,36 +27,23 @@ export type Daypart = 'morning' | 'afternoon' | 'evening' | 'night';
     IntakeLogCard,
     DayPartOverview,
     TagComponent,
-    DateRangePicker
-],
+    DateRangePicker,
+    BouncingLoaderComponent,
+  ],
   templateUrl: './schedule.html',
   host: {
     class: 'flex flex-col gap-4',
   },
 })
 export class Schedule {
-  today = new Date();
+  private readonly API_BASE = inject(API_BASE_URL);
 
-  pillData: { text: Daypart; icon: IconType; iconClass: string }[] = [
-    {
-      text: 'morning',
-      icon: 'sunrise-liner',
-      iconClass: 'text-orange-400',
-    },
-    {
-      text: 'afternoon',
-      icon: 'sun-liner',
-      iconClass: 'text-secondary',
-    },
-    {
-      text: 'evening',
-      icon: 'sunset-liner',
-      iconClass: 'text-accent-purple',
-    },
-    {
-      text: 'night',
-      icon: 'moon-liner',
-      iconClass: 'text-blue-400',
-    },
-  ];
+  today = new Date();
+  todayFormatted = signal(new Date().toISOString().slice(0, 10));
+
+  pillData = dayPartFilters;
+
+  dayOverview = httpResource<DayScheduleResponse>(
+    () => `${this.API_BASE}/schedule?date=${this.todayFormatted()}`,
+  );
 }

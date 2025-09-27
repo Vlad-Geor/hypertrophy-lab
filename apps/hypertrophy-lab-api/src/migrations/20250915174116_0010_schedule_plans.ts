@@ -11,7 +11,7 @@ export async function up(knex: Knex) {
     t.uuid('user_supplement_id')
       .notNullable()
       .references('id')
-      .inTable('nutrition.user_supplements')
+      .inTable('user_supplements')
       .onDelete('CASCADE');
     t.integer('units_per_dose').notNullable().checkPositive(); // ≥1
     t.text('time_of_day').notNullable();
@@ -26,7 +26,7 @@ export async function up(knex: Knex) {
 
   // checks + partial index
   await knex.schema.raw(`
-  ALTER TABLE nutrition.schedule_plans
+  ALTER TABLE schedule_plans
   ADD CONSTRAINT schedule_plans_units_per_dose_chk
     CHECK (units_per_dose >= 1),
   ADD CONSTRAINT schedule_plans_time_of_day_chk
@@ -40,7 +40,7 @@ export async function up(knex: Knex) {
 
   await knex.schema.raw(`
   CREATE INDEX IF NOT EXISTS schedule_plans_user_active_idx
-  ON nutrition.schedule_plans (user_id) WHERE active;
+  ON schedule_plans (user_id) WHERE active;
 `);
 
   // optional uniqueness (one plan per slot)

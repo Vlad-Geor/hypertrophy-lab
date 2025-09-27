@@ -7,7 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     t.uuid('user_supplement_id')
       .notNullable()
       .references('id')
-      .inTable('nutrition.user_supplements')
+      .inTable('user_supplements')
       .onDelete('CASCADE');
 
     t.integer('quantity_units').notNullable(); // remaining units in this lot
@@ -21,18 +21,16 @@ export async function up(knex: Knex): Promise<void> {
 
   // ---- Constraints ----
   await knex.raw(`
-        ALTER TABLE nutrition.batches
+        ALTER TABLE batches
         ADD CONSTRAINT batches_qty_ck CHECK (quantity_units >= 0);
       `);
 
   // ---- Indexes ----
-  await knex.raw(
-    `CREATE INDEX batches_us_idx     ON nutrition.batches (user_supplement_id);`,
-  );
-  await knex.raw(`CREATE INDEX batches_exp_idx    ON nutrition.batches (expires_on);`);
+  await knex.raw(`CREATE INDEX batches_us_idx     ON batches (user_supplement_id);`);
+  await knex.raw(`CREATE INDEX batches_exp_idx    ON batches (expires_on);`);
   await knex.raw(`
         CREATE INDEX batches_us_exp_idx
-          ON nutrition.batches (user_supplement_id, expires_on);
+          ON batches (user_supplement_id, expires_on);
       `);
 }
 

@@ -2,8 +2,7 @@
 import { isoDate, timeOfDay, isoDateTime, uuid } from '@ikigaidev/contracts';
 import { z } from 'zod';
 
-export const intakeStatus = z.enum(['taken', 'skipped']);
-export type IntakeStatus = z.infer<typeof intakeStatus>;
+export const intakeStatus = z.enum(['taken', 'skipped', 'pending']);
 
 export const scheduleLogSchema = z.object({
   id: uuid,
@@ -32,7 +31,11 @@ export const createLogRequest = z.object({
   // optional: let BE deduct from stock
   consumeStock: z.boolean().default(true),
 });
-export type CreateLogRequest = z.infer<typeof createLogRequest>;
 
+export const updateLogRequest = createLogRequest.partial();
+
+export type PatchLogRequest = z.infer<typeof updateLogRequest>;
+export type CreateLogRequest = z.infer<typeof createLogRequest>;
+export type IntakeStatus = z.infer<typeof intakeStatus>;
 export const createLogResponse = scheduleLogSchema;
 export type CreateLogResponse = z.infer<typeof createLogResponse>;

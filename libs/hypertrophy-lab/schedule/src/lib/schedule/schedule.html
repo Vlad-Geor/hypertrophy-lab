@@ -14,7 +14,7 @@
   <lib-button [size]="'lg'" [appearance]="'outline'" [fillContainer]="true">
     Today
   </lib-button>
-  <lib-button [size]="'lg'" [fillContainer]="true" [theme]="'primary'">
+  <lib-button theme="gradient-primary" [size]="'lg'" [fillContainer]="true">
     <lib-icon [icon]="'plus-solid'" left [iconSize]="16"></lib-icon>
     Add Schedule
   </lib-button>
@@ -33,30 +33,39 @@
   </div>
 </div>
 
-<hl-surface-card
+<lib-surface-card
   cardTitle="Today's Routine"
   titleSize="lg"
   [cardTitleIcon]="'clock-solid'"
   cardTitleIconClass="text-primary"
 >
-  @for (item of [1,2,3]; track $index) {
-  <hl-day-part-overview>
+  @if (dayOverview.hasValue()) { @for (section of dayOverview.value().sections; track
+  $index) { @if (section.items.length) {
+
+  <hl-day-part-overview [data]="section">
     <div dayPartOverviewHeader class="flex items-center gap-3">
       <div class="flex items-center gap-2">
         <lib-icon class="text-orange-400" [icon]="'sunrise-liner'"></lib-icon>
-        <span>Morning</span>
+        <span>{{section.timeOfDay | titlecase}}</span>
       </div>
-      <lib-tag [rounded]="true" theme="white" size="lg">3 supplements</lib-tag>
+      <lib-tag [rounded]="true" theme="white" size="lg">
+        {{section.items.length}} {{section.items.length > 1 ? 'supplements' :
+        'supplement'}}
+      </lib-tag>
     </div>
-    <hl-intake-action-card logState="skipped"></hl-intake-action-card>
+    @for (item of section.items; track $index) {
+    <hl-intake-action-card [cardData]="item"></hl-intake-action-card>
+    }
   </hl-day-part-overview>
+  } } } @else if (dayOverview.isLoading()) {
+  <lib-bouncing-loader></lib-bouncing-loader>
   }
-</hl-surface-card>
+</lib-surface-card>
 
-<hl-surface-card
+<lib-surface-card
   cardTitle="Weekly Overview"
   cardTitleIcon="calendar-liner"
   cardTitleIconClass="text-primary"
 >
   <lib-date-range-picker></lib-date-range-picker>
-</hl-surface-card>
+</lib-surface-card>

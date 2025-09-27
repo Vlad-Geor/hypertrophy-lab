@@ -6,7 +6,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { IconButtonComponent, IconComponent } from '@ikigaidev/elements';
 import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
 import { ViewportService } from '@ikigaidev/service';
-import { filter, map, startWith } from 'rxjs';
+import { filter, map, startWith, tap } from 'rxjs';
 import { MenuItem } from '../model/menu-item.model';
 import { createMenuItems } from '../util/create-menu-items';
 
@@ -39,7 +39,9 @@ export class SidenavComponent {
   );
   menuItems = signal<MenuItem[]>(createMenuItems());
   selectedItem = linkedSignal<MenuItem | undefined>(() =>
-    this.menuItems().find((i) => i.route === this.url()),
+    this.menuItems().find(
+      (i) => i.route === this.url() || (this.url() as string).includes(i.route),
+    ),
   );
   _menuItems = linkedSignal(() =>
     this.menuItems().map((i) => ({

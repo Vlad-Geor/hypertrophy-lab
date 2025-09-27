@@ -16,6 +16,15 @@
   --tone-active: var(--primary-active);
   --tone-ring: var(--primary-ring);
 }
+[data-tone='gradient-primary'] {
+  --tone: var(--gradient-primary);
+  --tone-ghost: var(--primary-ghost);
+  --tone-subtle: var(--primary-subtle);
+  --tone-soft: var(--primary-soft);
+  --tone-hover: var(--gradient-primary-hover);
+  --tone-active: var(--primary-active);
+  --tone-ring: var(--primary-ring);
+}
 [data-tone='secondary'] {
   --tone: var(--secondary);
   --tone-ghost: var(--secondary-ghost);

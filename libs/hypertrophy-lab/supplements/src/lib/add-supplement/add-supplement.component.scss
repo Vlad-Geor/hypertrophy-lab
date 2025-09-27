@@ -1,4 +1,3 @@
 :host {
-  display: block;
-  @apply max-w-[320px] bg-surface p-3 pl-4 flex flex-col gap-4 rounded-2xl border border-gray-active shadow-2xl;
+  @apply max-w-[320px] md:max-w-md bg-surface p-3 pl-4 flex flex-col gap-4 rounded-2xl border border-gray-active shadow-2xl;
 }

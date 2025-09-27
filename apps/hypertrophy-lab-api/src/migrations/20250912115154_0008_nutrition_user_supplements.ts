@@ -14,7 +14,7 @@ export async function up(knex: Knex): Promise<void> {
     // Optional link to global catalog (null => fully custom item)
     t.uuid('catalog_id')
       .references('id')
-      .inTable('nutrition.supplement_catalog')
+      .inTable('supplement_catalog')
       .onDelete('SET NULL');
 
     // Per-user display & thresholds
@@ -38,7 +38,7 @@ export async function up(knex: Knex): Promise<void> {
 
   // Keep custom_form tidy but flexible (enum-like)
   await knex.raw(`
-        ALTER TABLE nutrition.user_supplements
+        ALTER TABLE user_supplements
         ADD CONSTRAINT user_supplements_custom_form_ck
           CHECK (
             custom_form IS NULL OR custom_form IN
@@ -48,21 +48,19 @@ export async function up(knex: Knex): Promise<void> {
 
   // Threshold must be non-negative
   await knex.raw(`
-        ALTER TABLE nutrition.user_supplements
+        ALTER TABLE user_supplements
         ADD CONSTRAINT user_supplements_threshold_ck
           CHECK (low_stock_threshold_units >= 0);
       `);
 
   // ---- Indexes ----
-  await knex.raw(`CREATE INDEX us_user_idx    ON nutrition.user_supplements (user_id);`);
-  await knex.raw(
-    `CREATE INDEX us_catalog_idx ON nutrition.user_supplements (catalog_id);`,
-  );
+  await knex.raw(`CREATE INDEX us_user_idx    ON user_supplements (user_id);`);
+  await knex.raw(`CREATE INDEX us_catalog_idx ON user_supplements (catalog_id);`);
 
   // Speed common "active inventory" queries
   await knex.raw(`
         CREATE INDEX us_user_active_partial
-          ON nutrition.user_supplements (user_id)
+          ON user_supplements (user_id)
           WHERE archived_at IS NULL;
       `);
 }

@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { route, RouteMeta } from '@ikigaidev/router';
 
 export const supplementRoutes: Route[] = [
   {
@@ -15,13 +16,14 @@ export const supplementRoutes: Route[] = [
             (m) => m.AllSupplementsComponent,
           ),
       },
-      {
+      route({
         path: 'inventory',
         loadComponent: () =>
           import('./supplement-shell/user-supplements/user-supplements.component').then(
             (m) => m.SupplementList,
           ),
-      },
+        data: { meta: { header: 'Supplements' } as RouteMeta },
+      }),
     ],
   },
   {

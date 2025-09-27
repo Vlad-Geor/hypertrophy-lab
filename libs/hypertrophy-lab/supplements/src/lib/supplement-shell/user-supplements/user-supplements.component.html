@@ -2,4 +2,8 @@
   @for (supp of supplements.value()?.items ?? []; track $index) {
     <hl-supplement-card [supplement]="supp"></hl-supplement-card>
   }
+} @else if (supplements.isLoading()) {
+  <div class="absolute flex justify-center w-full">
+    <lib-bouncing-loader></lib-bouncing-loader>
+  </div>
 }

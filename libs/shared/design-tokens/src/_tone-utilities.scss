@@ -1,4 +1,10 @@
 @layer utilities {
+  .bg-gradient {
+    background: var(--tone);
+  }
+  .bg-gradient-hover {
+    background: var(--tone-hover);
+  }
   .bg-token {
     background-color: var(--tone);
   }

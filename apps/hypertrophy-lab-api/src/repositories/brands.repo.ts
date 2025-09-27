@@ -1,7 +1,7 @@
 import { db } from '../config/database';
 
 export const createBrand = async (data: { name: string; site?: string | null }) => {
-  const [created] = await db('nutrition.brands')
+  const [created] = await db('brands')
     .insert({
       name: data.name,
       site: data.site ?? null,
@@ -17,6 +17,6 @@ export const createBrand = async (data: { name: string; site?: string | null }) 
 };
 
 export const listBrands = () =>
-  db('nutrition.brands')
+  db('brands')
     .select('id', 'name', 'site', 'created_at as createdAt', 'updated_at as updatedAt')
     .orderBy('name', 'asc');

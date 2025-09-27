@@ -16,7 +16,7 @@ import { FormControlComponent } from '../form-control/form-control.component';
       >
         <input
           [placeholder]="placeholder() ?? 'e.g 1/1/2025'"
-          class="bg-transparent text-text-2 border-none outline-none focus:outline-none focus:ring-0 placeholder:text-sm"
+          class="bg-transparent max-w-28 text-text-2 border-none outline-none focus:outline-none focus:ring-0 placeholder:text-sm"
           matInput
           [matDatepicker]="picker"
           (dateChange)="onDateChange($event)"
@@ -28,10 +28,13 @@ import { FormControlComponent } from '../form-control/form-control.component';
           [icon]="'calendar-liner'"
           (click)="picker.open()"
         ></lib-icon-button>
-        <mat-datepicker #picker></mat-datepicker>
+        <mat-datepicker class="contents" #picker></mat-datepicker>
       </div>
     </lib-form-control-wrapper>
   `,
+  host: {
+    class: 'flex-1',
+  },
   imports: [MatDatepickerModule, IconButtonComponent, FormControlWrapperComponent],
 })
 export class DatePickerComponent extends FormControlComponent<Date | null> {

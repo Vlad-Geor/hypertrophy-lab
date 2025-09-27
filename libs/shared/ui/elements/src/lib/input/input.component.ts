@@ -11,7 +11,7 @@ type InputType = string | number;
   imports: [CommonModule, IconComponent, FormControlWrapperComponent],
   templateUrl: './input.component.html',
   host: {
-    class: 'bg-transparent border-none p-0',
+    class: 'bg-transparent border-none p-0 flex-1',
   },
 })
 export class InputComponent<

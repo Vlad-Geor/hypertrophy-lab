@@ -21,7 +21,7 @@ export async function up(knex: Knex) {
   });
 
   await knex.raw(`
-    ALTER TABLE nutrition.orders
+    ALTER TABLE orders
       ADD CONSTRAINT orders_status_chk CHECK (status IN ('ordered','in_transit','arrived','out_for_delivery','delivered','canceled')),
       ADD CONSTRAINT orders_total_cost_chk CHECK (total_cost_cents IS NULL OR total_cost_cents >= 0);
   `);
@@ -32,12 +32,12 @@ export async function up(knex: Knex) {
     t.uuid('order_id')
       .notNullable()
       .references('id')
-      .inTable('nutrition.orders')
+      .inTable('orders')
       .onDelete('CASCADE');
     t.uuid('catalog_id')
       .nullable()
       .references('id')
-      .inTable('nutrition.supplement_catalog')
+      .inTable('supplement_catalog')
       .onDelete('SET NULL');
     t.text('name').notNullable(); // denormalized label
     t.integer('quantity_units').notNullable();
@@ -46,7 +46,7 @@ export async function up(knex: Knex) {
   });
 
   await knex.raw(`
-    ALTER TABLE nutrition.order_items
+    ALTER TABLE order_items
       ADD CONSTRAINT order_items_qty_chk CHECK (quantity_units >= 0),
       ADD CONSTRAINT order_items_cost_chk CHECK (cost_cents IS NULL OR cost_cents >= 0);
   `);

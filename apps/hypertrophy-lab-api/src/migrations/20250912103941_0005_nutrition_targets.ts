@@ -16,11 +16,11 @@ export async function up(knex: Knex): Promise<void> {
 
   await knex.raw(`
       CREATE UNIQUE INDEX IF NOT EXISTS targets_slug_uni
-      ON nutrition.targets (LOWER(slug));
+      ON targets (LOWER(slug));
     `);
 
   await knex.raw(`
-  ALTER TABLE nutrition.targets
+  ALTER TABLE targets
   ADD CONSTRAINT targets_slug_ck
   CHECK (slug ~ '^[a-z0-9-]+$');
   `);

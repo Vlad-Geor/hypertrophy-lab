@@ -7,7 +7,7 @@ export async function getBatchesFIFO(
   userId: string,
   userSupplementId: string,
 ) {
-  return trx('nutrition.batches')
+  return trx('batches')
     .select('id', 'quantity_units as on_hand_units')
     .where({ user_id: userId, user_supplement_id: userSupplementId })
     .andWhere('quantity_units', '>', 0)
@@ -15,13 +15,13 @@ export async function getBatchesFIFO(
 }
 
 export async function decrementBatchUnits(trx: Knex, batchId: string, units: number) {
-  await trx('nutrition.batches')
+  await trx('batches')
     .where({ id: batchId })
     .update({ quantity_units: trx.raw('GREATEST(quantity_units - ?, 0)', [units]) });
 }
 
 export async function incrementBatchUnits(trx: Knex, batchId: string, units: number) {
-  await trx('nutrition.batches')
+  await trx('batches')
     .where({ id: batchId })
     .update({ quantity_units: trx.raw('quantity_units + ?', [units]) });
 }
@@ -30,7 +30,7 @@ export async function incrementBatchUnits(trx: Knex, batchId: string, units: num
 
 export async function getCounters(userId: string, withinDays: number) {
   // totalSupplements
-  const totalRow = await db('nutrition.user_supplements')
+  const totalRow = await db('user_supplements')
     .count<{ cnt: string | number | bigint }>({ cnt: 'id' })
     .where({ user_id: userId })
     .first();
@@ -40,8 +40,8 @@ export async function getCounters(userId: string, withinDays: number) {
   const lowRow = await db
     .from(function () {
       this.select('us.id')
-        .from({ us: 'nutrition.user_supplements' })
-        .leftJoin({ b: 'nutrition.batches' }, 'b.user_supplement_id', 'us.id')
+        .from({ us: 'user_supplements' })
+        .leftJoin({ b: 'batches' }, 'b.user_supplement_id', 'us.id')
         .where('us.user_id', userId)
         .groupBy('us.id', 'us.low_stock_threshold_units', 'us.custom_name')
         .havingRaw(
@@ -54,7 +54,7 @@ export async function getCounters(userId: string, withinDays: number) {
   const lowStock = toNumber(lowRow?.cnt);
 
   // expiringSoon
-  const expRow = await db('nutrition.batches')
+  const expRow = await db('batches')
     .count<{ cnt: string | number | bigint }>({ cnt: 'id' })
     .where({ user_id: userId })
     .whereNotNull('expires_on')
@@ -75,7 +75,7 @@ export async function getCounters(userId: string, withinDays: number) {
 }
 
 export async function getRecentlyAdded(userId: string, limit: number) {
-  return db('nutrition.user_supplements')
+  return db('user_supplements')
     .select({
       userSupplementId: 'id',
       name: db.raw(`COALESCE(custom_name, 'Supplement')`),
@@ -89,14 +89,14 @@ export async function getRecentlyAdded(userId: string, limit: number) {
 
 export async function getLowStock(userId: string, limit: number) {
   // rollup per user_supplement
-  return db('nutrition.user_supplements as us')
+  return db('user_supplements as us')
     .select({
       userSupplementId: 'us.id',
       name: db.raw(`COALESCE(us.custom_name, 'Supplement')`),
       onHand: db.raw(`COALESCE(SUM(b.quantity_units), 0)`),
       threshold: db.raw(`COALESCE(MAX(us.low_stock_threshold_units), 0)`),
     })
-    .leftJoin('nutrition.batches as b', 'b.user_supplement_id', 'us.id')
+    .leftJoin('batches as b', 'b.user_supplement_id', 'us.id')
     .where('us.user_id', userId)
     .groupBy('us.id', 'us.custom_name')
     .havingRaw(
@@ -107,7 +107,7 @@ export async function getLowStock(userId: string, limit: number) {
 }
 
 export async function getExpiringSoon(userId: string, withinDays: number, limit: number) {
-  return db('nutrition.batches as b')
+  return db('batches as b')
     .select({
       userSupplementId: 'b.user_supplement_id',
       name: db.raw(`'Supplement'`),
@@ -130,11 +130,11 @@ export function listInventory(
   params: { q?: string; archived?: boolean; limit: number; offset: number },
 ) {
   const archived = params.archived ?? false;
-  const base = db('nutrition.user_supplements as us')
-    .leftJoin('nutrition.supplement_catalog as c', 'c.id', 'us.catalog_id')
-    .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
+  const base = db('user_supplements as us')
+    .leftJoin('supplement_catalog as c', 'c.id', 'us.catalog_id')
+    .leftJoin('brands as b', 'b.id', 'c.brand_id')
     .leftJoin(
-      db('nutrition.batches')
+      db('batches')
         .select('user_supplement_id')
         .sum({ on_hand: 'quantity_units' })
         .min({ earliest_expiry: 'expires_on' })
@@ -183,7 +183,7 @@ export async function countInventory(
   params: { q?: string; archived?: boolean },
 ) {
   const archived = params.archived ?? false;
-  const base = db('nutrition.user_supplements as us')
+  const base = db('user_supplements as us')
     .where('us.user_id', userId)
     .modify((qb) => {
       if (!archived) qb.whereNull('us.archived_at');
@@ -194,16 +194,16 @@ export async function countInventory(
 }
 
 export const getInventoryById = (userId: string, id: string) =>
-  db('nutrition.user_supplements as us')
-    .leftJoin('nutrition.supplement_catalog as c', 'c.id', 'us.catalog_id')
-    .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
+  db('user_supplements as us')
+    .leftJoin('supplement_catalog as c', 'c.id', 'us.catalog_id')
+    .leftJoin('brands as b', 'b.id', 'c.brand_id')
     .select('us.*', 'c.name as catalogName', 'b.name as brandName', 'c.form', 'c.images')
     .where('us.user_id', userId)
     .andWhere('us.id', id)
     .first();
 
 export const listBatches = (userSupplementId: string) =>
-  db('nutrition.batches')
+  db('batches')
     .select(
       'id',
       'user_supplement_id as userSupplementId',
@@ -225,7 +225,7 @@ export async function createFromCatalog(
   catalogId: string,
   data: { nickname?: string; low?: number },
 ) {
-  const [row] = await db('nutrition.user_supplements')
+  const [row] = await db('user_supplements')
     .insert({
       user_id: userId,
       catalog_id: catalogId,
@@ -249,7 +249,7 @@ export async function createNewCatalog(
     low?: number;
   },
 ) {
-  const [row] = await db('nutrition.user_supplements')
+  const [row] = await db('user_supplements')
     .insert({
       user_id: userId,
       catalog_id: catalogId,
@@ -273,7 +273,7 @@ export async function addBulkExisting(
     const results: { index: number; userSupplementId: string }[] = [];
 
     // batch insert user_supplements
-    const rows = await trx('nutrition.user_supplements')
+    const rows = await trx('user_supplements')
       .insert(
         items.map((i) => ({
           user_id: userId,
@@ -295,7 +295,7 @@ export async function addBulkExisting(
     for (let i = 0; i < items.length; i++) {
       const ub = items[i].initialBatch;
       if (ub) {
-        await trx('nutrition.batches').insert({
+        await trx('batches').insert({
           user_supplement_id: rows[i].id,
           quantity_units: ub.quantityUnits,
           expires_on: ub.expiresOn ?? null,
@@ -311,15 +311,15 @@ export async function addBulkExisting(
 }
 
 export const updateInventory = (userId: string, id: string, patch: any) =>
-  db('nutrition.user_supplements').update(patch).where({ id, user_id: userId });
+  db('user_supplements').update(patch).where({ id, user_id: userId });
 
 export const archiveInventory = (userId: string, id: string) =>
-  db('nutrition.user_supplements')
+  db('user_supplements')
     .update({ archived_at: db.fn.now() })
     .where({ id, user_id: userId });
 
 export const createBatch = (userSupplementId: string, payload: any) =>
-  db('nutrition.batches')
+  db('batches')
     .insert({
       user_supplement_id: userSupplementId,
       quantity_units: payload.quantityUnits,
@@ -339,7 +339,7 @@ export const createBatch = (userSupplementId: string, payload: any) =>
     ]);
 
 export const updateBatch = (batchId: string, patch: any) =>
-  db('nutrition.batches')
+  db('batches')
     .update({
       quantity_units: patch.quantityUnits,
       expires_on: patch.expiresOn ?? null,
@@ -359,11 +359,11 @@ export const updateBatch = (batchId: string, patch: any) =>
     ]);
 
 export const deleteBatch = (batchId: string) =>
-  db('nutrition.batches').where({ id: batchId }).del();
+  db('batches').where({ id: batchId }).del();
 
 export const listLowStock = (userId: string) =>
-  db('nutrition.user_supplements as us')
-    .leftJoin('nutrition.batches as b', 'b.user_supplement_id', 'us.id')
+  db('user_supplements as us')
+    .leftJoin('batches as b', 'b.user_supplement_id', 'us.id')
     .select(
       'us.id',
       'us.user_id as userId',
@@ -386,7 +386,7 @@ export const listLowStock = (userId: string) =>
     .orderByRaw('COALESCE(SUM(b.quantity_units),0) ASC');
 
 export const listExpiringSoon = (userId: string, withinDays: number) =>
-  db('nutrition.batches')
+  db('batches')
     .select('user_supplement_id as userSupplementId', 'expires_on as expiresOn')
     .where({ user_id: userId })
     .whereNotNull('expires_on')

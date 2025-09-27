@@ -14,19 +14,22 @@ export const dayEntrySchema = z.object({
   form: supplementFormSchema.nullable().optional(),
   unitsPerDose: z.number().int().min(0),
   notes: z.string().nullable().optional(), // plan notes / instructions
-  status: z.union([intakeStatus, z.literal('pending')]).default('pending'),
+  status: intakeStatus.default('pending'),
   logId: uuid.optional(),
   onHand: z.number().int().nonnegative().default(0),
   earliestExpiry: z.string().nullable().optional(), // YYYY-MM-DD
 });
 
+export const dayFullEntrySchema = z.object({
+  timeOfDay,
+  items: z.array(dayEntrySchema),
+});
+
 export const dayScheduleResponse = z.object({
   date: isoDate,
-  sections: z.array(
-    z.object({
-      timeOfDay,
-      items: z.array(dayEntrySchema),
-    }),
-  ),
+  sections: z.array(dayFullEntrySchema),
 });
+
 export type DayScheduleResponse = z.infer<typeof dayScheduleResponse>;
+export type DayFullEntrySchema = z.infer<typeof dayFullEntrySchema>;
+export type DayEntrySchema = z.infer<typeof dayEntrySchema>;

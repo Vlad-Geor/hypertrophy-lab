@@ -6,12 +6,21 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 
 @Component({
   selector: 'lib-icon',
-  standalone: true,
   imports: [CommonModule, MatIconModule, AngularSvgIconModule],
   templateUrl: './icon.component.html',
   host: {
-    style: 'display:inline-flex;',
+    class: 'inline-flex rounded-md',
   },
+  styles: `
+    :host {
+      &.color-on-hover {
+        @apply hover:text-text-3;
+      }
+      &.highlight-on-hover {
+        @apply hover:bg-gray-soft;
+      }
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IconComponent {
@@ -19,4 +28,5 @@ export class IconComponent {
   color = input<string>('inherit');
   iconSize = input<number>(20);
   fillContainer = input(false);
+  onHoverEffect = input<'highlight' | 'color'>('color');
 }

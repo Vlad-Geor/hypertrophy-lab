@@ -3,11 +3,6 @@ import { db } from '../config/database';
 import * as inv from '../repositories/inventory.repo';
 import * as repo from '../repositories/schedule.repo';
 
-export async function getDayView(params: { userId: string; date: string }) {
-  const { userId, date } = params;
-  return repo.buildDayView({ userId, date });
-}
-
 export async function listPlans(params: { userId: string }) {
   return repo.listPlans(params.userId);
 }
@@ -28,53 +23,53 @@ export async function deletePlan(params: { userId: string; planId: string }) {
   await repo.softDeletePlan(params);
 }
 
-// export async function createLog(params: { userId: string; payload: CreateLogRequest }) {
-//   const { userId, payload } = params;
-
-//   return await db.transaction(async (trx) => {
-//     // create log first
-//     const log = await repo.createLog(trx, { userId, payload });
-
-//     // stock consumption on 'taken'
-//     const qty =
-//       payload.quantityUnits ??
-//       (await repo.getPlanUnitsOrDefault(trx, payload.planId, payload.userSupplementId)) ??
-//       0;
-//     if (payload.consumeStock && payload.status === 'taken' && qty > 0) {
-//       // FIFO by expiry: NULLS LAST, then earliest expiry
-//       const batches = await inv.getBatchesFIFO(trx, userId, payload.userSupplementId);
-//       let remaining = qty;
-//       const consumptions: Array<{ batchId: string; units: number }> = [];
-
-//       for (const b of batches) {
-//         if (remaining <= 0) break;
-//         const use = Math.min(remaining, b.on_hand_units);
-//         if (use > 0) {
-//           await inv.decrementBatchUnits(trx, b.id, use);
-//           consumptions.push({ batchId: b.id, units: use });
-//           remaining -= use;
-//         }
-//       }
-
-//       // record audit
-//       for (const c of consumptions) {
-//         await repo.recordConsumption(trx, {
-//           logId: log.id,
-//           batchId: c.batchId,
-//           units: c.units,
-//         });
-//       }
-//     }
-
-//     // return full log
-//     return repo.getLogById(trx, log.id);
-//   });
+// export async function patchLog(params: { userId: string; logId: string; patch: any }) {
+// if you allow changing status/quantityUnits, you may need to adjust consumption here
+// (left minimal for now)
+// await repo.updateLog(params);
 // }
 
 export async function patchLog(params: { userId: string; logId: string; patch: any }) {
-  // if you allow changing status/quantityUnits, you may need to adjust consumption here
-  // (left minimal for now)
-  await repo.updateLog(params);
+  const { userId, logId, patch } = params;
+
+  return db.transaction(async (trx) => {
+    const cur = await repo.getLogWithConsumptions(userId, logId).transacting(trx);
+    console.log('CURRENT: ', cur);
+    console.log('PATCH: ', patch);
+
+    if (!cur) throw new Error('Log not found');
+
+    // derive new status/qty (fall back to current)
+    const nextStatus = patch.status ?? cur.status;
+    const nextQty = patch.quantityUnits ?? cur.quantityUnits ?? 0;
+
+    // 1) restore previous consumption if any
+    if (cur.status === 'taken' && cur.totalConsumed > 0) {
+      await repo.restoreConsumptionsTx(trx, logId);
+      await repo.deleteConsumptionsTx(trx, logId);
+    }
+
+    // 2) update log fields
+    const updated = await repo.updateLogTx(trx, {
+      userId,
+      logId,
+      patch: {
+        status: nextStatus,
+        quantity_units: nextQty,
+        note: patch.note ?? cur.note,
+        time_of_day: patch.timeOfDay ?? cur.timeOfDay,
+      },
+    });
+
+    console.log('LOGGING UPDATED: ', updated);
+
+    // 3) re-consume if now taken with qty > 0
+    if (nextStatus === 'taken' && nextQty > 0) {
+      await repo.consumeStockTx(trx, logId, cur.userSupplementId, nextQty);
+    }
+
+    return updated;
+  });
 }
 
 export async function deleteLog(params: { userId: string; logId: string }) {
@@ -107,6 +102,8 @@ export async function createLog(
   if (payload.planId) {
     const plan = await repo.getPlanForUser(userId, payload.planId);
     if (!plan) throw new Error('Plan not found');
+    if (plan.timeOfDay !== payload.timeOfDay)
+      throw new Error('Log time of day mismatch; Valid option: ' + plan.timeOfDay);
     if (plan.userSupplementId !== payload.userSupplementId)
       throw new Error('Plan/userSupplement mismatch');
     if (qty === 0) qty = plan.unitsPerDose ?? 0;
@@ -146,4 +143,72 @@ export async function createLog(
 
     return log;
   });
+}
+
+const SLOTS = ['morning', 'afternoon', 'evening', 'bedtime'] as const;
+
+export async function getDayView(userId: string, date: string) {
+  const weekday = new Date(date + 'T00:00:00Z').getUTCDay(); // 0..6
+  const [plans, logs, adHocInfos] = await Promise.all([
+    repo.getPlansForDay(userId, weekday),
+    repo.getLogsForDate(userId, date),
+    repo.getAdhocLoggedSupplements(userId, date),
+  ]);
+  // index logs by (userSupplementId, timeOfDay)
+  const logKey = (usId: string, tod: string) => `${usId}|${tod}`;
+  const logMap = new Map<string, any>();
+  logs.forEach((l) => logMap.set(logKey(l.userSupplementId, l.timeOfDay), l));
+  console.log('MAP: ', logMap);
+
+  // base items from plans
+  const itemsFromPlans = plans.map((p) => {
+    const l = logMap.get(logKey(p.userSupplementId, p.timeOfDay));
+    console.log('PLAN - ', p);
+
+    return {
+      timeOfDay: p.timeOfDay,
+      planId: p.planId,
+      userSupplementId: p.userSupplementId,
+      catalogId: p.catalogId,
+      brandName: p.brandName ?? null,
+      name: p.name,
+      form: p.form ?? null,
+      unitsPerDose: p.unitsPerDose ?? 0,
+      notes: p.notes ?? null,
+      status: l ? l.status : 'pending',
+      logId: l?.id,
+      onHand: Number(p.onHand) || 0,
+      earliestExpiry: p.earliestExpiry ?? null,
+    };
+  });
+
+  // add ad-hoc logs (no plan)
+  const adHoc = adHocInfos.map((info) => {
+    const l = logMap.get(logKey(info.userSupplementId, info.timeOfDay));
+    return {
+      timeOfDay: info.timeOfDay,
+      planId: null,
+      userSupplementId: info.userSupplementId,
+      catalogId: info.catalogId ?? null,
+      brandName: info.brandName ?? null,
+      name: info.name,
+      form: info.form ?? null,
+      unitsPerDose: l?.quantityUnits ?? 0,
+      notes: l?.note ?? null,
+      status: l?.status ?? 'pending',
+      logId: l?.id,
+      onHand: Number(info.onHand) || 0,
+      earliestExpiry: info.earliestExpiry ?? null,
+    };
+  });
+
+  const all = [...itemsFromPlans, ...adHoc];
+
+  // group into sections by slot
+  const sections = SLOTS.map((tod) => ({
+    timeOfDay: tod,
+    items: all.filter((i) => i.timeOfDay === tod),
+  }));
+
+  return { date, sections };
 }

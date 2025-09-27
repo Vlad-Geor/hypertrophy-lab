@@ -14,11 +14,10 @@ export async function up(knex: Knex): Promise<void> {
   // case-insensitive unique brand name
   await knex.raw(`
       CREATE UNIQUE INDEX IF NOT EXISTS brands_name_ci_uni
-      ON nutrition.brands (LOWER(name));
+      ON brands (LOWER(name));
     `);
 }
 
 export async function down(knex: Knex): Promise<void> {
-    await knex.schema.withSchema('nutrition').dropTableIfExists('brands');
-
+  await knex.schema.withSchema('nutrition').dropTableIfExists('brands');
 }

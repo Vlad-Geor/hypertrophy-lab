@@ -3,9 +3,21 @@ import { Knex } from 'knex';
 export async function up(knex: Knex) {
   await knex.schema.withSchema('nutrition').createTable('schedule_logs', (t) => {
     t.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'));
-    t.uuid('user_id').notNullable().references('id').inTable('core.users').onDelete('CASCADE');
-    t.uuid('user_supplement_id').notNullable().references('id').inTable('nutrition.user_supplements').onDelete('CASCADE');
-    t.uuid('plan_id').nullable().references('id').inTable('nutrition.schedule_plans').onDelete('SET NULL');
+    t.uuid('user_id')
+      .notNullable()
+      .references('id')
+      .inTable('core.users')
+      .onDelete('CASCADE');
+    t.uuid('user_supplement_id')
+      .notNullable()
+      .references('id')
+      .inTable('user_supplements')
+      .onDelete('CASCADE');
+    t.uuid('plan_id')
+      .nullable()
+      .references('id')
+      .inTable('schedule_plans')
+      .onDelete('SET NULL');
     t.date('date').notNullable();
     t.text('time_of_day').notNullable();
     t.text('status').notNullable();
@@ -19,7 +31,7 @@ export async function up(knex: Knex) {
   });
 
   await knex.raw(`
-    ALTER TABLE nutrition.schedule_logs
+    ALTER TABLE schedule_logs
       ADD CONSTRAINT schedule_logs_time_of_day_chk CHECK (time_of_day IN ('morning','afternoon','evening','bedtime')),
       ADD CONSTRAINT schedule_logs_status_chk CHECK (status IN ('taken','skipped')),
       ADD CONSTRAINT schedule_logs_quantity_chk CHECK (quantity_units >= 0);

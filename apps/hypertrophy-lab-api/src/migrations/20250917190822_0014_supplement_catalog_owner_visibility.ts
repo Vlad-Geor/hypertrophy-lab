@@ -1,6 +1,6 @@
 import type { Knex } from 'knex';
 
-const TABLE = 'nutrition.supplement_catalog';
+const TABLE = 'supplement_catalog';
 const VIS_CHK = 'supplement_catalog_visibility_chk';
 const OWNER_IDX = 'supplement_catalog_owner_idx';
 const VIS_IDX = 'supplement_catalog_visibility_idx';

@@ -14,7 +14,7 @@ import { BadgeConfig, IconType, Size, Theme } from '@ikigaidev/model';
   `,
   host: {
     class: `outline-0 border inline-flex justify-center items-center gap-2
-     font-medium rounded hover:cursor-pointer transition-all
+     rounded hover:cursor-pointer transition-all
       duration-100`,
     '[attr.data-tone]': 'theme()',
     '[attr.type]': '"button"',
@@ -39,9 +39,13 @@ export class ButtonComponent {
 
   themeClasses = computed(() =>
     (this.appearance() === 'fill'
-      ? ['text-token', 'bg-token-soft', 'border-token-soft', 'hover:bg-token-active']
+      ? this.theme().includes('gradient')
+        ? ['bg-gradient', 'border-0']
+        : ['bg-token-soft', 'border-token-soft', 'hover:bg-token-active']
       : ['text-token', 'border-token-soft', 'hover:bg-token-ghost']
-    ).join(' '),
+    )
+      .concat('text-token')
+      .join(' '),
   );
 
   allClasses = computed(() => {

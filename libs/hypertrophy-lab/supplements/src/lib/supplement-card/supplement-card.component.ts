@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, input } from '@angular/core';
 import { ImagePlaceholderDirective } from '@ikigaidev/directive';
-import { ButtonComponent, TagComponent, TagGroupComponent } from '@ikigaidev/elements';
+import { BouncingLoaderComponent, ButtonComponent, TagComponent, TagGroupComponent } from '@ikigaidev/elements';
 import { SupplementCatalogItem } from '@ikigaidev/hl/contracts';
 
 @Component({
@@ -11,6 +11,7 @@ import { SupplementCatalogItem } from '@ikigaidev/hl/contracts';
     TagComponent,
     ButtonComponent,
     TagGroupComponent,
+    BouncingLoaderComponent,
     ImagePlaceholderDirective,
   ],
   templateUrl: './supplement-card.component.html',

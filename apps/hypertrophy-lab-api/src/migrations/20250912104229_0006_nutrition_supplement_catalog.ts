@@ -3,7 +3,7 @@ import type { Knex } from 'knex';
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.withSchema('nutrition').createTable('supplement_catalog', (t) => {
     t.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'));
-    t.uuid('brand_id').references('id').inTable('nutrition.brands').onDelete('SET NULL');
+    t.uuid('brand_id').references('id').inTable('brands').onDelete('SET NULL');
 
     t.string('name').notNullable();
     t.string('form').checkIn([
@@ -33,7 +33,7 @@ export async function up(knex: Knex): Promise<void> {
 
   await knex.raw(`
         CREATE UNIQUE INDEX IF NOT EXISTS catalog_brand_name_uni
-        ON nutrition.supplement_catalog (brand_id, LOWER(name));
+        ON supplement_catalog (brand_id, LOWER(name));
       `);
 }
 

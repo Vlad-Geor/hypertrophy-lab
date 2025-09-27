@@ -38,6 +38,9 @@ export function stableCellId(key: string) {
   templateUrl: './select.component.html',
   styleUrl: './select.component.scss',
   hostDirectives: [ConnectedOverlayDirective],
+  host: {
+    '[attr.tabindex]': '0',
+  },
 })
 export class SelectComponent extends FormControlComponent<CellConfig> implements OnInit {
   private readonly injector = inject(Injector);

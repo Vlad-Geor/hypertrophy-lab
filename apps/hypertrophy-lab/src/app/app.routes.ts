@@ -1,7 +1,7 @@
 import { ActivatedRouteSnapshot, Route } from '@angular/router';
 import { AuthGuard } from '@auth0/auth0-angular';
 import { PlaygroundComponent } from '@ikigaidev/playground';
-import { route } from '@ikigaidev/router';
+import { route, RouteMeta } from '@ikigaidev/router';
 import { Shell } from './shell/shell.component';
 
 export const appRoutes: Route[] = [
@@ -55,6 +55,7 @@ export const appRoutes: Route[] = [
         path: 'supplements',
         loadChildren: () =>
           import('@ikigaidev/hl/supplements').then((m) => m.supplementRoutes),
+        data: { meta: { header: 'Supplements' } as RouteMeta },
       },
       route({
         path: 'new-supplement',

@@ -22,6 +22,7 @@ export * from './lib/select/select-option/select-option.component';
 export * from './lib/select/select.component';
 export * from './lib/slide-toggle/slide-toggle.component';
 export * from './lib/stateful-icon/stateful-icon.component';
+export * from './lib/surface-card/surface-card.component';
 export * from './lib/tag/tag-group/tag-group.component';
 export * from './lib/tag/tag.component';
 export * from './lib/textarea/textarea.component';

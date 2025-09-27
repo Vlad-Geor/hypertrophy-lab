@@ -9,4 +9,7 @@ export type Theme =
   | 'accent-magenta'
   | 'warning'
   | 'danger'
-  | 'info';
+  | 'info'
+  | 'gradient-primary'
+  | 'gradient-secondary'
+  ;

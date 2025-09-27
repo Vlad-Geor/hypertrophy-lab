@@ -5,12 +5,12 @@ export async function up(knex: Knex): Promise<void> {
     t.uuid('catalog_id')
       .notNullable()
       .references('id')
-      .inTable('nutrition.supplement_catalog')
+      .inTable('supplement_catalog')
       .onDelete('CASCADE');
     t.uuid('target_id')
       .notNullable()
       .references('id')
-      .inTable('nutrition.targets')
+      .inTable('targets')
       .onDelete('CASCADE');
 
     t.primary(['catalog_id', 'target_id']);
@@ -18,10 +18,10 @@ export async function up(knex: Knex): Promise<void> {
 
   // Helpful lookup indexes
   await knex.raw(
-    `CREATE INDEX IF NOT EXISTS ct_catalog_idx ON nutrition.catalog_targets (catalog_id);`,
+    `CREATE INDEX IF NOT EXISTS ct_catalog_idx ON catalog_targets (catalog_id);`,
   );
   await knex.raw(
-    `CREATE INDEX IF NOT EXISTS ct_target_idx  ON nutrition.catalog_targets (target_id);`,
+    `CREATE INDEX IF NOT EXISTS ct_target_idx  ON catalog_targets (target_id);`,
   );
 }
 

@@ -17,7 +17,7 @@ import { AddSupplementComponent } from '../../add-supplement/add-supplement.comp
     <div
       class="px-6 pt-6 pb-4 flex flex-col gap-4 bg-surface border border-gray-soft rounded-lg shadow-xl"
     >
-      <div class="flex items-start gap-4">
+      <div class="flex items-start justify-between gap-4">
         <div class="flex flex-col gap-1">
           <div class="flex items-center gap-2">
             <lib-icon [icon]="'book-liner'" class="text-secondary"></lib-icon>
@@ -29,7 +29,12 @@ import { AddSupplementComponent } from '../../add-supplement/add-supplement.comp
             5 of 5 supplements
           </p>
         </div>
-        <lib-button [size]="'lg'" class="text-white" (click)="onAddInventoryItem()">
+        <lib-button
+          theme="gradient-primary"
+          [size]="'lg'"
+          class="text-white"
+          (click)="onAddInventoryItem()"
+        >
           <lib-icon [icon]="'plus-solid'" left [iconSize]="16"></lib-icon>
           Add
         </lib-button>

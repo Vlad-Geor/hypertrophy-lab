@@ -42,8 +42,22 @@
   @if (data?.hasInventory) {
     <lib-divider></lib-divider>
     <div class="flex flex-col gap-3 w-min">
-      <lib-doughnut [sizePx]="48" [stroke]="16" [progress]="stockLeftPercentage()">
-        <p class="text-xxs text-white text-center">{{ data?.onHand }} units</p>
+      <lib-doughnut
+        class="group"
+        [sizePx]="48"
+        [stroke]="16"
+        [progress]="stockLeftPercentage()"
+      >
+        <p
+          class="text-xxs text-white text-center transition-opacity duration-200 opacity-100 group-hover:opacity-0"
+        >
+          {{ data?.onHand }} units
+        </p>
+        <p
+          class="text-xxs text-white text-center absolute transition-opacity duration-200 opacity-0 group-hover:opacity-100"
+        >
+          {{ data?.onHand }}/{{ data?.unitsPerContainer }}
+        </p>
       </lib-doughnut>
       <p class="text-xs text-text-2 text-center">
         {{ (data?.onHand ?? 0) / (data?.servingUnits ?? 0) }} days left
