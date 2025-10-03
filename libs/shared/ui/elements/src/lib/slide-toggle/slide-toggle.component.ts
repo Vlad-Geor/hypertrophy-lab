@@ -1,32 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, signal } from '@angular/core';
+import { FormControlWrapperComponent } from '../form-control/form-control-wrapper.component';
 import { FormControlComponent } from '../form-control/form-control.component';
 
 @Component({
   selector: 'lib-slide-toggle',
-  imports: [CommonModule],
+  imports: [CommonModule, FormControlWrapperComponent],
   templateUrl: './slide-toggle.component.html',
-  host: {
-    class: 'flex items-center gap-2',
-  },
-  styles: `
-    @keyframes fade-in {
-      100% {
-        opacity: 100%;
-      }
-      0% {
-        opacity: 0%;
-      }
-    }
-    @keyframes fade-out {
-      100% {
-        opacity: 0%;
-      }
-      0% {
-        opacity: 100%;
-      }
-    }
-  `,
 })
 export class SlideToggleComponent extends FormControlComponent<boolean> {
   isActive = signal(false);

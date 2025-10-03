@@ -1,7 +1,7 @@
 import { computed, Directive, effect, inject, Injector, input, Provider } from '@angular/core';
 import { OVERLAY_HOST_DEFAULTS, useOverlayComponentPortal } from '@ikigaidev/overlay';
 import { DROPDOWN_CONFIG, DropdownSize } from './model/dropdown-model';
-import { DropdownComponent } from './dropdown.component';
+import { Dropdown } from './dropdown.component';
 
 @Directive({
   selector: '[libDropdown]',
@@ -25,7 +25,7 @@ export class DropdownDirective <T>{
 
   constructor() {
     effect(() => {
-      useOverlayComponentPortal(DropdownComponent, this.providersConfig(), this.injector);
+      useOverlayComponentPortal(Dropdown, this.providersConfig(), this.injector);
     });
   }
 }

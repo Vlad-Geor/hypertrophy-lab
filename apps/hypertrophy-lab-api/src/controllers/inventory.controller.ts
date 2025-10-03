@@ -32,7 +32,7 @@ export const addBulkExisting: RequestHandler = async (req: Request, res, next) =
     // res.status(404).json('Test');
     // return;
     const items = addInventoryBulkExistingRequest.parse(req.body.items);
-    const results = await svc.addBulkExisting(req.user.id, items);
+    const results = await svc.addBulkExisting(req.user.id, items.items);
     res.status(201).json({ results });
   } catch (e) {
     next(e);

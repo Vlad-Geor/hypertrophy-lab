@@ -1,5 +1,6 @@
 export const FEATURES = [
   'supplements',
+  'inventory',
   'dashboard',
   'schedule',
   'logs',
@@ -17,4 +18,5 @@ export const ROUTES: Record<Feature, string> = {
   orders: '',
   supplements: '',
   'add-supplement': '',
+  inventory: '',
 } as const;

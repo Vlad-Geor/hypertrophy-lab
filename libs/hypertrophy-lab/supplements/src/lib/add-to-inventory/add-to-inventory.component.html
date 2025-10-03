@@ -1,0 +1,123 @@
+<div class="flex flex-col gap-2">
+  <div class="flex items-center justify-between">
+    <p
+      tabindex="0"
+      class="text-xl font-semibold text-white"
+      (click)="onClose()"
+      (keypress.enter)="onClose()"
+    >
+      Add to Inventory
+    </p>
+    <lib-icon-button
+      class="text-text-3"
+      [icon]="'xmark-solid'"
+      (click)="onClose()"
+    ></lib-icon-button>
+  </div>
+  <div class="flex justify-center">
+    <div class="flex gap-1 p-1 rounded-lg justify-center bg-bg w-fit">
+      <button
+        class="h-7 px-3 flex items-center gap-1 text-xs text-gray-text rounded-md"
+        [ngClass]="{ 'text-secondary bg-surface-2': mode() === 'add-existing' }"
+        (click)="mode.set('add-existing')"
+      >
+        <lib-icon [icon]="'download-half-circle-liner'" [iconSize]="20"></lib-icon>
+        Add Existing
+      </button>
+      <button
+        class="h-7 px-3 flex items-center gap-1 text-xs text-gray-text rounded-md"
+        [ngClass]="{ 'text-secondary bg-surface-2': mode() === 'create' }"
+        (click)="mode.set('create')"
+      >
+        <lib-icon [icon]="'plus-solid'" [iconSize]="20"></lib-icon>
+        Create New
+      </button>
+    </div>
+  </div>
+</div>
+
+<lib-divider></lib-divider>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
+  <div class="flex items-center justify-between gap-4">
+    <lib-input
+      size="sm"
+      type="number"
+      label="Current Stock"
+      formControlName="description"
+      placeholder="Left at home"
+    ></lib-input>
+    <lib-single-select
+      [listItemRenderComponent]="existingSuppComponent"
+      size="sm"
+      appearance="minimal"
+      label="Reorder Threshold"
+      [options]="options() ?? []"
+      placeholder="e.g 7 units"
+      formControlName="healthTargets"
+    ></lib-single-select>
+  </div>
+
+  <div class="flex items-center gap-4 mb-1">
+    <div class="flex-1">
+      <lib-slide-toggle
+        formControlName="reminders"
+        label="Intake Reminders"
+      ></lib-slide-toggle>
+    </div>
+    <div class="flex-1">
+      <lib-slide-toggle
+        formControlName="reminders"
+        label="Low Stock Alerts"
+      ></lib-slide-toggle>
+    </div>
+  </div>
+
+  <p class="font-medium text-white">Choose a supplement to add:</p>
+  <lib-divider></lib-divider>
+
+  @if (supplementData.hasValue()) {
+    <lib-multi-select
+      [listItemRenderComponent]="existingSuppComponent"
+      [items]="options() ?? []"
+    ></lib-multi-select>
+  }
+
+  <!-- <div class="px-2">
+    <p class="mb-3">Image</p>
+    @if (previewUrl()) {
+      <img
+        class="h-40 w-full object-contain object-top rounded-lg"
+        [src]="previewUrl()"
+        alt="Supplement Image"
+      />
+    } @else {
+      <div class="h-40 w-full rounded-lg bg-gray-background p-4 flex">
+        <div
+          class="flex-1 rounded-md flex items-center justify-center hover:bg-gray-200 hover:cursor-pointer transition-all duration-150"
+        >
+          <input
+            type="file"
+            accept="image/*"
+            (change)="onFileInput($event)"
+            #fileInput
+            hidden
+          />
+          <button
+            type="button"
+            class="btn flex items-center gap-4"
+            (click)="fileInput.click()"
+          >
+            Upload image
+            <lib-icon [iconSize]="48" [icon]="'apple-whole-solid'"></lib-icon>
+          </button>
+        </div>
+      </div>
+    }
+  </div> -->
+</form>
+
+<div class="flex justify-center gap-3">
+  <lib-button appearance="outline" (click)="onClose()">Discard</lib-button>
+  <lib-button (click)="onSubmit()">Save</lib-button>
+</div>

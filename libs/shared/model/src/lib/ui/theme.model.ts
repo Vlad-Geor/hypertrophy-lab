@@ -3,6 +3,7 @@ export type Theme =
   | 'primary'
   | 'secondary'
   | 'success'
+  | 'gray'
   | 'success-bright'
   | 'accent-pink'
   | 'accent-purple'
@@ -11,5 +12,4 @@ export type Theme =
   | 'danger'
   | 'info'
   | 'gradient-primary'
-  | 'gradient-secondary'
-  ;
+  | 'gradient-secondary';

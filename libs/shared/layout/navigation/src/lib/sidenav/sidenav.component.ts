@@ -6,27 +6,26 @@ import { AuthService } from '@auth0/auth0-angular';
 import { IconButtonComponent, IconComponent } from '@ikigaidev/elements';
 import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
 import { ViewportService } from '@ikigaidev/service';
-import { filter, map, startWith, tap } from 'rxjs';
+import { filter, map, startWith } from 'rxjs';
 import { MenuItem } from '../model/menu-item.model';
 import { createMenuItems } from '../util/create-menu-items';
 
 @Component({
   selector: 'lib-sidenav',
-  standalone: true,
+
   imports: [CommonModule, IconComponent, RouterModule, IconButtonComponent],
   templateUrl: './sidenav.component.html',
   host: {
     role: 'navigation',
     class: 'flex flex-col bg-surface h-dvh max-w-[302px] border-r border-gray-active',
   },
-  styleUrl: './sidenav.component.scss',
 })
 export class SidenavComponent {
   private readonly router = inject(Router);
   readonly vpService = inject(ViewportService);
   readonly overlayRef = inject<GlobalOverlayRef>(GLOBAL_OVERLAY_REF, { optional: true });
 
-  // TBD should be injected, app wide. Differentiates between nutrition and fitness
+  // TBD should be injected, app wide. Differentiates between nutrition and fitness.
   readonly APP_MODE = 'Supplement Management';
 
   readonly user = toSignal(inject(AuthService).user$);

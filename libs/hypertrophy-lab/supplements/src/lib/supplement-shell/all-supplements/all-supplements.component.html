@@ -1,12 +1,12 @@
-@if (suppData.hasValue()) {
+@if (allSupplementsIncludeUsers.hasValue()) {
   <div
     class="py-3 px-2 flex flex-col gap-2 bg-surface border border-gray-soft rounded-lg shadow-xl"
   >
-    @for (supp of suppData.value()?.items ?? []; track $index) {
+    @for (supp of allSupplementsIncludeUsers.value()?.items ?? []; track $index) {
       <hl-supplement-list-item [supplement]="supp"></hl-supplement-list-item>
     }
   </div>
-} @else if (suppData.isLoading()) {
+} @else if (allSupplementsIncludeUsers.isLoading()) {
   <div class="absolute flex justify-center w-full">
     <lib-bouncing-loader></lib-bouncing-loader>
   </div>

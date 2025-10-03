@@ -5,9 +5,15 @@ import { ErrorMessageComponent } from '../error/error-message.component';
 @Component({
   selector: 'lib-form-control-wrapper',
   template: `
-    <span class="inline-block text-gray-text text-sm">{{ label() }}</span>
+    @if (label()) {
+      <span class="inline-block text-gray-text text-sm">{{ label() }}</span>
+    }
+
     <ng-content></ng-content>
-    <lib-error-message [control]="control()"></lib-error-message>
+
+    @if (control() && !control()?.valid) {
+      <lib-error-message [control]="control()"></lib-error-message>
+    }
   `,
   imports: [ErrorMessageComponent],
   host: {

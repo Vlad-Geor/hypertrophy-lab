@@ -12,7 +12,7 @@ export const carouselSizing: Record<Extract<Size, 'sm' | 'md' | 'lg' | 'xl'>, nu
 
 @Component({
   selector: 'lib-image-carousel',
-  standalone: true,
+
   imports: [CommonModule, HealthTargetItemComponent],
   templateUrl: './image-carousel.component.html',
   styleUrl: './image-carousel.component.scss',

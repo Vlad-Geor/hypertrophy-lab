@@ -1,4 +1,5 @@
 import { coerceNumberProperty } from '@angular/cdk/coercion';
+import { SelectionModel } from '@angular/cdk/collections';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -6,6 +7,7 @@ import {
   Injector,
   OnInit,
   Provider,
+  Type,
   computed,
   effect,
   inject,
@@ -15,17 +17,18 @@ import {
   signal,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CellConfig, IconType, Size } from '@ikigaidev/model';
+import { IconType, ListItem, Size } from '@ikigaidev/model';
 import { ConnectedOverlayDirective, useOverlayComponentPortal } from '@ikigaidev/overlay';
 import { v5 as uuidv5 } from 'uuid';
-import { Dropdown } from '../dropdown/dropdown.component';
-import { DROPDOWN_CONFIG } from '../dropdown/model/dropdown-model';
-import { FormControlComponent } from '../form-control/form-control.component';
-import { IconComponent } from '../icon/icon.component';
-import { TagComponent } from '../tag/tag.component';
-import { configCommonDropdownOverlay } from './dropdown-overlay.util';
+import { Dropdown } from '../../dropdown/dropdown.component';
+import { DROPDOWN_CONFIG, DropdownConfig } from '../../dropdown/model/dropdown-model';
+import { FormControlWrapperComponent } from '../../form-control/form-control-wrapper.component';
+import { FormControlComponent } from '../../form-control/form-control.component';
+import { IconComponent } from '../../icon/icon.component';
+import { TagComponent } from '../../tag/tag.component';
+import { configCommonDropdownOverlay } from '../dropdown-overlay.util';
+import { CustomListItemComponent } from '../../list-items';
 
-type DropdownSize = 'sm' | 'md' | 'lg';
 export const NAMESPACE = '2b2f9e1a-1d1d-4e88-9c5a-9a5b4c9f2c11';
 
 export function stableCellId(key: string) {
@@ -33,23 +36,39 @@ export function stableCellId(key: string) {
 }
 
 @Component({
-  selector: 'lib-select',
-  imports: [CommonModule, IconComponent, ReactiveFormsModule, TagComponent],
-  templateUrl: './select.component.html',
-  styleUrl: './select.component.scss',
+  selector: 'lib-single-select',
+  imports: [
+    CommonModule,
+    IconComponent,
+    ReactiveFormsModule,
+    TagComponent,
+    FormControlWrapperComponent,
+  ],
+  templateUrl: './single-select.component.html',
   hostDirectives: [ConnectedOverlayDirective],
   host: {
     '[attr.tabindex]': '0',
+    class: 'flex-1',
   },
 })
-export class SelectComponent extends FormControlComponent<CellConfig> implements OnInit {
+export class SingleSelectComponent<T>
+  extends FormControlComponent<ListItem<T>>
+  implements OnInit
+{
   private readonly injector = inject(Injector);
   private readonly overlayDirectiveRef = inject(ConnectedOverlayDirective);
-  private readonly dropdownCompRef = signal<ComponentRef<Dropdown> | undefined>(
+  private readonly dropdownCompRef = signal<ComponentRef<Dropdown<T>> | undefined>(
     undefined,
   );
 
-  readonly options = input<CellConfig[]>([]);
+  private readonly selectionModel = new SelectionModel<ListItem<T>>(
+    false,
+    [],
+    true,
+    (o1, o2) => o1.id === o2.id,
+  );
+
+  readonly options = input<ListItem<T>[]>([]);
   readonly _options = linkedSignal(() =>
     this.options().map((opt) => ({
       ...opt,
@@ -57,22 +76,22 @@ export class SelectComponent extends FormControlComponent<CellConfig> implements
     })),
   );
 
+  readonly listItemRenderComponent = input<Type<CustomListItemComponent<T>> | undefined>(undefined);
+
   icon = input<IconType>();
-  size = input<Extract<Size, 'sm' | 'md' | 'lg'>>('md');
+  appearance = input<'default' | 'minimal'>('default');
+  size = input<Extract<Size, 'sm' | 'lg'>>('lg');
   tagLabel = input('');
   hint = input('');
   selectedCount = input(0, { transform: coerceNumberProperty });
-  // open = input(false, { transform: coerceBooleanProperty });
 
-  // _open = linkedSignal(() => this.open());
-
-  override writeValue(value: CellConfig | null): void {
+  override writeValue(value: ListItem<T> | null): void {
     if (value) {
       this._value.set(value);
     }
   }
 
-  override registerOnChange(fn: (value?: CellConfig | null) => void): void {
+  override registerOnChange(fn: (value?: ListItem<T> | null) => void): void {
     this.onChange = fn;
   }
 
@@ -84,13 +103,6 @@ export class SelectComponent extends FormControlComponent<CellConfig> implements
     this._disabled.set(isDisabled);
   }
 
-  // toggleDropdown(): void {
-  // if (this.disabled()) {
-  // return;
-  // }
-  // this._open.set(!this._open());
-  // }
-
   providers = computed<Provider[]>(() => [
     {
       provide: DROPDOWN_CONFIG,
@@ -98,13 +110,14 @@ export class SelectComponent extends FormControlComponent<CellConfig> implements
         type: 'single',
         dropdownSize: this.size(),
         options: this._options(),
-        selectedCell: this._value,
-      },
+        selectedCell: this._value(),
+        selectionModel: this.selectionModel,
+        listItemRenderComponent: this.listItemRenderComponent(),
+      } as DropdownConfig<T>,
     },
   ]);
-  _hasSelection = signal(false);
-  hasSelection = linkedSignal(() => !!this._value());
-  selectionChange = output<CellConfig>();
+
+  selectionChange = output<ListItem<T>>();
 
   constructor() {
     super();
@@ -115,10 +128,13 @@ export class SelectComponent extends FormControlComponent<CellConfig> implements
     effect(() => {
       const cmp = this.dropdownCompRef();
       if (cmp) {
-        cmp.instance.itemSelected.subscribe((cell) => {
-          this._value.set(cell);
-          this.selectionChange.emit(cell);
-          this.overlayDirectiveRef.close();
+        this.selectionModel.changed.subscribe((change) => {
+          const added = change.added?.[0];
+          if (added) {
+            this._value.set(change.added.length ? change.added[0] : undefined);
+            this.selectionChange.emit(added);
+            this.overlayDirectiveRef.close();
+          }
         });
       }
     });

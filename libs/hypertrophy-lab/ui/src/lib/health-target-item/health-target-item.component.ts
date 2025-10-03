@@ -1,6 +1,5 @@
 import { NgClass, TitleCasePipe } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { HealthTarget } from '@ikigaidev/model';
 
 @Component({
   selector: 'hl-health-target-item',
@@ -13,5 +12,4 @@ import { HealthTarget } from '@ikigaidev/model';
 })
 export class HealthTargetItemComponent {
   active = input<boolean>();
-  target = input<HealthTarget>('brain');
 }

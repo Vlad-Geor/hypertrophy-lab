@@ -7,7 +7,18 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 @Component({
   selector: 'lib-icon',
   imports: [CommonModule, MatIconModule, AngularSvgIconModule],
-  templateUrl: './icon.component.html',
+  template: `
+    <svg-icon
+      class="w-full flex items-center justify-center"
+      [svgStyle]="{
+        color: color(),
+        width: iconSize(),
+        height: iconSize(),
+        fill: fillContainer() ? 'currentColor' : '',
+      }"
+      [src]="'shared-assets/icons/' + icon() + '.svg'"
+    ></svg-icon>
+  `,
   host: {
     class: 'inline-flex rounded-md',
   },

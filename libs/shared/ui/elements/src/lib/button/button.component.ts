@@ -16,7 +16,7 @@ import { BadgeConfig, IconType, Size, Theme } from '@ikigaidev/model';
     class: `outline-0 border inline-flex justify-center items-center gap-2
      rounded hover:cursor-pointer transition-all
       duration-100`,
-    '[attr.data-tone]': 'theme()',
+    '[attr.data-tone]': 'disabled() ? "gray" : theme()',
     '[attr.type]': '"button"',
     '[class]': 'allClasses()',
     '[class.disabled]': 'disabled()',

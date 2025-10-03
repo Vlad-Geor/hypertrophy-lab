@@ -4,7 +4,6 @@ import { Component, inject, isDevMode, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { InputComponent } from '@ikigaidev/elements';
 import { HeaderComponent } from '@ikigaidev/header';
-import { HealthTarget, HealthTargetCarouselItem, healthTargets } from '@ikigaidev/model';
 import { SidenavComponent } from '@ikigaidev/navigation';
 import { ViewportService } from '@ikigaidev/service';
 
@@ -28,9 +27,4 @@ import { ViewportService } from '@ikigaidev/service';
 export class Shell {
   readonly vpService = inject(ViewportService);
   readonly devMode = signal(isDevMode());
-  healthTargets: HealthTarget[] = [...healthTargets];
-
-  carouselData = this.healthTargets.map(
-    (t, i) => ({ index: i, target: t }) as HealthTargetCarouselItem,
-  );
 }

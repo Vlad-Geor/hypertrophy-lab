@@ -4,7 +4,7 @@
   "sourceRoot": "apps/hypertrophy-lab-api/src",
   "projectType": "application",
   "tags": [],
-  "targets": {
+   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
@@ -26,7 +26,14 @@
         }
       },
       "configurations": {
-        "development": {},
+        "development": {
+          "esbuildOptions": {
+            "sourcemap": true,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        },
         "production": {
           "esbuildOptions": {
             "sourcemap": false,
@@ -40,9 +47,9 @@
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
-      "dependsOn": ["build"],
       "options": {
-        "buildTarget": "hypertrophy-lab-api:build",
+        "buildTarget": "hypertrophy-lab-api:build:development",
+        "watch": true,
         "runBuildTargetDependencies": false
       },
       "configurations": {

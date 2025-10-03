@@ -1,8 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { ImagePlaceholderDirective } from '@ikigaidev/directive';
-import { BouncingLoaderComponent, ButtonComponent, TagComponent, TagGroupComponent } from '@ikigaidev/elements';
-import { SupplementCatalogItem } from '@ikigaidev/hl/contracts';
+import {
+  BouncingLoaderComponent,
+  ButtonComponent,
+  TagComponent,
+  TagGroupComponent,
+} from '@ikigaidev/elements';
+import { InventoryItemSummary } from '@ikigaidev/hl/contracts';
 
 @Component({
   selector: 'hl-supplement-card',
@@ -15,12 +20,16 @@ import { SupplementCatalogItem } from '@ikigaidev/hl/contracts';
     ImagePlaceholderDirective,
   ],
   templateUrl: './supplement-card.component.html',
-  styleUrl: './supplement-card.component.scss',
+  styles: `
+    :host {
+      @apply flex p-1 pr-2 gap-2 md:gap-3 bg-surface-2 rounded-md border border-gray-soft h-28;
+    }
+  `,
 })
 export class SupplementCardComponent {
-  supplement = input<SupplementCatalogItem>();
-
-  constructor() {
-    effect(() => console.log(this.supplement()));
-  }
+  supplement = input<InventoryItemSummary>();
+  remainingDays = computed(
+    () =>
+      Math.round(this.supplement()?.onHand ?? 0) / (this.supplement()?.servingUnits ?? 0),
+  );
 }

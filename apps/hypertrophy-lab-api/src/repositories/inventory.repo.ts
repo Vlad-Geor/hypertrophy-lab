@@ -167,11 +167,24 @@ export function listInventory(
       'us.created_at as createdAt',
       'us.updated_at as updatedAt',
       'c.name as catalogName',
+      'c.serving_units as servingUnits',
       'b.name as brandName',
       'c.form',
       'c.images',
+      'c.units_per_container as unitsPerContainer',
       'roll.on_hand as onHand',
       'roll.earliest_expiry as earliestExpiry',
+      db.raw(
+        `COALESCE((
+     SELECT jsonb_agg(jsonb_build_object('id', s.id, 'slug', s.slug, 'name', s.name) ORDER BY s.slug)
+     FROM (
+       SELECT DISTINCT t.id, t.slug, t.name
+       FROM catalog_targets ct
+       JOIN targets t ON t.id = ct.target_id
+       WHERE ct.catalog_id = c.id
+     ) AS s
+   ), '[]'::jsonb) AS targets`,
+      ),
     )
     .orderBy('us.created_at', 'desc')
     .limit(params.limit)
@@ -192,6 +205,7 @@ export async function countInventory(
   const row = await base.clearSelect().count<{ cnt: string }>({ cnt: '*' }).first();
   return Number(row?.cnt ?? 0);
 }
+
 
 export const getInventoryById = (userId: string, id: string) =>
   db('user_supplements as us')

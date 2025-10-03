@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, linkedSignal } from '@angular/core';
+import { Component, effect, inject, input, linkedSignal, signal } from '@angular/core';
 import {
   ButtonComponent,
   IconButtonComponent,
@@ -7,6 +7,7 @@ import {
   TagComponent,
 } from '@ikigaidev/elements';
 import { DayEntrySchema, IntakeStatus } from '@ikigaidev/hl/contracts';
+import { finalize } from 'rxjs';
 import { ScheduleService } from '../../data-access/schedule.service';
 
 @Component({
@@ -22,10 +23,10 @@ export class IntakeLogCard {
   private scheduleService = inject(ScheduleService);
 
   cardData = input<DayEntrySchema>();
-
-  enableActions = linkedSignal(() => this.cardData()?.status === 'pending');
-  inEditMode = computed(
-    () => this.enableActions() && this.cardData()?.status !== 'pending',
+  updatedLog = linkedSignal<Partial<DayEntrySchema>>(() => ({ ...this.cardData() }));
+  inEditMode = signal(false);
+  showActions = linkedSignal(
+    () => this.updatedLog()?.status === 'pending' || this.inEditMode(),
   );
 
   constructor() {
@@ -33,7 +34,7 @@ export class IntakeLogCard {
   }
 
   onLogIntake(status: Exclude<IntakeStatus, 'pending'>): void {
-    if (this.inEditMode()) {
+    if (!this.inEditMode()) {
       this.createIntakeLog(status);
     } else {
       this.updateIntakeLog(status);
@@ -50,10 +51,20 @@ export class IntakeLogCard {
         userSupplementId: this.cardData()?.userSupplementId ?? '',
         planId: this.cardData()?.planId ?? '',
       })
-      .subscribe((v) => this.enableActions.set(v.status !== 'pending' ? true : false));
+      .pipe(finalize(() => this.inEditMode.set(false)))
+      .subscribe((res) => {
+        this.showActions.set(false);
+        this.updatedLog.set({ ...res });
+      });
   }
 
   updateIntakeLog(status: Exclude<IntakeStatus, 'pending'>): void {
-    this.scheduleService.updateIntakeLog(this.cardData()?.logId ?? '', { status });
+    this.scheduleService
+      .updateIntakeLog(this.cardData()?.logId ?? '', { status })
+      .pipe(finalize(() => this.inEditMode.set(false)))
+      .subscribe((res) => {
+        this.showActions.set(false);
+        this.updatedLog.set({ ...res });
+      });
   }
 }

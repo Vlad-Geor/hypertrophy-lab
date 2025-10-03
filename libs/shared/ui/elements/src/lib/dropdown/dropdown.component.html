@@ -1,49 +1,39 @@
 @if (config?.type === 'multi') {
-  <header class="dropdown-header">
-    <p
-      [ngClass]="
-        config?.dropdownSize === 'sm' || config?.dropdownSize === 'md'
-          ? 'body2-extrabold'
-          : 'body1-extrabold'
-      "
-    >
-      {{ config?.title }}
-    </p>
-    <div class="header-actions flex gap-04">
-      <div
-        style="
-          border-radius: 8px;
-          border: 1px solid var(--color-border-primary-active);
-          width: 100%;
-          height: 32px;
-        "
-      ></div>
-      <lib-button (click)="toggleSelectAll()">
+  <header class="p-4">
+    <div class="flex items-center gap-2">
+      <lib-input size="sm" placeholder="Search..."></lib-input>
+      <lib-button
+        appearance="outline"
+        theme="primary"
+        size="sm"
+        class="whitespace-nowrap min-w-28"
+        (click)="toggleSelectAll()"
+      >
         {{ hasSelection() ? 'Unselect all' : 'Select all' }}
       </lib-button>
     </div>
   </header>
+  <lib-divider></lib-divider>
 }
 @if (config?.options) {
   <lib-list-items
+    [size]="config?.dropdownSize ?? 'sm'"
     [options]="config?.options ?? []"
-    [selectedItem]="config?.selectedCell ?? null"
-    (itemSelected)="onItemSelected($event)"
+    (itemSelected)="onItemSelected($any($event))"
+    [selectionModel]="configSm!"
+    [customListItemComponent]="config?.listItemRenderComponent"
   ></lib-list-items>
 }
 
 @if (config?.type === 'multi') {
-  <footer
-    class="dropdown-footer"
-    [style.justify-content]="'flex-end;'"
-    id="dropdown-actions"
-    role="group"
-  >
-    <div class="flex gap-04">
-      <lib-button themeColor="natural" (click)="onClose()">
+  <footer class="flex justify-end" id="dropdown-actions" role="group">
+    <div class="flex gap-2 p-2">
+      <lib-button theme="danger" (click)="onClose()">
         {{ config?.cancelButtonLabel || 'Cancel' }}
       </lib-button>
-      <lib-button (click)="onConfirmClick()"></lib-button>
+      <lib-button [disabled]="!hasSelection()" theme="primary" (click)="onConfirmClick()">
+        {{ config?.confirmButtonLabel || 'Confirm' }}
+      </lib-button>
     </div>
   </footer>
 }

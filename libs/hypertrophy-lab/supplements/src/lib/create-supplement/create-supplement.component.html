@@ -5,7 +5,7 @@
     (click)="onClose()"
     (keypress.enter)="onClose()"
   >
-    Add to Inventory
+    Create Supplement
   </p>
   <lib-icon-button
     class="text-text-3"
@@ -27,7 +27,7 @@
 
   <lib-input formControlName="description" placeholder="Description"></lib-input>
 
-  <lib-select
+  <lib-single-select
     [options]="[
       { displayText: 'A' },
       { displayText: 'B', icon: 'check-solid' },
@@ -35,7 +35,7 @@
     ]"
     placeholder="All Categories"
     formControlName="healthTargets"
-  ></lib-select>
+  ></lib-single-select>
 
   <lib-slide-toggle formControlName="reminders"></lib-slide-toggle>
 

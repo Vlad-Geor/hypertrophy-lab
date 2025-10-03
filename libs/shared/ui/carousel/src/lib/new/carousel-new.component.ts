@@ -2,7 +2,7 @@
 // import { animationFrames, concatMap, fromEvent, map, merge, takeUntil } from 'rxjs';
 
 // @Component({
-//   standalone: true,
+//
 //   // eslint-disable-next-line @angular-eslint/component-selector
 //   selector: 'iki-carousel',
 //   template: `

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, effect, inject, input } from '@angular/core';
-import { CellConfig } from '@ikigaidev/model';
+import { Component, computed, inject, input } from '@angular/core';
+import { ListItem, Size } from '@ikigaidev/model';
 import { IconComponent } from '../icon/icon.component';
 import { ListItemsComponent } from './list-items.component';
 
@@ -13,14 +13,19 @@ import { ListItemsComponent } from './list-items.component';
       }
       <span>{{ config()?.displayText }}</span>
     </div>
-    @if (selected()) {
-      <lib-icon [iconSize]="12" [icon]="'check-solid'"></lib-icon>
-    }
+    <!-- @if (selected()) {
+      <lib-icon
+        class="text-secondary"
+        [fillContainer]="true"
+        [iconSize]="12"
+        [icon]="'check-solid'"
+      ></lib-icon>
+    } -->
   `,
   imports: [CommonModule, IconComponent],
   host: {
-    class: 'flex items-center justify-between gap-2 py-2 px-3 rounded',
-    '[class]': 'classes()',
+    class: 'flex items-center justify-between rounded',
+    '[class]': 'computedClasses()',
     '[class.selected]': 'selected()',
     '[attr.tabindex]': '0',
     '(click)': 'onSelfClick()',
@@ -28,32 +33,35 @@ import { ListItemsComponent } from './list-items.component';
   styles: `
     :host {
       &.selected {
-        @apply bg-surface-2;
+        @apply bg-primary-ghost;
       }
     }
   `,
 })
-export class ListItemComponent {
+export class ListItemComponent<T> {
   private readonly listItemsRef = inject(ListItemsComponent);
 
-  config = input<CellConfig>();
+  config = input<ListItem<T>>();
   selectable = input(true);
   selected = input(false);
+  size = input<Extract<Size, 'sm' | 'lg'>>('lg');
 
   computedClasses = computed(() => {
     const selectableClasses = this.selectable()
       ? ['hover:cursor-pointer', '[&:hover:not(.selected)]:bg-gray-hover']
       : [''];
-    const selectedClasses = this.selected()
-      ? ['bg-secondary-subtle', 'text-secondary']
-      : [''];
+    const selectedClasses = this.selected() ? ['bg-secondary-subtle'] : [''];
+    const sizeClasses =
+      this.size() === 'sm'
+        ? ['text-sm', 'gap-1', 'py-1.5', 'px-2']
+        : ['gap-2', 'py-2', 'px-3'];
 
-    return selectableClasses.concat(selectedClasses);
+    return [...selectableClasses, ...selectedClasses, ...sizeClasses].join(' ');
   });
 
-  classes = computed(() => {
-    return this.computedClasses().join(' ');
-  });
+  // classes = computed(() => {
+  //   return this.computedClasses().join(' ');
+  // });
 
   onSelfClick(): void {
     if (this.selectable()) {

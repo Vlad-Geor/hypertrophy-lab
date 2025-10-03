@@ -13,9 +13,9 @@
           </lib-tag>
         }
       </div>
-      @if (!enableActions()) {
+      @if (!showActions()) {
         <lib-icon-button
-          (click)="enableActions.set(true)"
+          (click)="inEditMode.set(true)"
           [inheritIconFillColor]="false"
           [icon]="'edit-liner'"
           size="sm"
@@ -30,7 +30,7 @@
     </div>
   </div>
 </div>
-@if (enableActions()) {
+@if (showActions()) {
   <div class="flex gap-3 justify-between">
     <lib-button
       appearance="outline"
@@ -49,7 +49,7 @@
       Take
     </lib-button>
   </div>
-} @else if (data?.status === 'taken') {
+} @else if (updatedLog().status === 'taken') {
   <lib-button theme="white" [fillContainer]="true" appearance="outline">
     <lib-icon class="text-success-bright" [icon]="'check-circle-broken-liner'"></lib-icon>
     Taken

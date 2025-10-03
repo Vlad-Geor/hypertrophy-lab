@@ -7,5 +7,6 @@ export const API: Record<Feature, string> = {
   routine: '/routine',
   schedule: '/schedule',
   supplements: '/supplements',
+  inventory: '/inventory',
   'add-supplement': '/add-supplement',
 } as const;

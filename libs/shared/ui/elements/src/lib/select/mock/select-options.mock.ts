@@ -1,16 +1,14 @@
-import { CellConfig } from '@ikigaidev/model';
+import { ListItem } from '@ikigaidev/model';
 
-export const options: CellConfig[] = [
+export const options: ListItem<undefined>[] = [
   {
     icon: 'award-solid',
     displayText: 'Option A',
     imageUrl: '',
-    data: {},
   },
   {
     icon: 'pen-solid',
     displayText: 'Option B',
     imageUrl: '',
-    data: {},
   },
 ];

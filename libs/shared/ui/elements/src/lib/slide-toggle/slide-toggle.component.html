@@ -1,29 +1,25 @@
-<span class="text-text-2 text-sm">{{ isActive() ? 'On' : 'Off' }}</span>
-<button
-  class="relative group w-16 h-8 rounded-full border px-1"
-  [ngClass]="{
-    'bg-secondary-subtle border-secondary-active': isActive(),
-    'bg-gray-soft border-gray-active': !isActive(),
-  }"
-  (click)="toggleSlide()"
+<lib-form-control-wrapper
+  [control]="control"
+  errorMessage="Invalid input"
+  [label]="label()"
 >
-  <div
-    class="h-6 w-6 rounded-full border transition-all duration-100"
-    [ngClass]="{
-      'translate-x-8 bg-secondary border-none': isActive(),
-      'bg-gray border-gray-subtle ': !isActive(),
-    }"
-  ></div>
-  <!-- <div
-    class="w-14 h-8 opacity-30 rounded-full"
-    [class.bg-gray-700]="!isActive()"
-    [class.bg-primary]="isActive()"
-  ></div>
-  <div
-    class="h-6 w-6 rounded-full absolute top-0 translate-y-1 transition-all ease-in duration-150 shadow-hl-light group-hover:ring-8"
-    [ngClass]="{
-      'bg-white left-0 group-hover:ring-gray-background-faded': !isActive(),
-      'bg-primary right-0 group-hover:ring-primary-light-faded': isActive(),
-    }"
-  ></div> -->
-</button>
+  <div class="flex items-center gap-2">
+    <span class="text-text-2 text-xs">{{ isActive() ? 'On' : 'Off' }}</span>
+    <button
+      class="relative group w-16 h-8 rounded-full border px-1"
+      [ngClass]="{
+        'bg-secondary-subtle border-secondary-active': isActive(),
+        'bg-primary-subtle border-primary-soft': !isActive(),
+      }"
+      (click)="toggleSlide()"
+    >
+      <div
+        class="h-6 w-6 rounded-full border transition-all duration-100"
+        [ngClass]="{
+          'translate-x-8 bg-secondary border-none': isActive(),
+          'bg-primary border-primary-subtle ': !isActive(),
+        }"
+      ></div>
+    </button>
+  </div>
+</lib-form-control-wrapper>

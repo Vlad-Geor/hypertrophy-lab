@@ -20,14 +20,18 @@
   </lib-button>
   <div class="grid grid-cols-2 gap-2">
     @for (pill of pillData; track $index) {
-    <lib-pill>
+    <lib-pill
+      [selected]="pill.daypart === selectedDaypartFilter()"
+      [daypart]="pill.daypart"
+      (pillSelected)="onDaypartFilter($event)"
+    >
       <lib-icon
         [class]="pill.iconClass"
         [fillContainer]="false"
         [iconSize]="20"
         [icon]="pill.icon"
       ></lib-icon>
-      <span>{{pill.text | titlecase }}</span>
+      <span>{{pill.daypart | titlecase }}</span>
     </lib-pill>
     }
   </div>
@@ -39,26 +43,34 @@
   [cardTitleIcon]="'clock-solid'"
   cardTitleIconClass="text-primary"
 >
-  @if (dayOverview.hasValue()) { @for (section of dayOverview.value().sections; track
-  $index) { @if (section.items.length) {
+  @if (hasAnyData()) { @if (filteredOverview()?.sections?.[0]?.items?.length) { @for
+  (section of filteredOverview()?.sections ?? []; track $index) { @if
+  (section?.items?.length) {
 
   <hl-day-part-overview [data]="section">
     <div dayPartOverviewHeader class="flex items-center gap-3">
       <div class="flex items-center gap-2">
         <lib-icon class="text-orange-400" [icon]="'sunrise-liner'"></lib-icon>
-        <span>{{section.timeOfDay | titlecase}}</span>
+        <span>{{section?.timeOfDay | titlecase}}</span>
       </div>
       <lib-tag [rounded]="true" theme="white" size="lg">
-        {{section.items.length}} {{section.items.length > 1 ? 'supplements' :
+        {{section?.items?.length}} {{section?.items?.length ?? 0 > 1 ? 'supplements' :
         'supplement'}}
       </lib-tag>
     </div>
-    @for (item of section.items; track $index) {
+    @for (item of section?.items; track $index) {
     <hl-intake-action-card [cardData]="item"></hl-intake-action-card>
     }
   </hl-day-part-overview>
   } } } @else if (dayOverview.isLoading()) {
   <lib-bouncing-loader></lib-bouncing-loader>
+  } @else if (!filteredOverview()?.sections?.[0]?.items?.length) {
+  <hl-no-data [type]="'filter'"></hl-no-data>
+  } } @else if (!dayOverview.isLoading()) {
+  <hl-no-data
+    [type]="'no-data'"
+    noDataMessage="There are no supplements for today. Take a breather for the day, or add a supplement to start tracking!"
+  ></hl-no-data>
   }
 </lib-surface-card>
 
@@ -67,5 +79,6 @@
   cardTitleIcon="calendar-liner"
   cardTitleIconClass="text-primary"
 >
+  <p class="text-xl text-gray-text">Coming soon!...</p>
   <lib-date-range-picker></lib-date-range-picker>
 </lib-surface-card>

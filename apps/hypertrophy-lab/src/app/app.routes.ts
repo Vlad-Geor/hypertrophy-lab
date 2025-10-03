@@ -60,7 +60,7 @@ export const appRoutes: Route[] = [
       route({
         path: 'new-supplement',
         loadComponent: () =>
-          import('@ikigaidev/hl/supplements').then((m) => m.AddSupplementComponent),
+          import('@ikigaidev/hl/supplements').then((m) => m.CreateSupplementComponent),
         data: { meta: { header: 'Add Supplement' } },
       }),
       {

@@ -1,9 +1,12 @@
-@if (supplements.hasValue()) {
-  @for (supp of supplements.value()?.items ?? []; track $index) {
+@if (store.userSupplements()?.length) {
+  @for (supp of store.userSupplements() ?? []; track $index) {
     <hl-supplement-card [supplement]="supp"></hl-supplement-card>
   }
-} @else if (supplements.isLoading()) {
+} @else if (store.isLoading()) {
   <div class="absolute flex justify-center w-full">
     <lib-bouncing-loader></lib-bouncing-loader>
   </div>
+}
+@if (store.isError()) {
+  <hl-error-page class="col-span-2"></hl-error-page>
 }

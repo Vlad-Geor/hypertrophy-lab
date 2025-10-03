@@ -1,4 +1,4 @@
-import { Component, effect, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { DayFullEntrySchema } from '@ikigaidev/hl/contracts';
 import { IntakeLogCard } from '../intake-log-card/intake-log-card.component';
 

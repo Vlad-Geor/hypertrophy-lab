@@ -5,6 +5,7 @@ export * from './exercise/muscle-group-exercises.model';
 export * from './inventory/inventory-supplement.model';
 export * from './muscle/muscle-group.model';
 export * from './muscle/sub-muscles.model';
+export * from './schedule/day-part.model';
 export * from './supplement/health-target';
 export * from './supplement/supplement.mock';
 export * from './supplement/supplement.model';

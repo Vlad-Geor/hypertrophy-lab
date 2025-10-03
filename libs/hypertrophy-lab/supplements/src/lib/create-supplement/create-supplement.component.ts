@@ -14,12 +14,10 @@ import {
   IconButtonComponent,
   IconComponent,
   InputComponent,
-  SelectComponent,
-  SelectOptionComponent,
+  SingleSelectComponent,
   SlideToggleComponent,
 } from '@ikigaidev/elements';
 import { Supplement, quantityUnits } from '@ikigaidev/hl/model';
-import { HEALTH_TARGETS, HealthTarget } from '@ikigaidev/model';
 import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
 import { toSlug } from '@ikigaidev/util';
 import { switchMap } from 'rxjs';
@@ -40,15 +38,14 @@ import { SupplementService } from '../data-access/supplement.service';
     IconComponent,
     IconButtonComponent,
     DatePickerComponent,
-    SelectComponent,
-    SelectOptionComponent,
+    SingleSelectComponent,
     SlideToggleComponent,
   ],
-  templateUrl: './add-supplement.component.html',
-  styleUrl: './add-supplement.component.scss',
+  templateUrl: './create-supplement.component.html',
+  styleUrl: './create-supplement.component.scss',
   providers: [CloudinaryService, SupplementService],
 })
-export class AddSupplementComponent {
+export class CreateSupplementComponent {
   private readonly fb = inject(FormBuilder);
   private readonly cnService = inject(CloudinaryService);
   private readonly supplementService = inject(SupplementService);
@@ -57,9 +54,9 @@ export class AddSupplementComponent {
     optional: true,
   });
 
-  HealthTargets = HEALTH_TARGETS;
+  // HealthTargets = HEALTH_TARGETS;
   quantityUnits = quantityUnits;
-  healthTargetKeys = Object.keys(this.HealthTargets) as HealthTarget[];
+  // healthTargetKeys = Object.keys(this.HealthTargets) as HealthTarget[];
 
   imageFormData = signal<FormData | undefined>(undefined);
   previewUrl = signal<string>('');
@@ -102,7 +99,7 @@ export class AddSupplementComponent {
             this.form.patchValue({ imgUrl: cloudinaryRes.secure_url });
             const v = this.form.getRawValue();
 
-            return this.supplementService.addSupplement({
+            return this.supplementService.addCatalogSupplement({
               itemCount: v.itemCount ?? 0,
               name: v.name,
               description: v.description ?? '',

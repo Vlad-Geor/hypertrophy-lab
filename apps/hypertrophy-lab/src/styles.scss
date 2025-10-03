@@ -5,6 +5,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .transition-default {
+    @apply transition-all duration-100 ease-in-out;
+  }
+}
+
 @layer base {
   html {
     font-family: 'Poppins';

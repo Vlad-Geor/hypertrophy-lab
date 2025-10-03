@@ -1,0 +1,24 @@
+<div class="flex items-center gap-3 flex-1">
+  <img
+    libImagePlaceholder
+    [placeholderTarget]="'supplement'"
+    class="rounded-full min-h-16 max-h-16 min-w-16 object-cover border border-gradient-primary"
+    [src]="data()?.images?.[0]"
+    alt="Supplement image"
+  />
+  <div class="flex flex-col gap-1">
+    <p class="truncate text-sm font-medium text-text-2">{{ data()?.name }}</p>
+    <div class="flex items-center gap-1">
+      <lib-tag size="sm" theme="secondary" [rounded]="true">Gut (TBD)</lib-tag>
+      <!-- <lib-tag size="sm" [rounded]="true">Vitamins</lib-tag> -->
+    </div>
+  </div>
+</div>
+<div class="flex flex-col gap-2">
+  <lib-tag size="sm" theme="white" appearance="outline" [rounded]="true">
+    {{ data()?.unitsPerContainer }} units
+  </lib-tag>
+  <lib-tag size="sm" theme="white" appearance="outline" [rounded]="true">
+    {{ (data()?.unitsPerContainer ?? 0) / (data()?.servingUnits ?? 0) }} days
+  </lib-tag>
+</div>

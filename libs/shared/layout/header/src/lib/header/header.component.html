@@ -3,7 +3,11 @@
 >
   <div class="flex items-center gap-1">
     @if (!vpService.isFullView()) {
-      <lib-icon-button [onHoverEffect]="'highlight'" (click)="toggleSidebar()" [icon]="'menu-solid'"></lib-icon-button>
+      <lib-icon-button
+        [onHoverEffect]="'highlight'"
+        (click)="toggleSidebar()"
+        [icon]="'menu-solid'"
+      ></lib-icon-button>
     }
     <h2 class="text-heading-md h-fit">
       {{ this.routerService.pageHeader() | titlecase }}
@@ -19,9 +23,11 @@
       ></lib-icon-button>
     }
 
+    <!-- IF notifService.hasNotifications(): secondary + badge -->
     <lib-stateful-icon-button
+      [disabled]="true"
       [icon]="'bell-solid'"
-      class="text-secondary"
+      class="text-gray-text"
     ></lib-stateful-icon-button>
   </div>
 </header>

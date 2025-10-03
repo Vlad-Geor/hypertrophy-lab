@@ -1,0 +1,36 @@
+<!-- <lib-form-control-wrapper
+  [control]="control"
+  errorMessage="Invalid input"
+  [label]="label()"
+> -->
+<div
+  class="bg-surface-2 flex-1 border border-gray-ring text-white hover:cursor-pointer rounded-md focus-within:border-secondary-active transition-all duration-100 ease-in-out inline-flex items-center justify-between px-3"
+  [ngClass]="{ 'min-h-8 text-sm': size() === 'sm', 'min-h-11': size() === 'lg' }"
+>
+  @if (icon()) {
+    <lib-icon [icon]="icon()"></lib-icon>
+  }
+  <span class="text-gray-text font-light text-ellipsis">
+    {{ _value()?.displayText || placeholder() }}
+  </span>
+  @if (tagLabel()) {
+    <lib-tag>{{ tagLabel() }}</lib-tag>
+  }
+  @if (appearance() === 'minimal') {
+    <lib-icon
+      [fillContainer]="true"
+      class="text-white"
+      [iconSize]="20"
+      [icon]="'arrows-up-down-liner'"
+    ></lib-icon>
+  }
+  @if (appearance() === 'default') {
+    <lib-icon
+      [fillContainer]="true"
+      class="text-white"
+      [iconSize]="12"
+      [icon]="'chevron-down-solid'"
+    ></lib-icon>
+  }
+</div>
+<!-- </lib-form-control-wrapper> -->

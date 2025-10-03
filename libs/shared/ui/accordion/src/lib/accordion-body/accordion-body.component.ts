@@ -1,9 +1,9 @@
-import { Component, TemplateRef, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, TemplateRef, viewChild } from '@angular/core';
 
 @Component({
   selector: 'hl-accordion-body',
-  standalone: true,
+
   imports: [CommonModule],
   templateUrl: './accordion-body.component.html',
   styleUrl: './accordion-body.component.scss',

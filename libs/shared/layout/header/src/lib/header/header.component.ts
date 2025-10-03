@@ -13,7 +13,6 @@ import { ViewportService } from '@ikigaidev/service';
 
 @Component({
   selector: 'lib-header',
-  standalone: true,
   imports: [
     CommonModule,
     IconComponent,
@@ -27,6 +26,7 @@ export class HeaderComponent {
   private readonly overlay = inject(GlobalOverlay);
   readonly vpService = inject(ViewportService);
   readonly routerService = inject(RouterMetaService);
+  // readonly notifService; -> TBD
 
   toggleSidebar(): void {
     this.overlay.openComponent(SidenavComponent, {

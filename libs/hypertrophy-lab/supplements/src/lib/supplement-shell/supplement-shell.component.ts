@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, linkedSignal } from '@angular/core';
+import { Component, effect, inject, linkedSignal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import {
@@ -11,6 +11,7 @@ import {
 } from '@angular/router';
 import { IconComponent } from '@ikigaidev/elements';
 import { filter, map } from 'rxjs';
+import { SupplementStore } from '../data-access/supplement.store';
 import { SupplementHeaderComponent } from './supplement-header/supplement-header.component';
 
 @Component({
@@ -26,12 +27,13 @@ import { SupplementHeaderComponent } from './supplement-header/supplement-header
       >
         <lib-icon
           [icon]="'cart-liner'"
+          class="hover:text-white"
           [ngClass]="suppRla.isActive ? 'text-secondary' : 'text-muted-02'"
         ></lib-icon>
         <span>Catalog</span>
       </a>
       <a
-        class="tab"
+        class="tab hover:text-white"
         routerLink="/supplements/inventory"
         routerLinkActive="tab-active"
         #inventoryRla="routerLinkActive"
@@ -55,7 +57,7 @@ import { SupplementHeaderComponent } from './supplement-header/supplement-header
     }
 
     .tab {
-      @apply flex items-center gap-2 py-1.5 px-3 rounded-md text-muted-02;
+      @apply flex items-center gap-2 py-1.5 px-3 rounded-md text-muted-02 [&:hover:not(.active)]:bg-gray-soft;
 
       &.active {
         @apply bg-bg text-white;
@@ -73,6 +75,7 @@ import { SupplementHeaderComponent } from './supplement-header/supplement-header
 })
 export class SupplementShellComponent {
   readonly router = inject(Router);
+  readonly supplementStore = inject(SupplementStore);
 
   readonly routeUrl = toSignal(
     this.router.events.pipe(
@@ -95,5 +98,6 @@ export class SupplementShellComponent {
         ? 'inventory'
         : 'catalog',
     );
+    this.supplementStore.getUserSupplements(false);
   }
 }

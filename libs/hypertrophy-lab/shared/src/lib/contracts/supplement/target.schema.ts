@@ -1,6 +1,8 @@
 import { isoDateTime } from '@ikigaidev/contracts';
 import { z } from 'zod';
 
+export const categorySchema = z.enum(['vitamins', 'minerals', 'other']);
+
 export const targetSchema = z.object({
   id: z.uuid(),
   slug: z.string().min(1),
@@ -17,5 +19,6 @@ export const targetSchema = z.object({
 
 export const listTargetsResponse = z.array(targetSchema);
 
+export type Category = z.infer<typeof categorySchema>;
 export type Target = z.infer<typeof targetSchema>;
 export type ListTargetsResponse = z.infer<typeof listTargetsResponse>;

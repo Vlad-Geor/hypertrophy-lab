@@ -3,13 +3,10 @@ import cors from 'cors';
 import express, { Application } from 'express';
 import { auth } from 'express-oauth2-jwt-bearer';
 
-import { loadEnv } from './config/env';
 import { hydrateUser } from './repositories/users.repo';
 import { registerRoutes } from './routes/register-routes';
 
 export const app: Application = express();
-
-const env = loadEnv();
 
 app.use(express.json());
 app.use(cookieParser());
@@ -33,7 +30,7 @@ app.use(
       return cb(new Error('Not allowed by CORS'));
     },
     credentials: false,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );

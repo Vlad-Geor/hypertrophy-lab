@@ -1,3 +1,4 @@
+import { Brand } from '../../contracts/supplement/brand.schema';
 import { HealthTarget } from './health-target';
 
 export const dosageForms = ['pill', 'powder', 'liquid'] as const;
@@ -23,8 +24,8 @@ export interface Supplement {
   imgUrl?: string;
 }
 
-export interface Brand {
-  id?: number;
-  name: string;
-  website?: string;
-}
+// export interface Brand {
+//   id?: number;
+//   name: string;
+//   website?: string;
+// }

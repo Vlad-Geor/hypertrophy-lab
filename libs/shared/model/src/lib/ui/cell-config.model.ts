@@ -1,9 +1,8 @@
 import { IconType } from './icon-type.model';
 
-export type CellConfig = {
+export type ListItem<T = undefined> = {
   id?: string;
   icon?: IconType;
   displayText: string;
   imageUrl?: string;
-  data?: Record<string, any>;
-};
+} & (T extends undefined ? { data?: never } : { data: T });

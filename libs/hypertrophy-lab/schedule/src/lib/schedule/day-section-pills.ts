@@ -1,27 +1,26 @@
+import { Daypart } from '@ikigaidev/hl/model';
 import { IconType } from '@ikigaidev/model';
 
-export type Daypart = 'morning' | 'afternoon' | 'evening' | 'night';
-
-export type DayPartPill = { text: Daypart; icon: IconType; iconClass: string };
+export type DayPartPill = { daypart: Daypart; icon: IconType; iconClass: string };
 
 export const dayPartFilters: DayPartPill[] = [
   {
-    text: 'morning',
+    daypart: 'morning',
     icon: 'sunrise-liner',
     iconClass: 'text-orange-400',
   },
   {
-    text: 'afternoon',
+    daypart: 'afternoon',
     icon: 'sun-liner',
     iconClass: 'text-secondary',
   },
   {
-    text: 'evening',
+    daypart: 'evening',
     icon: 'sunset-liner',
     iconClass: 'text-accent-purple',
   },
   {
-    text: 'night',
+    daypart: 'night',
     icon: 'moon-liner',
     iconClass: 'text-blue-400',
   },

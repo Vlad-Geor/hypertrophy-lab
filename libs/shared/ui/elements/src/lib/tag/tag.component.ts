@@ -15,8 +15,9 @@ import { Size, Theme } from '@ikigaidev/model';
   `,
   styleUrl: './tag.component.scss',
   host: {
-    class: `text-token font-medium bg-token-soft border border-token-active`,
+    class: `text-token font-medium border border-token-active`,
     '[class]': '[size(), theme()]',
+    '[class.bg-token-soft]': 'appearance() === "fill"',
     '[class.round-chip]': 'rounded()',
     '[attr.data-tone]': 'theme()',
   },
@@ -25,6 +26,7 @@ export class TagComponent {
   theme = input<Theme>('primary');
   size = input<Extract<Size, 'xs' | 'sm' | 'md' | 'lg'>>('md');
   rounded = input<boolean>(false);
+  appearance = input<'fill' | 'outline'>('fill');
   content = viewChild<TemplateRef<unknown>>(TemplateRef);
 
   inputContent = input<TemplateRef<unknown>>();

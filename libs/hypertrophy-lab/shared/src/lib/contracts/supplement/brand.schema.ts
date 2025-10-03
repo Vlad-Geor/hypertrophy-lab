@@ -2,11 +2,11 @@ import { isoDateTime, uuid } from '@ikigaidev/contracts';
 import { z } from 'zod';
 
 export const brandSchema = z.object({
-  id: uuid,
+  id: uuid.optional(),
   name: z.string().min(1),
   site: z.url().nullable().optional(),
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  createdAt: isoDateTime.optional(),
+  updatedAt: isoDateTime.optional(),
 });
 
 export const listBrandsResponse = z.array(brandSchema);

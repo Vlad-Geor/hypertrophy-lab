@@ -45,6 +45,8 @@ export const supplementCatalogSummary = supplementCatalogSchema.pick({
   brandId: true,
   name: true,
   form: true,
+  unitsPerContainer: true,
+  servingUnits: true,
   images: true,
 });
 

@@ -9,7 +9,7 @@
     </div>
     <div class="flex flex-col">
       <h1 class="text-lg font-medium">Health Lab</h1>
-      <p class="text-xs text-gray-text font-medium">Precision health made simple</p>
+      <p class="text-xs text-gray-text">Precision health made simple</p>
     </div>
   </div>
   @if (vpService.isMobile() || vpService.isTablet()) {
@@ -26,7 +26,10 @@
     @for (item of _menuItems(); track $index) {
       <li
         class="py-3 px-4 border border-transparent rounded hover:cursor-pointer [&:hover:not(.active)]:bg-surface-2 [&:hover:not(.active)]:border-gray-active transition-all duration-100"
-        [class.active]="item.isActive"
+        [ngClass]="{
+          'bg-gradient-primary border-primary-ring text-white': item.isActive,
+          'pointer-events-none text-gray': item.disabled,
+        }"
         tabindex="0"
         (click)="navigateTo(item)"
         (keypress.enter)="navigateTo(item)"
@@ -35,6 +38,7 @@
           <lib-icon
             [iconSize]="20"
             class="text-white"
+            [class.text-gray]="item.disabled"
             [icon]="item.icon"
             [fillContainer]="false"
           ></lib-icon>
@@ -54,7 +58,11 @@
       @if (u) {
         <div>
           @if (u?.picture) {
-            <img class="rounded-full max-h-11 max-w-11" [src]="u.picture" [alt]="u.name + ' avatar'" />
+            <img
+              class="rounded-full max-h-11 max-w-11"
+              [src]="u.picture"
+              [alt]="u.name + ' avatar'"
+            />
           } @else {
             <div
               class="flex items-center justify-center w-10 h-10 rounded-full bg-white-subtle"

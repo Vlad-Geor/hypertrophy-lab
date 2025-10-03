@@ -1,15 +1,26 @@
 import { TitleCasePipe } from '@angular/common';
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input, linkedSignal, signal } from '@angular/core';
 import {
   ButtonComponent,
+  generateUnitOptions,
   IconComponent,
   InputComponent,
-  SelectComponent,
-  SelectOptionComponent,
+  MultiSelectComponent,
+  SingleSelectComponent,
+  stableCellId,
 } from '@ikigaidev/elements';
-import { CellConfig } from '@ikigaidev/model';
+import { ListItem } from '@ikigaidev/model';
 import { GlobalOverlay } from '@ikigaidev/overlay';
-import { AddSupplementComponent } from '../../add-supplement/add-supplement.component';
+import { AddSupplementToInventory } from '../../add-to-inventory/add-to-inventory.component';
+import {
+  ExistingSuppItemData,
+  ExistingSupplementItem,
+} from '../../add-to-inventory/existing-supplement-item/existing-supplement-item.component';
+
+export type DemiType = {
+  valOne: string;
+  valTwo: number;
+};
 
 @Component({
   selector: 'hl-supplement-header',
@@ -25,9 +36,10 @@ import { AddSupplementComponent } from '../../add-supplement/add-supplement.comp
               {{ headerFor() | titlecase }}
             </h1>
           </div>
-          <p class="text-sm text-nowrap font-semibold text-gray-text">
+          <lib-multi-select [items]="unitOptions()"></lib-multi-select>
+          <!-- <p class="text-sm text-nowrap font-semibold text-gray-text">
             5 of 5 supplements
-          </p>
+          </p> -->
         </div>
         <lib-button
           theme="gradient-primary"
@@ -42,7 +54,12 @@ import { AddSupplementComponent } from '../../add-supplement/add-supplement.comp
 
       <div class="flex flex-col gap-3">
         <lib-input [withSearch]="true" placeholder="Search..."></lib-input>
-        <lib-select [options]="options()" placeholder="All Categories"></lib-select>
+        <lib-single-select
+          [options]="_options()"
+          [value]="_options()[0]"
+          placeholder="All Categories"
+          [listItemRenderComponent]="existingSuppComponentType"
+        ></lib-single-select>
       </div>
     </div>
   `,
@@ -51,26 +68,47 @@ import { AddSupplementComponent } from '../../add-supplement/add-supplement.comp
   },
   imports: [
     InputComponent,
-    SelectComponent,
+    SingleSelectComponent,
     ButtonComponent,
     IconComponent,
     TitleCasePipe,
-    SelectOptionComponent,
+    MultiSelectComponent,
   ],
 })
 export class SupplementHeaderComponent {
   private readonly overlay = inject(GlobalOverlay);
 
-  readonly options = signal<CellConfig[]>([
-    { displayText: 'A' },
-    { displayText: 'B', icon: 'check-solid' },
-    { displayText: 'C' },
+  existingSuppComponentType = ExistingSupplementItem;
+
+  unitOptions = signal(
+    generateUnitOptions(30).map((op, i) => ({
+      ...op,
+      data: { valOne: 'Blabla' + ` ${i}`, valTwo: 22 + i } as DemiType,
+      id: stableCellId(`${op.displayText}|${op.data}`),
+    })),
+  );
+
+  readonly _options = linkedSignal(() =>
+    this.options().map((opt) => ({
+      ...opt,
+      id: stableCellId(`${opt.displayText}|${opt.data}`),
+    })),
+  );
+
+  readonly options = signal<ListItem<ExistingSuppItemData>[]>([
+    { displayText: 'A', data: { images: ['val three'], name: 'Name 1' } },
+    {
+      displayText: 'B',
+      icon: 'check-solid',
+      data: { images: ['val three'], name: 'Name 1' },
+    },
+    { displayText: 'C', data: { images: ['val three'], name: 'Name 1' } },
   ]);
 
   headerFor = input.required<'inventory' | 'catalog'>();
 
   onAddInventoryItem(): void {
-    this.overlay.openComponent(AddSupplementComponent, {
+    this.overlay.openComponent(AddSupplementToInventory, {
       overlayConfig: { hasBackdrop: true, backdropClass: 'bg-black/60' },
     });
   }

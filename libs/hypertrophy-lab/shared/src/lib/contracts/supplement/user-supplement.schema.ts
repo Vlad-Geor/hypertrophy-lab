@@ -7,7 +7,10 @@ import {
 } from '@ikigaidev/contracts';
 import { z } from 'zod';
 import { batchSchema } from './batch.schema';
-import { supplementFormSchema } from './supplement-catalog.schema';
+import {
+  supplementCatalogSchema,
+  supplementFormSchema,
+} from './supplement-catalog.schema';
 
 export const userSupplementSchema = z.object({
   id: uuid,
@@ -52,7 +55,15 @@ export const inventoryItemSummary = userSupplementSchema
     createdAt: true,
     updatedAt: true,
   })
-  .and(inventoryComputed);
+  .and(inventoryComputed)
+  .and(
+    supplementCatalogSchema.pick({
+      images: true,
+      targets: true,
+      unitsPerContainer: true,
+      servingUnits: true,
+    }),
+  );
 
 export const listInventoryResponse = z.object({
   items: z.array(inventoryItemSummary),
@@ -93,8 +104,8 @@ export const addInventoryNewCatalog = z.object({
   unitLabel: z.string().nullable().optional(),
   servingUnits: z.number().positive().nullable().optional(),
   targetIds: z.array(uuid).optional(),
-  images: z.array(z.string().url()).default([]),
-  productUrl: z.string().url().nullable().optional(),
+  images: z.array(z.url()).default([]),
+  productUrl: z.url().nullable().optional(),
   safetyNotes: z.string().nullable().optional(),
   ...commonAdd,
 });
@@ -176,7 +187,9 @@ const bulkExistingItem = z.object({
     })
     .default({}),
 });
-export const addInventoryBulkExistingRequest = z.array(bulkExistingItem).max(50);
+export const addInventoryBulkExistingRequest = z.object({
+  items: z.array(bulkExistingItem).max(50),
+});
 export const addInventoryBulkExistingResponse = z.object({
   results: z.array(z.object({ index: z.number(), userSupplementId: uuid })),
 });
@@ -188,6 +201,10 @@ export const listExpiringSoonQuery = z.object({
   withinDays: z.coerce.number().int().min(1).max(365).default(30),
 });
 
+export type AddInventoryBulkExistingResponse = z.infer<typeof addInventoryBulkExistingResponse>;
+export type AddInventoryBulkExistingRequest = z.infer<
+  typeof addInventoryBulkExistingRequest
+>;
 export type UserSupplement = z.infer<typeof userSupplementSchema>;
 export type ListInventoryQuery = z.infer<typeof listInventoryQuery>;
 export type InventoryItemSummary = z.infer<typeof inventoryItemSummary>;

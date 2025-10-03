@@ -11,4 +11,8 @@
     @apply min-w-36 py-3;
   }
 
+  &.disabled {
+    @apply pointer-events-none;
+  }
+
 }

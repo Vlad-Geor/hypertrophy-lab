@@ -4,7 +4,7 @@ import { ExerciseDetails, MuscleGroup } from '@ikigaidev/hl/model';
 
 @Component({
   selector: 'hl-muscle-group-card',
-  standalone: true,
+
   imports: [CommonModule, TitleCasePipe],
   templateUrl: './muscle-group-card.component.html',
 })

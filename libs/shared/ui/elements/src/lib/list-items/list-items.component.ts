@@ -1,34 +1,137 @@
+import { SelectionModel } from '@angular/cdk/collections';
+import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
-import { Component, input, output, Signal } from '@angular/core';
-import { CellConfig } from '@ikigaidev/model';
+import {
+  AfterViewInit,
+  Component,
+  DestroyRef,
+  effect,
+  inject,
+  input,
+  inputBinding,
+  output,
+  outputBinding,
+  QueryList,
+  Type,
+  ViewChildren,
+  ViewContainerRef,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NoData } from '@ikigaidev/hl/shared';
+import { ListItem, Size } from '@ikigaidev/model';
+import { filter, startWith } from 'rxjs';
+import { DividerComponent } from '../divider/divider.component';
+import { IconComponent } from '../icon/icon.component';
 import { ListItemComponent } from './list-item.component';
+import { CustomListItemComponent } from './model/custom-list-item.model';
 
 @Component({
   selector: 'lib-list-items',
   template: `
     @if (options().length) {
-      @for (option of options(); track $index) {
-        <lib-list-item
-          [selected]="selectedItem()?.()?.id === option.id"
-          [config]="option"
-          [selectable]="selectable()"
-        ></lib-list-item>
-      }
+      <cdk-virtual-scroll-viewport
+        [itemSize]="size() === 'sm' ? 32 : 40"
+        class="min-h-[300px] flex flex-col gap-2"
+      >
+        <div class="flex items-center gap-1.5" *cdkVirtualFor="let option of options()">
+          @if (selectionModel().isSelected(option)) {
+            <div class="flex">
+              <lib-icon
+                [icon]="'check-circle-broken-liner'"
+                class="text-success-bright"
+              ></lib-icon>
+            </div>
+          } @else if (selectionModel().isMultipleSelection()) {
+            <div class="h-5 w-5"></div>
+          }
+
+          @if (customListItemComponent()) {
+            <ng-container #dynamicComponentContainer class="flex-1"></ng-container>
+          } @else {
+            <lib-list-item
+              class="flex-1"
+              [size]="this.size()"
+              [selected]="selectionModel().isSelected(option)"
+              [config]="option"
+              [selectable]="selectable()"
+            ></lib-list-item>
+          }
+        </div>
+      </cdk-virtual-scroll-viewport>
+    } @else {
+      <hl-no-data size="md" type="filter"></hl-no-data>
     }
   `,
   host: {
-    class: '@apply flex flex-col gap-2 p-2',
+    class: 'flex flex-col p-2',
   },
-  imports: [CommonModule, ListItemComponent],
+  imports: [
+    CommonModule,
+    ListItemComponent,
+    CdkVirtualScrollViewport,
+    ScrollingModule,
+    DividerComponent,
+    IconComponent,
+    NoData,
+  ],
 })
-export class ListItemsComponent {
-  options = input.required<CellConfig[]>();
+export class ListItemsComponent<T> implements AfterViewInit {
+  private readonly dRef = inject(DestroyRef);
+
+  @ViewChildren('dynamicComponentContainer', { read: ViewContainerRef })
+  dynamicContainers!: QueryList<ViewContainerRef>;
+
+  options = input.required<ListItem<T>[]>();
   selectable = input(true);
-  selectedItem = input<Signal<CellConfig> | null>(null);
+  size = input<Extract<Size, 'sm' | 'lg'>>('lg');
+  customListItemComponent = input<Type<CustomListItemComponent<T>>>();
 
-  itemSelected = output<CellConfig>();
+  selectionModel = input.required<SelectionModel<ListItem<T>>>();
 
-  onItemSelected(c: CellConfig): void {
+  itemSelected = output<ListItem<T>>();
+
+  constructor() {
+    effect(() => {
+      if (this.options()?.length && this.dynamicContainers?.length) {
+        this.createDynamicComponents();
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.dynamicContainers.changes
+      .pipe(
+        startWith(this.dynamicContainers),
+        filter((containers) => !!containers.length),
+        takeUntilDestroyed(this.dRef),
+      )
+      .subscribe(() => this.createDynamicComponents());
+  }
+
+  onItemSelected(c: ListItem<T>): void {
     this.itemSelected.emit(c);
+    console.log(this.selectionModel().selected);
+  }
+
+  private createDynamicComponents(): void {
+    const customComponent = this.customListItemComponent();
+    if (!customComponent || !this.dynamicContainers) return;
+
+    this.dynamicContainers.forEach((container, index) => {
+      const ref = container;
+
+      ref.clear();
+
+      const listItem = this.options()[index];
+      const componentRef = ref.createComponent(customComponent, {
+        bindings: [
+          inputBinding('data', () => listItem.data),
+          inputBinding('listItem', () => listItem),
+          inputBinding('selected', () => this.selectionModel().isSelected(listItem)),
+          inputBinding('size', () => this.size()),
+          outputBinding('itemClicked', () => this.onItemSelected(listItem)),
+        ],
+      });
+    });
   }
 }

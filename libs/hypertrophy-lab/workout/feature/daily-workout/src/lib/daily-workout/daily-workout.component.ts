@@ -6,7 +6,7 @@ import { muscleGroupExercises } from './muscle-group-exercise.mock';
 
 @Component({
   selector: 'hl-daily-workout',
-  standalone: true,
+
   imports: [
     CommonModule,
     // MuscleGroupCardComponent,

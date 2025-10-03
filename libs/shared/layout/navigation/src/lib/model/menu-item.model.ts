@@ -4,5 +4,5 @@ export type MenuItem = {
   icon: IconType;
   label: string;
   route: string;
-  isActive?: boolean;
+  disabled?: boolean;
 };

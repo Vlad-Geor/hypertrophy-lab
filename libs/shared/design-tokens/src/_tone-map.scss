@@ -79,7 +79,15 @@
   --tone-active: var(--info-active);
   --tone-ring: var(--info-ring);
 }
-
+[data-tone='gray'] {
+  --tone: var(--gray);
+  --tone-ghost: var(--gray-ghost);
+  --tone-subtle: var(--gray-subtle);
+  --tone-soft: var(--gray-soft);
+  --tone-hover: var(--gray-hover);
+  --tone-active: var(--gray-active);
+  --tone-ring: var(--gray-ring);
+}
 /* Accents */
 [data-tone='accent-purple'] {
   --tone: var(--accent-purple);
