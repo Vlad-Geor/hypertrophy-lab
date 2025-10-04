@@ -96,13 +96,13 @@ export class SupplementHeaderComponent {
   );
 
   readonly options = signal<ListItem<ExistingSuppItemData>[]>([
-    { displayText: 'A', data: { images: ['val three'], name: 'Name 1' } },
+    { displayText: 'A', data: { images: ['val three'], name: 'Name 1', id: '' } },
     {
       displayText: 'B',
       icon: 'check-solid',
-      data: { images: ['val three'], name: 'Name 1' },
+      data: { images: ['val three'], name: 'Name 1', id: '' },
     },
-    { displayText: 'C', data: { images: ['val three'], name: 'Name 1' } },
+    { displayText: 'C', data: { images: ['val three'], name: 'Name 1', id: '' } },
   ]);
 
   headerFor = input.required<'inventory' | 'catalog'>();

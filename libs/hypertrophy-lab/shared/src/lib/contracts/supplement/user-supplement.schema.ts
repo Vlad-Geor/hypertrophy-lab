@@ -205,6 +205,8 @@ export type AddInventoryBulkExistingResponse = z.infer<typeof addInventoryBulkEx
 export type AddInventoryBulkExistingRequest = z.infer<
   typeof addInventoryBulkExistingRequest
 >;
+
+export type BulkExistingItem = z.infer<typeof bulkExistingItem>;
 export type UserSupplement = z.infer<typeof userSupplementSchema>;
 export type ListInventoryQuery = z.infer<typeof listInventoryQuery>;
 export type InventoryItemSummary = z.infer<typeof inventoryItemSummary>;

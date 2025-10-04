@@ -11,6 +11,7 @@
 
   /* ===== Neutrals (background / surfaces / border) ===== */
   --bg: #0f172a;
+  --bg-light: #152134;
   --surface-1: #1b2637;
   --surface-2: #212c3e;
   --surface-3: hsl(from var(--surface-2) h s calc(l * 1.1));
@@ -135,6 +136,13 @@
   --gray-hover: hsl(from var(--gray) h s l / var(--a-hover));
   --gray-active: hsl(from var(--gray) h s l / var(--a-active));
   --gray-ring: hsl(from var(--gray) h s l / var(--a-ring));
+
+  --gray-bright-ghost: hsl(from var(--gray-bright) h s l / var(--a-ghost));
+  --gray-bright-subtle: hsl(from var(--gray-bright) h s l / var(--a-subtle));
+  --gray-bright-soft: hsl(from var(--gray-bright) h s l / var(--a-soft));
+  --gray-bright-hover: hsl(from var(--gray-bright) h s l / var(--a-hover));
+  --gray-bright-active: hsl(from var(--gray-bright) h s l / var(--a-active));
+  --gray-bright-ring: hsl(from var(--gray-bright) h s l / var(--a-ring));
 
   /* Accents */
   --accent-purple-ghost: hsl(from var(--accent-purple) h s l / var(--a-ghost));

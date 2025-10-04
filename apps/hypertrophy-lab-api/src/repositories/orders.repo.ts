@@ -1,7 +1,7 @@
-import { db } from "../config/database";
+import { db } from '../config/database';
 
 export async function getLatestOrders(userId: string, limit: number) {
-  return db('orders')
+  return db('nutrition.orders')
     .select({
       id: 'id',
       label: 'supplier_name',

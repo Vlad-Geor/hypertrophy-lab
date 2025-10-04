@@ -7,7 +7,7 @@ import { Knex } from 'knex';
 import { db } from '../config/database';
 
 export async function listPlans(userId: string) {
-  return db('schedule_plans')
+  return db('nutrition.schedule_plans')
     .select('*')
     .where({ user_id: userId })
     .orderBy([
@@ -18,7 +18,7 @@ export async function listPlans(userId: string) {
 }
 
 export async function createPlan(params: { userId: string; payload: CreatePlanRequest }) {
-  const [row] = await db('schedule_plans')
+  const [row] = await db('nutrition.schedule_plans')
     .insert({
       user_id: params.userId,
       user_supplement_id: params.payload.userSupplementId,
@@ -45,13 +45,13 @@ export async function updatePlan(params: {
   if (params.patch.notes !== undefined) patch.notes = params.patch.notes;
   if (params.patch.active !== undefined) patch.active = params.patch.active;
 
-  await db('schedule_plans')
+  await db('nutrition.schedule_plans')
     .update(patch)
     .where({ id: params.planId, user_id: params.userId });
 }
 
 export async function softDeletePlan(params: { userId: string; planId: string }) {
-  await db('schedule_plans')
+  await db('nutrition.schedule_plans')
     .update({ active: false })
     .where({ id: params.planId, user_id: params.userId });
 }
@@ -119,7 +119,7 @@ export async function getLogById(trx: Knex, id: string) {
 }
 
 export async function updateLog(params: { userId: string; logId: string; patch: any }) {
-  await db('schedule_logs')
+  await db('nutrition.schedule_logs')
     .update(params.patch)
     .where({ id: params.logId, user_id: params.userId });
 }
@@ -145,7 +145,7 @@ export async function buildDayView(params: { userId: string; date: string }) {
   const weekdayIndex = new Date(date + 'T00:00:00Z').getUTCDay();
 
   // get plans
-  const plans = await db('schedule_plans as p')
+  const plans = await db('nutrition.schedule_plans as p')
     .select(
       'p.id as plan_id',
       'p.user_supplement_id',
@@ -158,17 +158,19 @@ export async function buildDayView(params: { userId: string; date: string }) {
       'b.name as brand_name',
     )
     .join('user_supplements as us', 'us.id', 'p.user_supplement_id')
-    .leftJoin('supplement_catalog as sc', 'sc.id', 'us.catalog_id')
-    .leftJoin('brands as b', 'b.id', 'sc.brand_id')
+    .leftJoin('nutrition.supplement_catalog as sc', 'sc.id', 'us.catalog_id')
+    .leftJoin('nutrition.brands as b', 'b.id', 'sc.brand_id')
     .where('p.user_id', userId)
     .andWhere('p.active', true)
     .andWhereRaw('? = ANY(p.days_of_week)', [weekdayIndex]);
 
   // logs for that date
-  const logs = await db('schedule_logs').select('*').where({ user_id: userId, date });
+  const logs = await db('nutrition.schedule_logs')
+    .select('*')
+    .where({ user_id: userId, date });
 
   // stock snapshot per user_supplement
-  const stocks = await db('batches')
+  const stocks = await db('nutrition.batches')
     .select('user_supplement_id')
     .sum({ on_hand: 'quantity_units' })
     .min({ earliest_expiry: db.raw("NULLIF(expires_on::text, '')::date") })
@@ -285,7 +287,7 @@ function mapLogRow(r: any) {
 }
 
 export const getPlanForUser = (userId: string, planId: string) =>
-  db('schedule_plans')
+  db('nutrition.schedule_plans')
     .select(
       'id',
       'user_supplement_id as userSupplementId',
@@ -298,7 +300,9 @@ export const getPlanForUser = (userId: string, planId: string) =>
     .first();
 
 export const ensureUserSupplement = (userId: string, userSupplementId: string) =>
-  db('user_supplements').where({ id: userSupplementId, user_id: userId }).first();
+  db('nutrition.user_supplements')
+    .where({ id: userSupplementId, user_id: userId })
+    .first();
 
 export const getExistingLog = (
   userId: string,
@@ -306,7 +310,7 @@ export const getExistingLog = (
   date: string,
   timeOfDay: string,
 ) =>
-  db('schedule_logs')
+  db('nutrition.schedule_logs')
     .where({
       user_id: userId,
       user_supplement_id: userSupplementId,
@@ -366,10 +370,10 @@ export async function getPlansForDay(userId: string, weekday: number) {
 
   const weekdayArr = [Number(weekday)];
 
-  return db('schedule_plans as p')
+  return db('nutrition.schedule_plans as p')
     .join('user_supplements as us', 'us.id', 'p.user_supplement_id')
-    .leftJoin('supplement_catalog as c', 'c.id', 'us.catalog_id')
-    .leftJoin('brands as b', 'b.id', 'c.brand_id')
+    .leftJoin('nutrition.supplement_catalog as c', 'c.id', 'us.catalog_id')
+    .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
     .leftJoin(inv, 'inv.user_supplement_id', 'us.id')
     .where('p.user_id', userId)
     .andWhere('p.active', true)
@@ -391,12 +395,12 @@ export async function getPlansForDay(userId: string, weekday: number) {
 }
 
 // export function getPlansForDay(userId: string, weekday: number) {
-//   return db('schedule_plans as p')
+//   return db('nutrition.schedule_plans as p')
 //     .join('user_supplements as us', 'us.id', 'p.user_supplement_id')
-//     .leftJoin('supplement_catalog as c', 'c.id', 'us.catalog_id')
-//     .leftJoin('brands as b', 'b.id', 'c.brand_id')
+//     .leftJoin('nutrition.supplement_catalog as c', 'c.id', 'us.catalog_id')
+//     .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
 //     .leftJoin(
-//       db('batches as bat')
+//       db('nutrition.batches as bat')
 //         .select('bat.user_supplement_id')
 //         .select(
 //           db.raw('COALESCE(SUM(bat.quantity_units),0)::int AS on_hand'),
@@ -427,7 +431,7 @@ export async function getPlansForDay(userId: string, weekday: number) {
 // }
 
 export function getLogsForDate(userId: string, date: string) {
-  return db('schedule_logs').where({ user_id: userId, date }).select({
+  return db('nutrition.schedule_logs').where({ user_id: userId, date }).select({
     id: 'id',
     userSupplementId: 'user_supplement_id',
     planId: 'plan_id',
@@ -440,12 +444,12 @@ export function getLogsForDate(userId: string, date: string) {
 
 export function getAdhocLoggedSupplements(userId: string, date: string) {
   // logs without a plan need minimal supplement info to display
-  return db('schedule_logs as l')
+  return db('nutrition.schedule_logs as l')
     .join('user_supplements as us', 'us.id', 'l.user_supplement_id')
-    .leftJoin('supplement_catalog as c', 'c.id', 'us.catalog_id')
-    .leftJoin('brands as b', 'b.id', 'c.brand_id')
+    .leftJoin('nutrition.supplement_catalog as c', 'c.id', 'us.catalog_id')
+    .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
     .leftJoin(
-      db('batches as bat')
+      db('nutrition.batches as bat')
         .select('bat.user_supplement_id')
         .sum({ on_hand: 'bat.quantity_units' })
         .min({ earliest_expiry: 'bat.expires_on' }) // ← alias the MIN
@@ -504,9 +508,9 @@ export async function consumeStockTx(
 
 // Patch Methods + Helpers (TX)
 export const getLogWithConsumptions = (userId: string, logId: string) =>
-  db('schedule_logs as l')
+  db('nutrition.schedule_logs as l')
     .leftJoin(
-      db('schedule_log_consumptions')
+      db('nutrition.schedule_log_consumptions')
         .select('log_id')
         .sum({ total_consumed: 'units' })
         .groupBy('log_id')

@@ -7,7 +7,7 @@ export const createTarget = async (data: {
   color?: string | null;
   icon?: string | null;
 }) => {
-  const [created] = await db('targets')
+  const [created] = await db('nutrition.targets')
     .insert({
       slug: data.slug,
       name: data.name,
@@ -29,7 +29,7 @@ export const createTarget = async (data: {
 };
 
 export const listTargets = () =>
-  db('targets')
+  db('nutrition.targets')
     .select(
       'id',
       'slug',

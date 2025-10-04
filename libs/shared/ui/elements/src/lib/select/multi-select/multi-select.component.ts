@@ -1,4 +1,3 @@
-import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { SelectionModel } from '@angular/cdk/collections';
 import { NgClass } from '@angular/common';
 import {
@@ -18,29 +17,36 @@ import {
 } from '@angular/core';
 import { IconType, ListItem, Size } from '@ikigaidev/model';
 import { ConnectedOverlayDirective, useOverlayComponentPortal } from '@ikigaidev/overlay';
+import { IconButtonComponent } from '../../button/icon-button/icon-button.component';
 import { Dropdown } from '../../dropdown/dropdown.component';
-import {
-  DROPDOWN_CONFIG,
-  DropdownConfig,
-  DropdownSize,
-} from '../../dropdown/model/dropdown-model';
+import { DROPDOWN_CONFIG, DropdownConfig } from '../../dropdown/model/dropdown-model';
 import { FormControlWrapperComponent } from '../../form-control/form-control-wrapper.component';
+import { FormControlComponent } from '../../form-control/form-control.component';
 import { IconComponent } from '../../icon/icon.component';
 import { CustomListItemComponent } from '../../list-items';
 import { TagComponent } from '../../tag/tag.component';
 import { configCommonDropdownOverlay } from '../dropdown-overlay.util';
+import { stableCellId } from '../single-select/single-select.component';
 
 @Component({
   selector: 'lib-multi-select',
   templateUrl: './multi-select.component.html',
-  imports: [FormControlWrapperComponent, IconComponent, NgClass, TagComponent],
+  imports: [
+    FormControlWrapperComponent,
+    IconComponent,
+    NgClass,
+    TagComponent,
+    IconButtonComponent,
+  ],
   host: {
     class: 'inline-flex',
   },
   hostDirectives: [ConnectedOverlayDirective],
 })
-// export class MultiSelectComponent<T> extends FormControlComponent<ListItem<T>> implements OnInit {
-export class MultiSelectComponent<T> implements OnInit {
+export class MultiSelectComponent<T>
+  extends FormControlComponent<ListItem<T>[]>
+  implements OnInit
+{
   private readonly overlayDirectiveRef = inject(ConnectedOverlayDirective);
   private readonly injector = inject(Injector);
 
@@ -50,30 +56,55 @@ export class MultiSelectComponent<T> implements OnInit {
     undefined,
   );
 
-  placeholder = input<string>('');
-  dropdownSize = input<DropdownSize>('lg');
   dropdownTitle = input<string>('');
   dropdownHeight = input<number>();
   selectWidth = input<number>();
   confirmButtonLabel = input<string>('');
   cancelButtonLabel = input<string>('');
-  _hasSelection = signal(false);
-  hasSelection = linkedSignal(() => false);
   items = input.required<ListItem<T>[]>();
   icon = input<IconType>();
   appearance = input<'default' | 'minimal'>('default');
   size = input<Extract<Size, 'sm' | 'lg'>>('lg');
   tagLabel = input('');
   hint = input('');
-  selectedCount = input(0, { transform: coerceNumberProperty });
-  // TBD this is a temporary patch. _value needs to come from extending FormControlComponent<T>
-  _value = linkedSignal(() => this.items()[0]);
+  selectedCount = computed(() => this._value()?.length);
   selectionModel = new SelectionModel<ListItem<T>>(
     true,
     [],
     true,
     (o1, o2) => o1.id === o2.id,
   );
+  readonly _options = linkedSignal(() =>
+    this.items().map((opt) => ({
+      ...opt,
+      id: stableCellId(`${opt.displayText}|${opt.data}`),
+    })),
+  );
+  displayValue = computed<string | undefined>(() =>
+    this._value()
+      ?.map(({ displayText }) => displayText)
+      .join(', '),
+  );
+
+  override writeValue(value: ListItem<T>[] | undefined): void {
+    if (value) {
+      if (value.length) {
+        this._value.set(value);
+      } else this._value.set(undefined);
+    }
+  }
+  override registerOnChange(
+    fn: (value?: ListItem<T>[] | null | undefined) => void,
+  ): void {
+    this.onChange = fn;
+  }
+  override registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+  override setDisabledState(isDisabled: boolean): void {
+    this._disabled.set(isDisabled);
+  }
+
   //   filterFn = input<DropdownFilterFn>(undefined);
 
   //   badgeConfig = computed<BadgeConfig>(() => ({
@@ -89,9 +120,9 @@ export class MultiSelectComponent<T> implements OnInit {
     {
       provide: DROPDOWN_CONFIG,
       useValue: {
-        options: this.items(),
+        options: this._options(),
         type: 'multi',
-        dropdownSize: this.dropdownSize(),
+        dropdownSize: this.size(),
         maxDropdownHeight: this.dropdownHeight(),
         cancelButtonLabel: this.cancelButtonLabel() ?? 'Cancel',
         confirmButtonLabel: this.confirmButtonLabel() ?? 'Confirm',
@@ -103,12 +134,15 @@ export class MultiSelectComponent<T> implements OnInit {
   ]);
 
   constructor() {
+    super();
     effect(() => useOverlayComponentPortal(Dropdown, this.providers(), this.injector));
     configCommonDropdownOverlay(this.overlayDirectiveRef);
     effect(() => {
       const dropdownRef = this.dropdownCompRef();
       if (dropdownRef) {
         dropdownRef.instance.confirmClicked.subscribe((v) => {
+          this.writeValue(v);
+          this.onChange(v);
           this.confirm.emit(v);
           this.overlayDirectiveRef.close();
         });
@@ -124,5 +158,11 @@ export class MultiSelectComponent<T> implements OnInit {
     this.overlayDirectiveRef?.componentAttached?.subscribe((cmp) => {
       this.dropdownCompRef.set(cmp);
     });
+  }
+
+  onClear(): void {
+    this.writeValue([]);
+    this.onChange([]);
+    this.selectionModel.clear();
   }
 }

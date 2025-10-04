@@ -54,7 +54,7 @@
       label="Reorder Threshold"
       [options]="options() ?? []"
       placeholder="e.g 7 units"
-      formControlName="healthTargets"
+      formControlName="selectedSingleItem"
     ></lib-single-select>
   </div>
 
@@ -67,19 +67,21 @@
     </div>
     <div class="flex-1">
       <lib-slide-toggle
-        formControlName="reminders"
+        formControlName="lowStockAlerts"
         label="Low Stock Alerts"
       ></lib-slide-toggle>
     </div>
   </div>
 
-  <p class="font-medium text-white">Choose a supplement to add:</p>
+  <p class="text-lg font-medium text-white">Choose a supplement to add:</p>
   <lib-divider></lib-divider>
 
   @if (supplementData.hasValue()) {
     <lib-multi-select
+      placeholder="Choose supplements"
       [listItemRenderComponent]="existingSuppComponent"
       [items]="options() ?? []"
+      formControlName="existingItems"
     ></lib-multi-select>
   }
 
@@ -117,7 +119,21 @@
   </div> -->
 </form>
 
+<div>
+  <hl-added-supplements-overview
+    [data]="selectedSupplementsData()"
+  ></hl-added-supplements-overview>
+</div>
+
 <div class="flex justify-center gap-3">
   <lib-button appearance="outline" (click)="onClose()">Discard</lib-button>
-  <lib-button (click)="onSubmit()">Save</lib-button>
+  <lib-button (click)="onSubmit()" theme="gradient-primary">
+    <lib-icon
+      left
+      [icon]="'check-circle-broken-liner'"
+      [iconSize]="20"
+      class="text-white"
+    ></lib-icon>
+    <p class="text-white">Save</p>
+  </lib-button>
 </div>

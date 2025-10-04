@@ -25,9 +25,9 @@ import { DROPDOWN_CONFIG, DropdownConfig } from '../../dropdown/model/dropdown-m
 import { FormControlWrapperComponent } from '../../form-control/form-control-wrapper.component';
 import { FormControlComponent } from '../../form-control/form-control.component';
 import { IconComponent } from '../../icon/icon.component';
+import { CustomListItemComponent } from '../../list-items';
 import { TagComponent } from '../../tag/tag.component';
 import { configCommonDropdownOverlay } from '../dropdown-overlay.util';
-import { CustomListItemComponent } from '../../list-items';
 
 export const NAMESPACE = '2b2f9e1a-1d1d-4e88-9c5a-9a5b4c9f2c11';
 
@@ -76,7 +76,9 @@ export class SingleSelectComponent<T>
     })),
   );
 
-  readonly listItemRenderComponent = input<Type<CustomListItemComponent<T>> | undefined>(undefined);
+  readonly listItemRenderComponent = input<Type<CustomListItemComponent<T>> | undefined>(
+    undefined,
+  );
 
   icon = input<IconType>();
   appearance = input<'default' | 'minimal'>('default');

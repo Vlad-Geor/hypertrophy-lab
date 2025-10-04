@@ -20,7 +20,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NoData } from '@ikigaidev/hl/shared';
 import { ListItem, Size } from '@ikigaidev/model';
 import { filter, startWith } from 'rxjs';
-import { DividerComponent } from '../divider/divider.component';
 import { IconComponent } from '../icon/icon.component';
 import { ListItemComponent } from './list-item.component';
 import { CustomListItemComponent } from './model/custom-list-item.model';
@@ -70,7 +69,6 @@ import { CustomListItemComponent } from './model/custom-list-item.model';
     ListItemComponent,
     CdkVirtualScrollViewport,
     ScrollingModule,
-    DividerComponent,
     IconComponent,
     NoData,
   ],
@@ -110,7 +108,6 @@ export class ListItemsComponent<T> implements AfterViewInit {
 
   onItemSelected(c: ListItem<T>): void {
     this.itemSelected.emit(c);
-    console.log(this.selectionModel().selected);
   }
 
   private createDynamicComponents(): void {

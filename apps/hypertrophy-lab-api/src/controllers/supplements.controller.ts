@@ -13,8 +13,30 @@ export const listCatalog: RequestHandler = async (req: Request, res) => {
 
   const { brandId, targetId, q } = req.query as any;
 
-  const result = await svc.listCatalog({ brandId, targetId, q, page, limit }, userId);
-  res.json(result);
+  try {
+    const result = await svc.listCatalog({ brandId, targetId, q, page, limit }, userId);
+    res.json(result);
+  } catch (err) {
+    console.error('Full error:', err);
+
+    const errorResponse = {
+      message: 'Internal Server Error',
+      error:
+        err instanceof Error
+          ? {
+              message: err.message,
+              name: err.name,
+              stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+              // Neon/Postgres specific properties
+              code: (err as any).code,
+              detail: (err as any).detail,
+              hint: (err as any).hint,
+              position: (err as any).position,
+            }
+          : String(err),
+    };
+    res.status(500).json(errorResponse);
+  }
 };
 
 export const getCatalogById: RequestHandler<{ id: string }> = async (req, res) => {

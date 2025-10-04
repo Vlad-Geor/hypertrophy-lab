@@ -39,6 +39,7 @@ module.exports = {
       colors: {
         /* ===== Neutrals / Surfaces ===== */
         bg: 'var(--bg)',
+        'bg-light': 'var(--bg-light)',
         surface: 'var(--surface-1)',
         'surface-2': 'var(--surface-2)',
         'surface-3': 'var(--surface-3)',

@@ -40,7 +40,7 @@ export class ButtonComponent {
   themeClasses = computed(() =>
     (this.appearance() === 'fill'
       ? this.theme().includes('gradient')
-        ? ['bg-gradient', 'border-0']
+        ? ['bg-gradient', 'border-0', 'hover:brightness-125']
         : ['bg-token-soft', 'border-token-soft', 'hover:bg-token-active']
       : ['text-token', 'border-token-soft', 'hover:bg-token-ghost']
     )

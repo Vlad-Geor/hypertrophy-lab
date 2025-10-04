@@ -1,0 +1,55 @@
+<div class="flex items-center gap-3 flex-1">
+  <div class="flex flex-col gap-2 items-center">
+    <lib-tag appearance="outline" theme="secondary" size="sm" [rounded]="true">
+      {{ stockDaysLeft() }} days
+    </lib-tag>
+    <img
+      libImagePlaceholder
+      [placeholderTarget]="'supplement'"
+      class="rounded-full min-h-12 max-h-12 min-w-12 object-cover border border-gradient-primary"
+      [src]="_data()?.images?.[0]"
+      alt="Supplement image"
+    />
+  </div>
+  <div class="flex flex-col gap-2">
+    <p
+      class="truncate text-sm font-medium"
+      [class.text-text-2]="!selected()"
+      [class.text-accent-purple]="selected()"
+    >
+      {{ _data()?.name }}
+    </p>
+    <div class="flex items-center gap-1">
+      <lib-tag size="sm" theme="secondary" [rounded]="true">Gut (TBD)</lib-tag>
+      <!-- <lib-tag size="sm" [rounded]="true">Vitamins</lib-tag> -->
+    </div>
+  </div>
+</div>
+<div class="flex flex-col gap-2">
+  <lib-tag size="md" theme="gray-bright" appearance="outline">
+    {{ _data().bottleCount }}
+    {{ _data().bottleCount && _data().bottleCount! > 1 ? 'bottles' : 'bottle' }}
+  </lib-tag>
+  <lib-tag size="md" theme="gray-bright" appearance="outline">
+    {{ (_data().unitsPerContainer ?? 1) * (_data().bottleCount ?? 1) }} units
+  </lib-tag>
+</div>
+
+<div class="flex flex-col gap-1">
+  <div
+    class="stock-action-btn"
+    tabindex="0"
+    (click)="increaseBottleStock()"
+    (keydown.enter)="increaseBottleStock()"
+  >
+    +
+  </div>
+  <div
+    class="stock-action-btn"
+    tabindex="0"
+    (click)="decreaseBottleStock()"
+    (keydown.enter)="decreaseBottleStock()"
+  >
+    -
+  </div>
+</div>

@@ -32,6 +32,7 @@ export class Dropdown<T> {
 
   constructor() {
     console.log(this.config);
+    this.hasSelection.set(this.config?.selectionModel.hasValue() ?? false);
 
     this.configSm?.changed.subscribe(() =>
       this.hasSelection.set(this.configSm?.hasValue() ?? false),

@@ -4,6 +4,7 @@ export type Theme =
   | 'secondary'
   | 'success'
   | 'gray'
+  | 'gray-bright'
   | 'success-bright'
   | 'accent-pink'
   | 'accent-purple'

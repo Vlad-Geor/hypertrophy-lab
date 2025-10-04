@@ -88,6 +88,15 @@
   --tone-active: var(--gray-active);
   --tone-ring: var(--gray-ring);
 }
+[data-tone='gray-bright'] {
+  --tone: var(--gray-bright);
+  --tone-ghost: var(--gray-bright-ghost);
+  --tone-subtle: var(--gray-bright-subtle);
+  --tone-soft: var(--gray-bright-soft);
+  --tone-hover: var(--gray-bright-hover);
+  --tone-active: var(--gray-bright-active);
+  --tone-ring: var(--gray-bright-ring);
+}
 /* Accents */
 [data-tone='accent-purple'] {
   --tone: var(--accent-purple);
