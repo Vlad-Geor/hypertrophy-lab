@@ -51,8 +51,8 @@ export function stableCellId(key: string) {
     class: 'flex-1',
   },
 })
-export class SingleSelectComponent<T>
-  extends FormControlComponent<ListItem<T>>
+export class SingleSelectComponent<T, V>
+  extends FormControlComponent<V>
   implements OnInit
 {
   private readonly injector = inject(Injector);
@@ -69,6 +69,15 @@ export class SingleSelectComponent<T>
   );
 
   readonly options = input<ListItem<T>[]>([]);
+  readonly _options = linkedSignal(() =>
+    this.options().map((opt) => ({
+      ...opt,
+      id: stableCellId(`${opt.displayText}|${opt.data}`),
+    })),
+  );
+
+  readonly returnFn = input<(it: ListItem<T>) => V>((it) => it.value as unknown as V);
+  readonly equals = input<(a: V, b: V) => boolean>((a, b) => a === b);
   readonly listItemRenderComponent = input<Type<CustomListItemComponent<T>> | undefined>(
     undefined,
   );
@@ -79,14 +88,15 @@ export class SingleSelectComponent<T>
   hint = input('');
   selectedCount = input(0, { transform: coerceNumberProperty });
 
-  selectionChange = output<ListItem<T>>();
+  selectionChange = output<V>();
 
-  readonly _options = linkedSignal(() =>
-    this.options().map((opt) => ({
-      ...opt,
-      id: stableCellId(`${opt.displayText}|${opt.data}`),
-    })),
-  );
+  public readonly _item = signal<ListItem<T> | undefined>(undefined);
+  private readonly _valueToItem = computed(() => {
+    const map = new Map<V, ListItem<T>>();
+    for (const it of this.options() ?? []) map.set(this.returnFn()(it), it);
+    return map;
+  });
+
   providers = computed<Provider[]>(() => [
     {
       provide: DROPDOWN_CONFIG,
@@ -94,20 +104,39 @@ export class SingleSelectComponent<T>
         type: 'single',
         dropdownSize: this.size(),
         options: this._options(),
-        selectedCell: this._value(),
+        selectedCell: this._item(),
         selectionModel: this.selectionModel,
         listItemRenderComponent: this.listItemRenderComponent(),
       } as DropdownConfig<T>,
     },
   ]);
 
-  override writeValue(value: ListItem<T> | null): void {
-    if (value) {
-      this._value.set(value);
+  override writeValue(value: V | null): void {
+    if (value == null) {
+      this._item.set(undefined);
+      this._value.set(value ?? undefined);
+      this.selectionModel.clear();
+      return;
+    }
+    console.log('writeValue, val: ', value);
+
+    const map = this._valueToItem();
+    console.log('map is: ', map);
+
+    const found =
+      map.get(value) ?? [...map.entries()].find(([v]) => this.equals()(v, value))?.[1];
+
+    if (found) {
+      this._item.set(found);
+      this.selectionModel.select(found);
+    } else {
+      // value not in options; clear or keep as-is per your UX
+      this._item.set(undefined);
+      this.selectionModel.clear();
     }
   }
 
-  override registerOnChange(fn: (value?: ListItem<T> | null) => void): void {
+  override registerOnChange(fn: (value?: V | null) => void): void {
     this.onChange = fn;
   }
 
@@ -127,20 +156,43 @@ export class SingleSelectComponent<T>
     });
     effect(() => {
       const cmp = this.dropdownCompRef();
-      if (cmp) {
-        this.selectionModel.changed.subscribe((change) => {
-          const added = change.added?.[0];
-          if (added) {
-            this._value.set(change.added.length ? change.added[0] : undefined);
-            this.selectionChange.emit(added);
-            this.overlayDirectiveRef.close();
-          }
-        });
+    });
+
+    this.selectionModel.changed.subscribe((chg) => {
+      const added = chg.added?.[0];
+      if (!added) return;
+      this._item.set(added);
+      const v = this.returnFn()(added);
+      this.onChange(v);
+      this.selectionChange.emit(v);
+      this.overlayDirectiveRef.close();
+    });
+    // effect(() => {
+    //   const cmp = this.dropdownCompRef();
+    //   if (cmp) {
+    //     this.selectionModel.changed.subscribe((change) => {
+    //       const added = change.added?.[0];
+    //       if (!added) return;
+    //       this._item.set(added);
+    //       const v = this.returnFn()(added);
+    //       this.onChange(v);
+    //       this._value.set(change.added.length ? change.added[0] : undefined);
+    //       this.selectionChange.emit(added);
+    //       this.overlayDirectiveRef.close();
+    //     });
+    //   }
+    // });
+    effect(() => {
+      const it = this._item();
+      if (!it) return;
+      const exists = (this._options() ?? []).some((o) => o.id === it.id);
+      if (!exists) {
+        this._item.set(undefined);
+        this.selectionModel.clear();
+        this.onChange(null);
       }
     });
-    effect(() => {
-      this.onChange(this._value() ?? null);
-    });
+    effect(() => console.log('ssl _item', this._item()));
   }
 
   ngOnInit(): void {

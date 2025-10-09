@@ -199,6 +199,9 @@ export class AddSupplementToInventory {
       previewSupps.forEach((s) => this.ensureItem(s.data.id));
       this.items.controls.forEach((c) => c.valueChanges.subscribe(console.log));
     });
+    effect(() => {
+      this.selectedGroup()?.controls.quantityUnits.setValue(20);
+    });
 
     // if (state.imgUrl && state.name) {
     //   this.imageFormData.update((fd) => {
