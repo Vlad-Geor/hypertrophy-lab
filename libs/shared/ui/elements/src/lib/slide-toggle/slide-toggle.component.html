@@ -12,6 +12,7 @@
         'bg-primary-subtle border-primary-soft': !isActive(),
       }"
       (click)="toggleSlide()"
+      [disabled]="_disabled()"
     >
       <div
         class="h-6 w-6 rounded-full border transition-all duration-100"

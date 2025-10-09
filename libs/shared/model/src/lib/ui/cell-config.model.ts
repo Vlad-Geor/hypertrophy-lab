@@ -5,4 +5,5 @@ export type ListItem<T = undefined> = {
   icon?: IconType;
   displayText: string;
   imageUrl?: string;
+  value?: T;
 } & (T extends undefined ? { data?: never } : { data: T });

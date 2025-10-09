@@ -1,20 +1,22 @@
 import { JsonPipe } from '@angular/common';
-import { Component, computed, effect, input, linkedSignal, output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { ImagePlaceholderDirective } from '@ikigaidev/directive';
 import { TagComponent } from '@ikigaidev/elements';
-import { ExistingSuppItemData } from '../existing-supplement-item/existing-supplement-item.component';
+import { ExistingSuppItemData } from '../existing-supplement-dropdown-item/existing-supplement-item.component';
 
 export type AddedSupplementCard = ExistingSuppItemData & {
   bottleCount: number;
   daysLeft: number;
 };
 
+export type SupplementStockChangeEvent = { catalogId: string; newStock: number };
+
 @Component({
   selector: 'hl-added-supplement-item',
   templateUrl: './added-supplement-item.component.html',
   imports: [JsonPipe, ImagePlaceholderDirective, TagComponent],
   host: {
-    '(click)': 'supplementSelected.emit(_data())',
+    '(click)': 'supplementSelected.emit(data())',
     class:
       'flex flex-1 items-center p-2 gap-4 rounded hover:cursor-pointer hover:bg-bg-light',
     '[class.bg-bg-light]': 'selected()',
@@ -26,40 +28,31 @@ export type AddedSupplementCard = ExistingSuppItemData & {
   `,
 })
 export class AddedSupplementItem {
-  data = input.required<AddedSupplementCard | undefined>();
-  _data = linkedSignal<AddedSupplementCard>(() => ({
-    ...this.data(),
-    id: this.data()?.id ?? '',
-    name: this.data()?.name ?? '',
-    images: this.data()?.images ?? [],
-    bottleCount: 1,
-    daysLeft: 1,
-  }));
+  data = input.required<AddedSupplementCard>();
 
   selected = input(false);
   supplementSelected = output<AddedSupplementCard>();
+  stockChanged = output<SupplementStockChangeEvent>();
 
   stockDaysLeft = computed(() => {
-    const d = this._data();
+    const d = this.data();
     const bottles = d?.bottleCount;
-    if (bottles) {
-      return (bottles * (d.unitsPerContainer ?? 0)) / (d.servingUnits ?? 1);
-    } else return 0;
+    return bottles ? (bottles * (d.unitsPerContainer ?? 0)) / (d.servingUnits ?? 1) : 0;
   });
 
-  constructor() {
-    effect(() => console.log(this.data()));
-    // effect(() => console.log(this._data()));
-  }
-
   increaseBottleStock(): void {
-    this._data.update((d) => ({ ...d, bottleCount: d.bottleCount + 1 }));
+    const d = this.data();
+    this.stockChanged.emit({
+      catalogId: d.id ?? '',
+      newStock: (d.bottleCount ?? 1) + 1,
+    });
   }
 
   decreaseBottleStock(): void {
-    this._data.update((d) => ({
-      ...d,
-      bottleCount: d.bottleCount > 0 ? d.bottleCount - 1 : d.bottleCount,
-    }));
+    const d = this.data();
+    this.stockChanged.emit({
+      catalogId: d.id ?? '',
+      newStock: (d.bottleCount ?? 0) > 0 ? d.bottleCount - 1 : d.bottleCount,
+    });
   }
 }

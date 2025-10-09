@@ -1,4 +1,4 @@
-export * from './lib/add-to-inventory/existing-supplement-item/existing-supplement-item.component';
+export * from './lib/add-to-inventory/existing-supplement-dropdown-item/existing-supplement-item.component';
 export * from './lib/create-supplement/create-supplement.component';
 export * from './lib/supplement-card/supplement-card.component';
 export * from './lib/supplement-shell/all-supplements/all-supplements.component';

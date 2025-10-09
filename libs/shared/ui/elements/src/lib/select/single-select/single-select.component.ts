@@ -69,23 +69,37 @@ export class SingleSelectComponent<T>
   );
 
   readonly options = input<ListItem<T>[]>([]);
-  readonly _options = linkedSignal(() =>
-    this.options().map((opt) => ({
-      ...opt,
-      id: stableCellId(`${opt.displayText}|${opt.data}`),
-    })),
-  );
-
   readonly listItemRenderComponent = input<Type<CustomListItemComponent<T>> | undefined>(
     undefined,
   );
-
   icon = input<IconType>();
   appearance = input<'default' | 'minimal'>('default');
   size = input<Extract<Size, 'sm' | 'lg'>>('lg');
   tagLabel = input('');
   hint = input('');
   selectedCount = input(0, { transform: coerceNumberProperty });
+
+  selectionChange = output<ListItem<T>>();
+
+  readonly _options = linkedSignal(() =>
+    this.options().map((opt) => ({
+      ...opt,
+      id: stableCellId(`${opt.displayText}|${opt.data}`),
+    })),
+  );
+  providers = computed<Provider[]>(() => [
+    {
+      provide: DROPDOWN_CONFIG,
+      useValue: {
+        type: 'single',
+        dropdownSize: this.size(),
+        options: this._options(),
+        selectedCell: this._value(),
+        selectionModel: this.selectionModel,
+        listItemRenderComponent: this.listItemRenderComponent(),
+      } as DropdownConfig<T>,
+    },
+  ]);
 
   override writeValue(value: ListItem<T> | null): void {
     if (value) {
@@ -104,22 +118,6 @@ export class SingleSelectComponent<T>
   override setDisabledState(isDisabled: boolean): void {
     this._disabled.set(isDisabled);
   }
-
-  providers = computed<Provider[]>(() => [
-    {
-      provide: DROPDOWN_CONFIG,
-      useValue: {
-        type: 'single',
-        dropdownSize: this.size(),
-        options: this._options(),
-        selectedCell: this._value(),
-        selectionModel: this.selectionModel,
-        listItemRenderComponent: this.listItemRenderComponent(),
-      } as DropdownConfig<T>,
-    },
-  ]);
-
-  selectionChange = output<ListItem<T>>();
 
   constructor() {
     super();
@@ -141,7 +139,6 @@ export class SingleSelectComponent<T>
       }
     });
     effect(() => {
-      this.writeValue(this._value() ?? null);
       this.onChange(this._value() ?? null);
     });
   }

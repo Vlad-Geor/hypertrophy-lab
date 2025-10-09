@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormControlWrapperComponent } from '../form-control/form-control-wrapper.component';
 import { FormControlComponent } from '../form-control/form-control.component';
 
@@ -11,22 +11,22 @@ import { FormControlComponent } from '../form-control/form-control.component';
 export class SlideToggleComponent extends FormControlComponent<boolean> {
   isActive = signal(false);
 
+  // onChange = (v: boolean | null | undefined) => {};
+  // private onTouched = () => {};
+
   toggleSlide() {
-    this.isActive.update((active) => !active);
+    if (this.disabled()) return;
+    const v = !this.isActive();
+    this.isActive.set(v);
+    this._value.set(v);
+    this.onChange(v);
+    this.onTouched();
   }
 
-  constructor() {
-    super();
-    effect(() => {
-      this.writeValue(this.isActive());
-      this.onChange(this.isActive());
-    });
-  }
-
-  override writeValue(value: boolean): void {
-    if (value) {
-      this._value.set(value);
-    }
+  override writeValue(value: boolean | null): void {
+    const val = !!value;
+    this.isActive.set(val);
+    this._value.set(val);
   }
   override registerOnChange(fn: (value?: boolean | null) => void): void {
     this.onChange = fn;

@@ -36,8 +36,6 @@ export abstract class FormControlComponent<T> implements ControlValueAccessor {
 
   onInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
-    console.log(input.value);
-
     this._value.set(input.value as T);
     this.onChange(this._value());
   }

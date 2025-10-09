@@ -16,6 +16,8 @@ import { Size, Theme } from '@ikigaidev/model';
   styleUrl: './tag.component.scss',
   host: {
     class: `text-token border border-token-active`,
+    '[class.text-token]': '!(theme() === "primary")',
+    '[class.text-token-bright]': 'theme() === "primary"',
     '[class]': '[size(), theme()]',
     '[class.bg-token-soft]': 'appearance() === "fill"',
     '[class.round-chip]': 'rounded()',

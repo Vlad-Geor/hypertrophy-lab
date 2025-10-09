@@ -15,7 +15,7 @@ import { AddSupplementToInventory } from '../../add-to-inventory/add-to-inventor
 import {
   ExistingSuppItemData,
   ExistingSupplementItem,
-} from '../../add-to-inventory/existing-supplement-item/existing-supplement-item.component';
+} from '../../add-to-inventory/existing-supplement-dropdown-item/existing-supplement-item.component';
 
 export type DemiType = {
   valOne: string;

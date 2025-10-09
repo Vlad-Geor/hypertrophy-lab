@@ -141,7 +141,6 @@ export class MultiSelectComponent<T>
       const dropdownRef = this.dropdownCompRef();
       if (dropdownRef) {
         dropdownRef.instance.confirmClicked.subscribe((v) => {
-          this.writeValue(v);
           this.onChange(v);
           this.confirm.emit(v);
           this.overlayDirectiveRef.close();
@@ -161,7 +160,6 @@ export class MultiSelectComponent<T>
   }
 
   onClear(): void {
-    this.writeValue([]);
     this.onChange([]);
     this.selectionModel.clear();
   }

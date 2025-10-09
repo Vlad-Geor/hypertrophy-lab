@@ -10,6 +10,7 @@ export const iconType = [
   'arrows-up-down-liner',
   'bars-solid',
   'save-liner',
+  'bullseye-liner',
   'bed-solid',
   'moon-liner',
   'sunrise-liner',

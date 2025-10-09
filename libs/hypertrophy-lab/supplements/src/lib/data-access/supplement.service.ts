@@ -2,6 +2,7 @@ import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@ikigaidev/config';
 import {
+  addInventoryBulkExistingRequest,
   AddInventoryBulkExistingRequest,
   AddInventoryBulkExistingResponse,
   ListCatalogResponse,
@@ -16,9 +17,11 @@ export class SupplementService {
   private readonly http = inject(HttpClient);
   private readonly API_BASE = inject(API_BASE_URL);
 
-  userSupplements = httpResource<ListInventoryResponse>(
-    () => `${this.API_BASE}${API.inventory}`,
-  );
+  getAllSupplements(includeUser: boolean): Observable<ListCatalogResponse> {
+    return this.http.get<ListCatalogResponse>(
+      `${this.API_BASE}/supplements${includeUser ? '?includeUser=true' : ''}`,
+    );
+  }
 
   getUserSupplements(): Observable<ListInventoryResponse> {
     return this.http.get<ListInventoryResponse>(`${this.API_BASE}${API.inventory}`);
@@ -31,6 +34,9 @@ export class SupplementService {
   addExistingSupplementsToUserBulk(
     req: AddInventoryBulkExistingRequest,
   ): Observable<AddInventoryBulkExistingResponse> {
+    const parsed = addInventoryBulkExistingRequest.safeParse(req);
+    console.log(parsed);
+
     return of({} as AddInventoryBulkExistingResponse);
   }
 

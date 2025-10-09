@@ -43,6 +43,14 @@ export const SupplementStore = signalStore(
     setUserSupplementQuery(userSupplementsTargetFilter: string): void {
       patchState(store, { userSupplementsTargetFilter });
     },
+    // getAllSupplements: rxMethod<boolean | undefined>(
+    //   pipe(
+    //     map((includeUser) => !!includeUser),
+    //     exhaustMap((includeUser) => {
+
+    //     })
+    //   )
+    // ),
     getUserSupplements: rxMethod<boolean | undefined>(
       pipe(
         map((force) => !!force),

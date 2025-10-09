@@ -9,6 +9,7 @@
 }
 [data-tone='primary'] {
   --tone: var(--primary);
+  --tone-bright: var(--primary-bright);
   --tone-ghost: var(--primary-ghost);
   --tone-subtle: var(--primary-subtle);
   --tone-soft: var(--primary-soft);

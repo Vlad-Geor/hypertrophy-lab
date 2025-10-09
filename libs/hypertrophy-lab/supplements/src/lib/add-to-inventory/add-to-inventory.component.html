@@ -38,54 +38,104 @@
 
 <lib-divider></lib-divider>
 
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
-  <div class="flex items-center justify-between gap-4">
-    <lib-input
-      size="sm"
-      type="number"
-      label="Current Stock"
-      formControlName="description"
-      placeholder="Left at home"
-    ></lib-input>
-    <lib-single-select
-      [listItemRenderComponent]="existingSuppComponent"
-      size="sm"
-      appearance="minimal"
-      label="Reorder Threshold"
-      [options]="options() ?? []"
-      placeholder="e.g 7 units"
-      formControlName="selectedSingleItem"
-    ></lib-single-select>
+<!-- @if (selectedGroup()) { -->
+@if (selectedGroup()) {
+  <div class="flex items-center gap-2 text-secondary font-medium mb-2">
+    <lib-icon [iconSize]="24" class="text-secondary" [icon]="'bullseye-liner'"></lib-icon>
+    <span>{{ selectedCatalog()?.name ?? '' }}</span>
+    <span class="text-gray-text text-xs">(Per supplement settings)</span>
   </div>
+}
 
-  <div class="flex items-center gap-4 mb-1">
-    <div class="flex-1">
-      <lib-slide-toggle
-        formControlName="reminders"
-        label="Intake Reminders"
-      ></lib-slide-toggle>
+@if (!selectedGroup()) {
+  <p class="text-sm text-gray-text">
+    Choose the supplements you wish to add to your inventory, then select each to adjust
+    settings.
+    <br />
+    Settings will appear here.
+  </p>
+}
+
+@if (selectedGroup()) {
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
+    <div formArrayName="items">
+      <div [formGroup]="selectedGroup()!" class="flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-4">
+          <lib-input
+            size="sm"
+            type="number"
+            label="Remaining Stock"
+            formControlName="quantityUnits"
+            placeholder="Left at home"
+          ></lib-input>
+          <lib-single-select
+            size="sm"
+            appearance="minimal"
+            label="Reorder Threshold"
+            [options]="unitOptions()"
+            placeholder="e.g 7 units"
+            formControlName="lowStockThresholdUnits"
+          ></lib-single-select>
+        </div>
+        <div
+          class="flex items-center gap-4 mb-1"
+          [formGroup]="selectedGroup()?.controls?.settings!"
+        >
+          <div class="flex-1">
+            <lib-slide-toggle
+              formControlName="intakeRemindersEnabled"
+              label="Intake Reminders"
+            ></lib-slide-toggle>
+          </div>
+          <div class="flex-1">
+            <lib-slide-toggle
+              formControlName="lowStockAlertsEnabled"
+              label="Low Stock Alerts"
+            ></lib-slide-toggle>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="flex-1">
-      <lib-slide-toggle
-        formControlName="lowStockAlerts"
-        label="Low Stock Alerts"
-      ></lib-slide-toggle>
-    </div>
-  </div>
+  </form>
+}
 
-  <p class="text-lg font-medium text-white">Choose a supplement to add:</p>
-  <lib-divider></lib-divider>
-
+<div class="flex flex-col gap-2">
+  <p class="text-lg font-medium text-white">Select Supplements:</p>
   @if (supplementData.hasValue()) {
     <lib-multi-select
       placeholder="Choose supplements"
       [listItemRenderComponent]="existingSuppComponent"
       [items]="options() ?? []"
-      formControlName="existingItems"
+      [formControl]="existingItemsDropdown"
     ></lib-multi-select>
+  } @else if (supplementData.isLoading()) {
+    <lib-bouncing-loader></lib-bouncing-loader>
   }
 
-  <!-- <div class="px-2">
+  @if (selectedSupplementsData().length) {
+    <hl-added-supplements-overview
+      class="mt-1"
+      (supplementSelected)="onSupplementOverviewSelect($event)"
+      (stockChanged)="onStockChanged($event)"
+      [data]="selectedSupplementsData()"
+    ></hl-added-supplements-overview>
+  }
+</div>
+
+<div class="flex justify-center gap-3">
+  <lib-button appearance="outline" (click)="onClose()">Discard</lib-button>
+  <lib-button (click)="onSubmit()" theme="gradient-primary" [disabled]="!selectedGroup()">
+    <lib-icon
+      left
+      [icon]="'check-circle-broken-liner'"
+      [iconSize]="20"
+      class="text-white"
+    ></lib-icon>
+    <p class="text-white">Save</p>
+  </lib-button>
+</div>
+
+<!-- <div class="px-2">
     <p class="mb-3">Image</p>
     @if (previewUrl()) {
       <img
@@ -117,23 +167,3 @@
       </div>
     }
   </div> -->
-</form>
-
-<div>
-  <hl-added-supplements-overview
-    [data]="selectedSupplementsData()"
-  ></hl-added-supplements-overview>
-</div>
-
-<div class="flex justify-center gap-3">
-  <lib-button appearance="outline" (click)="onClose()">Discard</lib-button>
-  <lib-button (click)="onSubmit()" theme="gradient-primary">
-    <lib-icon
-      left
-      [icon]="'check-circle-broken-liner'"
-      [iconSize]="20"
-      class="text-white"
-    ></lib-icon>
-    <p class="text-white">Save</p>
-  </lib-button>
-</div>
