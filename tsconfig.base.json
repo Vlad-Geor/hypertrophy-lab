@@ -21,6 +21,7 @@
       "@ikigaidev/carousel": ["libs/shared/ui/carousel/src/index.ts"],
       "@ikigaidev/config": ["libs/shared/config/src/index.ts"],
       "@ikigaidev/contracts": ["libs/shared/contracts/src/index.ts"],
+      "@ikigaidev/contracts/*": ["libs/shared/contracts/src/*"],
       "@ikigaidev/data-access": ["libs/shared/data-access/src/index.ts"],
       "@ikigaidev/decorators": ["libs/shared/decorators/src/index.ts"],
       "@ikigaidev/directive": ["libs/shared/directive/src/index.ts"],

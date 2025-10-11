@@ -1,0 +1,27 @@
+@if (label() || placeholder()) {
+  <p class="text-sm text-text-3">{{ label() ?? placeholder() }}</p>
+}
+
+<div
+  tabindex="0"
+  (keypress.enter)="toggleCheckbox()"
+  (click)="toggleCheckbox()"
+  class="flex items-center justify-center rounded hover:cursor-pointer"
+  [ngClass]="{
+    'w-5 h-5': size() === 'sm',
+    'w-6 h-6': size() === 'md',
+    'border border-gray-text': !_value(),
+    'bg-gradient-primary': _value() && !_disabled(),
+    'bg-gray': _value() && _disabled(),
+    'hover:pointer-events-none': _disabled(),
+  }"
+>
+  @if (_value()) {
+    <lib-icon
+      class="text-white"
+      [icon]="'check-solid'"
+      [iconSize]="14"
+      [fillContainer]="true"
+    ></lib-icon>
+  }
+</div>

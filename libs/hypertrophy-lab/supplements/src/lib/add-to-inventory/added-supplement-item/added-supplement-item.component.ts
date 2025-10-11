@@ -1,7 +1,7 @@
 import { JsonPipe } from '@angular/common';
 import { Component, computed, input, output } from '@angular/core';
 import { ImagePlaceholderDirective } from '@ikigaidev/directive';
-import { TagComponent } from '@ikigaidev/elements';
+import { Checkbox, TagComponent } from '@ikigaidev/elements';
 import { ExistingSuppItemData } from '../existing-supplement-dropdown-item/existing-supplement-item.component';
 
 export type AddedSupplementCard = ExistingSuppItemData & {
@@ -14,7 +14,7 @@ export type SupplementStockChangeEvent = { catalogId: string; newStock: number }
 @Component({
   selector: 'hl-added-supplement-item',
   templateUrl: './added-supplement-item.component.html',
-  imports: [JsonPipe, ImagePlaceholderDirective, TagComponent],
+  imports: [JsonPipe, ImagePlaceholderDirective, TagComponent, Checkbox],
   host: {
     '(click)': 'supplementSelected.emit(data())',
     class:

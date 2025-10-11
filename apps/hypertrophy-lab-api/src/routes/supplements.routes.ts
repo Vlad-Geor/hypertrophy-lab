@@ -8,6 +8,7 @@ import * as targets from '../controllers/target.controller';
 const r = Router();
 
 r.get('/', ctl.listCatalog);
+r.get('/available', ctl.getAvailable);
 r.get('/:id', ctl.getCatalogById);
 r.post('/', ctl.createCatalog);
 

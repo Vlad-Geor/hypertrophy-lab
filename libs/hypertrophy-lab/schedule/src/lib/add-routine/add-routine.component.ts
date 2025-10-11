@@ -1,0 +1,142 @@
+import { TitleCasePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { TimeOfDay } from '@ikigaidev/contracts';
+import {ExistingSuppItemData, ExistingSupplementItem, SupplementService} from '@ikigaidev/hl/supplements';
+import {
+  ButtonComponent,
+  Checkbox,
+  IconButtonComponent,
+  IconComponent,
+  InputComponent,
+  SingleSelectComponent,
+  TextareaComponent,
+} from '@ikigaidev/elements';
+import { CreatePlanRequest } from '@ikigaidev/hl/contracts';
+import { ListItem } from '@ikigaidev/model';
+import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
+import { debounceTime, filter, map } from 'rxjs';
+import { DaysGroup } from '../model/create-routine-form.model';
+import { DAY_KEYS, DAY_NUM } from '../model/weekdays.model';
+import { toSignal, toObservable } from '@angular/core/rxjs-interop';
+
+type AddRoutineForm = {
+  days: FormGroup<DaysGroup>;
+  timeOfDay: FormControl<TimeOfDay>;
+  unitsPerDose: FormControl<number>;
+  userSupplementId: FormControl<string>;
+  notes: FormControl<string>;
+};
+
+@Component({
+  selector: 'hl-add-routine',
+  templateUrl: './add-routine.component.html',
+  imports: [
+    IconComponent,
+    ButtonComponent,
+    IconButtonComponent,
+    Checkbox,
+    InputComponent,
+    ReactiveFormsModule,
+    SingleSelectComponent,
+    TextareaComponent,
+    TitleCasePipe,
+  ],
+  host: {
+    class:
+      'max-w-[320px] md:max-w-md bg-surface p-3 pl-4 flex flex-col gap-4 rounded-2xl border border-gray-active shadow-2xl',
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class AddRoutine {
+  private readonly suppService = inject(SupplementService);
+  private readonly fb = inject(FormBuilder);
+  protected globalOverlayRef = inject<GlobalOverlayRef>(GLOBAL_OVERLAY_REF, {
+    optional: true,
+  });
+  existingSuppComponent = ExistingSupplementItem;
+
+  DAYS = DAY_KEYS;
+  timeOfDayOptions = signal<ListItem<TimeOfDay>[]>([
+    { displayText: 'morning', value: 'morning', data: 'morning' },
+    { displayText: 'afternoon', value: 'afternoon', data: 'afternoon' },
+    { displayText: 'evening', value: 'evening', data: 'evening' },
+    { displayText: 'bedtime', value: 'bedtime', data: 'bedtime' },
+  ]);
+  noPlanSupplements = this.suppService.userSupplements(true);
+  addRoutineOptions = toSignal(
+    toObservable(this.noPlanSupplements.value).pipe(
+      filter(Boolean),
+      map(
+        (response) =>
+          response?.items.map((d) => ({
+            data: {
+              id: d.catalogId,
+              images: d.images,
+              name: d.catalogName,
+              form: d.form,
+              servingUnits: Number(d.servingUnits),
+              unitsPerContainer: d.unitsPerContainer,
+            },
+            displayText: d.catalogName,
+          })) as ListItem<ExistingSuppItemData>[] | undefined,
+      ),
+    ),
+  );
+
+
+  readonly form = this.fb.group<AddRoutineForm>({
+    days: this.fb.group<DaysGroup>({
+      sun: this.fb.nonNullable.control(false),
+      mon: this.fb.nonNullable.control(false),
+      tue: this.fb.nonNullable.control(false),
+      wed: this.fb.nonNullable.control(false),
+      thu: this.fb.nonNullable.control(false),
+      fri: this.fb.nonNullable.control(false),
+      sat: this.fb.nonNullable.control(false),
+    }),
+    timeOfDay: this.fb.nonNullable.control<TimeOfDay>('morning'),
+    unitsPerDose: this.fb.nonNullable.control(0),
+    userSupplementId: this.fb.nonNullable.control(''),
+    notes: this.fb.nonNullable.control(''),
+  });
+
+  constructor() {
+    this.form.valueChanges.pipe(debounceTime(200)).subscribe(console.log);
+  }
+
+  private daysToArray(): number[] {
+    const v = this.form.controls.days.getRawValue();
+    return DAY_KEYS.filter((k) => v[k]).map((k) => DAY_NUM[k]);
+  }
+
+  // submit mapping to DTO
+  toCreatePlanRequest(): CreatePlanRequest {
+    const { timeOfDay, unitsPerDose, userSupplementId, notes } = this.form.getRawValue();
+    return {
+      daysOfWeek: this.daysToArray(),
+      timeOfDay,
+      unitsPerDose,
+      userSupplementId,
+      notes,
+    };
+  }
+
+  // optional: patch from numbers -> checkboxes (for edit)
+  patchDays(nums: number[]) {
+    const set = new Set(nums);
+    for (const k of DAY_KEYS) {
+      this.form.controls.days.controls[k].setValue(set.has(DAY_NUM[k]), {
+        emitEvent: false,
+      });
+    }
+  }
+
+  onClose(): void {
+    if (this.globalOverlayRef) this.globalOverlayRef.close();
+  }
+
+  onSubmit(): void {
+    console.log('');
+  }
+}

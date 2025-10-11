@@ -10,7 +10,7 @@ import {
 } from '@ikigaidev/hl/contracts';
 import { Supplement } from '@ikigaidev/hl/model';
 import { API, API_BASE_URL } from '@ikigaidev/hl/shared';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SupplementService {
@@ -23,9 +23,16 @@ export class SupplementService {
     );
   }
 
-  getUserSupplements(): Observable<ListInventoryResponse> {
-    return this.http.get<ListInventoryResponse>(`${this.API_BASE}${API.inventory}`);
+  getUserSupplements(withoutPlan?: boolean): Observable<ListInventoryResponse> {
+    return this.http.get<ListInventoryResponse>(
+      `${this.API_BASE}${API.inventory}${withoutPlan ? '?withoutPlan=true' : ''}`,
+    );
   }
+
+  userSupplements = (withoutPlan?: boolean) =>
+    httpResource<ListInventoryResponse>(
+      () => `${this.API_BASE}${API.inventory}${withoutPlan ? '?withoutPlan=true' : ''}`,
+    );
 
   addCatalogSupplement(payload: Supplement): Observable<Supplement> {
     return this.http.post<Supplement>(`${environment.apiBase}/supplements`, payload);
@@ -35,9 +42,12 @@ export class SupplementService {
     req: AddInventoryBulkExistingRequest,
   ): Observable<AddInventoryBulkExistingResponse> {
     const parsed = addInventoryBulkExistingRequest.safeParse(req);
-    console.log(parsed);
-
-    return of({} as AddInventoryBulkExistingResponse);
+    if (parsed.error)
+      throw new Error(`Invalid supplement add bulk, err: ${parsed.error.message}`);
+    return this.http.post<AddInventoryBulkExistingResponse>(
+      `${environment.apiBase}${API.inventory}/bulk-existing`,
+      req,
+    );
   }
 
   getCatalogSupplements(): Supplement[] {

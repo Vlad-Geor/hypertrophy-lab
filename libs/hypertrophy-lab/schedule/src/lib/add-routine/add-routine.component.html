@@ -1,0 +1,60 @@
+<div class="flex items-center justify-between">
+  <div class="flex items-center gap-3">
+    <lib-icon [icon]="'clock-solid'" [iconSize]="24" class="text-primary"></lib-icon>
+    <p tabindex="0" class="text-xl font-semibold text-white" (keypress.enter)="onClose()">
+      Add New Routine
+    </p>
+  </div>
+  <lib-icon-button
+    class="text-text-3"
+    [icon]="'xmark-solid'"
+    (click)="onClose()"
+  ></lib-icon-button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+  <div class="flex items-center gap-5">
+    <lib-single-select
+      [options]="addRoutineOptions() ?? []"
+      [listItemRenderComponent]="existingSuppComponent"
+      placeholder="Select Supplements"
+      label="Supplement"
+      formControlName="userSupplementId"
+    ></lib-single-select>
+    <lib-single-select
+      [options]="timeOfDayOptions()"
+      label="Time of Day"
+      placeholder="Choose time of day"
+      formControlName="timeOfDay"
+    ></lib-single-select>
+  </div>
+  <lib-input
+    type="number"
+    label="Dosage Amount"
+    formControlName="unitsPerDose"
+  ></lib-input>
+
+  <div formGroupName="days">
+    <p class="text-text-3 text-sm mb-3">Days of week</p>
+    <div class="flex flex-wrap gap-3">
+      @for (item of DAYS; track $index) {
+        <lib-checkbox
+          size="sm"
+          [formControlName]="item"
+          [label]="item | titlecase"
+        ></lib-checkbox>
+      }
+    </div>
+  </div>
+
+  <lib-textarea
+    placeholder="e.g., Take with food, Before workout..."
+    formControlName="notes"
+    label="Notes (optional)"
+  ></lib-textarea>
+</form>
+
+<div class="flex justify-center gap-3">
+  <lib-button appearance="outline" (click)="onClose()">Discard</lib-button>
+  <lib-button (click)="onSubmit()">Save</lib-button>
+</div>

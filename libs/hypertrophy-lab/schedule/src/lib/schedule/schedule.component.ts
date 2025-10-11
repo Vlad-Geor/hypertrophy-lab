@@ -1,5 +1,11 @@
 import { DatePipe, TitleCasePipe } from '@angular/common';
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   BouncingLoaderComponent,
   ButtonComponent,
@@ -10,6 +16,8 @@ import {
 } from '@ikigaidev/elements';
 import { Daypart, NoData } from '@ikigaidev/hl/shared';
 import { SurfaceCard } from '@ikigaidev/hl/ui';
+import { GlobalOverlay } from '@ikigaidev/overlay';
+import { AddRoutine } from '../add-routine/add-routine.component';
 import { ScheduleService } from '../data-access/schedule.service';
 import { DayPartOverview } from '../ui/day-part-overview/day-part-overview.component';
 import { IntakeLogCard } from '../ui/intake-log-card/intake-log-card.component';
@@ -32,13 +40,15 @@ import { dayPartFilters } from './day-section-pills';
     BouncingLoaderComponent,
   ],
   providers: [ScheduleService],
-  templateUrl: './schedule.html',
+  templateUrl: './schedule.component.html',
   host: {
     class: 'flex flex-col gap-4',
   },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Schedule {
   private scheduleService = inject(ScheduleService);
+  private readonly globalOverlay = inject(GlobalOverlay);
 
   today = new Date();
   todayFormatted = signal(this.today.toISOString().slice(0, 10));
@@ -68,5 +78,11 @@ export class Schedule {
 
   onDaypartFilter(dayPart: Daypart): void {
     this.selectedDaypartFilter.set(dayPart);
+  }
+
+  addRoutine(): void {
+    this.globalOverlay.openComponent(AddRoutine, {
+      overlayConfig: { hasBackdrop: true, backdropClass: 'bg-black/80' },
+    });
   }
 }

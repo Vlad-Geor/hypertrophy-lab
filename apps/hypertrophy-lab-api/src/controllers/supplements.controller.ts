@@ -1,4 +1,4 @@
-import { createCatalogRequest } from '@ikigaidev/hl/contracts';
+import { availableSuppsQuery, createCatalogRequest } from '@ikigaidev/hl/contracts';
 import { Request, RequestHandler } from 'express';
 import { ZodError } from 'zod';
 import * as svc from '../services/supplement.service';
@@ -45,14 +45,27 @@ export const getCatalogById: RequestHandler<{ id: string }> = async (req, res) =
   res.json(data);
 };
 
+export const getAvailable: RequestHandler = async (req: Request, res) => {
+  try {
+    const q = availableSuppsQuery.parse(req.query);
+    const result = await svc.getAvailableCatalog(req.user.id, q);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 export const createCatalog: RequestHandler = async (req: Request, res) => {
   const includeUser = req.query.includeUser === '1' || req.query.includeUser === 'true';
   const userId = includeUser ? req.user?.id : undefined;
-
   try {
-    const dto = createCatalogRequest.parse(req.body);
-    const result = await svc.createCatalog(dto, userId);
-    res.status(201).json(result);
+    const dto = createCatalogRequest.safeParse(req.body);
+    if (dto.success) {
+      const result = await svc.createCatalog(dto.data, userId);
+      res.status(201).json(result);
+    } else {
+      console.log(dto.data);
+    }
   } catch (err) {
     if (err instanceof ZodError) {
       return res.status(400).json({
@@ -62,7 +75,7 @@ export const createCatalog: RequestHandler = async (req: Request, res) => {
         })),
       });
     }
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error', message: err });
   }
 };
 

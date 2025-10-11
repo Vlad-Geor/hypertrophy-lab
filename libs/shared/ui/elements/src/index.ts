@@ -2,6 +2,7 @@ export * from './lib/avatar/avatar.component';
 export * from './lib/badge/badge.component';
 export * from './lib/button/button.component';
 export * from './lib/button/icon-button/icon-button.component';
+export * from './lib/checkbox/checkbox.component';
 export * from './lib/date-picker/date-picker.component';
 export * from './lib/date-range-picker/date-range-picker.component';
 export * from './lib/divider/divider.component';

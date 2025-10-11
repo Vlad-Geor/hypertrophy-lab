@@ -10,6 +10,7 @@ import { environment } from '@ikigaidev/config';
 import { CloudinaryService, CloudinaryUploadRes } from '@ikigaidev/data-access';
 import {
   ButtonComponent,
+  Checkbox,
   DatePickerComponent,
   IconButtonComponent,
   IconComponent,
@@ -31,6 +32,7 @@ import { SupplementService } from '../data-access/supplement.service';
     MatInputModule,
     MatFormFieldModule,
     ReactiveFormsModule,
+    Checkbox,
     MatNativeDateModule,
     InputComponent,
     ButtonComponent,

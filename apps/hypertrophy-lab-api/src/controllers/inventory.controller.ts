@@ -6,11 +6,17 @@ import { Request, RequestHandler } from 'express';
 import * as svc from '../services/inventory.service';
 
 export const list: RequestHandler = async (req: Request, res) => {
-  const { q, archived } = req.query as any;
+  const { q, archived, withoutPlan } = req.query as any;
   const page = Number(req.query.page ?? 1);
   const limit = Number(req.query.limit ?? 20);
   res.json(
-    await svc.list(req.user.id, { q, archived: archived === 'true', page, limit }),
+    await svc.list(req.user.id, {
+      q,
+      archived: archived === 'true',
+      withoutPlan: withoutPlan === 'true',
+      page,
+      limit,
+    }),
   );
 };
 
@@ -31,7 +37,9 @@ export const addBulkExisting: RequestHandler = async (req: Request, res, next) =
     // console.log('req.body printed: ', req.body);
     // res.status(404).json('Test');
     // return;
-    const items = addInventoryBulkExistingRequest.parse(req.body.items);
+    console.log('API log: ', req.body);
+
+    const items = addInventoryBulkExistingRequest.parse(req.body);
     const results = await svc.addBulkExisting(req.user.id, items.items);
     res.status(201).json({ results });
   } catch (e) {

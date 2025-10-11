@@ -1,4 +1,4 @@
-import { isoDateTime, pageMeta, paginationQuery, uuid } from '@ikigaidev/contracts';
+import { isoDateTime,  listQuerySchema,  pageMeta, paginationQuery, uuid } from '@ikigaidev/contracts';
 import { z } from 'zod';
 import { targetSchema } from './target.schema';
 
@@ -59,7 +59,7 @@ export const supplementCatalogItem = supplementCatalogSchema
   })
   .extend({ onHand: z.number().optional(), hasInventory: z.boolean().optional() });
 
-export const listCatalogQuery = paginationQuery.extend({
+export const listCatalogQuery = z.object(paginationQuery).extend({
   q: z.string().trim().min(1).optional(),
   brandId: uuid.optional(),
   targetId: uuid.optional(),
@@ -92,6 +92,9 @@ export const createCatalogRequest = z.object({
 
 export const createCatalogResponse = z.object({ id: uuid });
 
+export const availableSuppsQuery = listQuerySchema;
+
+export type AvailableQuerySupps = z.infer<typeof availableSuppsQuery>;
 export type CreateCatalogRequest = z.infer<typeof createCatalogRequest>;
 export type CreateCatalogResponse = z.infer<typeof createCatalogResponse>;
 export type SupplementCatalog = z.infer<typeof supplementCatalogSchema>;

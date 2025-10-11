@@ -265,7 +265,7 @@ export class AddSupplementToInventory {
         const extra = selectedByCatalogId.get(catalogId ?? '') ?? 0;
         return {
           catalogId,
-          lowStockThresholdUnits,
+          lowStockThresholdUnits: lowStockThresholdUnits ?? 0,
           initialBatch: {
             quantityUnits: (quantityUnits ?? 0) + extra,
           },

@@ -1,4 +1,9 @@
-import { createCatalogRequest, CreateCatalogRequest } from '@ikigaidev/hl/contracts';
+import {
+  AvailableQuerySupps,
+  // AvailableQuerySupps,
+  createCatalogRequest,
+  CreateCatalogRequest,
+} from '@ikigaidev/hl/contracts';
 import {} from '../repositories/supplements.repo';
 
 import * as repo from '../repositories/supplements.repo';
@@ -39,6 +44,14 @@ export async function listCatalog(
     })),
     page: { page, limit, total },
   };
+}
+
+export async function getAvailableCatalog(userId: string, q: AvailableQuerySupps) {
+  const [items, total] = await Promise.all([
+    repo.findAvailable(userId, q),
+    repo.countAvailable(userId, q),
+  ]);
+  return { items, limit: q.limit, offset: q.offset, total };
 }
 
 export async function getCatalogById(id: string) {

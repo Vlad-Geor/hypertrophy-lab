@@ -3,15 +3,31 @@ import * as suppRepo from '../repositories/supplements.repo';
 
 export async function list(
   userId: string,
-  params: { q?: string; archived?: boolean; page?: number; limit?: number },
+  params: {
+    q?: string;
+    archived?: boolean;
+    page?: number;
+    limit?: number;
+    withoutPlan?: boolean;
+  },
 ) {
   const page = Math.max(params.page ?? 1, 1);
   const limit = Math.min(Math.max(params.limit ?? 20, 1), 100);
   const offset = (page - 1) * limit;
 
   const [total, items] = await Promise.all([
-    repo.countInventory(userId, { q: params.q, archived: params.archived }),
-    repo.listInventory(userId, { q: params.q, archived: params.archived, limit, offset }),
+    repo.countInventory(userId, {
+      q: params.q,
+      archived: params.archived,
+      withoutPlan: params.withoutPlan,
+    }),
+    repo.listInventory(userId, {
+      q: params.q,
+      archived: params.archived,
+      limit,
+      offset,
+      withoutPlan: params.withoutPlan,
+    }),
   ]);
 
   return { items, page: { page, limit, total } };

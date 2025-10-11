@@ -2,7 +2,7 @@ import {
   isoDate,
   isoDateTime,
   pageMeta,
-  paginationQuery,
+  paginationQuerySchema,
   uuid,
 } from '@ikigaidev/contracts';
 import { z } from 'zod';
@@ -39,7 +39,7 @@ export const inventoryComputed = z.object({
   cover: z.url().nullable().optional(),
 });
 
-export const listInventoryQuery = paginationQuery.extend({
+export const listInventoryQuery = paginationQuerySchema.extend({
   archived: z.coerce.boolean().optional(),
   q: z.string().trim().min(1).optional(),
 });

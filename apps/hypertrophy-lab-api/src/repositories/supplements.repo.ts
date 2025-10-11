@@ -1,6 +1,10 @@
 /** @format */
 
-import { createCatalogRequest, CreateCatalogRequest } from '@ikigaidev/hl/contracts';
+import {
+  AvailableQuerySupps,
+  createCatalogRequest,
+  CreateCatalogRequest,
+} from '@ikigaidev/hl/contracts';
 import { db } from '../config/database';
 
 type CatalogRow = {
@@ -18,6 +22,67 @@ type CatalogRow = {
   servingUnits: number;
   hasInventory: boolean;
 };
+
+export async function findAvailable(userId: string, q: AvailableQuerySupps) {
+  const sortCol = q.sort === 'brand' ? 'b.name' : q.sort === 'form' ? 'c.form' : 'c.name';
+
+  const qb = db
+    .from('nutrition.supplement_catalog as c')
+    .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
+    .whereNotExists(
+      db
+        .from('nutrition.user_supplements as us')
+        .select(db.raw('1'))
+        .where('us.user_id', userId)
+        .whereRaw('us.catalog_id = c.id'),
+    );
+
+  if (q.q) {
+    qb.andWhere((b) => {
+      b.whereILike('c.name', `%${q.q}%`)
+        .orWhereILike('b.name', `%${q.q}%`)
+        .orWhereILike('c.form', `%${q.q}%`);
+    });
+  }
+
+  return qb
+    .select(
+      'c.id',
+      'c.name',
+      'c.form',
+      'c.brand_id as brandId',
+      'b.name as brandName',
+      'c.serving_units as servingUnits',
+      'c.product_url as productUrl',
+    )
+    .orderBy(sortCol, q.dir)
+    .limit(q.limit)
+    .offset(q.offset);
+}
+
+export async function countAvailable(userId: string, q: AvailableQuerySupps) {
+  const qb = db
+    .from('nutrition.supplement_catalog as c')
+    .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
+    .whereNotExists(
+      db
+        .from('nutrition.user_supplements as us')
+        .select(db.raw('1'))
+        .where('us.user_id', userId)
+        .whereRaw('us.catalog_id = c.id'),
+    );
+
+  if (q.q) {
+    qb.andWhere((b) => {
+      b.whereILike('c.name', `%${q.q}%`)
+        .orWhereILike('b.name', `%${q.q}%`)
+        .orWhereILike('c.form', `%${q.q}%`);
+    });
+  }
+
+  const row = await qb.clearSelect().count<{ count: string }>({ count: '*' }).first();
+  return Number(row?.count ?? 0);
+}
 
 export const listBrands = () =>
   db('nutrition.brands')
@@ -476,7 +541,7 @@ export function deleteCatalogForOwner(id: string, ownerId: string) {
 export const attachTargets = (catalogId: string, targetIds: string[]) =>
   targetIds.length
     ? db.batchInsert(
-        'catalog_targets',
+        'nutrition.catalog_targets',
         targetIds.map((t) => ({ catalog_id: catalogId, target_id: t })),
         100,
       )

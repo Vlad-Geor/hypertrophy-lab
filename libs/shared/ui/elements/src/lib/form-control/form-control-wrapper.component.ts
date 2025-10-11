@@ -6,7 +6,7 @@ import { ErrorMessageComponent } from '../error/error-message.component';
   selector: 'lib-form-control-wrapper',
   template: `
     @if (label()) {
-      <span class="inline-block text-gray-text text-sm">{{ label() }}</span>
+      <span class="inline-block text-text-3 text-sm">{{ label() }}</span>
     }
 
     <ng-content></ng-content>

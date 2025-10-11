@@ -10,7 +10,10 @@
     @if (icon()) {
       <lib-icon [icon]="icon()"></lib-icon>
     }
-    <span class="text-gray-text font-light text-ellipsis">
+    <span
+      class="text-gray-text font-light text-ellipsis"
+      [class.text-sm]="!!placeholder()"
+    >
       {{ _item()?.displayText || placeholder() }}
     </span>
     @if (tagLabel()) {

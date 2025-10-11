@@ -127,12 +127,27 @@ export async function getExpiringSoon(userId: string, withinDays: number, limit:
 
 export function listInventory(
   userId: string,
-  params: { q?: string; archived?: boolean; limit: number; offset: number },
+  params: {
+    q?: string;
+    archived?: boolean;
+    limit: number;
+    offset: number;
+    withoutPlan?: boolean;
+  },
 ) {
   const archived = params.archived ?? false;
   const base = db('nutrition.user_supplements as us')
     .leftJoin('nutrition.supplement_catalog as c', 'c.id', 'us.catalog_id')
     .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
+    .modify((qb) => {
+      if (params.withoutPlan) {
+        qb.leftJoin(
+          'nutrition.schedule_plans as ns',
+          'ns.user_supplement_id',
+          'us.id',
+        ).whereNull('ns.id');
+      }
+    })
     .leftJoin(
       db('nutrition.batches')
         .select('user_supplement_id')
@@ -193,10 +208,19 @@ export function listInventory(
 
 export async function countInventory(
   userId: string,
-  params: { q?: string; archived?: boolean },
+  params: { q?: string; archived?: boolean, withoutPlan?: boolean },
 ) {
   const archived = params.archived ?? false;
   const base = db('nutrition.user_supplements as us')
+  .modify((qb) => {
+      if (params.withoutPlan) {
+        qb.leftJoin(
+          'nutrition.schedule_plans as ns',
+          'ns.user_supplement_id',
+          'us.id',
+        ).whereNull('ns.id');
+      }
+    })
     .where('us.user_id', userId)
     .modify((qb) => {
       if (!archived) qb.whereNull('us.archived_at');
@@ -286,7 +310,7 @@ export async function addBulkExisting(
     const results: { index: number; userSupplementId: string }[] = [];
 
     // batch insert user_supplements
-    const rows = await trx('user_supplements')
+    const rows = await trx('nutrition.user_supplements')
       .insert(
         items.map((i) => ({
           user_id: userId,
@@ -308,7 +332,7 @@ export async function addBulkExisting(
     for (let i = 0; i < items.length; i++) {
       const ub = items[i].initialBatch;
       if (ub) {
-        await trx('batches').insert({
+        await trx('nutrition.batches').insert({
           user_supplement_id: rows[i].id,
           quantity_units: ub.quantityUnits,
           expires_on: ub.expiresOn ?? null,

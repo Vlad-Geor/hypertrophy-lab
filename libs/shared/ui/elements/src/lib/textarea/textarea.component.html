@@ -1,1 +1,12 @@
-<p class="h-10 w-full bg-blue-700 text-white">textarea works!</p>
+<lib-form-control-wrapper
+  [control]="control"
+  errorMessage="Invalid input"
+  [label]="label()"
+>
+  <textarea
+    class="bg-surface-2 text-white text-sm caret-white rounded-md border-gray-ring focus:border-secondary-active focus:outline-none focus:ring-0"
+    (input)="onInput($event)"
+    [placeholder]="placeholder() ?? ''"
+    [disabled]="_disabled()"
+  ></textarea>
+</lib-form-control-wrapper>
