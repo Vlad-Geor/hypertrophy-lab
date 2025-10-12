@@ -56,7 +56,7 @@ export type DemiType = {
         <lib-input [withSearch]="true" placeholder="Search..."></lib-input>
         <lib-single-select
           [options]="_options()"
-          [value]="_options()[0]"
+          [value]="_options()[0].value"
           placeholder="All Categories"
           [listItemRenderComponent]="existingSuppComponentType"
         ></lib-single-select>
@@ -95,14 +95,23 @@ export class SupplementHeaderComponent {
     })),
   );
 
-  readonly options = signal<ListItem<ExistingSuppItemData>[]>([
-    { displayText: 'A', data: { images: ['val three'], name: 'Name 1', id: '' } },
+  readonly options = signal<ListItem<string, ExistingSuppItemData>[]>([
+    {
+      displayText: 'A',
+      value: '',
+      data: { images: ['val three'], name: 'Name 1', id: '' },
+    },
     {
       displayText: 'B',
+      value: '',
       icon: 'check-solid',
       data: { images: ['val three'], name: 'Name 1', id: '' },
     },
-    { displayText: 'C', data: { images: ['val three'], name: 'Name 1', id: '' } },
+    {
+      displayText: 'C',
+      value: '',
+      data: { images: ['val three'], name: 'Name 1', id: '' },
+    },
   ]);
 
   headerFor = input.required<'inventory' | 'catalog'>();

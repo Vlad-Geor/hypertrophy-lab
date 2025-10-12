@@ -73,20 +73,20 @@ import { CustomListItemComponent } from './model/custom-list-item.model';
     NoData,
   ],
 })
-export class ListItemsComponent<T> implements AfterViewInit {
+export class ListItemsComponent<V, T> implements AfterViewInit {
   private readonly dRef = inject(DestroyRef);
 
   @ViewChildren('dynamicComponentContainer', { read: ViewContainerRef })
   dynamicContainers!: QueryList<ViewContainerRef>;
 
-  options = input.required<ListItem<T>[]>();
+  options = input.required<ListItem<V, T>[]>();
   selectable = input(true);
   size = input<Extract<Size, 'sm' | 'lg'>>('lg');
-  customListItemComponent = input<Type<CustomListItemComponent<T>>>();
+  customListItemComponent = input<Type<CustomListItemComponent<V, T>>>();
 
-  selectionModel = input.required<SelectionModel<ListItem<T>>>();
+  selectionModel = input.required<SelectionModel<ListItem<V, T>>>();
 
-  itemSelected = output<ListItem<T>>();
+  itemSelected = output<ListItem<V, T>>();
 
   constructor() {
     effect(() => {
@@ -106,7 +106,7 @@ export class ListItemsComponent<T> implements AfterViewInit {
       .subscribe(() => this.createDynamicComponents());
   }
 
-  onItemSelected(c: ListItem<T>): void {
+  onItemSelected(c: ListItem<V, T>): void {
     this.itemSelected.emit(c);
   }
 

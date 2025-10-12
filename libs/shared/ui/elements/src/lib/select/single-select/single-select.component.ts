@@ -51,24 +51,24 @@ export function stableCellId(key: string) {
     class: 'flex-1',
   },
 })
-export class SingleSelectComponent<T, V>
+export class SingleSelectComponent<V, T>
   extends FormControlComponent<V>
   implements OnInit
 {
   private readonly injector = inject(Injector);
   private readonly overlayDirectiveRef = inject(ConnectedOverlayDirective);
-  private readonly dropdownCompRef = signal<ComponentRef<Dropdown<T>> | undefined>(
+  private readonly dropdownCompRef = signal<ComponentRef<Dropdown<V, T>> | undefined>(
     undefined,
   );
 
-  private readonly selectionModel = new SelectionModel<ListItem<T>>(
+  private readonly selectionModel = new SelectionModel<ListItem<V, T>>(
     false,
     [],
     true,
     (o1, o2) => o1.id === o2.id,
   );
 
-  readonly options = input<ListItem<T>[]>([]);
+  readonly options = input<ListItem<V, T>[]>([]);
   readonly _options = linkedSignal(() =>
     this.options().map((opt) => ({
       ...opt,
@@ -76,11 +76,13 @@ export class SingleSelectComponent<T, V>
     })),
   );
 
-  readonly returnFn = input<(it: ListItem<T>) => V>((it) => it.value as unknown as V);
-  readonly equals = input<(a: V, b: V) => boolean>((a, b) => a === b);
-  readonly listItemRenderComponent = input<Type<CustomListItemComponent<T>> | undefined>(
-    undefined,
+  readonly returnFn = input<(it: ListItem<V, T>) => V | undefined>(
+    (it) => it.value ?? undefined,
   );
+  readonly equals = input<(a: V, b: V) => boolean>((a, b) => a === b);
+  readonly listItemRenderComponent = input<
+    Type<CustomListItemComponent<V, T>> | undefined
+  >(undefined);
   icon = input<IconType>();
   appearance = input<'default' | 'minimal'>('default');
   size = input<Extract<Size, 'sm' | 'lg'>>('lg');
@@ -90,12 +92,12 @@ export class SingleSelectComponent<T, V>
 
   selectionChange = output<V>();
 
-  public readonly _item = signal<ListItem<T> | undefined>(undefined);
-  private readonly _valueToItem = computed(() => {
-    const map = new Map<V, ListItem<T>>();
-    for (const it of this.options() ?? []) map.set(this.returnFn()(it), it);
-    return map;
-  });
+  public readonly _item = signal<ListItem<V, T> | undefined>(undefined);
+  // private readonly _valueToItem = computed(() => {
+  //   const map = new Map<V, ListItem<V>>();
+  //   for (const it of this.options() ?? []) map.set(this.returnFn()(it), it);
+  //   return map;
+  // });
 
   providers = computed<Provider[]>(() => [
     {
@@ -107,7 +109,7 @@ export class SingleSelectComponent<T, V>
         selectedCell: this._item(),
         selectionModel: this.selectionModel,
         listItemRenderComponent: this.listItemRenderComponent(),
-      } as DropdownConfig<T>,
+      } as DropdownConfig<V, T>,
     },
   ]);
 
@@ -118,13 +120,12 @@ export class SingleSelectComponent<T, V>
       this.selectionModel.clear();
       return;
     }
-    console.log('writeValue, val: ', value);
+    // const map = this._valueToItem();
+    // console.log('map is: ', map);
 
-    const map = this._valueToItem();
-    console.log('map is: ', map);
-
-    const found =
-      map.get(value) ?? [...map.entries()].find(([v]) => this.equals()(v, value))?.[1];
+    // const found =
+    //   map.get(value) ?? [...map.entries()].find(([v]) => this.equals()(v, value))?.[1];
+    const found = false;
 
     if (found) {
       this._item.set(found);
@@ -164,7 +165,7 @@ export class SingleSelectComponent<T, V>
       this._item.set(added);
       const v = this.returnFn()(added);
       this.onChange(v);
-      this.selectionChange.emit(v);
+      if (v) this.selectionChange.emit(v);
       this.overlayDirectiveRef.close();
     });
     // effect(() => {
@@ -192,7 +193,6 @@ export class SingleSelectComponent<T, V>
         this.onChange(null);
       }
     });
-    effect(() => console.log('ssl _item', this._item()));
   }
 
   ngOnInit(): void {

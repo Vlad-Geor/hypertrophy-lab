@@ -22,15 +22,15 @@ export type ExistingSuppItemData = SupplementCatalogSummary;
   },
 })
 export class ExistingSupplementItem
-  implements CustomListItemComponent<ExistingSuppItemData>
+  implements CustomListItemComponent<string, ExistingSuppItemData>
 {
   data = input<ExistingSuppItemData>();
-  listItem = input<ListItem<ExistingSuppItemData> | undefined>();
+  listItem = input<ListItem<string, ExistingSuppItemData> | undefined>();
   selectable = input(true);
   selected = input<boolean | undefined>();
   size = input<Extract<Size, 'sm' | 'md' | 'lg'> | undefined>();
 
-  itemClicked = output<ListItem<ExistingSuppItemData> | undefined>();
+  itemClicked = output<ListItem<string, ExistingSuppItemData> | undefined>();
 
   onSelfClick(): void {
     if (this.selectable()) {

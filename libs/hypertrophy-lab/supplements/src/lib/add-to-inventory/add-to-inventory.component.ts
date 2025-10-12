@@ -100,14 +100,14 @@ export class AddSupplementToInventory {
               unitsPerContainer: d.unitsPerContainer,
             },
             displayText: d.name,
-          })) as ListItem<ExistingSuppItemData>[] | undefined,
+          })) as ListItem<string, ExistingSuppItemData>[] | undefined,
       ),
     ),
   );
 
   imageFormData = signal<FormData | undefined>(undefined);
   previewUrl = signal<string>('');
-  previewSupplements = signal<ListItem<ExistingSuppItemData>[]>([]);
+  previewSupplements = signal<ListItem<string, ExistingSuppItemData>[]>([]);
 
   selectedCatalog = linkedSignal<{
     id: string;
@@ -168,7 +168,7 @@ export class AddSupplementToInventory {
     items: this.fb.nonNullable.array<ReturnType<typeof this.createItemForm>>([]),
   });
   readonly existingItemsDropdown = this.fb.nonNullable.control<
-    ListItem<ExistingSuppItemData>[]
+    ListItem<string, ExistingSuppItemData>[]
   >([]);
 
   get items() {

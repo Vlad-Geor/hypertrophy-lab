@@ -5,7 +5,7 @@ import { ButtonComponent } from '../button/button.component';
 import { DividerComponent } from '../divider/divider.component';
 import { InputComponent } from '../input/input.component';
 import { ListItemsComponent } from '../list-items/list-items.component';
-import { DROPDOWN_CONFIG } from './model/dropdown-model';
+import { DROPDOWN_CONFIG, DropdownConfig } from './model/dropdown-model';
 
 @Component({
   selector: 'lib-dropdown',
@@ -19,15 +19,15 @@ import { DROPDOWN_CONFIG } from './model/dropdown-model';
     DividerComponent,
   ],
 })
-export class Dropdown<T> {
-  config = inject(DROPDOWN_CONFIG, { optional: true });
+export class Dropdown<V, T> {
+  config = inject<DropdownConfig<V, T>>(DROPDOWN_CONFIG, { optional: true });
   configSm = this.config?.selectionModel;
 
   hasSelection = signal(false);
   signalFallback = signal([]);
 
-  itemSelected = output<ListItem<T>>();
-  confirmClicked = output<ListItem<T>[]>();
+  itemSelected = output<ListItem<V, T>>();
+  confirmClicked = output<V[]>();
   cancelClicked = output<void>();
 
   constructor() {
@@ -41,7 +41,7 @@ export class Dropdown<T> {
     }
   }
 
-  onItemSelected(cell: ListItem<T>): void {
+  onItemSelected(cell: ListItem<V, T>): void {
     if (this.config?.type === 'single') {
       this.config.selectionModel.select(cell);
       this.itemSelected.emit(cell);
@@ -64,6 +64,8 @@ export class Dropdown<T> {
   }
 
   onConfirmClick(): void {
-    this.confirmClicked.emit((this.configSm?.selected as ListItem<T>[]) ?? []);
+    this.confirmClicked.emit(
+      this.configSm?.selected?.map((s) => s.value ?? ({} as V)) ?? [],
+    );
   }
 }

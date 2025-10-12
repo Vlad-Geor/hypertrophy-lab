@@ -3,7 +3,7 @@ import { InjectionToken, Type } from '@angular/core';
 import { ListItem, Size } from '@ikigaidev/model';
 import { CustomListItemComponent } from '../../list-items';
 
-export const DROPDOWN_CONFIG = new InjectionToken<DropdownConfig<any>>('DROPDOWN_DATA');
+export const DROPDOWN_CONFIG = new InjectionToken<DropdownConfig<any, any>>('DROPDOWN_DATA');
 
 export type DropdownType = 'single' | 'multi';
 
@@ -11,12 +11,12 @@ export const DROPDOWN_TITLE = new InjectionToken<string>('DROPDOWN_TITLE');
 
 export type DropdownSize = Extract<Size, 'sm' | 'lg'>;
 
-export type DropdownConfig<T = undefined> = {
-  options: ListItem<T>[];
-  selectionModel: SelectionModel<ListItem<T>>;
-  listItemRenderComponent?: Type<CustomListItemComponent<T>>;
+export type DropdownConfig<V = unknown, T = undefined> = {
+  options: ListItem<V, T>[];
+  selectionModel: SelectionModel<ListItem<V, T>>;
+  listItemRenderComponent?: Type<CustomListItemComponent<V, T>>;
   disableHover?: boolean;
-  selectedCell?: ListItem<T>;
+  selectedCell?: ListItem<V, T>;
   type?: DropdownType;
   dropdownSize?: DropdownSize;
   title?: string;

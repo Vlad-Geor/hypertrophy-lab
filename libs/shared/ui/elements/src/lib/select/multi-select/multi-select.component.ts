@@ -43,32 +43,32 @@ import { stableCellId } from '../single-select/single-select.component';
   },
   hostDirectives: [ConnectedOverlayDirective],
 })
-export class MultiSelectComponent<T>
-  extends FormControlComponent<ListItem<T>[]>
+export class MultiSelectComponent<V, T>
+  extends FormControlComponent<V[]>
   implements OnInit
 {
   private readonly overlayDirectiveRef = inject(ConnectedOverlayDirective);
   private readonly injector = inject(Injector);
 
-  private dropdownCompRef = signal<ComponentRef<Dropdown<T>> | undefined>(undefined);
+  private dropdownCompRef = signal<ComponentRef<Dropdown<V, T>> | undefined>(undefined);
 
-  readonly listItemRenderComponent = input<Type<CustomListItemComponent<T>> | undefined>(
-    undefined,
-  );
+  readonly listItemRenderComponent = input<
+    Type<CustomListItemComponent<V, T>> | undefined
+  >(undefined);
 
   dropdownTitle = input<string>('');
   dropdownHeight = input<number>();
   selectWidth = input<number>();
   confirmButtonLabel = input<string>('');
   cancelButtonLabel = input<string>('');
-  items = input.required<ListItem<T>[]>();
+  items = input.required<ListItem<V, T>[]>();
   icon = input<IconType>();
   appearance = input<'default' | 'minimal'>('default');
   size = input<Extract<Size, 'sm' | 'lg'>>('lg');
   tagLabel = input('');
   hint = input('');
   selectedCount = computed(() => this._value()?.length);
-  selectionModel = new SelectionModel<ListItem<T>>(
+  selectionModel = new SelectionModel<ListItem<V, T>>(
     true,
     [],
     true,
@@ -80,22 +80,35 @@ export class MultiSelectComponent<T>
       id: stableCellId(`${opt.displayText}|${opt.data}`),
     })),
   );
-  displayValue = computed<string | undefined>(() =>
-    this._value()
-      ?.map(({ displayText }) => displayText)
-      .join(', '),
-  );
+  displayValue = computed<unknown | undefined>(() => this._value() ?? undefined);
 
-  override writeValue(value: ListItem<T>[] | undefined): void {
+  confirm = output<V[]>();
+
+  providers = computed<Provider[]>(() => [
+    {
+      provide: DROPDOWN_CONFIG,
+      useValue: {
+        options: this._options(),
+        type: 'multi',
+        dropdownSize: this.size(),
+        maxDropdownHeight: this.dropdownHeight(),
+        cancelButtonLabel: this.cancelButtonLabel() ?? 'Cancel',
+        confirmButtonLabel: this.confirmButtonLabel() ?? 'Confirm',
+        title: this.dropdownTitle(),
+        selectionModel: this.selectionModel,
+        listItemRenderComponent: this.listItemRenderComponent(),
+      } as DropdownConfig<V, T>,
+    },
+  ]);
+
+  override writeValue(value: V[] | undefined): void {
     if (value) {
       if (value.length) {
         this._value.set(value);
       } else this._value.set(undefined);
     }
   }
-  override registerOnChange(
-    fn: (value?: ListItem<T>[] | null | undefined) => void,
-  ): void {
+  override registerOnChange(fn: (value?: V[] | null | undefined) => void): void {
     this.onChange = fn;
   }
   override registerOnTouched(fn: () => void): void {
@@ -113,25 +126,6 @@ export class MultiSelectComponent<T>
   //     counterValue:
   //       this.dropdownCompRef()?.instance.selectedCount() ?? this.items().filter((i) => i.checkboxConfig?.checked).length,
   //   }));
-
-  confirm = output<ListItem<T>[]>();
-
-  providers = computed<Provider[]>(() => [
-    {
-      provide: DROPDOWN_CONFIG,
-      useValue: {
-        options: this._options(),
-        type: 'multi',
-        dropdownSize: this.size(),
-        maxDropdownHeight: this.dropdownHeight(),
-        cancelButtonLabel: this.cancelButtonLabel() ?? 'Cancel',
-        confirmButtonLabel: this.confirmButtonLabel() ?? 'Confirm',
-        title: this.dropdownTitle(),
-        selectionModel: this.selectionModel,
-        listItemRenderComponent: this.listItemRenderComponent(),
-      } as DropdownConfig<T>,
-    },
-  ]);
 
   constructor() {
     super();

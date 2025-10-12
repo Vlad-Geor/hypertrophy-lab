@@ -1,8 +1,8 @@
 import { TitleCasePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TimeOfDay } from '@ikigaidev/contracts';
-import {ExistingSuppItemData, ExistingSupplementItem, SupplementService} from '@ikigaidev/hl/supplements';
 import {
   ButtonComponent,
   Checkbox,
@@ -13,12 +13,16 @@ import {
   TextareaComponent,
 } from '@ikigaidev/elements';
 import { CreatePlanRequest } from '@ikigaidev/hl/contracts';
+import {
+  ExistingSuppItemData,
+  ExistingSupplementItem,
+  SupplementService,
+} from '@ikigaidev/hl/supplements';
 import { ListItem } from '@ikigaidev/model';
 import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
 import { debounceTime, filter, map } from 'rxjs';
 import { DaysGroup } from '../model/create-routine-form.model';
 import { DAY_KEYS, DAY_NUM } from '../model/weekdays.model';
-import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 
 type AddRoutineForm = {
   days: FormGroup<DaysGroup>;
@@ -58,12 +62,13 @@ export class AddRoutine {
 
   DAYS = DAY_KEYS;
   timeOfDayOptions = signal<ListItem<TimeOfDay>[]>([
-    { displayText: 'morning', value: 'morning', data: 'morning' },
-    { displayText: 'afternoon', value: 'afternoon', data: 'afternoon' },
-    { displayText: 'evening', value: 'evening', data: 'evening' },
-    { displayText: 'bedtime', value: 'bedtime', data: 'bedtime' },
+    { displayText: 'morning', value: 'morning' },
+    { displayText: 'afternoon', value: 'afternoon' },
+    { displayText: 'evening', value: 'evening' },
+    { displayText: 'bedtime', value: 'bedtime' },
   ]);
   noPlanSupplements = this.suppService.userSupplements(true);
+  // addRoutineOptions = signal([]);
   addRoutineOptions = toSignal(
     toObservable(this.noPlanSupplements.value).pipe(
       filter(Boolean),
@@ -79,11 +84,11 @@ export class AddRoutine {
               unitsPerContainer: d.unitsPerContainer,
             },
             displayText: d.catalogName,
-          })) as ListItem<ExistingSuppItemData>[] | undefined,
+            value: d.catalogId,
+          })) as ListItem<string, ExistingSuppItemData>[] | undefined,
       ),
     ),
   );
-
 
   readonly form = this.fb.group<AddRoutineForm>({
     days: this.fb.group<DaysGroup>({

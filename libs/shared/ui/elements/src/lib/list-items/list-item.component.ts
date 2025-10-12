@@ -38,10 +38,10 @@ import { ListItemsComponent } from './list-items.component';
     }
   `,
 })
-export class ListItemComponent<T> {
+export class ListItemComponent<V, T> {
   private readonly listItemsRef = inject(ListItemsComponent);
 
-  config = input<ListItem<T>>();
+  config = input<ListItem<V, T>>();
   selectable = input(true);
   selected = input(false);
   size = input<Extract<Size, 'sm' | 'lg'>>('lg');
