@@ -34,8 +34,8 @@ export const listQuerySchema = z.object({
   q: z.string().trim().optional(),
   limit: z.coerce.number().int().min(1).max(100).default(20),
   offset: z.coerce.number().int().min(0).default(0),
-  sort: z.enum(['name','brand','form']).default('name'),
-  dir: z.enum(['asc','desc']).default('asc'),
+  sort: z.enum(['name', 'brand', 'form']).default('name'),
+  dir: z.enum(['asc', 'desc']).default('asc'),
 });
 
 export const apiError = z.object({

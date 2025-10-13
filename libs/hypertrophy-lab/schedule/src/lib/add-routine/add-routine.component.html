@@ -56,5 +56,7 @@
 
 <div class="flex justify-center gap-3">
   <lib-button appearance="outline" (click)="onClose()">Discard</lib-button>
-  <lib-button (click)="onSubmit()">Save</lib-button>
+  <lib-button theme="gradient-primary" [disabled]="!form.valid" (click)="onSubmit()">
+    <span class="text-white">Save</span>
+  </lib-button>
 </div>

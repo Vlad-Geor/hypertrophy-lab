@@ -21,6 +21,7 @@ import {
 import { ListItem } from '@ikigaidev/model';
 import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
 import { debounceTime, filter, map } from 'rxjs';
+import { ScheduleService } from '../data-access/schedule.service';
 import { DaysGroup } from '../model/create-routine-form.model';
 import { DAY_KEYS, DAY_NUM } from '../model/weekdays.model';
 
@@ -46,6 +47,7 @@ type AddRoutineForm = {
     TextareaComponent,
     TitleCasePipe,
   ],
+  providers: [ScheduleService],
   host: {
     class:
       'max-w-[320px] md:max-w-md bg-surface p-3 pl-4 flex flex-col gap-4 rounded-2xl border border-gray-active shadow-2xl',
@@ -54,6 +56,7 @@ type AddRoutineForm = {
 })
 export class AddRoutine {
   private readonly suppService = inject(SupplementService);
+  private readonly scheduleService = inject(ScheduleService);
   private readonly fb = inject(FormBuilder);
   protected globalOverlayRef = inject<GlobalOverlayRef>(GLOBAL_OVERLAY_REF, {
     optional: true,
@@ -76,7 +79,7 @@ export class AddRoutine {
         (response) =>
           response?.items.map((d) => ({
             data: {
-              id: d.catalogId,
+              id: d.id,
               images: d.images,
               name: d.catalogName,
               form: d.form,
@@ -84,7 +87,7 @@ export class AddRoutine {
               unitsPerContainer: d.unitsPerContainer,
             },
             displayText: d.catalogName,
-            value: d.catalogId,
+            value: d.id,
           })) as ListItem<string, ExistingSuppItemData>[] | undefined,
       ),
     ),
@@ -92,13 +95,13 @@ export class AddRoutine {
 
   readonly form = this.fb.group<AddRoutineForm>({
     days: this.fb.group<DaysGroup>({
-      sun: this.fb.nonNullable.control(false),
-      mon: this.fb.nonNullable.control(false),
-      tue: this.fb.nonNullable.control(false),
-      wed: this.fb.nonNullable.control(false),
-      thu: this.fb.nonNullable.control(false),
-      fri: this.fb.nonNullable.control(false),
-      sat: this.fb.nonNullable.control(false),
+      sun: this.fb.nonNullable.control(true),
+      mon: this.fb.nonNullable.control(true),
+      tue: this.fb.nonNullable.control(true),
+      wed: this.fb.nonNullable.control(true),
+      thu: this.fb.nonNullable.control(true),
+      fri: this.fb.nonNullable.control(true),
+      sat: this.fb.nonNullable.control(true),
     }),
     timeOfDay: this.fb.nonNullable.control<TimeOfDay>('morning'),
     unitsPerDose: this.fb.nonNullable.control(0),
@@ -112,7 +115,7 @@ export class AddRoutine {
 
   private daysToArray(): number[] {
     const v = this.form.controls.days.getRawValue();
-    return DAY_KEYS.filter((k) => v[k]).map((k) => DAY_NUM[k]);
+    return DAY_KEYS.filter((k) => v[k]).map((k) => DAY_NUM[k] - 1);
   }
 
   // submit mapping to DTO
@@ -121,20 +124,10 @@ export class AddRoutine {
     return {
       daysOfWeek: this.daysToArray(),
       timeOfDay,
-      unitsPerDose,
+      unitsPerDose: Number(unitsPerDose),
       userSupplementId,
       notes,
     };
-  }
-
-  // optional: patch from numbers -> checkboxes (for edit)
-  patchDays(nums: number[]) {
-    const set = new Set(nums);
-    for (const k of DAY_KEYS) {
-      this.form.controls.days.controls[k].setValue(set.has(DAY_NUM[k]), {
-        emitEvent: false,
-      });
-    }
   }
 
   onClose(): void {
@@ -142,6 +135,7 @@ export class AddRoutine {
   }
 
   onSubmit(): void {
-    console.log('');
+    const req = this.toCreatePlanRequest();
+    this.scheduleService.addUserSupplementPlan(req).subscribe((v) => console.log(v));
   }
 }
