@@ -25,6 +25,8 @@ export class ScheduleService {
     if (parsed.error) {
       throw new Error(`Zod validation error: ${z.treeifyError(parsed.error)}`);
     }
+    console.log(parsed);
+    
     return this.http.post<CreatePlanResponse>(
       `${this.API_BASE}${API.schedule}/plans`,
       reqBody,

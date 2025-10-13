@@ -12,7 +12,7 @@ import {
   SingleSelectComponent,
   TextareaComponent,
 } from '@ikigaidev/elements';
-import { CreatePlanRequest } from '@ikigaidev/hl/contracts';
+import { CreatePlanRequest, CreatePlanResponse } from '@ikigaidev/hl/contracts';
 import {
   ExistingSuppItemData,
   ExistingSupplementItem,
@@ -20,7 +20,7 @@ import {
 } from '@ikigaidev/hl/supplements';
 import { ListItem } from '@ikigaidev/model';
 import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
-import { debounceTime, filter, map } from 'rxjs';
+import { debounceTime, filter, map, Observable } from 'rxjs';
 import { ScheduleService } from '../data-access/schedule.service';
 import { DaysGroup } from '../model/create-routine-form.model';
 import { DAY_KEYS, DAY_NUM } from '../model/weekdays.model';
@@ -134,8 +134,12 @@ export class AddRoutine {
     if (this.globalOverlayRef) this.globalOverlayRef.close();
   }
 
-  onSubmit(): void {
+  onSubmit(): Observable<CreatePlanResponse> {
     const req = this.toCreatePlanRequest();
-    this.scheduleService.addUserSupplementPlan(req).subscribe((v) => console.log(v));
+    return this.scheduleService.addUserSupplementPlan(req)
+  }
+
+  onSubmitNext(ev: unknown): void {
+
   }
 }

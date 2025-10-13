@@ -1,16 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { BadgeConfig, IconType, Size, Theme } from '@ikigaidev/model';
+import { IconComponent } from '../icon/icon.component';
+import { AsyncButton } from './directive/async-button.directive';
 
 @Component({
   selector: 'lib-button',
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   template: `
     <ng-content select="lib-icon[left]"></ng-content>
 
     <ng-content></ng-content>
 
     <ng-content select="lib-icon[right]"></ng-content>
+
+    @if (asyncDirective.processing()) {
+      <lib-icon [icon]="'award-solid-full'" [iconSize]="32"></lib-icon>
+    }
   `,
   host: {
     class: `outline-0 border inline-flex justify-center items-center gap-2
@@ -24,9 +30,18 @@ import { BadgeConfig, IconType, Size, Theme } from '@ikigaidev/model';
     '[class.w-full]': 'fillContainer()',
     '[class.w-fit]': '!fillContainer()',
   },
+  hostDirectives: [
+    {
+      directive: AsyncButton,
+      inputs: ['asyncClickCallback'],
+      outputs: ['next', 'btnError', 'complete'],
+    },
+  ],
   styleUrl: './button.component.scss',
 })
 export class ButtonComponent {
+  readonly asyncDirective = inject(AsyncButton);
+
   badge = input<BadgeConfig>();
 
   theme = input<Theme>('white');
