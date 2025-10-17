@@ -1,7 +1,7 @@
 import { createPlanResponse, listPlansResponse } from '@ikigaidev/hl/contracts';
 import { Request, RequestHandler, Response } from 'express';
-import * as svc from '../services/schedule.service';
-import * as tg from '../services/schedule.telegram.service';
+import * as svc from '../services/schedule.service.js';
+import * as tg from '../services/schedule.telegram.service.js';
 
 export async function telegramActionController(req: Request, res: Response) {
   const { action, logId, chatId } = req.body ?? {};

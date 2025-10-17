@@ -1,7 +1,7 @@
 import { CreatePlanRequest, UpdatePlanRequest } from '@ikigaidev/hl/contracts';
-import { db } from '../config/database';
-import * as inv from '../repositories/inventory.repo';
-import * as repo from '../repositories/schedule.repo';
+import { db } from '../config/database.js';
+import * as inv from '../repositories/inventory.repo.js';
+import * as repo from '../repositories/schedule.repo.js';
 
 export async function listPlans(params: { userId: string }) {
   return repo.listPlans(params.userId);

@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import * as svc from '../services/target.service';
+import * as svc from '../services/target.service.js';
 
 export const createTarget: RequestHandler = async (req, res, next) => {
   try {

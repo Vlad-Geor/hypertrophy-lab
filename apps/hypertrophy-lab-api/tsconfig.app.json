@@ -2,10 +2,11 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "module": "esnext",
+    "module": "nodenext",
     "types": ["node", "pg"],
-    "target": "es2020",
-    "esModuleInterop": true
+    "target": "es2022",
+    "esModuleInterop": true,
+    "moduleResolution": "NodeNext",
   },
   "include": ["src/**/*.ts", "src/knexfile.ts", "src/types/*.d.ts"]
 }

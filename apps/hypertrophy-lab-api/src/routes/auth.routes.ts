@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getOrCreateAuth0User, logout } from '../controllers/auth.controller';
+import { getOrCreateAuth0User, logout } from '../controllers/auth.controller.js';
 
 const r = Router();
 

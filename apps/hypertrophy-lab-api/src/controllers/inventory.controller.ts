@@ -3,7 +3,7 @@ import {
   addInventoryRequest,
 } from '@ikigaidev/hl/contracts';
 import { Request, RequestHandler } from 'express';
-import * as svc from '../services/inventory.service';
+import * as svc from '../services/inventory.service.js';
 
 export const list: RequestHandler = async (req: Request, res) => {
   const { q, archived, withoutPlan } = req.query as any;

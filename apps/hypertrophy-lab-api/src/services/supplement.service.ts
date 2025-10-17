@@ -4,9 +4,8 @@ import {
   createCatalogRequest,
   CreateCatalogRequest,
 } from '@ikigaidev/hl/contracts';
-import {} from '../repositories/supplements.repo';
 
-import * as repo from '../repositories/supplements.repo';
+import * as repo from '../repositories/supplements.repo.js';
 
 export const listBrands = () => repo.listBrands();
 export const listTargets = () => repo.listTargets();

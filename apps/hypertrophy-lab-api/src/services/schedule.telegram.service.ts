@@ -1,6 +1,6 @@
 // services/schedule.telegram.service.ts (replace placeholders)
-import { db } from '../config/database';
-import * as repo from '../repositories/schedule.repo';
+import { db } from '../config/database.js';
+import * as repo from '../repositories/schedule.repo.js';
 
 type Out = {
   ok: boolean;

@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import * as svc from '../services/brand.service';
+import * as svc from '../services/brand.service.js';
 
 export const createBrand: RequestHandler = async (req, res, next) => {
   try {

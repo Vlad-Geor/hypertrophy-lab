@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
-import { db } from '../config/database';
-import { toNumber } from '../util/single-count';
+import { db } from '../config/database.js';
+import { toNumber } from '../util/single-count.js';
 
 export async function getBatchesFIFO(
   trx: Knex,

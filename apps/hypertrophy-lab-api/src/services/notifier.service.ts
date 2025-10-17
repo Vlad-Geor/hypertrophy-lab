@@ -1,11 +1,11 @@
 import { sendReminder } from '@ikigaidev/tg-bot';
-import { db } from '../config/database';
-import { telegram } from '../infra/telegram';
+import { db } from '../config/database.js';
+import { telegram } from '../infra/telegram.js';
 import {
   createLog,
   fetchDuePlanInstances,
   markNotified,
-} from '../repositories/schedule.repo';
+} from '../repositories/schedule.repo.js';
 
 export async function sendDueRemindersService() {
   const due = await fetchDuePlanInstances(); // [{ userId, chatId, name, dose, date, timeOfDay, userSupplementId, planId }]

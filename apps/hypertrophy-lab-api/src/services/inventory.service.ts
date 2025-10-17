@@ -1,5 +1,5 @@
-import * as repo from '../repositories/inventory.repo';
-import * as suppRepo from '../repositories/supplements.repo';
+import * as repo from '../repositories/inventory.repo.js';
+import * as suppRepo from '../repositories/supplements.repo.js';
 
 export async function list(
   userId: string,

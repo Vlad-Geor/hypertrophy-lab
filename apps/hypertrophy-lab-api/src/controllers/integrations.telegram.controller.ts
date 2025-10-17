@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import {
   claimLinkService,
   createLinkService,
-} from '../services/integrations.telegram.service';
+} from '../services/integrations.telegram.service.js';
 
 export async function createLinkController(req: Request, res: Response) {
   try {

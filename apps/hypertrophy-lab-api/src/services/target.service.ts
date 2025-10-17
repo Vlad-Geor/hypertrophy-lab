@@ -1,4 +1,4 @@
-import * as repo from '../repositories/targets.repo';
+import * as repo from '../repositories/targets.repo.js';
 
 export async function createTarget(data: {
   slug: string;

@@ -12,8 +12,9 @@
       "options": {
         "platform": "node",
         "outputPath": "dist/apps/hypertrophy-lab-api",
-        "format": ["cjs"],
-        "bundle": false,
+        "format": ["esm"],
+        "bundle": true,
+        "target": "node20",
         "main": "apps/hypertrophy-lab-api/src/main.ts",
         "tsConfig": "apps/hypertrophy-lab-api/tsconfig.app.json",
         "assets": ["apps/hypertrophy-lab-api/src/assets"],

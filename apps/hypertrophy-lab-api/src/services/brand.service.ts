@@ -1,4 +1,4 @@
-import * as repo from '../repositories/brands.repo';
+import * as repo from '../repositories/brands.repo.js';
 
 export async function createBrand(data: { name: string; site?: string | null }) {
   return repo.createBrand(data);

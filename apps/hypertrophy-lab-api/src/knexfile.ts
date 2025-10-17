@@ -2,7 +2,7 @@
 
 import type { Knex } from 'knex';
 import { knexSnakeCaseMappers } from 'objection';
-import { loadEnv } from './config/env';
+import { loadEnv } from './config/env.js';
 
 const { DB_URL } = loadEnv();
 

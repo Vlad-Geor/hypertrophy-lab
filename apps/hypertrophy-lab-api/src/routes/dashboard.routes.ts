@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import * as ctrl from '../controllers/dashboard.controller';
+import * as ctrl from '../controllers/dashboard.controller.js';
 import { z } from 'zod';
-import { validateQuery } from '../util/zod-express';
+import { validateQuery } from '../util/zod-express.js';
 
 const r = Router();
 

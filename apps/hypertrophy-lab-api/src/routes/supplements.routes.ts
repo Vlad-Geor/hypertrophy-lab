@@ -1,9 +1,9 @@
 /** @format */
 
 import { Router } from 'express';
-import * as brands from '../controllers/brand.controller';
-import * as ctl from '../controllers/supplements.controller';
-import * as targets from '../controllers/target.controller';
+import * as brands from '../controllers/brand.controller.js';
+import * as ctl from '../controllers/supplements.controller.js';
+import * as targets from '../controllers/target.controller.js';
 
 const r = Router();
 

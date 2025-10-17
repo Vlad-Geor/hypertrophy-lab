@@ -1,5 +1,5 @@
-import * as inv from '../repositories/inventory.repo';
-import * as orders from '../repositories/orders.repo';
+import * as inv from '../repositories/inventory.repo.js';
+import * as orders from '../repositories/orders.repo.js';
 
 export async function getSummary(params: { userId: string; withinDays: number }) {
   const { userId, withinDays } = params;

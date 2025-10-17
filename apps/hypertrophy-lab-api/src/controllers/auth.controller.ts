@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { loadEnv } from '../config/env';
-import { getOrCreateUserFromAuth0 } from '../services/auth.service';
+import { loadEnv } from '../config/env.js';
+import { getOrCreateUserFromAuth0 } from '../services/auth.service.js';
 
 const { FRONT_URL } = loadEnv();
 

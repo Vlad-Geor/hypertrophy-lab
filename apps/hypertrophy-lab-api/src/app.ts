@@ -3,8 +3,8 @@ import cors from 'cors';
 import express, { Application } from 'express';
 import { auth } from 'express-oauth2-jwt-bearer';
 
-import { hydrateUser } from './repositories/users.repo';
-import { registerRoutes } from './routes/register-routes';
+import { hydrateUser } from './repositories/users.repo.js';
+import { registerRoutes } from './routes/register-routes.js';
 
 export const app: Application = express();
 

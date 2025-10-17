@@ -1,7 +1,7 @@
 import { availableSuppsQuery, createCatalogRequest } from '@ikigaidev/hl/contracts';
 import { Request, RequestHandler } from 'express';
 import { ZodError } from 'zod';
-import * as svc from '../services/supplement.service';
+import * as svc from '../services/supplement.service.js';
 
 // controller
 export const listCatalog: RequestHandler = async (req: Request, res) => {

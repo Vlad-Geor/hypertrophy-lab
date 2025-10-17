@@ -1,11 +1,11 @@
 import crypto from 'crypto';
-import { db } from '../config/database';
-import { loadEnv } from '../config/env';
+import { db } from '../config/database.js';
+import { loadEnv } from '../config/env.js';
 import {
   findTokenForClaim,
   insertLinkToken,
   markTokenUsed,
-} from '../repositories/integrations.repo';
+} from '../repositories/integrations.repo.js';
 
 const { TG_BOT_USERNAME } = loadEnv();
 

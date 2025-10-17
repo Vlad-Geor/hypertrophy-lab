@@ -4,7 +4,7 @@ import {
   UpdatePlanRequest,
 } from '@ikigaidev/hl/contracts';
 import { Knex } from 'knex';
-import { db } from '../config/database';
+import { db } from '../config/database.js';
 
 export async function listPlans(userId: string) {
   return db('nutrition.schedule_plans')

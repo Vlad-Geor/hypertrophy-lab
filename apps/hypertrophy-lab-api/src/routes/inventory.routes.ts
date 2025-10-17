@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as ctl from '../controllers/inventory.controller';
+import * as ctl from '../controllers/inventory.controller.js';
 
 const r = Router();
 

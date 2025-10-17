@@ -1,6 +1,6 @@
 // repositories/user.repository.ts
 import { Request, RequestHandler } from 'express';
-import { db } from '../config/database';
+import { db } from '../config/database.js';
 
 const USER_TABLE = 'users';
 

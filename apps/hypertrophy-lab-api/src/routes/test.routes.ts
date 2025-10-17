@@ -1,8 +1,8 @@
 import { sendReminder } from '@ikigaidev/tg-bot';
 import { Router } from 'express';
-import { db } from '../config/database';
-import { telegram } from '../infra/telegram';
-import { createLog } from '../repositories/schedule.repo';
+import { db } from '../config/database.js';
+import { telegram } from '../infra/telegram.js';
+import { createLog } from '../repositories/schedule.repo.js';
 
 const r = Router();
 

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as svc from '../services/dashboard.service';
+import * as svc from '../services/dashboard.service.js';
 import { dashboardSummaryResponse } from '@ikigaidev/hl/contracts';
 
 export async function getSummary(req: Request, res: Response) {

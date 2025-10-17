@@ -1,4 +1,4 @@
-import { db } from '../config/database';
+import { db } from '../config/database.js';
 
 export const createBrand = async (data: { name: string; site?: string | null }) => {
   const [created] = await db('nutrition.brands')

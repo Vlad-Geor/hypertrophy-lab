@@ -5,7 +5,7 @@ import {
   createCatalogRequest,
   CreateCatalogRequest,
 } from '@ikigaidev/hl/contracts';
-import { db } from '../config/database';
+import { db } from '../config/database.js';
 
 type CatalogRow = {
   id: string;

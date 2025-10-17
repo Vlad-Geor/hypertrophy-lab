@@ -1,8 +1,8 @@
 import { isoDate } from '@ikigaidev/contracts';
 import { Router } from 'express';
 import { z } from 'zod';
-import * as ctrl from '../controllers/schedule.controller';
-import { validateBody, validateQuery } from '../util/zod-express';
+import * as ctrl from '../controllers/schedule.controller.js';
+import { validateBody, validateQuery } from '../util/zod-express.js';
 import { createLogRequest, createPlanRequest, updatePlanRequest } from '@ikigaidev/hl/contracts';
 
 const r = Router();
