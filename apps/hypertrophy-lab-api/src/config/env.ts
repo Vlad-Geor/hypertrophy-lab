@@ -1,11 +1,14 @@
 import { config } from 'dotenv';
-import { dirname, join } from 'path';
+import { dirname, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const here = dirname(fileURLToPath(import.meta.url));
+const repoRoot = resolve(here, '../../../apps/hypertrophy-lab-api/');
+const envPath = join(repoRoot, '.env');
 
-config({ path: join(__dirname, '../../.env') });
+config({ path: envPath, debug: true });
+
+// spot-check a var
 
 export function loadEnv() {
   return {

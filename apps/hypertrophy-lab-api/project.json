@@ -5,6 +5,17 @@
   "projectType": "application",
   "tags": [],
    "targets": {
+     "generate-routes": {
+      "executor": "@nx/workspace:run-commands",
+      "options": {
+        "command": "node scripts/generate-routes.mjs"
+      },
+      "inputs": [
+        "{projectRoot}/src/routes/*.routes.ts",
+        "{workspaceRoot}/scripts/generate-routes.mjs"
+      ],
+      "outputs": ["{projectRoot}/src/routes/manifest.ts"]
+    },
     "build": {
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],

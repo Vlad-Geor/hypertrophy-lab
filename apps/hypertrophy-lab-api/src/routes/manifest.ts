@@ -1,4 +1,3 @@
-export { default as api } from './api.routes.js';
 export { default as auth } from './auth.routes.js';
 export { default as dashboard } from './dashboard.routes.js';
 export { default as integrations } from './integrations.routes.js';

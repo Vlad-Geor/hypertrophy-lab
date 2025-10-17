@@ -1,18 +1,15 @@
 import { Context, Telegraf } from 'telegraf';
+import { BotEnv } from '../../../../../shared/contracts/src/lib/bot/bot-env.schema';
 import { getM2MToken } from '../m2m-token/auth0-m2m';
-import { TelegramActionResponse } from '../model/telegram-action-response.model';
+import { TelegramActionResponse } from '../model/telegram-action-response.schema';
 
 type ClaimResponse = { ok: boolean; error?: string };
 
-export async function createBot(cfg: {
-  token: string;
-  apiUrl: string;
-  username?: string;
-}) {
-  const bot = new Telegraf<Context>(cfg.token);
-  const token = await getM2MToken();
+export async function createBot(env: BotEnv) {
+  const bot = new Telegraf<Context>(env.TG_BOT_TOKEN);
+  const token = await getM2MToken(env);
 
-  if (!cfg.token || !cfg.apiUrl) throw new Error('Missing env config for tg-bot');
+  if (!env.TG_BOT_TOKEN || !env.API_URL) throw new Error('Missing env config for tg-bot');
 
   bot.start(async (ctx) => {
     const code = (ctx.payload || '').trim();
@@ -22,7 +19,7 @@ export async function createBot(cfg: {
 
     let res: Response;
     try {
-      res = await fetch(`${cfg.apiUrl}/integrations/telegram/claim`, {
+      res = await fetch(`${env.API_URL}/integrations/telegram/claim`, {
         method: 'POST',
         headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` },
         body: JSON.stringify({ code, telegram_chat_id: ctx.chat.id }),
@@ -55,8 +52,8 @@ export async function createBot(cfg: {
 
     const [action, logId] = [data[0], data.slice(2)]; // "t:<id>" | "s:<id>"
     try {
-      const token = await getM2MToken();
-      const res = await fetch(`${cfg.apiUrl}/schedule/logs/telegram-action`, {
+      const token = await getM2MToken(env);
+      const res = await fetch(`${env.API_URL}/schedule/logs/telegram-action`, {
         method: 'POST',
         headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` },
         body: JSON.stringify({ action, logId, chatId: ctx.chat?.id }),
