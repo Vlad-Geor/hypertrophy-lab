@@ -19,6 +19,7 @@ export * from './lib/loader/infinity-loader.component';
 export * from './lib/pill/pill.component';
 export * from './lib/select/index';
 export * from './lib/slide-toggle/slide-toggle.component';
+export * from './lib/spinner/spinner.component';
 export * from './lib/stateful-icon/stateful-icon.component';
 export * from './lib/surface-card/surface-card.component';
 export * from './lib/tag/tag-group/tag-group.component';

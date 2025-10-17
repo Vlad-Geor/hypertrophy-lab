@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { BadgeConfig, IconType, Size, Theme } from '@ikigaidev/model';
+import { timer } from 'rxjs';
 import { IconComponent } from '../icon/icon.component';
+import { SpinnerComponent } from '../spinner/spinner.component';
 import { AsyncButton } from './directive/async-button.directive';
 
 @Component({
   selector: 'lib-button',
-  imports: [CommonModule, IconComponent],
+  imports: [CommonModule, IconComponent, SpinnerComponent],
   template: `
     <ng-content select="lib-icon[left]"></ng-content>
 
@@ -15,7 +17,16 @@ import { AsyncButton } from './directive/async-button.directive';
     <ng-content select="lib-icon[right]"></ng-content>
 
     @if (asyncDirective.processing()) {
-      <lib-icon [icon]="'award-solid-full'" [iconSize]="32"></lib-icon>
+      <lib-spinner [size]="20"></lib-spinner>
+    }
+
+    @if (errorShown()) {
+      <lib-icon
+        [iconSize]="20"
+        [icon]="'xmark-solid'"
+        [fillContainer]="true"
+        class="text-red-600"
+      ></lib-icon>
     }
   `,
   host: {
@@ -33,7 +44,7 @@ import { AsyncButton } from './directive/async-button.directive';
   hostDirectives: [
     {
       directive: AsyncButton,
-      inputs: ['asyncClickCallback'],
+      inputs: ['asyncClick'],
       outputs: ['next', 'btnError', 'complete'],
     },
   ],
@@ -42,8 +53,9 @@ import { AsyncButton } from './directive/async-button.directive';
 export class ButtonComponent {
   readonly asyncDirective = inject(AsyncButton);
 
-  badge = input<BadgeConfig>();
+  errorShown = signal<boolean>(false);
 
+  badge = input<BadgeConfig>();
   theme = input<Theme>('white');
   icon = input<IconType>();
   size = input<Extract<Size, 'sm' | 'md' | 'lg'>>('md');
@@ -51,7 +63,6 @@ export class ButtonComponent {
   fillContainer = input<boolean>(false);
   rounded = input<boolean>(false);
   disabled = input<boolean>();
-
   themeClasses = computed(() =>
     (this.appearance() === 'fill'
       ? this.theme().includes('gradient')
@@ -62,10 +73,18 @@ export class ButtonComponent {
       .concat('text-token')
       .join(' '),
   );
-
   allClasses = computed(() => {
     return [this.size(), this.appearance(), this.themeClasses()]
       .filter(Boolean)
       .join(' ');
   });
+
+  constructor() {
+    this.asyncDirective.btnError.subscribe(() => this.showErrorState());
+  }
+
+  showErrorState(): void {
+    this.errorShown.set(true);
+    timer(3000).subscribe(() => this.errorShown.set(false));
+  }
 }

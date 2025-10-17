@@ -1,4 +1,12 @@
-import { Component, effect, inject, input, linkedSignal, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  input,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 import {
   ButtonComponent,
   IconButtonComponent,
@@ -18,6 +26,7 @@ import { ScheduleService } from '../../data-access/schedule.service';
   host: {
     class: 'flex flex-col gap-3 bg-surface-2 p-3 pb-4 rounded-lg',
   },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IntakeLogCard {
   private scheduleService = inject(ScheduleService);

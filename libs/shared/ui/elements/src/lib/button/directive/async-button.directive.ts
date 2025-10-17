@@ -9,8 +9,8 @@ import {
 import { from, Observable } from 'rxjs';
 
 @Directive({ selector: '[libAsyncClick]' })
-export class AsyncButton <T extends Observable<unknown>> {
-  readonly asyncClickCallback = input<() => Promise<unknown> | Observable<unknown>>();
+export class AsyncButton<T extends Observable<unknown>> {
+  readonly asyncClick = input<() => T>();
   public readonly processing = signal<boolean>(false);
 
   @HostBinding('attr.disabled') disabled = false;
@@ -21,18 +21,24 @@ export class AsyncButton <T extends Observable<unknown>> {
 
   @HostListener('click')
   handle() {
-    const inputCallback = this.asyncClickCallback()?.();
+    const inputCallback = this.asyncClick()?.();
     if (!inputCallback || this.processing()) return;
     this.processing.set(true);
     this.disabled = true;
-    from(inputCallback).subscribe({
-      next: (v) => this.next.emit(v),
-      error: (err) => this.btnError.emit(err),
-      complete: () => {
-        this.processing.set(false);
-        this.disabled = false;
-        this.complete.emit();
-      },
-    });
+    from(inputCallback)
+      //   .pipe(delay(50000))
+      .subscribe({
+        next: (v) => this.next.emit(v),
+        error: (err) => {
+          this.processing.set(false);
+          this.disabled = false;
+          this.btnError.emit(err);
+        },
+        complete: () => {
+          this.processing.set(false);
+          this.disabled = false;
+          this.complete.emit();
+        },
+      });
   }
 }

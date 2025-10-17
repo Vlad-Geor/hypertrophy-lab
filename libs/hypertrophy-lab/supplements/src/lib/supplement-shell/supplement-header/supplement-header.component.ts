@@ -36,10 +36,10 @@ export type DemiType = {
               {{ headerFor() | titlecase }}
             </h1>
           </div>
-          <lib-multi-select [items]="unitOptions()"></lib-multi-select>
-          <!-- <p class="text-sm text-nowrap font-semibold text-gray-text">
-            5 of 5 supplements
-          </p> -->
+          <!-- <lib-multi-select [items]="unitOptions()"></lib-multi-select> -->
+          <p class="text-sm text-nowrap font-medium text-gray-text">
+            {{ _options().length }} of {{ _options().length }} supplements
+          </p>
         </div>
         <lib-button
           theme="gradient-primary"

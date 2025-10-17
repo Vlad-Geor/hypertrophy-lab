@@ -3,7 +3,7 @@ import { Component, inject, linkedSignal, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
-import { IconButtonComponent, IconComponent } from '@ikigaidev/elements';
+import { IconButtonComponent, IconComponent, ButtonComponent } from '@ikigaidev/elements';
 import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
 import { ViewportService } from '@ikigaidev/service';
 import { filter, map, startWith } from 'rxjs';
@@ -22,6 +22,7 @@ import { createMenuItems } from '../util/create-menu-items';
 })
 export class SidenavComponent {
   private readonly router = inject(Router);
+  readonly authService = inject(AuthService);
   readonly vpService = inject(ViewportService);
   readonly overlayRef = inject<GlobalOverlayRef>(GLOBAL_OVERLAY_REF, { optional: true });
 

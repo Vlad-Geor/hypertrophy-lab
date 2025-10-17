@@ -20,5 +20,6 @@ r.delete('/plans/:id', ctrl.deletePlan);
 r.post('/logs', validateBody(createLogRequest), ctrl.createLog);
 r.patch('/logs/:id', ctrl.patchLog); // (optional) add schema if you expose fields
 r.delete('/logs/:id', ctrl.deleteLog); // (optional)
+r.post('/logs/telegram-action', ctrl.telegramActionController)
 
 export default r;

@@ -1,7 +1,13 @@
 import { TitleCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { TimeOfDay } from '@ikigaidev/contracts';
 import {
   ButtonComponent,
@@ -27,10 +33,10 @@ import { DAY_KEYS, DAY_NUM } from '../model/weekdays.model';
 
 type AddRoutineForm = {
   days: FormGroup<DaysGroup>;
-  timeOfDay: FormControl<TimeOfDay>;
-  unitsPerDose: FormControl<number>;
-  userSupplementId: FormControl<string>;
-  notes: FormControl<string>;
+  timeOfDay: FormControl<TimeOfDay | null>;
+  unitsPerDose: FormControl<number | null>;
+  userSupplementId: FormControl<string | null>;
+  notes: FormControl<string | null>;
 };
 
 @Component({
@@ -94,19 +100,22 @@ export class AddRoutine {
   );
 
   readonly form = this.fb.group<AddRoutineForm>({
-    days: this.fb.group<DaysGroup>({
-      sun: this.fb.nonNullable.control(true),
-      mon: this.fb.nonNullable.control(true),
-      tue: this.fb.nonNullable.control(true),
-      wed: this.fb.nonNullable.control(true),
-      thu: this.fb.nonNullable.control(true),
-      fri: this.fb.nonNullable.control(true),
-      sat: this.fb.nonNullable.control(true),
-    }),
-    timeOfDay: this.fb.nonNullable.control<TimeOfDay>('morning'),
-    unitsPerDose: this.fb.nonNullable.control(0),
-    userSupplementId: this.fb.nonNullable.control(''),
-    notes: this.fb.nonNullable.control(''),
+    days: this.fb.group<DaysGroup>(
+      {
+        sun: this.fb.nonNullable.control(true),
+        mon: this.fb.nonNullable.control(true),
+        tue: this.fb.nonNullable.control(true),
+        wed: this.fb.nonNullable.control(true),
+        thu: this.fb.nonNullable.control(true),
+        fri: this.fb.nonNullable.control(true),
+        sat: this.fb.nonNullable.control(true),
+      },
+      { validators: [Validators.required] },
+    ),
+    timeOfDay: this.fb.control<TimeOfDay>('morning'),
+    unitsPerDose: this.fb.control(null, Validators.required),
+    userSupplementId: this.fb.control(null, Validators.required),
+    notes: this.fb.control(null),
   });
 
   constructor() {
@@ -123,9 +132,9 @@ export class AddRoutine {
     const { timeOfDay, unitsPerDose, userSupplementId, notes } = this.form.getRawValue();
     return {
       daysOfWeek: this.daysToArray(),
-      timeOfDay,
+      timeOfDay: timeOfDay ?? 'morning',
       unitsPerDose: Number(unitsPerDose),
-      userSupplementId,
+      userSupplementId: userSupplementId ?? '',
       notes,
     };
   }
@@ -134,12 +143,12 @@ export class AddRoutine {
     if (this.globalOverlayRef) this.globalOverlayRef.close();
   }
 
-  onSubmit(): Observable<CreatePlanResponse> {
+  onSubmit = (): Observable<CreatePlanResponse> => {
     const req = this.toCreatePlanRequest();
-    return this.scheduleService.addUserSupplementPlan(req)
-  }
+    return this.scheduleService.addUserSupplementPlan(req);
+  };
 
-  onSubmitNext(ev: unknown): void {
-
+  onSubmitSuccess(e: unknown): void {
+    this.globalOverlayRef?.close();
   }
 }

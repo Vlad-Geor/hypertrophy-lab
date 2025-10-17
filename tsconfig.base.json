@@ -61,6 +61,7 @@
       "@ikigaidev/router": ["libs/shared/router/src/index.ts"],
       "@ikigaidev/service": ["libs/shared/layout/service/src/index.ts"],
       "@ikigaidev/tag": ["libs/shared/ui/tag/src/index.ts"],
+      "@ikigaidev/tg-bot": ["libs/hypertrophy-lab/tg-bot/src/index.ts"],
       "@ikigaidev/tw-preset": ["libs/shared/tw-preset/src/index.ts"],
       "@ikigaidev/types": ["libs/shared/types/src/index.ts"],
       "@ikigaidev/util": ["libs/shared/util/src/index.ts"]

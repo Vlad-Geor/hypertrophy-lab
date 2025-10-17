@@ -9,6 +9,7 @@ export const iconType = [
   'bag-shopping-solid',
   'arrows-up-down-liner',
   'bars-solid',
+  'logout-liner',
   'save-liner',
   'bullseye-liner',
   'bed-solid',

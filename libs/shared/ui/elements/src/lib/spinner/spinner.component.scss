@@ -1,0 +1,42 @@
+:host {
+  display: inline-block;
+  line-height: 0;
+  color: inherit;
+}
+svg {
+  animation: spin var(--dur) linear infinite;
+}
+circle {
+  stroke-linecap: round;
+  stroke: currentColor;
+  animation: dash calc(var(--dur) * 1.5) ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: -125;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  svg {
+    animation: none;
+  }
+  circle {
+    animation: dash calc(var(--dur) * 2) ease-in-out infinite;
+  }
+}

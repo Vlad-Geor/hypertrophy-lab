@@ -531,3 +531,74 @@ export const updateLogTx = (
       'updated_at as updatedAt',
     ])
     .then((r) => r[0]);
+
+
+    export async function getLogForAction(trx: Knex.Transaction, logId: string) {
+  return trx('nutrition.schedule_logs as l')
+    .join('core.users as u','u.id','l.user_id')
+    .select('l.id','l.user_id','l.user_supplement_id','l.quantity_units','l.status','u.telegram_chat_id')
+    .where('l.id', logId)
+    .first()
+    .forUpdate(); // lock row for idempotency
+}
+
+export async function setStatusTaken(trx: Knex.Transaction, log: any) {
+  // your FIFO consumption here
+  // await consumeStock(trx, log.user_id, log.user_supplement_id, log.quantity_units, log.id);
+  await trx('nutrition.schedule_logs').where({ id: log.id }).update({
+    status: 'taken',
+    updated_at: trx.fn.now(),
+  });
+}
+
+export async function setStatusSkipped(trx: Knex.Transaction, logId: string) {
+  await trx('nutrition.schedule_logs').where({ id: logId }).update({
+    status: 'skipped',
+    updated_at: trx.fn.now(),
+  });
+}
+
+export async function revertTaken(trx: Knex.Transaction, logId: string) {
+  const rows = await trx('nutrition.schedule_log_consumptions')
+    .where({ log_id: logId })
+    .select('batch_id', 'units')
+    .forUpdate();
+
+  if (rows.length === 0) return;
+
+  for (const r of rows) {
+    await trx('nutrition.batches')
+      .where({ id: r.batch_id })
+      .increment('quantity_units', r.units);
+  }
+
+  await trx('nutrition.schedule_log_consumptions').where({ log_id: logId }).del();
+}
+
+export async function markNotified(trx: Knex.Transaction, logId: string) {
+  await trx('nutrition.schedule_logs')
+    .where({ id: logId, status: 'pending' })
+    .update({ notified_at: trx.fn.now() });
+}
+
+export async function fetchDuePlanInstances() {
+  // Example: plans with time_of_day matching current local hour bucket and not yet logged today.
+  return await db('nutrition.schedule_plans as p')
+    .join('core.users as u', 'u.id', 'p.user_id')
+    .join('nutrition.user_supplements as us', 'us.id', 'p.user_supplement_id')
+    .select({
+      userId: 'p.user_id',
+      chatId: 'u.telegram_chat_id',
+      name: db.raw(`coalesce(us.nicdbname, 'Supplement')`),
+      doseUnits: 'p.quantity_units',
+      doseLabel: db.raw(`p.quantity_units::text`),
+      date: db.raw('CURRENT_DATE'),           // replace with TZ-aware date per u.tz
+      timeOfDay: 'p.time_of_day',
+      userSupplementId: 'p.user_supplement_id',
+      planId: 'p.id',
+    })
+    .whereNotNull('u.telegram_chat_id')
+    .where({ 'p.active': true })
+    // naive window; refine to your schedule windows
+    .whereRaw('p.time_of_day = ?', ['morning']);
+}

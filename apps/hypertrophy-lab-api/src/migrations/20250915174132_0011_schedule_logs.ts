@@ -31,7 +31,7 @@ export async function up(knex: Knex) {
   });
 
   await knex.raw(`
-    ALTER TABLE schedule_logs
+    ALTER TABLE nutrition.schedule_logs
       ADD CONSTRAINT schedule_logs_time_of_day_chk CHECK (time_of_day IN ('morning','afternoon','evening','bedtime')),
       ADD CONSTRAINT schedule_logs_status_chk CHECK (status IN ('taken','skipped')),
       ADD CONSTRAINT schedule_logs_quantity_chk CHECK (quantity_units >= 0);

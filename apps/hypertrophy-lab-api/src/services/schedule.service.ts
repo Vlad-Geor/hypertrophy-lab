@@ -212,3 +212,4 @@ export async function getDayView(userId: string, date: string) {
 
   return { date, sections };
 }
+

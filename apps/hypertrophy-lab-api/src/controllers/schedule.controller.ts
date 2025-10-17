@@ -1,19 +1,16 @@
 import { createPlanResponse, listPlansResponse } from '@ikigaidev/hl/contracts';
 import { Request, RequestHandler, Response } from 'express';
 import * as svc from '../services/schedule.service';
+import * as tg from '../services/schedule.telegram.service';
 
-// export async function getDayView(req: Request, res: Response) {
-//   const userId = req.user.id;
-//   const date = String(req.query.date);
-//   const data = await svc.getDayView({ userId, date });
-//   // runtime guard (dev safety)
-//   const parsed = dayScheduleResponse.safeParse(data);
-//   if (!parsed.success)
-//     return res
-//       .status(500)
-//       .json({ error: 'Invalid response shape', issues: parsed.error.issues });
-//   res.json(parsed.data);
-// }
+export async function telegramActionController(req: Request, res: Response) {
+  const { action, logId, chatId } = req.body ?? {};
+  if (!['t', 's'].includes(action) || !logId || !chatId)
+    return res.status(400).json({ ok: false, error: 'bad_request' });
+
+  const out = await tg.telegramActionService({ action, logId, chatId: String(chatId) });
+  return res.status(out.ok ? 200 : 400).json(out);
+}
 
 export const getDayView: RequestHandler = async (req: Request, res, next) => {
   try {

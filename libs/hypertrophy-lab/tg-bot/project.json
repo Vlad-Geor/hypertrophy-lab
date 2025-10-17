@@ -1,0 +1,27 @@
+{
+  "name": "tg-bot",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/hypertrophy-lab/tg-bot/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/hypertrophy-lab/tg-bot",
+        "tsConfig": "libs/hypertrophy-lab/tg-bot/tsconfig.lib.json",
+        "packageJson": "libs/hypertrophy-lab/tg-bot/package.json",
+        "main": "libs/hypertrophy-lab/tg-bot/src/index.ts",
+        "assets": ["libs/hypertrophy-lab/tg-bot/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/hypertrophy-lab/tg-bot/jest.config.ts"
+      }
+    }
+  }
+}

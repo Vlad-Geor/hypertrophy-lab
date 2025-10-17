@@ -56,7 +56,12 @@
 
 <div class="flex justify-center gap-3">
   <lib-button appearance="outline" (click)="onClose()">Discard</lib-button>
-  <lib-button theme="gradient-primary" [disabled]="!form.valid" [asyncClickCallback]="onSubmit" (next)="onSubmitNext($event)">
+  <lib-button
+    theme="gradient-primary"
+    [disabled]="!form.valid"
+    [asyncClick]="onSubmit"
+    (next)="onSubmitSuccess($event)"
+  >
     <span class="text-white">Save</span>
   </lib-button>
 </div>

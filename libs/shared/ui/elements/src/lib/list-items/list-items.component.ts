@@ -8,9 +8,7 @@ import {
   effect,
   inject,
   input,
-  inputBinding,
   output,
-  outputBinding,
   QueryList,
   Type,
   ViewChildren,
@@ -57,6 +55,13 @@ import { CustomListItemComponent } from './model/custom-list-item.model';
           }
         </div>
       </cdk-virtual-scroll-viewport>
+    } @else if (!options().length) {
+      <hl-no-data
+        noDataTitle="No Results"
+        noDataMessage="Dropdown contains no items."
+        size="md"
+        type="no-data"
+      ></hl-no-data>
     } @else {
       <hl-no-data size="md" type="filter"></hl-no-data>
     }
@@ -113,22 +118,5 @@ export class ListItemsComponent<V, T> implements AfterViewInit {
   private createDynamicComponents(): void {
     const customComponent = this.customListItemComponent();
     if (!customComponent || !this.dynamicContainers) return;
-
-    this.dynamicContainers.forEach((container, index) => {
-      const ref = container;
-
-      ref.clear();
-
-      const listItem = this.options()[index];
-      const componentRef = ref.createComponent(customComponent, {
-        bindings: [
-          inputBinding('data', () => listItem.data),
-          inputBinding('listItem', () => listItem),
-          inputBinding('selected', () => this.selectionModel().isSelected(listItem)),
-          inputBinding('size', () => this.size()),
-          outputBinding('itemClicked', () => this.onItemSelected(listItem)),
-        ],
-      });
-    });
   }
 }
