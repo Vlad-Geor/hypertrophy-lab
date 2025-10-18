@@ -1,4 +1,5 @@
 import { CreatePlanRequest, UpdatePlanRequest } from '@ikigaidev/hl/contracts';
+import { Knex } from 'knex';
 import { db } from '../config/database.js';
 import * as inv from '../repositories/inventory.repo.js';
 import * as repo from '../repositories/schedule.repo.js';
@@ -31,6 +32,7 @@ export async function deletePlan(params: { userId: string; planId: string }) {
 
 export async function patchLog(params: { userId: string; logId: string; patch: any }) {
   const { userId, logId, patch } = params;
+  console.log('patchLog init, params: ', params);
 
   return db.transaction(async (trx) => {
     const cur = await repo.getLogWithConsumptions(userId, logId).transacting(trx);
@@ -72,6 +74,42 @@ export async function patchLog(params: { userId: string; logId: string; patch: a
   });
 }
 
+// services/logs.service.ts
+export async function patchLogTx(
+  trx: Knex.Transaction,
+  params: { userId: string; logId: string; patch: any },
+) {
+  const { userId, logId, patch } = params;
+  console.log('patchTx params: ', params);
+
+  const cur = await repo.getLogWithConsumptionsTx(trx, userId, logId);
+  if (!cur) throw new Error('Log not found');
+
+  const nextStatus = patch.status ?? cur.status;
+  const nextQty = patch.quantityUnits ?? cur.quantityUnits ?? 0;
+
+  if (cur.status === 'taken' && cur.totalConsumed > 0) {
+    await repo.restoreConsumptionsTx(trx, logId);
+    await repo.deleteConsumptionsTx(trx, logId);
+  }
+
+  const updated = await repo.updateLogTx(trx, {
+    userId,
+    logId,
+    patch: {
+      status: nextStatus,
+      quantity_units: nextQty,
+      note: patch.note ?? cur.note,
+      time_of_day: patch.timeOfDay ?? cur.timeOfDay,
+    },
+  });
+
+  if (nextStatus === 'taken' && nextQty > 0) {
+    await repo.consumeStockTx(trx, logId, cur.userSupplementId, nextQty);
+  }
+  return updated;
+}
+
 export async function deleteLog(params: { userId: string; logId: string }) {
   await db.transaction(async (trx) => {
     // revert stock if any consumption
@@ -91,7 +129,7 @@ export async function createLog(
     userSupplementId: string;
     date: string;
     timeOfDay: 'morning' | 'afternoon' | 'evening' | 'bedtime';
-    status: 'taken' | 'skipped';
+    status: 'taken' | 'skipped' | 'pending';
     quantityUnits?: number;
     note?: string | null;
     consumeStock?: boolean;
@@ -135,12 +173,9 @@ export async function createLog(
       note: payload.note ?? null,
     });
 
-    const shouldConsume =
-      payload.consumeStock !== false && payload.status === 'taken' && qty > 0;
-    if (shouldConsume) {
+    if (payload.status === 'taken' && (payload.consumeStock ?? true) && qty > 0) {
       await repo.consumeStockTx(trx, log.id, payload.userSupplementId, qty);
     }
-
     return log;
   });
 }
@@ -212,4 +247,3 @@ export async function getDayView(userId: string, date: string) {
 
   return { date, sections };
 }
-

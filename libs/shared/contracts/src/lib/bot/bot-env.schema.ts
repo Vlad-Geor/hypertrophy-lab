@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const botEnv = z.object({
-  BOT_PORT: z.number(),
+  BOT_PORT: z.string(),
   TG_BOT_TOKEN: z.string(),
   TG_WEBHOOK_SECRET: z.string(),
   TG_BOT_USERNAME: z.string(),

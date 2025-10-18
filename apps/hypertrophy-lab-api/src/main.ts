@@ -1,6 +1,7 @@
 import pg from 'pg';
 import { app } from './app.js';
 import { loadEnv } from './config/env.js';
+import './worker/notifier.cron.js';
 
 async function bootstrap() {
   const { PORT, DB_URL } = loadEnv();

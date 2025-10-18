@@ -4,6 +4,8 @@ import * as svc from '../services/schedule.service.js';
 import * as tg from '../services/schedule.telegram.service.js';
 
 export async function telegramActionController(req: Request, res: Response) {
+  console.log('req body: ', req.body);
+
   const { action, logId, chatId } = req.body ?? {};
   if (!['t', 's'].includes(action) || !logId || !chatId)
     return res.status(400).json({ ok: false, error: 'bad_request' });

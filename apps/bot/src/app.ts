@@ -3,14 +3,6 @@ import { buildWebhookHandler, setWebhook } from '@ikigaidev/tg-bot';
 import express from 'express';
 import { Telegraf } from 'telegraf';
 
-type Env = {
-  PORT: string | number;
-  TG_BOT_TOKEN: string;
-  TG_BOT_USERNAME: string;
-  TG_WEBHOOK_SECRET: string;
-  TG_PUBLIC_URL: string;
-};
-
 export function createApp({ env, bot }: { env: BotEnv; bot: Telegraf }) {
   const app = express();
   app.use(express.json());

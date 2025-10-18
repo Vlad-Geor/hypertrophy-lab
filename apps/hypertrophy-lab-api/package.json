@@ -1,5 +1,5 @@
 {
-  "name": "hypertrophy-lab-api",
+  "name": "@ikigaidev/hypertrophy-lab-api",
   "private": true,
   "type": "module",
   "dependencies": {

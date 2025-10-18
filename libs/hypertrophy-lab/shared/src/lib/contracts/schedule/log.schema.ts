@@ -1,5 +1,5 @@
 // libs/shared/contracts/src/schedule/log.schema.ts
-import { isoDate, timeOfDay, isoDateTime, uuid } from '@ikigaidev/contracts';
+import { isoDate, isoDateTime, timeOfDay, uuid } from '@ikigaidev/contracts';
 import { z } from 'zod';
 
 export const intakeStatus = z.enum(['taken', 'skipped', 'pending']);
@@ -29,7 +29,7 @@ export const createLogRequest = z.object({
   quantityUnits: z.number().int().min(0).optional(),
   note: z.string().nullable().optional(),
   // optional: let BE deduct from stock
-  consumeStock: z.boolean().default(true),
+  consumeStock: z.boolean().optional().default(true),
 });
 
 export const updateLogRequest = createLogRequest.partial();

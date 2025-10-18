@@ -8,7 +8,7 @@ export const userSchema = z.object({
   displayName: z.string().nullable().optional(),
   nickname: z.string().nullable().optional(),
   pictureUrl: z.url().nullable().optional(),
-  tz: z.string().default('UTC'),
+  tz: z.string().default('Asia/Jerusalem'),
   locale: z.string().default('en'),
   settings: z.record(z.string(), z.unknown()).default({}),
   createdAt: isoDateTime,

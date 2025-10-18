@@ -327,7 +327,7 @@ export const insertLogTx = (
     planId?: string | null;
     date: string;
     timeOfDay: string;
-    status: 'taken' | 'skipped';
+    status: 'taken' | 'skipped' | 'pending';
     quantityUnits: number;
     note?: string | null;
   },
@@ -449,6 +449,8 @@ export async function consumeStockTx(
   userSupplementId: string,
   units: number,
 ) {
+  console.log('trying to consumeStockTX');
+
   let remaining = units;
   const batches = await selectFifoBatchesTx(trx, userSupplementId);
 
@@ -473,6 +475,30 @@ export async function consumeStockTx(
 // Patch Methods + Helpers (TX)
 export const getLogWithConsumptions = (userId: string, logId: string) =>
   db('nutrition.schedule_logs as l')
+    .leftJoin(
+      db('nutrition.schedule_log_consumptions')
+        .select('log_id')
+        .sum({ total_consumed: 'units' })
+        .groupBy('log_id')
+        .as('lc'),
+      'lc.log_id',
+      'l.id',
+    )
+    .where({ 'l.id': logId, 'l.user_id': userId })
+    .first()
+    .select(
+      'l.id',
+      'l.user_id',
+      'l.user_supplement_id',
+      'l.status',
+      'l.quantity_units',
+      'l.time_of_day',
+      'l.note',
+      db.raw('COALESCE(lc.total_consumed, 0) as total_consumed'),
+    );
+
+export const getLogWithConsumptionsTx = (trx: Knex, userId: string, logId: string) =>
+  trx('nutrition.schedule_logs as l')
     .leftJoin(
       db('nutrition.schedule_log_consumptions')
         .select('log_id')
@@ -532,33 +558,39 @@ export const updateLogTx = (
     ])
     .then((r) => r[0]);
 
-
-    export async function getLogForAction(trx: Knex.Transaction, logId: string) {
+export async function getLogForActionTx(trx: Knex.Transaction, logId: string) {
   return trx('nutrition.schedule_logs as l')
-    .join('core.users as u','u.id','l.user_id')
-    .select('l.id','l.user_id','l.user_supplement_id','l.quantity_units','l.status','u.telegram_chat_id')
+    .join('core.users as u', 'u.id', 'l.user_id')
+    .select(
+      'l.id',
+      'l.user_id',
+      'l.user_supplement_id',
+      'l.quantity_units',
+      'l.status',
+      'u.telegram_chat_id',
+    )
     .where('l.id', logId)
     .first()
     .forUpdate(); // lock row for idempotency
 }
 
-export async function setStatusTaken(trx: Knex.Transaction, log: any) {
+export async function setStatusTakenTx(trx: Knex.Transaction, log: any) {
   // your FIFO consumption here
-  // await consumeStock(trx, log.user_id, log.user_supplement_id, log.quantity_units, log.id);
-  await trx('nutrition.schedule_logs').where({ id: log.id }).update({
-    status: 'taken',
-    updated_at: trx.fn.now(),
-  });
+  await consumeStockTx(trx, log.id, log.user_supplement_id, log.quantity_units);
+  // await trx('nutrition.schedule_logs').where({ id: log.id }).update({
+  //   status: 'taken',
+  //   updated_at: trx.fn.now(),
+  // });
 }
 
-export async function setStatusSkipped(trx: Knex.Transaction, logId: string) {
+export async function setStatusSkippedTx(trx: Knex.Transaction, logId: string) {
   await trx('nutrition.schedule_logs').where({ id: logId }).update({
     status: 'skipped',
     updated_at: trx.fn.now(),
   });
 }
 
-export async function revertTaken(trx: Knex.Transaction, logId: string) {
+export async function revertTakenTx(trx: Knex.Transaction, logId: string) {
   const rows = await trx('nutrition.schedule_log_consumptions')
     .where({ log_id: logId })
     .select('batch_id', 'units')
@@ -575,30 +607,53 @@ export async function revertTaken(trx: Knex.Transaction, logId: string) {
   await trx('nutrition.schedule_log_consumptions').where({ log_id: logId }).del();
 }
 
-export async function markNotified(trx: Knex.Transaction, logId: string) {
+export async function markNotifiedTx(trx: Knex.Transaction, logId: string) {
   await trx('nutrition.schedule_logs')
     .where({ id: logId, status: 'pending' })
     .update({ notified_at: trx.fn.now() });
 }
 
-export async function fetchDuePlanInstances() {
-  // Example: plans with time_of_day matching current local hour bucket and not yet logged today.
-  return await db('nutrition.schedule_plans as p')
+export async function fetchDuePlanInstances(trx?: Knex.Transaction) {
+  const k = (trx ?? db) as Knex;
+  return k('nutrition.schedule_plans as p')
     .join('core.users as u', 'u.id', 'p.user_id')
     .join('nutrition.user_supplements as us', 'us.id', 'p.user_supplement_id')
+    .whereNotNull('u.telegram_chat_id')
+    .where({ 'p.active': true })
+    .whereRaw(
+      `
+      CASE p.time_of_day
+        WHEN 'morning'   THEN ((now() AT TIME ZONE u.tz)::time >= time '06:00'
+                            AND (now() AT TIME ZONE u.tz)::time <  time '11:05')
+        WHEN 'afternoon' THEN ((now() AT TIME ZONE u.tz)::time >= time '12:00'
+                            AND (now() AT TIME ZONE u.tz)::time <  time '16:05')
+        WHEN 'evening'   THEN ((now() AT TIME ZONE u.tz)::time >= time '17:00'
+                            AND (now() AT TIME ZONE u.tz)::time <  time '21:05')
+        WHEN 'bedtime'   THEN ((now() AT TIME ZONE u.tz)::time >= time '21:00'
+                            AND (now() AT TIME ZONE u.tz)::time <= time '23:59:59')
+      END
+    `,
+    )
+    .andWhereRaw(
+      `
+      NOT EXISTS (
+        SELECT 1 FROM nutrition.schedule_logs l
+        WHERE l.user_id = p.user_id
+          AND l.user_supplement_id = p.user_supplement_id
+          AND l.date = (now() AT TIME ZONE u.tz)::date
+          AND l.time_of_day = p.time_of_day
+      )
+    `,
+    )
     .select({
       userId: 'p.user_id',
       chatId: 'u.telegram_chat_id',
-      name: db.raw(`coalesce(us.nicdbname, 'Supplement')`),
-      doseUnits: 'p.quantity_units',
-      doseLabel: db.raw(`p.quantity_units::text`),
-      date: db.raw('CURRENT_DATE'),           // replace with TZ-aware date per u.tz
+      name: k.raw(`coalesce(us.nickname, 'Supplement')`),
+      doseUnits: 'p.units_per_dose', // ensure this column exists
+      doseLabel: k.raw(`p.units_per_dose::text`),
+      date: k.raw('(now() AT TIME ZONE u.tz)::date'),
       timeOfDay: 'p.time_of_day',
       userSupplementId: 'p.user_supplement_id',
       planId: 'p.id',
-    })
-    .whereNotNull('u.telegram_chat_id')
-    .where({ 'p.active': true })
-    // naive window; refine to your schedule windows
-    .whereRaw('p.time_of_day = ?', ['morning']);
+    });
 }

@@ -1,4 +1,4 @@
-import { BotEnv } from '../../../../../shared/contracts/src/lib/bot/bot-env.schema';
+import { BotEnv } from '@ikigaidev/contracts';
 
 let cached: { token: string; exp: number } | null = null;
 

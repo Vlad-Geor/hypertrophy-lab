@@ -1,7 +1,7 @@
+import { BotEnv } from '@ikigaidev/contracts';
 import { Context, Telegraf } from 'telegraf';
-import { BotEnv } from '../../../../../shared/contracts/src/lib/bot/bot-env.schema';
-import { getM2MToken } from '../m2m-token/auth0-m2m';
-import { TelegramActionResponse } from '../model/telegram-action-response.schema';
+import { getM2MToken } from '../m2m-token/auth0-m2m.js';
+import { TelegramActionResponse } from '../model/telegram-action-response.schema.js';
 
 type ClaimResponse = { ok: boolean; error?: string };
 
@@ -50,7 +50,12 @@ export async function createBot(env: BotEnv) {
     const data = String(cq.data || '');
     console.log('callbackQ data: ', data);
 
-    const [action, logId] = [data[0], data.slice(2)]; // "t:<id>" | "s:<id>"
+    const [action, rest] = data.split(':', 2); // "t:<id>|uriEncoded(suppName)" | "s:<id>|uriEncoded(suppName)"
+    const [id, encName] = (rest ?? '').split('|', 2);
+
+    const logId = id ?? '';
+    const name = encName ? decodeURIComponent(encName) : undefined;
+
     try {
       const token = await getM2MToken(env);
       const res = await fetch(`${env.API_URL}/schedule/logs/telegram-action`, {
@@ -61,8 +66,14 @@ export async function createBot(env: BotEnv) {
       const j = (await res.json()) as TelegramActionResponse;
       if (!res.ok || !j.ok)
         return ctx.answerCbQuery(j?.error || res.statusText, { show_alert: true });
-      await ctx.answerCbQuery(j.status === 'taken' ? 'Marked taken' : 'Marked skipped');
+      await ctx.answerCbQuery(j.status === 'taken' ? 'Marked taken' : 'Marked skipped', {
+        show_alert: true,
+      });
       await ctx.editMessageReplyMarkup(undefined); // disable buttons
+      // 🚫❌
+      await ctx.editMessageText(
+        `${(j.status === 'taken' ? '✅ Taken — ' : '❌ Skipped - ') + name} `,
+      );
     } catch (e) {
       console.error(e);
       await ctx.answerCbQuery('Error', { show_alert: true });
@@ -71,21 +82,3 @@ export async function createBot(env: BotEnv) {
 
   return bot;
 }
-
-// const { TG_BOT_TOKEN, API_URL } = loadEnv();
-// if (!TG_BOT_TOKEN || !API_URL) throw new Error('Missing env');
-
-// export const bot = new Telegraf<Context>(TG_BOT_TOKEN);
-// const token = await getM2MToken();
-
-// export async function startPolling() {
-//   await bot.telegram.deleteWebhook({ drop_pending_updates: false }); // ensure polling
-//   const me = await bot.telegram.getMe();
-//   console.log(`Bot @${me.username} starting…`);
-//   });
-
-//   await bot.launch();
-
-//   process.once('SIGINT', () => bot.stop('SIGINT'));
-//   process.once('SIGTERM', () => bot.stop('SIGTERM'));
-// }

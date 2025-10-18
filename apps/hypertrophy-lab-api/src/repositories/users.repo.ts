@@ -51,7 +51,7 @@ export async function upsertUserFromAuth0(claims: Claims) {
         displayName: displayName ?? null,
         nickname: nickname ?? null,
         pictureUrl: picture ?? null,
-        tz: 'UTC',
+        tz: 'Asia/Jerusalem',
         locale: 'en',
         settings: {}, // pg driver serializes to jsonb
       })

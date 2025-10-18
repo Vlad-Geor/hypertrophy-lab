@@ -1,1 +1,1 @@
-export * from './lib/service/index';
+export * from './lib/service/index.js';
