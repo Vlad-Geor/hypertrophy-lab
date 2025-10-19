@@ -7,9 +7,9 @@ export const botEnv = z.object({
   TG_BOT_USERNAME: z.string(),
   TG_PUBLIC_URL: z.string(),
   API_URL: z.string(),
-  AUTH0_DOMAIN: z.string(),
-  AUTH0_CLIENT_ID: z.string(),
-  AUTH0_CLIENT_SECRET: z.string(),
-  AUTH0_AUDIENCE: z.string(),
+  M2M_AUTH0_DOMAIN: z.string(),
+  M2M_AUTH0_CLIENT_ID: z.string(),
+  M2M_AUTH0_CLIENT_SECRET: z.string(),
+  M2M_AUTH0_AUDIENCE: z.string(),
 });
 export type BotEnv = z.infer<typeof botEnv>;

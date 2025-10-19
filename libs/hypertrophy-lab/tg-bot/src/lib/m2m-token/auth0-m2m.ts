@@ -8,14 +8,14 @@ export async function getM2MToken(env: BotEnv) {
   const now = Math.floor(Date.now() / 1000);
   if (cached && cached.exp - 30 > now) return cached.token; // 30s leeway
 
-  const res = await fetch(`https://${env.AUTH0_DOMAIN}/oauth/token`, {
+  const res = await fetch(`https://${env.M2M_AUTH0_DOMAIN}/oauth/token`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       grant_type: 'client_credentials',
-      client_id: env.AUTH0_CLIENT_ID,
-      client_secret: env.AUTH0_CLIENT_SECRET,
-      audience: env.AUTH0_AUDIENCE,
+      client_id: env.M2M_AUTH0_CLIENT_ID,
+      client_secret: env.M2M_AUTH0_CLIENT_SECRET,
+      audience: env.M2M_AUTH0_AUDIENCE,
     }),
   });
   if (!res.ok) throw new Error(`oauth/token ${res.status}`);
