@@ -3,15 +3,22 @@ import { Request, RequestHandler, Response } from 'express';
 import * as svc from '../services/schedule.service.js';
 import * as tg from '../services/schedule.telegram.service.js';
 
-export async function telegramActionController(req: Request, res: Response) {
+export async function telegramAction(req: Request, res: Response) {
   console.log('req body: ', req.body);
 
   const { action, logId, chatId } = req.body ?? {};
   if (!['t', 's'].includes(action) || !logId || !chatId)
     return res.status(400).json({ ok: false, error: 'bad_request' });
 
-  const out = await tg.telegramActionService({ action, logId, chatId: String(chatId) });
+  const out = await tg.telegramAction({ action, logId, chatId: String(chatId) });
   return res.status(out.ok ? 200 : 400).json(out);
+}
+
+export async function getDaySummary(req: Request, res: Response) {
+  const userId = req.user.id;
+  const date = String(req.query.date || '');
+  const out = await svc.getDaySummary({ userId, date });
+  res.json(out);
 }
 
 export const getDayView: RequestHandler = async (req: Request, res, next) => {

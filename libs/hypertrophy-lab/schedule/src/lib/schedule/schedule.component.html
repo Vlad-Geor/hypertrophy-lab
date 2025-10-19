@@ -79,6 +79,9 @@
       noDataMessage="There are no supplements for today. Take a breather for the day, or add a supplement to start tracking!"
     ></hl-no-data>
   }
+  @if (selectedDaypartFilter()) {
+    <lib-tag surfaceCardTag>{{ selectedDaypartFilter() | titlecase }}</lib-tag>
+  }
 </lib-surface-card>
 
 <lib-surface-card

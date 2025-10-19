@@ -10,17 +10,13 @@ type Out = {
   statusCode?: number;
 };
 
-export async function telegramActionService(p: {
+export async function telegramAction(p: {
   action: 't' | 's';
   logId: string;
   chatId: string;
 }): Promise<Out> {
   return db.transaction(async (trx) => {
     const log = await repo.getLogForActionTx(trx, p.logId);
-    console.log('log status: ', log.status);
-    console.log('chatId: ', p.chatId);
-    console.log('input p: ', p);
-    console.log('p.action: ', p.action);
     const chatId = String(p.chatId);
 
     if (!log)

@@ -6,6 +6,8 @@ export async function getSummary(req: Request, res: Response) {
   const userId = req.user.id;
   const withinDays = Number(req.query.withinDays ?? 30);
   const data = await svc.getSummary({ userId, withinDays });
+  console.log('dash summary aggregated data: ', data);
+  
   const parsed = dashboardSummaryResponse.safeParse(data);
   if (!parsed.success) return res.status(500).json({ error: 'Invalid response', issues: parsed.error.issues });
   res.json(parsed.data);

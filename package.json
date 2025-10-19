@@ -8,9 +8,10 @@
     "build-api": "npm install && npx nx build hypertrophy-lab-api",
     "start-api": "node dist/apps/hypertrophy-lab-api/main.js",
     "ngrok-client": "ngrok http 4200",
-    "knex": "knex",
-    "migrate": "knex migrate:latest --knexfile apps/hypertrophy-lab-api/src/knexfile.cjs --migrations-directory migrations",
-    "rollback": "knex migrate:rollback --all --knexfile apps/hypertrophy-lab-api/src/knexfile.cjs --migrations-directory migrations",
+    "knex": "tsx --env-file=apps/hypertrophy-lab-api/.env ./node_modules/knex/bin/cli.js --knexfile apps/hypertrophy-lab-api/src/knexfile.ts",
+    "knex:make": "tsx ./node_modules/knex/bin/cli.js --knexfile apps/hypertrophy-lab-api/src/knexfile.ts migrate:make",
+    "knex:latest": "pnpm run knex -- migrate:latest",
+    "knex:rollback": "pnpm run knex -- migrate:rollback",
     "lint": "nx run hypertrophy-lab:lint --fix",
     "sb": "nx run hypertrophy-lab:storybook"
   },

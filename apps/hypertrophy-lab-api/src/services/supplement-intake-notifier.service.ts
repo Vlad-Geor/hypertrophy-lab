@@ -35,10 +35,10 @@ async function runBatch() {
 }
 
 export async function sendDueRemindersService() {
-  const {
-    rows: [{ ok }],
-  } = await db.raw('select pg_try_advisory_lock(?,?) ok', [42, 1]);
-  if (!ok) return;
+  const r = await db.raw('select pg_try_advisory_lock(?,?) AS ok', [42, 1]);
+  const got = r.rows?.[0].ok === true;
+
+  if (!got) return;
 
   try {
     const due = await fetchDuePlanInstances(); // [{ userId, chatId, name, dose, date, timeOfDay, userSupplementId, planId }]
@@ -88,35 +88,3 @@ export async function sendDueRemindersService() {
     await db.raw('select pg_advisory_unlock(?,?)', [42, 1]);
   }
 }
-
-// await db.transaction(async (trx) => {
-//       for (const it of due) {
-//         // dedupe: unique (user_id, user_supplement_id, date, time_of_day)
-//         const { id: logId } = await createLog(trx, {
-//           userId: it.userId,
-//           payload: {
-//             userSupplementId: it.userSupplementId,
-//             planId: it.planId ?? null,
-//             date: it.date,
-//             timeOfDay: it.timeOfDay,
-//             quantityUnits: it.doseUnits ?? 0,
-//             consumeStock: true,
-//             status: 'pending',
-//           },
-//         });
-
-//         const hash = crypto.createHash('md5').update(it.userId).digest(); // deterministic
-//         const jitterSec = hash[0] % 30; // 0–29s
-//         await new Promise((r) => setTimeout(r, jitterSec * 1000));
-
-//         await sendReminder(telegram, {
-//           chatId: it.chatId,
-//           suppName: it.name,
-//           logId: logId,
-//           doseLabel: it.doseLabel,
-//           doseUnits: it.doseUnits,
-//         });
-
-//         await markNotifiedTx(trx, logId);
-//       }
-//     });

@@ -27,6 +27,7 @@ import { dayPartFilters } from './day-section-pills';
   selector: 'hl-schedule',
   imports: [
     IconComponent,
+    TitleCasePipe,
     ButtonComponent,
     DatePipe,
     Pill,

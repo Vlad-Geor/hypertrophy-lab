@@ -1,7 +1,11 @@
 import pg from 'pg';
 import { app } from './app.js';
+import { db } from './config/database.js';
 import { loadEnv } from './config/env.js';
-import './worker/notifier.cron.js';
+import './worker/morning-summary.cron.js';
+import { notifierTask } from './worker/supplement-intake-notifier.cron.js';
+
+let srv: import('http').Server | undefined;
 
 async function bootstrap() {
   const { PORT, DB_URL } = loadEnv();
@@ -21,10 +25,39 @@ async function bootstrap() {
       .map((s) => s.trim()),
   );
 
-  app.listen(PORT, () => {
+  notifierTask.start();
+
+  srv = app.listen(PORT, () => {
     console.log(`[API] Running on http://localhost:${PORT}`);
   });
 }
+
+async function shutdown(sig: string) {
+  console.log('shutdown', sig);
+  try {
+    notifierTask.stop();
+  } catch (err) {
+    console.error(err);
+  }
+  try {
+    if (srv) await new Promise((r) => srv.close(r));
+  } catch (err) {
+    console.error(err);
+  }
+  try {
+    await db.destroy();
+  } catch (err) {
+    console.error(err);
+  }
+  process.exit(0);
+}
+
+process.once('SIGINT', () => {
+  void shutdown('SIGINT');
+});
+process.once('SIGTERM', () => {
+  void shutdown('SIGTERM');
+});
 
 bootstrap().catch((err) => {
   console.error('Fatal startup error', err);

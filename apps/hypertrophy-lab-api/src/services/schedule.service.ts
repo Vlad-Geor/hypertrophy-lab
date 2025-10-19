@@ -182,6 +182,63 @@ export async function createLog(
 
 const SLOTS = ['morning', 'afternoon', 'evening', 'bedtime'] as const;
 
+export type DaySummary = {
+  date: string;
+  total: number;
+  firstTime?: 'morning' | 'afternoon' | 'evening' | 'bedtime';
+  groups: Array<{
+    time: 'morning' | 'afternoon' | 'evening' | 'bedtime';
+    items: Array<{
+      name: string;
+      dose: number;
+      status: 'pending' | 'taken' | 'skipped';
+      logId?: string;
+    }>;
+  }>;
+};
+
+const ORDER: Array<DaySummary['firstTime']> = [
+  'morning',
+  'afternoon',
+  'evening',
+  'bedtime',
+];
+
+export async function getDaySummary(p: { userId: string; date?: string }) {
+  const tz = await repo.getUserTz(p.userId);
+  const date = p.date && p.date.length ? p.date : await inferTodayInTz(tz);
+  const rows = await repo.fetchDaySummaryRows(p.userId, date);
+
+  const byTime = new Map<string, DaySummary['groups'][number]>();
+
+  for (const r of rows) {
+    if (!byTime.has(r.timeOfDay))
+      byTime.set(r.timeOfDay, { time: r.timeOfDay, items: [] });
+    byTime.get(r.timeOfDay).items.push({
+      name: r.name,
+      dose: r.doseUnits ?? 0,
+      status: (r.logStatus as any) || 'pending',
+      logId: r.logId || undefined,
+    });
+  }
+
+  const groups = ORDER.map((t) => byTime.get(t)).filter(Boolean) as DaySummary['groups'];
+
+  const firstTime = groups[0]?.time;
+  const total = rows.length;
+
+  const out: DaySummary = { date, total, firstTime, groups };
+  return out;
+}
+
+async function inferTodayInTz(tz: string) {
+  const r = await db.raw(
+    `select to_char((now() at time zone ?)::date, 'YYYY-MM-DD') as d`,
+    [tz],
+  );
+  return r.rows[0].d as string; // e.g. "2025-10-19"
+}
+
 export async function getDayView(userId: string, date: string) {
   const weekday = new Date(date + 'T00:00:00Z').getUTCDay(); // 0..6
   const [plans, logs, adHocInfos] = await Promise.all([

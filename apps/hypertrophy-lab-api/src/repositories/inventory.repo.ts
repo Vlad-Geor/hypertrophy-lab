@@ -36,14 +36,14 @@ export async function getCounters(userId: string, withinDays: number) {
     .first();
   const totalSupplements = toNumber(totalRow?.cnt);
 
-  // lowStock — count grouped lows via subquery
+  // lowStock (sum batches per supplement)
   const lowRow = await db
     .from(function () {
       this.select('us.id')
-        .from({ us: 'user_supplements' })
-        .leftJoin({ b: 'batches' }, 'b.user_supplement_id', 'us.id')
+        .from({ us: 'nutrition.user_supplements' })
+        .leftJoin({ b: 'nutrition.batches' }, 'b.user_supplement_id', 'us.id')
         .where('us.user_id', userId)
-        .groupBy('us.id', 'us.low_stock_threshold_units', 'us.custom_name')
+        .groupBy('us.id')
         .havingRaw(
           'COALESCE(SUM(b.quantity_units), 0) <= COALESCE(MAX(us.low_stock_threshold_units), 0)',
         )
@@ -53,16 +53,21 @@ export async function getCounters(userId: string, withinDays: number) {
     .first();
   const lowStock = toNumber(lowRow?.cnt);
 
-  // expiringSoon
-  const expRow = await db('nutrition.batches')
-    .count<{ cnt: string | number | bigint }>({ cnt: 'id' })
-    .where({ user_id: userId })
-    .whereNotNull('expires_on')
-    .andWhere('expires_on', '<=', db.raw(`CURRENT_DATE + INTERVAL '${withinDays} days'`))
+  // expiringSoon (join via user_supplements; TZ-aware)
+  const expRow = await db('nutrition.batches as bt')
+    .innerJoin('nutrition.user_supplements as us', 'us.id', 'bt.user_supplement_id')
+    .innerJoin('core.users as u', 'u.id', 'us.user_id')
+    .count<{ cnt: string | number | bigint }>({ cnt: 'bt.id' })
+    .where('us.user_id', userId)
+    .whereNotNull('bt.expires_on')
+    .andWhereRaw(
+      `bt.expires_on::date <= ((now() at time zone u.tz)::date + (? || ' days')::interval)`,
+      [withinDays],
+    )
     .first();
   const expiringSoon = toNumber(expRow?.cnt);
 
-  // openOrders
+  // openOrders (schema likely `orders`)
   const openStatuses = ['ordered', 'in_transit', 'arrived', 'out_for_delivery'];
   const openRow = await db('nutrition.orders')
     .count<{ cnt: string | number | bigint }>({ cnt: 'id' })
@@ -75,15 +80,19 @@ export async function getCounters(userId: string, withinDays: number) {
 }
 
 export async function getRecentlyAdded(userId: string, limit: number) {
-  return db('nutrition.user_supplements')
+  return db('nutrition.user_supplements as us')
     .select({
-      userSupplementId: 'id',
-      name: db.raw(`COALESCE(custom_name, 'Supplement')`),
-      quantityUnits: db.raw(`0`), // optional to compute from batches
-      createdAt: 'created_at',
+      userSupplementId: 'us.id',
+      name: db.raw(`COALESCE(us.nickname, 'Supplement')`),
+      quantityUnits: db.raw(`COALESCE(SUM(b.quantity_units),0)::int`),
+      createdAt: db.raw(
+        `to_char(us.created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`,
+      ),
     })
-    .where({ user_id: userId })
-    .orderBy('created_at', 'desc')
+    .leftJoin('nutrition.batches as b', 'b.user_supplement_id', 'us.id')
+    .where('us.user_id', userId)
+    .groupBy('us.id')
+    .orderBy('us.created_at', 'desc')
     .limit(limit);
 }
 
@@ -93,7 +102,7 @@ export async function getLowStock(userId: string, limit: number) {
     .select({
       userSupplementId: 'us.id',
       name: db.raw(`COALESCE(us.custom_name, 'Supplement')`),
-      onHand: db.raw(`COALESCE(SUM(b.quantity_units), 0)`),
+      onHand: db.raw(`COALESCE(SUM(b.quantity_units), 0)::int`),
       threshold: db.raw(`COALESCE(MAX(us.low_stock_threshold_units), 0)`),
     })
     .leftJoin('nutrition.batches as b', 'b.user_supplement_id', 'us.id')
@@ -107,21 +116,52 @@ export async function getLowStock(userId: string, limit: number) {
 }
 
 export async function getExpiringSoon(userId: string, withinDays: number, limit: number) {
-  return db('nutrition.batches as b')
-    .select({
-      userSupplementId: 'b.user_supplement_id',
-      name: db.raw(`'Supplement'`),
-      expiresOn: 'b.expires_on',
-      daysLeft: db.raw(
-        `GREATEST(0, DATE_PART('day', b.expires_on::timestamp - CURRENT_DATE::timestamp))`,
-      ),
-    })
-    .where({ user_id: userId })
-    .whereNotNull('expires_on')
-    .andWhere('expires_on', '<=', db.raw(`CURRENT_DATE + INTERVAL '${withinDays} days'`))
-    .orderBy('expires_on', 'asc')
-    .limit(limit);
+  return (
+    db('nutrition.batches as bt')
+      .innerJoin('nutrition.user_supplements as us', 'us.id', 'bt.user_supplement_id')
+      .innerJoin('core.users as u', 'u.id', 'us.user_id') // for tz-aware date math
+      .leftJoin('nutrition.supplement_catalog as sc', 'sc.id', 'us.catalog_id')
+      .leftJoin('nutrition.brands as br', 'br.id', 'sc.brand_id')
+      .where('us.user_id', userId)
+      .whereNotNull('bt.expires_on')
+      // optional: exclude archived supplements
+      .whereNull('us.archived_at')
+      // within N days using user's tz
+      .andWhereRaw(
+        `bt.expires_on::date <= ((now() at time zone u.tz)::date + (? || ' days')::interval)`,
+        [withinDays],
+      )
+      .select({
+        batchId: 'bt.id',
+        userSupplementId: 'bt.user_supplement_id',
+        name: db.raw(`COALESCE(us.nickname, CONCAT_WS(' ', br.name, sc.name))`),
+        expiresOn: 'bt.expires_on',
+        daysLeft: db.raw(
+          `GREATEST(0, (bt.expires_on::date - (now() at time zone u.tz)::date))`,
+        ),
+        onHandUnits: 'bt.quantity_units',
+      })
+      .orderBy('bt.expires_on', 'asc')
+      .limit(limit)
+  );
 }
+
+// export async function getExpiringSoon(userId: string, withinDays: number, limit: number) {
+//   return db('nutrition.batches as b')
+//     .select({
+//       userSupplementId: 'b.user_supplement_id',
+//       name: db.raw(`'Supplement'`),
+//       expiresOn: 'b.expires_on',
+//       daysLeft: db.raw(
+//         `GREATEST(0, DATE_PART('day', b.expires_on::timestamp - CURRENT_DATE::timestamp))`,
+//       ),
+//     })
+//     .where({ user_id: userId })
+//     .whereNotNull('expires_on')
+//     .andWhere('expires_on', '<=', db.raw(`CURRENT_DATE + INTERVAL '${withinDays} days'`))
+//     .orderBy('expires_on', 'asc')
+//     .limit(limit);
+// }
 
 // ******************************************************** NEW
 
@@ -208,11 +248,11 @@ export function listInventory(
 
 export async function countInventory(
   userId: string,
-  params: { q?: string; archived?: boolean, withoutPlan?: boolean },
+  params: { q?: string; archived?: boolean; withoutPlan?: boolean },
 ) {
   const archived = params.archived ?? false;
   const base = db('nutrition.user_supplements as us')
-  .modify((qb) => {
+    .modify((qb) => {
       if (params.withoutPlan) {
         qb.leftJoin(
           'nutrition.schedule_plans as ns',

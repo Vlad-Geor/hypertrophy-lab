@@ -6,6 +6,36 @@ import {
 import { Knex } from 'knex';
 import { db } from '../config/database.js';
 
+export async function getUserTz(userId: string): Promise<string> {
+  const r = await db('core.users').where({ id: userId }).first('tz');
+  return r?.tz || 'UTC';
+}
+
+/** One row per active plan for the date, with LEFT JOIN to existing log */
+export async function fetchDaySummaryRows(userId: string, date: string) {
+  return db('nutrition.schedule_plans as p')
+    .join('nutrition.user_supplements as us', 'us.id', 'p.user_supplement_id')
+    .leftJoin('nutrition.supplement_catalog as c', 'c.id', 'us.catalog_id')
+    .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
+    .leftJoin('nutrition.schedule_logs as l', function () {
+      this.on('l.user_id', '=', 'p.user_id')
+        .andOn('l.user_supplement_id', '=', 'p.user_supplement_id')
+        .andOn('l.time_of_day', '=', 'p.time_of_day')
+        .andOn(db.raw('l.date = ?', [date]));
+    })
+    .where({ 'p.user_id': userId, 'p.active': true })
+    .select({
+      planId: 'p.id',
+      timeOfDay: 'p.time_of_day',
+      name: db.raw(`coalesce(us.nickname, c.name, 'Supplement')`),
+      doseUnits: db.raw(`coalesce(l.quantity_units, p.units_per_dose, 0)`),
+      logId: 'l.id',
+      logStatus: 'l.status',
+    }).orderByRaw(`CASE p.time_of_day
+        WHEN 'morning' THEN 1 WHEN 'afternoon' THEN 2
+        WHEN 'evening' THEN 3 WHEN 'bedtime' THEN 4 ELSE 5 END, name asc`);
+}
+
 export async function listPlans(userId: string) {
   return db('nutrition.schedule_plans')
     .select('*')

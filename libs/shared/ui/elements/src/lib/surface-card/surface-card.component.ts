@@ -19,6 +19,7 @@ import { IconComponent } from '../icon/icon.component';
           >
             {{ cardTitle() }}
           </h1>
+          <ng-content select="[surfaceCardTag]"></ng-content>
         </div>
         <p class="text-sm text-nowrap text-gray-text">
           {{ cardSubtitle() }}
