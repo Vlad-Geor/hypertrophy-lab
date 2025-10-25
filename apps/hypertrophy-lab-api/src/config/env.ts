@@ -2,11 +2,18 @@ import { config } from 'dotenv';
 import { dirname, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const repoRoot = resolve(here, '../../../apps/hypertrophy-lab-api/');
-const envPath = join(repoRoot, '.env');
+const isRender = process.env.RENDER === '1';
+const isProd = process.env.NODE_ENV === 'production' || isRender;
 
-config({ path: envPath, debug: true });
+const here = dirname(fileURLToPath(import.meta.url));
+const localRepoRoot = resolve(here, '../../../apps/hypertrophy-lab-api/');
+const envPath = join(localRepoRoot, '.env');
+
+if (isProd) {
+  config({ path: envPath, debug: true });
+} else {
+  config();
+}
 
 // spot-check a var
 
