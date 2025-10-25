@@ -63,7 +63,7 @@
           "fileReplacements": [
             {
               "replace": "libs/shared/config/src/lib/env.ts",
-              "with":    "apps/hypertrophy-lab/src/environments/environment.prod.ts"
+              "with": "apps/hypertrophy-lab/src/environments/environment.prod.ts"
             }
           ]
         },

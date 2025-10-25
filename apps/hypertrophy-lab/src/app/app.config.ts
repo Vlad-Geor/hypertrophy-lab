@@ -10,7 +10,7 @@ import { provideRouter } from '@angular/router';
 import { AuthService, authHttpInterceptorFn, provideAuth0 } from '@auth0/auth0-angular';
 import { API_BASE_URL } from '@ikigaidev/hl/shared';
 import { AngularSvgIconModule } from 'angular-svg-icon';
-import { environment } from '../environments/environment';
+import { environment } from '@ikigaidev/config';
 import { appRoutes } from './app.routes';
 
 export const handleAuthError = () => {

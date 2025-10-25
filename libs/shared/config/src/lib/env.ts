@@ -3,7 +3,15 @@ import { Environment } from './env.model';
 export const environment: Environment = {
   production: false,
   apiBase: '',
-  cloudName: '',
-  uploadPreset: '',
-  uploadFolder: '',
+  cloudinary: {
+    cloudName: '',
+    uploadPreset: '',
+    uploadFolder: '',
+  },
+  auth: {
+    audience: '',
+    clientId: '',
+    domain: '',
+    redirectUri: '',
+  },
 };
