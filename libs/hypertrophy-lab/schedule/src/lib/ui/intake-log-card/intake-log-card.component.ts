@@ -14,8 +14,8 @@ import {
   IconTile,
   TagComponent,
 } from '@ikigaidev/elements';
-import { DayEntrySchema, IntakeStatus } from '@ikigaidev/hl/contracts';
-import { finalize } from 'rxjs';
+import { CreateLogResponse, DayEntrySchema, IntakeStatus } from '@ikigaidev/hl/contracts';
+import { finalize, Observable } from 'rxjs';
 import { ScheduleService } from '../../data-access/schedule.service';
 
 @Component({
@@ -42,12 +42,15 @@ export class IntakeLogCard {
     effect(() => console.log(this.cardData()));
   }
 
-  onLogIntake(status: Exclude<IntakeStatus, 'pending'>): void {
-    // if (!this.inEditMode()) {
-    //   this.createIntakeLog(status);
-    // } else {
-    this.updateIntakeLog(status);
-    // }
+  logTaken = (): Observable<CreateLogResponse> => this.updateIntakeLog('taken');
+  logSkipped = (): Observable<CreateLogResponse> => this.updateIntakeLog('skipped');
+  onLogSkipped(ev: unknown) {
+    this.showActions.set(false);
+    this.updatedLog.set({ ...(ev as Partial<DayEntrySchema>) });
+  }
+  onLogTaken(ev: unknown) {
+    this.showActions.set(false);
+    this.updatedLog.set({ ...(ev as Partial<DayEntrySchema>) });
   }
 
   createIntakeLog(status: Exclude<IntakeStatus, 'pending'>): void {
@@ -67,13 +70,11 @@ export class IntakeLogCard {
       });
   }
 
-  updateIntakeLog(status: Exclude<IntakeStatus, 'pending'>): void {
-    this.scheduleService
+  updateIntakeLog(
+    status: Exclude<IntakeStatus, 'pending'>,
+  ): Observable<CreateLogResponse> {
+    return this.scheduleService
       .updateIntakeLog(this.cardData()?.logId ?? '', { status })
-      .pipe(finalize(() => this.inEditMode.set(false)))
-      .subscribe((res) => {
-        this.showActions.set(false);
-        this.updatedLog.set({ ...res });
-      });
+      .pipe(finalize(() => this.inEditMode.set(false)));
   }
 }

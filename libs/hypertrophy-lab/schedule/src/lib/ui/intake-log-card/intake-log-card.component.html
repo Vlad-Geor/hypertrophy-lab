@@ -35,16 +35,18 @@
     <lib-button
       appearance="outline"
       [fillContainer]="true"
-      (click)="onLogIntake('skipped')"
+      [asyncClick]="logSkipped"
+      (next)="onLogSkipped($event)"
     >
       <lib-icon [icon]="'close-circle-liner'"></lib-icon>
       Skip
     </lib-button>
-    <!-- [asyncClick]="onLogIntake('taken')" -->
+
     <lib-button
+      [asyncClick]="logTaken"
+      (next)="onLogTaken($event)"
       theme="success-bright"
       [fillContainer]="true"
-      (click)="onLogIntake('taken')"
     >
       <lib-icon [icon]="'check-circle-broken-liner'"></lib-icon>
       Take
