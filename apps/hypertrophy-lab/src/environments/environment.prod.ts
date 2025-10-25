@@ -2,7 +2,7 @@ import { Environment } from '@ikigaidev/config';
 
 export const environment: Environment = {
   production: true,
-  apiBase: 'https://hypertrophy-lab.onrender.com',
+  apiBase: 'https://hypertrophy-lab.onrender.com/api/v1',
   cloudinary: {
     cloudName: 'dvokg3twy',
     uploadPreset: 'z0PsadmkmKASdSKDSqwkem213Sdmaksm231',
