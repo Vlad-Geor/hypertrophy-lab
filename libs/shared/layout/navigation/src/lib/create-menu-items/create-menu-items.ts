@@ -5,7 +5,6 @@ export const createMenuItems: () => MenuItem[] = () => [
     icon: 'dashboard-liner',
     label: 'Dashboard',
     route: '/dashboard',
-    disabled: true,
   },
   {
     icon: 'clock-solid',
@@ -14,7 +13,7 @@ export const createMenuItems: () => MenuItem[] = () => [
   },
   {
     icon: 'list-check-liner',
-    label: 'My Routine',
+    label: 'Active Supplements',
     route: '/routine',
     disabled: true,
   },

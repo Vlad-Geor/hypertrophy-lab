@@ -1,0 +1,12 @@
+<div class="flex items-center gap-2" [attr.data-tone]="theme()">
+  <div
+    class="h-2 rounded-full relative overflow-hidden bg-gray-ring"
+    [class]=""
+    [style]="widthPx() ? `width: ${widthPx()}px;` : 'width: 100%;'"
+  >
+    <div class="absolute inset-0 bg-token w-0" [style.width.%]="pct()"></div>
+  </div>
+  @if (showLabel()) {
+    <span class="text-sm text-gray-heading">{{ value() }}/{{ max() }}</span>
+  }
+</div>

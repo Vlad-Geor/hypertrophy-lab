@@ -648,13 +648,14 @@ export async function fetchDuePlanInstances(trx?: Knex.Transaction) {
   return k('nutrition.schedule_plans as p')
     .join('core.users as u', 'u.id', 'p.user_id')
     .join('nutrition.user_supplements as us', 'us.id', 'p.user_supplement_id')
+    .join('nutrition.supplement_catalog as sc', 'sc.id', 'us.catalog_id')
     .whereNotNull('u.telegram_chat_id')
     .where({ 'p.active': true })
     .whereRaw(
       `
       CASE p.time_of_day
-        WHEN 'morning'   THEN ((now() AT TIME ZONE u.tz)::time >= time '06:00'
-                            AND (now() AT TIME ZONE u.tz)::time <  time '11:05')
+        WHEN 'morning'   THEN ((now() AT TIME ZONE u.tz)::time >= time '00:05'
+                            AND (now() AT TIME ZONE u.tz)::time <  time '23:55')
         WHEN 'afternoon' THEN ((now() AT TIME ZONE u.tz)::time >= time '12:00'
                             AND (now() AT TIME ZONE u.tz)::time <  time '16:05')
         WHEN 'evening'   THEN ((now() AT TIME ZONE u.tz)::time >= time '17:00'
@@ -685,5 +686,6 @@ export async function fetchDuePlanInstances(trx?: Knex.Transaction) {
       timeOfDay: 'p.time_of_day',
       userSupplementId: 'p.user_supplement_id',
       planId: 'p.id',
+      images: 'sc.images',
     });
 }

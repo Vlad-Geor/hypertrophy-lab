@@ -70,9 +70,16 @@ export async function createBot(env: BotEnv) {
         show_alert: true,
       });
       await ctx.editMessageReplyMarkup(undefined); // disable buttons
-      // 🚫❌
+      const ts = new Date().toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: 'Asia/Jerusalem',
+      });
+
       await ctx.editMessageText(
-        `${(j.status === 'taken' ? '✅ Taken — ' : '❌ Skipped - ') + name} `,
+        `${j.status === 'taken' ? '✅ Taken — ' : '🚫 Skipped — '}${name} • ${ts}`,
+        { parse_mode: 'HTML' },
       );
     } catch (e) {
       console.error(e);

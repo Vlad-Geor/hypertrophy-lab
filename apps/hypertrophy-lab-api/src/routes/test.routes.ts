@@ -33,6 +33,7 @@ r.post('/send-one', async (req, res) => {
     logId,
     suppName: 'Magnesium',
     doseUnits: units,
+    images: ['bla'],
   });
 
   await db('nutrition.schedule_logs')

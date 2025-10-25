@@ -1,0 +1,31 @@
+<!-- Faded blob on the top-right corner - absolute -->
+<div
+  [attr.data-tone]="theme()"
+  class="absolute rounded-full -right-3 -top-3 bg-token-subtle h-[84px] w-[84px]"
+></div>
+
+<div class="flex flex-col gap-4">
+  <p class="text-xs text-gray-text font-medium">{{ title() }}</p>
+  <div class="flex items-center gap-2">
+    @if (value()) {
+      <span class="text-2xl font-bold">{{ value() }}</span>
+    } @else {
+      <ng-content select="[noValueTpl]"></ng-content>
+    }
+
+    @if (value() && showAlert()) {
+      <div class="flex items-center justify-center bg-accent-pink w-5 h-5 rounded-full">
+        <lib-icon
+          class="text-white"
+          [fillContainer]="true"
+          [iconSize]="12"
+          icon="exclamation-solid"
+        ></lib-icon>
+      </div>
+    }
+  </div>
+</div>
+
+<ng-content select="lib-icon-tile"></ng-content>
+
+<lib-icon-tile [theme]="theme()" [icon]="icon()"></lib-icon-tile>

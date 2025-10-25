@@ -1,38 +1,39 @@
 import { sendReminder } from '@ikigaidev/tg-bot';
-import * as crypto from 'crypto';
 import { db } from '../config/database.js';
 import { telegram } from '../infra/telegram.js';
 import { createLog, fetchDuePlanInstances } from '../repositories/schedule.repo.js';
+import * as crypto from 'crypto';
 
-async function runBatch() {
-  await db.transaction(async (trx) => {
-    const due = await fetchDuePlanInstances(trx);
-    for (const it of due) {
-      const { id: logId } = await createLog(trx, {
-        userId: it.userId,
-        payload: {
-          planId: it.planId,
-          userSupplementId: it.userSupplementId,
-          date: it.date,
-          timeOfDay: it.timeOfDay,
-          status: 'pending',
-          quantityUnits: it.doseUnits ?? 0,
-          consumeStock: false,
-        },
-      });
-      await sendReminder(telegram, {
-        chatId: String(it.chatId),
-        logId: logId,
-        suppName: it.name,
-        doseUnits: it.doseUnits,
-        doseLabel: it.doseLabel,
-      });
-      await trx('nutrition.schedule_logs')
-        .where({ id: logId })
-        .update({ notified_at: trx.fn.now() });
-    }
-  });
-}
+// async function runBatch() {
+//   await db.transaction(async (trx) => {
+//     const due = await fetchDuePlanInstances(trx);
+//     for (const it of due) {
+//       const { id: logId } = await createLog(trx, {
+//         userId: it.userId,
+//         payload: {
+//           planId: it.planId,
+//           userSupplementId: it.userSupplementId,
+//           date: it.date,
+//           timeOfDay: it.timeOfDay,
+//           status: 'pending',
+//           quantityUnits: it.doseUnits ?? 0,
+//           consumeStock: false,
+//         },
+//       });
+//       await sendReminder(telegram, {
+//         chatId: String(it.chatId),
+//         logId: logId,
+//         suppName: it.name,
+//         doseUnits: it.doseUnits,
+//         doseLabel: it.doseLabel,
+//         images: it.images ?? ['bla'],
+//       });
+//       await trx('nutrition.schedule_logs')
+//         .where({ id: logId })
+//         .update({ notified_at: trx.fn.now() });
+//     }
+//   });
+// }
 
 export async function sendDueRemindersService() {
   const r = await db.raw('select pg_try_advisory_lock(?,?) AS ok', [42, 1]);
@@ -42,11 +43,17 @@ export async function sendDueRemindersService() {
 
   try {
     const due = await fetchDuePlanInstances(); // [{ userId, chatId, name, dose, date, timeOfDay, userSupplementId, planId }]
+
     if (due.length === 0) return;
 
     const created = await db.transaction(async (trx) => {
-      const out: Array<{ chatId: string; name: string; units: number; logId: string }> =
-        [];
+      const out: Array<{
+        chatId: string;
+        name: string;
+        units: number;
+        logId: string;
+        images: string[];
+      }> = [];
       for (const it of due) {
         const { id: logId } = await createLog(trx, {
           userId: it.userId,
@@ -65,6 +72,7 @@ export async function sendDueRemindersService() {
           name: it.name,
           units: it.doseUnits ?? 0,
           logId,
+          images: it.images,
         });
       }
       return out;
@@ -79,6 +87,7 @@ export async function sendDueRemindersService() {
         logId: it.logId,
         suppName: it.name,
         doseUnits: String(it.units),
+        images: it.images ?? ['bla'],
       });
       await db('nutrition.schedule_logs')
         .where({ id: it.logId, status: 'pending' })

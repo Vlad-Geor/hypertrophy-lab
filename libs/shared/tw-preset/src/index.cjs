@@ -58,6 +58,7 @@ module.exports = {
         'text-3': 'var(--text-3)', // muted
         'text-inverse': 'var(--text-inverse)', // on bright chips
         'gray-text': 'var(--gray-bright)',
+        'gray-heading': 'var(--gray-heading)',
         'gray-dark': 'var(--gray-dark)',
 
         // If you still use the old heading/body names, point them to HSL triples:

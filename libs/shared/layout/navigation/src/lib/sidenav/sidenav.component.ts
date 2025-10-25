@@ -8,7 +8,7 @@ import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
 import { ViewportService } from '@ikigaidev/service';
 import { filter, map, startWith } from 'rxjs';
 import { MenuItem } from '../model/menu-item.model';
-import { createMenuItems } from '../util/create-menu-items';
+import { createMenuItems } from '../create-menu-items/create-menu-items';
 
 @Component({
   selector: 'lib-sidenav',

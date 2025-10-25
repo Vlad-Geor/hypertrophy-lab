@@ -250,12 +250,10 @@ export async function getDayView(userId: string, date: string) {
   const logKey = (usId: string, tod: string) => `${usId}|${tod}`;
   const logMap = new Map<string, any>();
   logs.forEach((l) => logMap.set(logKey(l.userSupplementId, l.timeOfDay), l));
-  console.log('MAP: ', logMap);
 
   // base items from plans
   const itemsFromPlans = plans.map((p) => {
     const l = logMap.get(logKey(p.userSupplementId, p.timeOfDay));
-    console.log('PLAN - ', p);
 
     return {
       timeOfDay: p.timeOfDay,

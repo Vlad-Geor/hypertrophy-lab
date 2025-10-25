@@ -8,11 +8,14 @@
 @if (!vpService.isMobile() && !vpService.isTablet()) {
   <lib-sidenav></lib-sidenav>
 }
-<div id="layout-right" class="flex flex-col flex-1 text-white">
+<div id="layout-right" class="flex flex-col flex-1 text-white h-dvh">
   <!-- This should span the 'remaining' space. When sidebar exists, it shrinks to fit whatever
      is left. When sidebar doesn't exist, it takes up 100% of the width. -->
   <lib-header></lib-header>
-  <div id="main-content-shell" class="flex-1 bg-bg px-4 pt-4">
+  <div
+    id="main-content-shell"
+    class="flex-1 bg-bg px-4 pt-4 overflow-auto scrollbar-thin scrollbar-colors"
+  >
     <router-outlet></router-outlet>
   </div>
 </div>

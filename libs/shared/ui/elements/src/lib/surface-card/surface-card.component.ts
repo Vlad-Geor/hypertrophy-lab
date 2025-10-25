@@ -1,21 +1,25 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { IconType } from '@ikigaidev/model';
+import { IconType, Theme } from '@ikigaidev/model';
 import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'lib-surface-card',
-  imports: [IconComponent, DatePipe],
+  imports: [IconComponent, DatePipe, NgClass],
   template: `
     @if (cardTitle()) {
       <div class="flex flex-col gap-2">
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 text-token" [attr.data-tone]="theme()">
           <lib-icon [icon]="cardTitleIcon()" [class]="cardTitleIconClass()"></lib-icon>
           <h1
-            class="text-white"
             [class]="
-              titleSize() === 'md' ? 'text-heading-md-semibold' : 'text-heading-semibold'
+              titleSize() === 'md'
+                ? 'text-heading-md-semibold'
+                : titleSize() === 'sm'
+                  ? 'text-heading-sm-semibold'
+                  : 'text-heading-semibold'
             "
+            [ngClass]="{ 'text-white': cardTitleWhite() }"
           >
             {{ cardTitle() }}
           </h1>
@@ -36,8 +40,10 @@ import { IconComponent } from '../icon/icon.component';
 })
 export class SurfaceCard {
   cardTitle = input<string>();
-  titleSize = input<'md' | 'lg'>('md');
+  titleSize = input<'sm' | 'md' | 'lg'>('md');
   cardSubtitle = input<string>();
   cardTitleIcon = input<IconType>();
   cardTitleIconClass = input<string>();
+  cardTitleWhite = input(false);
+  theme = input<Theme>('white');
 }

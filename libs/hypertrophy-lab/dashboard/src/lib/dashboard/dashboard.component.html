@@ -1,2 +1,183 @@
-<p>Dashboard works!</p>
-<lib-single-select [options]="options"></lib-single-select>
+<!-- <lib-single-select [options]="options"></lib-single-select> -->
+
+<!-- <hr class="mb-6" /> -->
+
+<div class="grid grid-cols-2 justify-items-stretch gap-3">
+  <hl-dashboard-summary-card
+    title="Total Supplements"
+    [value]="counters()?.totalSupplements ?? 0"
+    theme="primary"
+    icon="box-liner"
+  >
+    <span noValueTpl>
+      Nothing here.
+      <br />
+      <a
+        class="text-xs underline text-primary hover:cursor-pointer"
+        routerLink="/new-supplement"
+      >
+        Add supplements
+      </a>
+    </span>
+  </hl-dashboard-summary-card>
+
+  <hl-dashboard-summary-card
+    title="Low Stock"
+    [value]="counters()?.lowStock ?? 0"
+    [showAlert]="(counters()?.lowStock ?? 0) > 2"
+    theme="secondary"
+    icon="alert-triangle-liner"
+  >
+    <div class="flex items-center gap-1" noValueTpl>
+      <span>None!</span>
+      <lib-icon class="text-secondary" icon="stars-liner" [iconSize]="28"></lib-icon>
+    </div>
+  </hl-dashboard-summary-card>
+
+  <hl-dashboard-summary-card
+    title="Expiring"
+    [value]="counters()?.expiringSoon ?? 0"
+    theme="danger"
+    icon="calendar-liner"
+  >
+    <div class="flex items-center gap-1" noValueTpl>
+      <span>None!</span>
+      <lib-icon class="text-danger" icon="stars-liner" [iconSize]="28"></lib-icon>
+    </div>
+  </hl-dashboard-summary-card>
+
+  <hl-dashboard-summary-card
+    title="Orders"
+    [value]="counters()?.openOrders ?? 0"
+    theme="accent-purple"
+    icon="cart-liner"
+  >
+    <span noValueTpl>No active orders.</span>
+  </hl-dashboard-summary-card>
+</div>
+
+<lib-surface-card cardTitleIcon="clock-solid" cardTitle="Recent Activity" titleSize="lg">
+  <div class="flex flex-col gap-3">
+    @if (latestOrders()?.length) {
+      <p class="text-sm font-medium text-gray-heading">Latest Orders</p>
+      @for (order of latestOrders(); track $index) {
+        <div class="bg-surface-2 rounded-lg flex items-center gap-3 p-3">
+          <lib-icon-tile icon="cart-liner"></lib-icon-tile>
+          <div class="flex flex-col gap-1">
+            <p class="text-sm">{{ order.label }}</p>
+            <div class="flex items-center gap-2.5">
+              <lib-tag theme="secondary" [rounded]="true">{{ order.status }}</lib-tag>
+              <span class="text-sm text-gray-text">{{ order.totalCostCents }}cents</span>
+            </div>
+          </div>
+        </div>
+      }
+    }
+    @if (recentlyAdded()?.length) {
+      <p class="text-sm font-medium text-gray-heading">Recently Added</p>
+      @for (recentlyAdded of recentlyAdded(); track $index) {
+        <div class="flex flex-col gap-3">
+          <div class="bg-surface-2 rounded-lg flex gap-3 items-center p-3">
+            <lib-icon-tile icon="box-liner"></lib-icon-tile>
+            <div class="flex flex-col gap-1">
+              <p class="text-sm font-medium">
+                {{ recentlyAdded.name }} (TBD - fix 'nickname' to default to supplement
+                name)
+              </p>
+              <div class="flex gap-1 text-xs text-gray-text">
+                <p>Nature made - TBD (brand)</p>
+                <span>•</span>
+                <span>{{ recentlyAdded.quantityUnits }}units</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</lib-surface-card>
+
+@if (lowStockAlerts()?.length) {
+  <lib-surface-card
+    theme="secondary"
+    cardTitle="Low Stock Alerts"
+    cardTitleIcon="alert-triangle-liner"
+    titleSize="sm"
+  >
+    @for (alert of lowStockAlerts(); track $index) {
+      <div
+        class="p-4 flex items-center gap-3 border border-gray-active rounded-xl surface-2"
+      >
+        <lib-icon-tile icon="alert-circle-liner" theme="secondary"></lib-icon-tile>
+        <div class="flex flex-col flex-1 gap-1">
+          <div class="flex items-center justify-between">
+            <p class="text-sm font-medium truncate">{{ alert.name }}</p>
+            <lib-tag theme="secondary" [rounded]="true">
+              <!-- {{alert.onHand}} -->
+              4 days left (TBD - RETURN servingUnits to calc days left.)
+            </lib-tag>
+          </div>
+          <div>
+            <p class="mb-1 text-gray-text text-sm">Thorne (TBD - add brand)</p>
+            <span>
+              TBD - add containerUnitQuantity to know how much to calc on progress-bar.
+              (e.g 8 - onHand), out of 90. 8/90
+            </span>
+            <lib-progress-bar
+              [value]="alert.onHand"
+              [max]="90"
+              theme="secondary"
+            ></lib-progress-bar>
+          </div>
+        </div>
+      </div>
+    }
+  </lib-surface-card>
+}
+@if (expiringSoon()?.length) {
+  <lib-surface-card
+    theme="accent-magenta"
+    cardTitle="Expiring Soon"
+    cardTitleIcon="calendar-liner"
+    titleSize="sm"
+  >
+    @for (item of expiringSoon(); track $index) {
+      <div
+        class="p-4 flex items-center gap-3 border border-gray-active rounded-xl surface-2"
+      >
+        <lib-icon-tile icon="alert-circle-liner" theme="accent-magenta"></lib-icon-tile>
+        <div class="flex flex-col flex-1 gap-1">
+          <div class="flex items-center justify-between">
+            <p class="text-sm font-medium truncate">{{ item.name }}</p>
+            <lib-tag theme="accent-magenta" [rounded]="true">{{ item.daysLeft }}</lib-tag>
+          </div>
+          <div>
+            <p class="mb-1 text-gray-text text-sm">Thorne (TBD add brand)</p>
+            <p class="text-sm text-gray-dark">{{ item.expiresOn }}</p>
+          </div>
+        </div>
+      </div>
+    }
+  </lib-surface-card>
+}
+
+<lib-surface-card
+  cardTitle="Quick Actions"
+  cardTitleIcon="trend-upward-liner"
+  theme="primary"
+  [cardTitleWhite]="true"
+>
+  @for (action of quickActions; track $index) {
+    <lib-button
+      [routerLink]="action.redirectUrl"
+      size="lg"
+      [fillContainer]="true"
+      [theme]="action.theme ?? 'white'"
+      [appearance]="action.theme === 'gradient-primary' ? 'fill' : 'outline'"
+      [disabled]="action.disabled"
+    >
+      <lib-icon [icon]="action.icon"></lib-icon>
+      <p>{{ action.label }}</p>
+    </lib-button>
+  }
+</lib-surface-card>

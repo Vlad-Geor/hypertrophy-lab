@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "dev": "nx run-many --target=serve --projects=hypertrophy-lab-api,hypertrophy-lab --parallel",
+    "dev-bot": "nx run-many --target=serve --projects=hypertrophy-lab-api,hypertrophy-lab,bot --parallel",
     "client": "nx run hypertrophy-lab:serve",
     "api": "nx run hypertrophy-lab-api:serve",
     "build-api": "npm install && npx nx build hypertrophy-lab-api",

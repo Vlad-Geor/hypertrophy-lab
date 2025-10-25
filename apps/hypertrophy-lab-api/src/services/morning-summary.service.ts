@@ -5,10 +5,9 @@ import { getDaySummary } from './schedule.service.js';
 
 export async function sendMorningSummaries() {
   // leader-only
-  const {
-    rows: [{ ok }],
-  } = await db.raw('select pg_try_advisory_lock(?,?) as ok', [43, 1]);
-  if (!ok) return;
+  const r = await db.raw('select pg_try_advisory_lock(?,?) as ok', [43, 1]);
+  const got = r.rows?.[0].ok === true;
+  if (!got) return;
 
   try {
     const users = await db('core.users as u')
@@ -16,7 +15,7 @@ export async function sendMorningSummaries() {
       .whereRaw(
         `
         (now() at time zone u.tz)::time >= time '07:00'
-        AND (now() at time zone u.tz)::time <  time '07:05'
+        AND (now() at time zone u.tz)::time <  time '14:05'
         AND NOT EXISTS (
           SELECT 1 FROM core.daily_notifications dn
           WHERE dn.user_id=u.id

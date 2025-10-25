@@ -3,6 +3,7 @@ import { app } from './app.js';
 import { db } from './config/database.js';
 import { loadEnv } from './config/env.js';
 import './worker/morning-summary.cron.js';
+import { morningTask } from './worker/morning-summary.cron.js';
 import { notifierTask } from './worker/supplement-intake-notifier.cron.js';
 
 let srv: import('http').Server | undefined;
@@ -26,6 +27,7 @@ async function bootstrap() {
   );
 
   notifierTask.start();
+  morningTask.start();
 
   srv = app.listen(PORT, () => {
     console.log(`[API] Running on http://localhost:${PORT}`);
@@ -36,6 +38,7 @@ async function shutdown(sig: string) {
   console.log('shutdown', sig);
   try {
     notifierTask.stop();
+    morningTask.stop();
   } catch (err) {
     console.error(err);
   }

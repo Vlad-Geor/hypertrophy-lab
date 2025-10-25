@@ -19,7 +19,7 @@
 <div class="overflow-hidden whitespace-nowrap w-1/2 flex flex-col justify-between flex-1">
   <div class="flex flex-col">
     <p
-      class="pb-1 text-sm font-semibold lg:text-lg lg:font-medium md:text-base text-white text-wrap line-clamp-2"
+      class="pb-1 font-semibold lg:text-lg lg:font-medium md:text-base text-white text-wrap line-clamp-2 truncate"
     >
       {{ supp?.catalogName }}
     </p>
@@ -30,8 +30,8 @@
   <div class="flex flex-col mb-1 gap-2">
     <lib-button
       [fillContainer]="true"
-      theme="gradient-primary"
-      [size]="'md'"
+      theme="primary"
+      [size]="'sm'"
       class="text-white text-xs"
     >
       Update

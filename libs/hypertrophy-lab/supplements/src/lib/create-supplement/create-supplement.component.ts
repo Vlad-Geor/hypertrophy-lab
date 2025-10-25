@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -45,7 +45,7 @@ import { SupplementService } from '../data-access/supplement.service';
   ],
   templateUrl: './create-supplement.component.html',
   styleUrl: './create-supplement.component.scss',
-  providers: [CloudinaryService, SupplementService],
+  providers: [CloudinaryService, SupplementService, provideNativeDateAdapter()],
 })
 export class CreateSupplementComponent {
   private readonly fb = inject(FormBuilder);

@@ -12,7 +12,6 @@ import { API_BASE_URL } from '@ikigaidev/hl/shared';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { environment } from '../environments/environment';
 import { appRoutes } from './app.routes';
-import { provideNativeDateAdapter } from '@angular/material/core';
 
 export const handleAuthError = () => {
   const auth = inject(AuthService);
@@ -27,7 +26,6 @@ export const handleAuthError = () => {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideNativeDateAdapter(),
     provideRouter(appRoutes),
     provideHttpClient(withInterceptors([authHttpInterceptorFn])),
     importProvidersFrom(AngularSvgIconModule.forRoot()),

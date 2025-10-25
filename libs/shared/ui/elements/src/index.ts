@@ -14,6 +14,7 @@ export * from './lib/icon-tile/icon-tile.component';
 export * from './lib/icon/icon.component';
 export * from './lib/input/input.component';
 export * from './lib/list-items/index';
+export * from './lib/progress-bar/progress-bar.component';
 export * from './lib/loader/bouncing-loader.component';
 export * from './lib/loader/infinity-loader.component';
 export * from './lib/pill/pill.component';

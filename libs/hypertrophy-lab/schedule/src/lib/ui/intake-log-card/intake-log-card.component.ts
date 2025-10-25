@@ -43,11 +43,11 @@ export class IntakeLogCard {
   }
 
   onLogIntake(status: Exclude<IntakeStatus, 'pending'>): void {
-    if (!this.inEditMode()) {
-      this.createIntakeLog(status);
-    } else {
-      this.updateIntakeLog(status);
-    }
+    // if (!this.inEditMode()) {
+    //   this.createIntakeLog(status);
+    // } else {
+    this.updateIntakeLog(status);
+    // }
   }
 
   createIntakeLog(status: Exclude<IntakeStatus, 'pending'>): void {

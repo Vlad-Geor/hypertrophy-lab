@@ -1,5 +1,6 @@
 export const iconType = [
   'apple-whole-solid',
+  'trend-upward-liner',
   'arrow-right-solid',
   'arrow-up-from-bracket-solid',
   'arrow-up-solid',
@@ -7,6 +8,7 @@ export const iconType = [
   'award-solid',
   'edit-liner',
   'bag-shopping-solid',
+  'stars-liner',
   'arrows-up-down-liner',
   'bars-solid',
   'logout-liner',

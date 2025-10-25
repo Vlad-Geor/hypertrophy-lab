@@ -15,6 +15,7 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
         width: iconSize(),
         height: iconSize(),
         fill: fillContainer() ? 'currentColor' : '',
+        'stroke-width': strokeWidth() + 'px',
       }"
       [src]="'shared-assets/icons/' + icon() + '.svg'"
     ></svg-icon>
@@ -38,6 +39,7 @@ export class IconComponent {
   icon = input.required<IconType | undefined>();
   color = input<string>('inherit');
   iconSize = input<number>(20);
+  strokeWidth = input<number>(1);
   fillContainer = input(false);
   onHoverEffect = input<'highlight' | 'color'>('color');
 }

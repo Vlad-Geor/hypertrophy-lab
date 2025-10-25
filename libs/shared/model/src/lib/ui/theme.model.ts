@@ -13,4 +13,7 @@ export type Theme =
   | 'danger'
   | 'info'
   | 'gradient-primary'
-  | 'gradient-secondary';
+  | 'gradient-secondary'
+  | 'gradient-danger'
+  | 'gradient-accent-purple'
+  ;
