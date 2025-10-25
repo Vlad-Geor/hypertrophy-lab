@@ -9,9 +9,15 @@ import { notifierTask } from './worker/supplement-intake-notifier.cron.js';
 let srv: import('http').Server | undefined;
 
 async function bootstrap() {
-  const { PORT, DB_URL } = loadEnv();
+  const env = loadEnv();
+  console.log('[BOOT] PORT', env.PORT);
+  console.log('[BOOT] AUTH0_AUDIENCE', env.AUTH0_AUDIENCE);
+  console.log('[BOOT] AUTH0_DOMAIN', env.AUTH0_DOMAIN);
+  console.log('[BOOT] NODE_ENV', process.env.NODE_ENV);
+  console.log('[BOOT] RENDER', process.env.RENDER);
+  
 
-  const client = new pg.Client({ connectionString: DB_URL });
+  const client = new pg.Client({ connectionString: env.DB_URL });
   await client.connect();
   const { rows } = await client.query(`
   SELECT typarray FROM pg_type WHERE typname = 'health_target_enum'`);
@@ -29,8 +35,8 @@ async function bootstrap() {
   notifierTask.start();
   morningTask.start();
 
-  srv = app.listen(PORT, () => {
-    console.log(`[API] Running on http://localhost:${PORT}`);
+  srv = app.listen(env.PORT, () => {
+    console.log(`[API] Running on http://localhost:${env.PORT}`);
   });
 }
 

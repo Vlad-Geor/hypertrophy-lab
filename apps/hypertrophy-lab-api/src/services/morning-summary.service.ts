@@ -5,6 +5,8 @@ import { getDaySummary } from './schedule.service.js';
 
 export async function sendMorningSummaries() {
   // leader-only
+  console.log('[CRON] sendMorningSummaries tick at', new Date().toISOString());
+
   const r = await db.raw('select pg_try_advisory_lock(?,?) as ok', [43, 1]);
   const got = r.rows?.[0].ok === true;
   if (!got) return;
