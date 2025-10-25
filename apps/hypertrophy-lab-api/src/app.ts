@@ -15,18 +15,12 @@ app.use(cookieParser());
 /* request log BEFORE anything else */
 app.use((req, _res, next) => {
   const authHeader = req.headers.authorization || '(none)';
-  console.log(
-    '[REQ]',
-    req.method,
-    req.originalUrl,
-    'auth:',
-    authHeader.slice(0, 80),
-  );
+  console.log('[REQ]', req.method, req.originalUrl, 'auth:', authHeader.slice(0, 80));
   next();
 });
 
 /* public health BEFORE auth */
-app.get('/health', (req, res) => {
+app.get('/health', (_req, res) => {
   console.log('[HEALTH] hit /health');
   res.send('ok');
 });
@@ -57,6 +51,10 @@ const checkJwt = auth({
   tokenSigningAlg: 'RS256',
 });
 
+app.get('/', (_req, res) => {
+  res.status(200).send('api up');
+});
+
 /* wrap auth so we see why it fails */
 function checkJwtWithLog(req, res, next) {
   console.log('[AUTH] checking', req.method, req.originalUrl);
@@ -72,8 +70,10 @@ function checkJwtWithLog(req, res, next) {
 }
 
 /* protected pipeline */
-app.use(checkJwtWithLog);
-app.use(hydrateUser);
+// app.use(checkJwtWithLog);
+app.use('/api/v1', checkJwtWithLog, hydrateUser);
+
+// app.use(hydrateUser);
 
 /* routes */
 registerRoutes(app);
@@ -92,14 +92,10 @@ app.use((err, req, res, _next) => {
   }
 
   if (err.name === 'UnauthorizedError' || (status && status === 401)) {
-    return res
-      .status(401)
-      .json({ error: 'unauthorized', detail: err.message });
+    return res.status(401).json({ error: 'unauthorized', detail: err.message });
   }
 
-  return res
-    .status(status || 500)
-    .json({ error: 'server_error', detail: err.message });
+  return res.status(status || 500).json({ error: 'server_error', detail: err.message });
 });
 
 /* 404 catch-all LAST */
