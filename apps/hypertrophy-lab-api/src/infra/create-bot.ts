@@ -60,12 +60,7 @@ export async function createBot(env: ApiEnv) {
         logId,
         chatId: String(ctx.chat.id),
       });
-      //   const res = await fetch(`${env.API_URL}/schedule/logs/telegram-action`, {
-      //     method: 'POST',
-      //     headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` },
-      //     body: JSON.stringify({ action, logId, chatId: ctx.chat?.id }),
-      //   });
-      //   const j = (await res.json()) as TelegramActionResponse;
+
       if (!res.ok)
         return ctx.answerCbQuery(res?.error || res?.status, { show_alert: true });
       await ctx.answerCbQuery(
@@ -82,7 +77,7 @@ export async function createBot(env: ApiEnv) {
         timeZone: 'Asia/Jerusalem',
       });
 
-      await ctx.editMessageText(
+      await ctx.editMessageCaption(
         `${res.status === 'taken' ? '✅ Taken — ' : '🚫 Skipped — '}${name} • ${ts}`,
         { parse_mode: 'HTML' },
       );

@@ -31,7 +31,7 @@ export async function telegramAction(p: {
       } else {
         console.log('log status: ', log.status);
 
-        await service.patchLogTx(trx, {
+        await service.patchLogTx(trx, { 
           logId: log.id,
           userId: log.userId,
           patch: { status: 'taken', quantityUnits: log.quantityUnits },
