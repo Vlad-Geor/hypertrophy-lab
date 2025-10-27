@@ -27,8 +27,6 @@ export async function createLinkService(params: { userId: string }) {
 export async function claimLinkService(params: { code: string; chatId: string }) {
   return db.transaction(async (trx) => {
     const tok = await findTokenForClaim(trx, params.code);
-    console.log('found token: ', tok);
-
     if (!tok) return { ok: false, status: 404, error: 'invalid_or_expired' };
 
     // ensure chat not already linked to another user
