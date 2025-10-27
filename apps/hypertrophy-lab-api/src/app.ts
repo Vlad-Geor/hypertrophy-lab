@@ -37,8 +37,7 @@ app.post(
 
 /* request log BEFORE anything else */
 app.use((req, _res, next) => {
-  const authHeader = req.headers.authorization || '(none)';
-  console.log('[REQ]', req.method, req.originalUrl, 'auth:', authHeader.slice(0, 80));
+  console.log('[REQ]', req.method, req.originalUrl);
   next();
 });
 

@@ -111,8 +111,6 @@ export async function upsertByTelegramId(data: {
 }
 
 export const hydrateUser: RequestHandler = async (req: Request, _res, next) => {
-  console.log('[USER] auth payload sub:', req.auth?.payload?.sub);
-
   try {
     if (!req.auth?.payload?.sub) return next();
 
