@@ -647,8 +647,7 @@ export async function fetchDuePlanInstances(trx?: Knex.Transaction) {
   const k = (trx ?? db) as Knex;
   return k('nutrition.schedule_plans as p')
     .join('core.users as u', 'u.id', 'p.user_id')
-    .join('nutrition.user_supplements as us', 'us.id', 'p.user_supplement_id')
-    .join('nutrition.supplement_catalog as sc', 'sc.id', 'us.catalog_id')
+    .join('nutrition.v_user_supplements as vus', 'vus.id', 'p.user_supplement_id')
     .whereNotNull('u.telegram_chat_id')
     .where({ 'p.active': true })
     .whereRaw(
@@ -679,13 +678,13 @@ export async function fetchDuePlanInstances(trx?: Knex.Transaction) {
     .select({
       userId: 'p.user_id',
       chatId: 'u.telegram_chat_id',
-      name: k.raw(`coalesce(us.nickname, 'Supplement')`),
-      doseUnits: 'p.units_per_dose', // ensure this column exists
+      name: 'vus.display_name',
+      doseUnits: 'p.units_per_dose',
       doseLabel: k.raw(`p.units_per_dose::text`),
       date: k.raw('(now() AT TIME ZONE u.tz)::date'),
       timeOfDay: 'p.time_of_day',
       userSupplementId: 'p.user_supplement_id',
       planId: 'p.id',
-      images: 'sc.images',
+      images: 'vus.images',
     });
 }

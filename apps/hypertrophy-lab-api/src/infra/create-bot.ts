@@ -78,7 +78,10 @@ export async function createBot(env: ApiEnv) {
       });
 
       await ctx.editMessageCaption(
-        `${res.status === 'taken' ? '✅ Taken — ' : '🚫 Skipped — '}${name} • ${ts}`,
+        `${res.status === 'taken' ? '✅ <b>Taken</b>' : '🚫 <b>Skipped</b>'}\n` +
+          `<code>${name}</code>\n` +
+          `<i>${ts}</i>\n\n` +
+          `— Hypertrophy Lab`,
         { parse_mode: 'HTML' },
       );
     } catch (e) {

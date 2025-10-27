@@ -4,37 +4,6 @@ import { telegram } from '../infra/telegram.js';
 import { createLog, fetchDuePlanInstances } from '../repositories/schedule.repo.js';
 import * as crypto from 'crypto';
 
-// async function runBatch() {
-//   await db.transaction(async (trx) => {
-//     const due = await fetchDuePlanInstances(trx);
-//     for (const it of due) {
-//       const { id: logId } = await createLog(trx, {
-//         userId: it.userId,
-//         payload: {
-//           planId: it.planId,
-//           userSupplementId: it.userSupplementId,
-//           date: it.date,
-//           timeOfDay: it.timeOfDay,
-//           status: 'pending',
-//           quantityUnits: it.doseUnits ?? 0,
-//           consumeStock: false,
-//         },
-//       });
-//       await sendReminder(telegram, {
-//         chatId: String(it.chatId),
-//         logId: logId,
-//         suppName: it.name,
-//         doseUnits: it.doseUnits,
-//         doseLabel: it.doseLabel,
-//         images: it.images ?? ['bla'],
-//       });
-//       await trx('nutrition.schedule_logs')
-//         .where({ id: logId })
-//         .update({ notified_at: trx.fn.now() });
-//     }
-//   });
-// }
-
 export async function sendDueRemindersService() {
   const r = await db.raw('select pg_try_advisory_lock(?,?) AS ok', [42, 1]);
   const got = r.rows?.[0].ok === true;
