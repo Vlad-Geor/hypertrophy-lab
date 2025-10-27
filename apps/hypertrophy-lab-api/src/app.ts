@@ -3,14 +3,37 @@ import cors from 'cors';
 import express, { Application } from 'express';
 import { auth } from 'express-oauth2-jwt-bearer';
 
+import { buildWebhookHandler, setWebhook } from '@ikigaidev/tg-bot';
+import { loadEnv } from './config/env.js';
+import { createBot } from './infra/create-bot.js';
 import { hydrateUser } from './repositories/users.repo.js';
 import { registerRoutes } from './routes/register-routes.js';
 
 export const app: Application = express();
+const env = loadEnv();
+const bot = await createBot(env);
 
 /* core middleware */
 app.use(express.json());
 app.use(cookieParser());
+
+const hook = `/telegram/${env.TG_WEBHOOK_SECRET}`;
+app.get('/telegram/set-webhook', async (_req, res) => {
+  const url = env.TG_PUBLIC_URL + hook;
+  res.json(
+    await setWebhook({ token: env.TG_BOT_TOKEN, url, secret: env.TG_WEBHOOK_SECRET }),
+  );
+});
+
+app.post(
+  hook,
+  (req, res, next) =>
+    req.get('X-Telegram-Bot-Api-Secret-Token') === env.TG_WEBHOOK_SECRET
+      ? next()
+      : res.sendStatus(401),
+  express.json(),
+  buildWebhookHandler(bot),
+);
 
 /* request log BEFORE anything else */
 app.use((req, _res, next) => {
@@ -57,14 +80,10 @@ app.get('/', (_req, res) => {
 
 /* wrap auth so we see why it fails */
 function checkJwtWithLog(req, res, next) {
-  console.log('[AUTH] checking', req.method, req.originalUrl);
-  console.log('[AUTH] header:', req.headers.authorization || '(none)');
   checkJwt(req, res, (err) => {
     if (err) {
-      console.error('[AUTH] error:', err.name, err.message);
       return next(err);
     }
-    console.log('[AUTH] ok sub=', req.auth?.payload?.sub);
     next();
   });
 }

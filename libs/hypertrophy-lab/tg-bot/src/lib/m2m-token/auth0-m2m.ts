@@ -1,10 +1,10 @@
-import { BotEnv } from '@ikigaidev/contracts';
+import { ApiEnv } from '@ikigaidev/contracts';
 
 let cached: { token: string; exp: number } | null = null;
 
 // const { AUTH0_DOMAIN, AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET, AUTH0_AUDIENCE } = loadEnv();
 
-export async function getM2MToken(env: BotEnv) {
+export async function getM2MToken(env: ApiEnv) {
   const now = Math.floor(Date.now() / 1000);
   if (cached && cached.exp - 30 > now) return cached.token; // 30s leeway
 

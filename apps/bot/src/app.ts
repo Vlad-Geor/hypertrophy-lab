@@ -1,9 +1,9 @@
-import { BotEnv } from '@ikigaidev/contracts/lib/bot/bot-env.schema';
+import { ApiEnv } from '@ikigaidev/contracts/lib/env/api-env.schema';
 import { buildWebhookHandler, setWebhook } from '@ikigaidev/tg-bot';
 import express from 'express';
 import { Telegraf } from 'telegraf';
 
-export function createApp({ env, bot }: { env: BotEnv; bot: Telegraf }) {
+export function createApp({ env, bot }: { env: ApiEnv; bot: Telegraf }) {
   const app = express();
   app.use(express.json());
 

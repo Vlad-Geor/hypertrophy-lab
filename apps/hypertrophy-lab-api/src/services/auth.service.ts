@@ -2,7 +2,7 @@
 import { loadEnv } from '../config/env.js';
 import { Claims, upsertUserFromAuth0 } from '../repositories/users.repo.js'; // ← your repo
 
-const { JWT_SECRET } = loadEnv();
+// const { JWT_SECRET } = loadEnv();
 
 // export async function handleTelegramLogin(query: any) {
 //   const tg = verifyTelegram(query);
