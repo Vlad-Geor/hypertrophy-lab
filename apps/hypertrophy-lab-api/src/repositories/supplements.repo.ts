@@ -341,6 +341,7 @@ export async function listCatalog(params: {
   targetId?: string;
   q?: string;
   userId?: string;
+  excludeOwned?: boolean;
   limit: number;
   offset: number;
 }): Promise<{ total: number; items: CatalogRow[] }> {
@@ -378,6 +379,14 @@ export async function listCatalog(params: {
           db('nutrition.catalog_targets as ct')
             .whereRaw('ct.catalog_id = c.id')
             .andWhere('ct.target_id', params.targetId),
+        );
+      }
+      if (params.userId && params.excludeOwned) {
+        qb.whereNotExists(
+          db('nutrition.user_supplements as us2')
+            .whereRaw('us2.catalog_id = c.id')
+            .andWhere('us2.user_id', params.userId)
+            .whereNull('us2.archived_at'),
         );
       }
     })

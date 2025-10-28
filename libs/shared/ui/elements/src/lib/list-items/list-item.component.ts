@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { ListItem, Size } from '@ikigaidev/model';
 import { IconComponent } from '../icon/icon.component';
 import { ListItemsComponent } from './list-items.component';
@@ -58,10 +58,6 @@ export class ListItemComponent<V, T> {
 
     return [...selectableClasses, ...selectedClasses, ...sizeClasses].join(' ');
   });
-
-  // classes = computed(() => {
-  //   return this.computedClasses().join(' ');
-  // });
 
   onSelfClick(): void {
     if (this.selectable()) {

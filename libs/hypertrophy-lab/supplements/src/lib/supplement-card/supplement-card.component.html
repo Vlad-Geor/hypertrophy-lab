@@ -18,11 +18,18 @@
 </div>
 <div class="overflow-hidden whitespace-nowrap w-1/2 flex flex-col justify-between flex-1">
   <div class="flex flex-col">
-    <p
-      class="pb-1 font-semibold lg:text-lg lg:font-medium md:text-base text-white text-wrap line-clamp-2 truncate"
-    >
+    <p class="font-semibold lg:text-lg lg:font-medium md:text-base text-white truncate">
       {{ supp?.catalogName }}
     </p>
+    <div class="flex items-center gap-1">
+      @if (!viewportService.isMobile()) {
+        <p class="text-xxs text-gray-text truncate pb-1">{{ supp?.brandName }},</p>
+      }
+
+      <p class="text-xxs text-gray-text truncate pb-1">
+        {{ supp?.servingUnits | number }}/day
+      </p>
+    </div>
     <lib-tag [size]="'xs'" [theme]="'secondary'" [rounded]="true">
       {{ supp?.targets?.[0]?.name }}
     </lib-tag>

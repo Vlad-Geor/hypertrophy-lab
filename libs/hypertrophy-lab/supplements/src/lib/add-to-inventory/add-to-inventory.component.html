@@ -76,6 +76,22 @@
             placeholder="e.g 7 units"
             formControlName="lowStockThresholdUnits"
           ></lib-single-select>
+          <lib-single-select
+            size="sm"
+            appearance="minimal"
+            label="What's this for?"
+            [options]="unitOptions()"
+            placeholder="e.g Medical Treatment"
+            formControlName="lowStockThresholdUnits"
+          ></lib-single-select>
+          <lib-single-select
+            size="sm"
+            appearance="minimal"
+            label="Severity"
+            [options]="unitOptions()"
+            placeholder="e.g Low"
+            formControlName="lowStockThresholdUnits"
+          ></lib-single-select>
         </div>
         <div
           class="flex items-center gap-4 mb-1"

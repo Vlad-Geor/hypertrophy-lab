@@ -80,19 +80,40 @@ export async function getCounters(userId: string, withinDays: number) {
 }
 
 export async function getRecentlyAdded(userId: string, limit: number) {
-  return db('nutrition.user_supplements as us')
+  const roll = db('nutrition.batches as b')
+    .select('b.user_supplement_id')
+    .sum<{ qty: string }>({ qty: 'b.quantity_units' })
+    .groupBy('b.user_supplement_id')
+    .as('roll');
+
+  return db('nutrition.v_user_supplements as vus')
+    .leftJoin(roll, 'roll.user_supplement_id', 'vus.id')
+    .where('vus.user_id', userId)
     .select({
-      userSupplementId: 'us.id',
-      name: db.raw(`COALESCE(us.nickname, 'Supplement')`),
-      quantityUnits: db.raw(`COALESCE(SUM(b.quantity_units),0)::int`),
+      userSupplementId: 'vus.id',
+      name: 'vus.display_name',
+      brand: 'vus.brand_name',
+      quantityUnits: db.raw('COALESCE(roll.qty,0)::int'),
       createdAt: db.raw(
-        `to_char(us.created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`,
+        `to_char(vus.created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`,
       ),
     })
-    .leftJoin('nutrition.batches as b', 'b.user_supplement_id', 'us.id')
-    .where('us.user_id', userId)
-    .groupBy('us.id')
-    .orderBy('us.created_at', 'desc')
+    .orderBy('vus.created_at', 'desc')
+    .limit(limit);
+
+  return db('nutrition.v_user_supplements as vus')
+    .select({
+      userSupplementId: 'vus.id',
+      name: 'vus.display_name',
+      quantityUnits: db.raw(`COALESCE(SUM(b.quantity_units),0)::int`),
+      createdAt: db.raw(
+        `to_char(vus.created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`,
+      ),
+    })
+    .leftJoin('nutrition.batches as b', 'b.user_supplement_id', 'vus.id')
+    .where('vus.user_id', userId)
+    .groupBy('vus.id')
+    .orderBy('vus.created_at', 'desc')
     .limit(limit);
 }
 

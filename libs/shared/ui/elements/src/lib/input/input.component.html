@@ -4,8 +4,13 @@
   [label]="label()"
 >
   <div
-    class="inline-flex items-center px-3 gap-2 text-text-2 w-full bg-surface-2 border border-gray-ring focus-within:border-secondary-active rounded-md transition-default"
-    [ngClass]="{ 'min-h-8': size() === 'sm', 'min-h-11': size() === 'lg' }"
+    class="inline-flex items-center px-3 gap-2 text-text-2 w-full border border-gray-ring focus-within:border-secondary-active rounded-md transition-default"
+    [ngClass]="{
+      'min-h-8': size() === 'sm',
+      'min-h-11': size() === 'lg',
+      'bg-surface-2': !disabled(),
+      'bg-gray-ghost': disabled(),
+    }"
   >
     @if (withSearch()) {
       <lib-icon
@@ -15,7 +20,12 @@
       ></lib-icon>
     }
     <input
-      class="text-sm text-white w-full bg-transparent border-0 p-0 placeholder:text-gray-text placeholder:text-sm focus:outline-none focus:ring-0"
+      class="text-sm text-white w-full bg-transparent border-0 p-0 placeholder:text-sm focus:outline-none focus:ring-0"
+      [ngClass]="{
+        'placeholder:text-gray-text': !disabled(),
+        'placeholder:text-gray': disabled(),
+        'cursor-not-allowed': disabled(),
+      }"
       [value]="_value() || ''"
       [placeholder]="placeholder() || ''"
       [type]="type()"

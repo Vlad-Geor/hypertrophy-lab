@@ -1,7 +1,12 @@
 @if (config?.type === 'multi') {
   <header class="p-4">
     <div class="flex items-center gap-2">
-      <lib-input size="sm" placeholder="Search..."></lib-input>
+      <lib-input
+        size="sm"
+        placeholder="Search..."
+        [formControl]="filterInput"
+        [disabled]="true"
+      ></lib-input>
       <lib-button
         appearance="outline"
         theme="primary"

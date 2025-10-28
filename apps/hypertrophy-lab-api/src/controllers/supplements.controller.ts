@@ -9,16 +9,15 @@ export const listCatalog: RequestHandler = async (req: Request, res) => {
   const limit = Math.min(Math.max(Number(req.query.limit ?? 20), 1), 100);
 
   const includeUser = req.query.includeUser === '1' || req.query.includeUser === 'true';
+  const excludeOwned = req.query.excludeOwned === '1' || req.query.excludeOwned === 'true';
   const userId = includeUser ? req.user?.id : undefined;
 
   const { brandId, targetId, q } = req.query as any;
 
   try {
-    const result = await svc.listCatalog({ brandId, targetId, q, page, limit }, userId);
+    const result = await svc.listCatalog({ brandId, targetId, q, excludeOwned, page, limit }, userId);
     res.json(result);
   } catch (err) {
-    console.error('Full error:', err);
-
     const errorResponse = {
       message: 'Internal Server Error',
       error:

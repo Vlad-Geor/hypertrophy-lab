@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { Component, effect, input, output } from '@angular/core';
 import { ImagePlaceholderDirective } from '@ikigaidev/directive';
 import { CustomListItemComponent, TagComponent } from '@ikigaidev/elements';
 import { SupplementCatalogSummary } from '@ikigaidev/hl/contracts';
@@ -17,6 +17,7 @@ export type ExistingSuppItemData = SupplementCatalogSummary;
     '[class.border-transparent]': '!selected()',
     '[class.bg-gray-subtle]': 'selected()',
     '[class.border-gray-soft]': 'selected()',
+    '[class.hover:bg-gray-ghost]': '!selected()',
     '[attr.tabindex]': '0',
     '(click)': 'onSelfClick()',
   },
@@ -31,6 +32,10 @@ export class ExistingSupplementItem
   size = input<Extract<Size, 'sm' | 'md' | 'lg'> | undefined>();
 
   itemClicked = output<ListItem<string, ExistingSuppItemData> | undefined>();
+
+  constructor() {
+    effect(() => console.log(this.data()));
+  }
 
   onSelfClick(): void {
     if (this.selectable()) {

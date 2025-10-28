@@ -40,7 +40,7 @@
     </p>
   </div>
   @if (data?.hasInventory) {
-    <lib-divider></lib-divider>
+    <lib-divider orientation="vertical"></lib-divider>
     <div class="flex flex-col gap-3 w-min">
       <lib-doughnut
         class="group"
@@ -61,7 +61,9 @@
         </p>
       </lib-doughnut>
       <p class="text-xs text-text-2 text-center">
-        {{ (data?.onHand ?? 0) / (data?.servingUnits ?? 0) }} days left
+        {{ (data?.onHand ?? 0) / (data?.servingUnits ?? 0) }}
+        <br />
+        days left
       </p>
     </div>
   }

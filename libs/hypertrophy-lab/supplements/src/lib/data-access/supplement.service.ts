@@ -54,8 +54,14 @@ export class SupplementService {
     return [];
   }
 
-  allSupplements = (includeUser?: boolean) =>
-    httpResource<ListCatalogResponse>(
-      () => `${this.API_BASE}/supplements${includeUser ? '?includeUser=true' : ''}`,
-    );
+  allSupplements = (includeUser?: boolean, excludeOwned?: boolean) =>
+    httpResource<ListCatalogResponse>(() => {
+      const sp = new URLSearchParams();
+      if (includeUser) sp.set('includeUser', 'true');
+      if (excludeOwned) sp.set('excludeOwned', 'true');
+
+      const qs = sp.toString();
+
+      return `${this.API_BASE}/supplements${qs ? '?' + qs : ''}`;
+    });
 }

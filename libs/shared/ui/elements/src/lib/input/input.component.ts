@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
+import { Size } from '@ikigaidev/model';
 import { FormControlWrapperComponent } from '../form-control/form-control-wrapper.component';
 import { FormControlComponent } from '../form-control/form-control.component';
 import { IconComponent } from '../icon/icon.component';
-import { Size } from '@ikigaidev/model';
 
 type InputType = string | number;
 
@@ -13,6 +13,7 @@ type InputType = string | number;
   templateUrl: './input.component.html',
   host: {
     class: 'bg-transparent border-none p-0 flex-1',
+    '[class.disabled]': 'disabled()',
   },
 })
 export class InputComponent<
@@ -21,7 +22,7 @@ export class InputComponent<
   type = input<T>();
   withSearch = input<boolean>(false);
   rounded = input<boolean>(false);
-  size = input<Extract<Size,'sm' | 'lg'>>('lg');
+  size = input<Extract<Size, 'sm' | 'lg'>>('lg');
 
   override writeValue(value: T): void {
     if (value) {

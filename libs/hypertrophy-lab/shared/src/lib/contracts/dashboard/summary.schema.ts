@@ -45,6 +45,7 @@ export const orderSummary = z.object({
 export const recentlyAddedItem = z.object({
   userSupplementId: uuid,
   name: z.string(),
+  brand: z.string(),
   quantityUnits: z.number().int().nonnegative().optional(),
   createdAt: isoDateTime,
 });

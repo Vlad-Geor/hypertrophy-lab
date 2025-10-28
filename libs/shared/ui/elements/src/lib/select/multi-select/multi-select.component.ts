@@ -129,6 +129,7 @@ export class MultiSelectComponent<V, T>
 
   constructor() {
     super();
+    effect(() => console.log(this._options()));
     effect(() => useOverlayComponentPortal(Dropdown, this.providers(), this.injector));
     configCommonDropdownOverlay(this.overlayDirectiveRef);
     effect(() => {

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { ImagePlaceholderDirective } from '@ikigaidev/directive';
+import { ViewportService } from '@ikigaidev/service';
 import {
   BouncingLoaderComponent,
   ButtonComponent,
@@ -27,6 +28,8 @@ import { InventoryItemSummary } from '@ikigaidev/hl/contracts';
   `,
 })
 export class SupplementCardComponent {
+  readonly viewportService = inject(ViewportService);
+  
   supplement = input<InventoryItemSummary>();
   remainingDays = computed(
     () =>

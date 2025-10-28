@@ -8,7 +8,9 @@ import {
   effect,
   inject,
   input,
+  inputBinding,
   output,
+  outputBinding,
   QueryList,
   Type,
   ViewChildren,
@@ -39,7 +41,9 @@ import { CustomListItemComponent } from './model/custom-list-item.model';
               ></lib-icon>
             </div>
           } @else if (selectionModel().isMultipleSelection()) {
-            <div class="h-5 w-5"></div>
+            <div class="h-5 w-5 px-1 flex items-center justify-center bg-gray-subtle rounded">
+              <div class="w-full h-0.5 bg-gray-text rounded-full"></div>
+            </div>
           }
 
           @if (customListItemComponent()) {
@@ -118,5 +122,22 @@ export class ListItemsComponent<V, T> implements AfterViewInit {
   private createDynamicComponents(): void {
     const customComponent = this.customListItemComponent();
     if (!customComponent || !this.dynamicContainers) return;
+
+    this.dynamicContainers.forEach((container, index) => {
+      const ref = container;
+
+      ref.clear();
+
+      const listItem = this.options()[index];
+      const componentRef = ref.createComponent(customComponent, {
+        bindings: [
+          inputBinding('data', () => listItem.data),
+          inputBinding('listItem', () => listItem),
+          inputBinding('selected', () => this.selectionModel().isSelected(listItem)),
+          inputBinding('size', () => this.size()),
+          outputBinding('itemClicked', () => this.onItemSelected(listItem)),
+        ],
+      });
+    });
   }
 }

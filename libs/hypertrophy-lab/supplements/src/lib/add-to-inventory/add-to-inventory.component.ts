@@ -31,7 +31,7 @@ import {
 } from '@ikigaidev/hl/contracts';
 import { ListItem } from '@ikigaidev/model';
 import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
-import { filter, map } from 'rxjs';
+import { filter, map, tap } from 'rxjs';
 import { SupplementService } from '../data-access/supplement.service';
 import {
   AddedSupplementCard,
@@ -84,9 +84,10 @@ export class AddSupplementToInventory {
 
   unitOptions = signal(generateUnitOptions(60));
   existingSuppComponent = ExistingSupplementItem;
-  supplementData = this.supplementService.allSupplements();
+  supplementData = this.supplementService.allSupplements(true, true);
   options = toSignal(
     toObservable(this.supplementData.value).pipe(
+      tap((v) => console.log(v)),
       filter(Boolean),
       map(
         (response) =>
@@ -100,6 +101,7 @@ export class AddSupplementToInventory {
               unitsPerContainer: d.unitsPerContainer,
             },
             displayText: d.name,
+            value: d.id,
           })) as ListItem<string, ExistingSuppItemData>[] | undefined,
       ),
     ),
@@ -145,6 +147,7 @@ export class AddSupplementToInventory {
     const base = this.previewSupplements(); // read-only selection from multiselect
     const st = this.cardState();
     const mapped = base.map((s) => {
+      console.log('selected Data: ', s);
       const { id, images, name, form, unitsPerContainer, servingUnits } = s.data;
       const b = st[id]?.bottleCount ?? 1;
       return {
@@ -190,12 +193,16 @@ export class AddSupplementToInventory {
     // 1. Multi dropdown input is passed into previewSupps.
     // multi dropdown input
     this.existingItemsDropdown.valueChanges.subscribe((state) => {
+      console.log('dropdown change: ', state);
+
       if (Array.isArray(state)) {
         this.previewSupplements.set(state);
       }
     });
     effect(() => {
       const previewSupps = this.previewSupplements();
+      console.log('pre ensure supps: ', previewSupps);
+
       previewSupps.forEach((s) => this.ensureItem(s.data.id));
       this.items.controls.forEach((c) => c.valueChanges.subscribe(console.log));
     });

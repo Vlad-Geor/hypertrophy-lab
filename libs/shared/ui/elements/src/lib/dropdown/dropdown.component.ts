@@ -1,6 +1,8 @@
 import { NgClass } from '@angular/common';
 import { Component, inject, output, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ListItem } from '@ikigaidev/model';
+import { debounceTime } from 'rxjs';
 import { ButtonComponent } from '../button/button.component';
 import { DividerComponent } from '../divider/divider.component';
 import { InputComponent } from '../input/input.component';
@@ -17,10 +19,12 @@ import { DROPDOWN_CONFIG, DropdownConfig } from './model/dropdown-model';
     ListItemsComponent,
     InputComponent,
     DividerComponent,
+    ReactiveFormsModule,
   ],
 })
 export class Dropdown<V, T> {
   config = inject<DropdownConfig<V, T>>(DROPDOWN_CONFIG, { optional: true });
+  _options = signal(this.config?.options);
   configSm = this.config?.selectionModel;
 
   hasSelection = signal(false);
@@ -30,7 +34,16 @@ export class Dropdown<V, T> {
   confirmClicked = output<V[]>();
   cancelClicked = output<void>();
 
+  filterInput = new FormControl<string>('');
+
   constructor() {
+    this.filterInput.valueChanges.pipe(debounceTime(200)).subscribe((v) =>
+      this._options.set(
+        this.config?.options?.filter((op) => {
+          return op.displayText.includes(v ?? '');
+        }),
+      ),
+    );
     this.hasSelection.set(this.config?.selectionModel.hasValue() ?? false);
 
     this.configSm?.changed.subscribe(() =>
@@ -64,8 +77,10 @@ export class Dropdown<V, T> {
   }
 
   onConfirmClick(): void {
-    this.confirmClicked.emit(
-      this.configSm?.selected?.map((s) => s.value ?? ({} as V)) ?? [],
-    );
+    console.log('selected: ', this.configSm?.selected);
+
+    // this.confirmClicked.emit(
+    //   this.configSm?.selected?.map((s) => s.value ?? ({} as V)) ?? [],
+    // );
   }
 }

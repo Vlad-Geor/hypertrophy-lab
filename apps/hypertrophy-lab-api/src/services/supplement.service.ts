@@ -16,6 +16,7 @@ export async function listCatalog(
     brandId?: string;
     targetId?: string;
     q?: string;
+    excludeOwned?: boolean;
     page?: number;
     limit?: number;
   },
@@ -30,6 +31,7 @@ export async function listCatalog(
     targetId: params.targetId,
     q: params.q,
     userId,
+    excludeOwned: params.excludeOwned,
     limit,
     offset,
   });

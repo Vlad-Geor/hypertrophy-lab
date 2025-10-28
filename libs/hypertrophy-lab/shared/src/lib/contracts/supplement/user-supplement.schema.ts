@@ -18,6 +18,15 @@ export const userSupplementSchema = z.object({
   catalogId: uuid.nullable().optional(),
   nickname: z.string().nullable().optional(),
   lowStockThresholdUnits: z.number().int().nonnegative(),
+  purposeCategory: z.enum([
+    'medical_treatment',
+    'symptom_or_deficiency_support',
+    'baseline_wellness',
+    'optimization_performance',
+    'situational_acute',
+    'experimental',
+  ]),
+  criticalityLevel: z.enum(['high', 'medium', 'low']),
 
   customName: z.string().nullable().optional(),
   customForm: supplementFormSchema.nullable().optional(),
@@ -201,7 +210,9 @@ export const listExpiringSoonQuery = z.object({
   withinDays: z.coerce.number().int().min(1).max(365).default(30),
 });
 
-export type AddInventoryBulkExistingResponse = z.infer<typeof addInventoryBulkExistingResponse>;
+export type AddInventoryBulkExistingResponse = z.infer<
+  typeof addInventoryBulkExistingResponse
+>;
 export type AddInventoryBulkExistingRequest = z.infer<
   typeof addInventoryBulkExistingRequest
 >;
