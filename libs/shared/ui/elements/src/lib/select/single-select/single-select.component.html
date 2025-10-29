@@ -4,14 +4,14 @@
   [label]="label()"
 >
   <div
-    class="bg-surface-2 flex-1 border border-gray-ring text-white hover:cursor-pointer rounded-md focus-within:border-secondary-active transition-all duration-100 ease-in-out inline-flex items-center justify-between px-3"
+    class="bg-surface-2 flex-1 inline-flex items-center justify-between px-3 border border-gray-ring text-white hover:cursor-pointer rounded-md focus-within:border-secondary-active transition-all duration-100 ease-in-out"
     [ngClass]="{ 'min-h-8 text-sm': size() === 'sm', 'min-h-11': size() === 'lg' }"
   >
     @if (icon()) {
       <lib-icon [icon]="icon()"></lib-icon>
     }
     <span
-      class="text-gray-text font-light text-ellipsis"
+      class="text-xs text-gray-text font-light text-ellipsis truncate"
       [class.text-sm]="!!placeholder()"
     >
       {{ _item()?.displayText || placeholder() }}

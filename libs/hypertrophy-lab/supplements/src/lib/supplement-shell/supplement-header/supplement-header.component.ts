@@ -95,21 +95,23 @@ export class SupplementHeaderComponent {
     })),
   );
 
-  readonly options = signal<ListItem<string, ExistingSuppItemData>[]>([
+  readonly options = signal<
+    ListItem<{ id: string; displayName: string }, ExistingSuppItemData>[]
+  >([
     {
       displayText: 'A',
-      value: '',
+      value: { id: '', displayName: '' },
       data: { images: ['val three'], name: 'Name 1', id: '' },
     },
     {
       displayText: 'B',
-      value: '',
+      value: { id: '', displayName: '' },
       icon: 'check-solid',
       data: { images: ['val three'], name: 'Name 1', id: '' },
     },
     {
       displayText: 'C',
-      value: '',
+      value: { id: '', displayName: '' },
       data: { images: ['val three'], name: 'Name 1', id: '' },
     },
   ]);

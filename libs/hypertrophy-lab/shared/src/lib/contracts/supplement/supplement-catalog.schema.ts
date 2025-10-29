@@ -1,4 +1,10 @@
-import { isoDateTime,  listQuerySchema,  pageMeta, paginationQuery, uuid } from '@ikigaidev/contracts';
+import {
+  isoDateTime,
+  listQuerySchema,
+  pageMeta,
+  paginationQuery,
+  uuid,
+} from '@ikigaidev/contracts';
 import { z } from 'zod';
 import { targetSchema } from './target.schema';
 
@@ -92,8 +98,22 @@ export const createCatalogRequest = z.object({
 
 export const createCatalogResponse = z.object({ id: uuid });
 
+export const severityLevel = z.enum(['low', 'medium', 'high']).default('low');
+export const supplementPurpose = z
+  .enum([
+    'medical_treatment',
+    'symptom_or_deficiency_support',
+    'baseline_wellness',
+    'optimization_performance',
+    'situational_acute',
+    'experimental',
+  ])
+  .default('baseline_wellness');
+
 export const availableSuppsQuery = listQuerySchema;
 
+export type SeverityLevel = z.infer<typeof severityLevel>;
+export type SupplementPurpose = z.infer<typeof supplementPurpose>;
 export type AvailableQuerySupps = z.infer<typeof availableSuppsQuery>;
 export type CreateCatalogRequest = z.infer<typeof createCatalogRequest>;
 export type CreateCatalogResponse = z.infer<typeof createCatalogResponse>;

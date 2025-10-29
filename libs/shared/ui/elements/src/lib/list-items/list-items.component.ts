@@ -30,7 +30,7 @@ import { CustomListItemComponent } from './model/custom-list-item.model';
     @if (options().length) {
       <cdk-virtual-scroll-viewport
         [itemSize]="size() === 'sm' ? 32 : 40"
-        class="min-h-[300px] flex flex-col gap-2"
+        class="min-h-[300px] scrollbar-thin scrollbar-theme flex flex-col gap-2 "
       >
         <div class="flex items-center gap-1.5" *cdkVirtualFor="let option of options()">
           @if (selectionModel().isSelected(option)) {
@@ -41,7 +41,9 @@ import { CustomListItemComponent } from './model/custom-list-item.model';
               ></lib-icon>
             </div>
           } @else if (selectionModel().isMultipleSelection()) {
-            <div class="h-5 w-5 px-1 flex items-center justify-center bg-gray-subtle rounded">
+            <div
+              class="h-5 w-5 px-1 flex items-center justify-center bg-gray-subtle rounded"
+            >
               <div class="w-full h-0.5 bg-gray-text rounded-full"></div>
             </div>
           }

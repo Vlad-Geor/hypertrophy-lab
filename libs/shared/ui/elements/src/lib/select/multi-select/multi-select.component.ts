@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { NgClass } from '@angular/common';
+import { JsonPipe, NgClass } from '@angular/common';
 import {
   Component,
   ComponentRef,
@@ -36,6 +36,7 @@ import { stableCellId } from '../single-select/single-select.component';
     IconComponent,
     NgClass,
     TagComponent,
+    JsonPipe,
     IconButtonComponent,
   ],
   host: {
@@ -43,7 +44,7 @@ import { stableCellId } from '../single-select/single-select.component';
   },
   hostDirectives: [ConnectedOverlayDirective],
 })
-export class MultiSelectComponent<V, T>
+export class MultiSelectComponent<V extends { displayName: string }, T>
   extends FormControlComponent<V[]>
   implements OnInit
 {
@@ -80,7 +81,12 @@ export class MultiSelectComponent<V, T>
       id: stableCellId(`${opt.displayText}|${opt.data}`),
     })),
   );
-  displayValue = computed<unknown | undefined>(() => this._value() ?? undefined);
+  displayValue = computed<unknown | undefined>(
+    () =>
+      this._value()
+        ?.map((v) => v.displayName)
+        .join(', ') ?? undefined,
+  );
 
   confirm = output<V[]>();
 
@@ -136,6 +142,7 @@ export class MultiSelectComponent<V, T>
       const dropdownRef = this.dropdownCompRef();
       if (dropdownRef) {
         dropdownRef.instance.confirmClicked.subscribe((v) => {
+          this._value.set(v);
           this.onChange(v);
           this.confirm.emit(v);
           this.overlayDirectiveRef.close();
@@ -155,6 +162,7 @@ export class MultiSelectComponent<V, T>
   }
 
   onClear(): void {
+    this._value.set([]);
     this.onChange([]);
     this.selectionModel.clear();
   }

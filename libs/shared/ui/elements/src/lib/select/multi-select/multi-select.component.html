@@ -17,11 +17,11 @@
   }
   @if (displayValue()) {
     <span class="text-text-1 font-light text-ellipsis">
-      {{ displayValue() }}
+      {{ displayValue()}}
     </span>
   }
 
-  <div class="flex gap-2">
+  <div class="flex items-center gap-2">
     @if (selectedCount()) {
       <lib-tag [rounded]="true" theme="secondary">{{ selectedCount() }}</lib-tag>
     }

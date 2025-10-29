@@ -79,8 +79,8 @@ export class Dropdown<V, T> {
   onConfirmClick(): void {
     console.log('selected: ', this.configSm?.selected);
 
-    // this.confirmClicked.emit(
-    //   this.configSm?.selected?.map((s) => s.value ?? ({} as V)) ?? [],
-    // );
+    this.confirmClicked.emit(
+      this.configSm?.selected?.map((s) => s.value ?? ({} as V)) ?? [],
+    );
   }
 }

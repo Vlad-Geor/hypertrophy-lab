@@ -28,6 +28,8 @@ import {
 import {
   AddInventoryBulkExistingRequest,
   BulkExistingItem,
+  SeverityLevel,
+  SupplementPurpose,
 } from '@ikigaidev/hl/contracts';
 import { ListItem } from '@ikigaidev/model';
 import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
@@ -82,6 +84,37 @@ export class AddSupplementToInventory {
     optional: true,
   });
 
+  severityOptions: ListItem<SeverityLevel, undefined>[] = [
+    { displayText: 'Low (can be missed)', value: 'low' },
+    { displayText: 'Medium (important but not critical)', value: 'medium' },
+    { displayText: 'High (cant miss a dose)', value: 'high' },
+  ];
+  purposeOptions: ListItem<SupplementPurpose, undefined>[] = [
+    {
+      displayText: 'General Wellness',
+      value: 'baseline_wellness',
+    },
+    {
+      displayText: 'Experimental',
+      value: 'experimental',
+    },
+    {
+      displayText: 'Medical Purposes',
+      value: 'medical_treatment',
+    },
+    {
+      displayText: 'Fitness Optimization',
+      value: 'optimization_performance',
+    },
+    {
+      displayText: 'Solving an acute problem',
+      value: 'situational_acute',
+    },
+    {
+      displayText: 'Deficiency coverage',
+      value: 'symptom_or_deficiency_support',
+    },
+  ];
   unitOptions = signal(generateUnitOptions(60));
   existingSuppComponent = ExistingSupplementItem;
   supplementData = this.supplementService.allSupplements(true, true);
@@ -101,15 +134,19 @@ export class AddSupplementToInventory {
               unitsPerContainer: d.unitsPerContainer,
             },
             displayText: d.name,
-            value: d.id,
-          })) as ListItem<string, ExistingSuppItemData>[] | undefined,
+            value: { id: d.id, displayName: d.name },
+          })) as
+            | ListItem<{ id: string; displayName: string }, ExistingSuppItemData>[]
+            | undefined,
       ),
     ),
   );
 
   imageFormData = signal<FormData | undefined>(undefined);
   previewUrl = signal<string>('');
-  previewSupplements = signal<ListItem<string, ExistingSuppItemData>[]>([]);
+  previewSupplements = signal<
+    ListItem<{ id: string; displayName: string }, ExistingSuppItemData>[]
+  >([]);
 
   selectedCatalog = linkedSignal<{
     id: string;
@@ -162,7 +199,6 @@ export class AddSupplementToInventory {
         daysLeft: (b * (unitsPerContainer ?? 0)) / Number(servingUnits),
       };
     });
-    console.log(mapped);
 
     return mapped;
   });
@@ -171,7 +207,7 @@ export class AddSupplementToInventory {
     items: this.fb.nonNullable.array<ReturnType<typeof this.createItemForm>>([]),
   });
   readonly existingItemsDropdown = this.fb.nonNullable.control<
-    ListItem<string, ExistingSuppItemData>[]
+    { id: string; displayName: string }[]
   >([]);
 
   get items() {
@@ -192,11 +228,11 @@ export class AddSupplementToInventory {
   constructor() {
     // 1. Multi dropdown input is passed into previewSupps.
     // multi dropdown input
-    this.existingItemsDropdown.valueChanges.subscribe((state) => {
-      console.log('dropdown change: ', state);
-
-      if (Array.isArray(state)) {
-        this.previewSupplements.set(state);
+    this.existingItemsDropdown.valueChanges.subscribe((ids) => {
+      if (Array.isArray(ids)) {
+        const idsSet = new Set(ids.map((id) => id.id));
+        const state = this.options()?.filter((o) => idsSet.has(o.data.id));
+        this.previewSupplements.set(state ?? []);
       }
     });
     effect(() => {
@@ -223,13 +259,12 @@ export class AddSupplementToInventory {
   createItemForm(catalogId: string, init: Partial<BulkExistingItem> = {}) {
     return this.fb.nonNullable.group({
       catalogId: this.fb.nonNullable.control(catalogId),
-
       lowStockThresholdUnits: this.fb.nonNullable.control(
         init?.lowStockThresholdUnits ?? 20,
       ),
-
       quantityUnits: this.fb.nonNullable.control(init?.initialBatch?.quantityUnits ?? 20),
-
+      severity: this.fb.nonNullable.control<SeverityLevel>('low'),
+      purpose: this.fb.nonNullable.control<SupplementPurpose>('baseline_wellness'),
       settings: this.fb.nonNullable.group({
         lowStockAlertsEnabled: this.fb.nonNullable.control(
           init?.settings?.lowStockAlertsEnabled ?? true,
@@ -261,6 +296,8 @@ export class AddSupplementToInventory {
   }
 
   onSubmit(): void {
+    console.log('submit');
+
     const selectedByCatalogId = new Map(
       this.selectedSupplementsData().map((s) => [
         s.id,
@@ -268,7 +305,14 @@ export class AddSupplementToInventory {
       ]),
     );
     const formatted = this.items.value.map(
-      ({ catalogId, lowStockThresholdUnits, quantityUnits, settings }) => {
+      ({
+        catalogId,
+        lowStockThresholdUnits,
+        quantityUnits,
+        settings,
+        purpose,
+        severity,
+      }) => {
         const extra = selectedByCatalogId.get(catalogId ?? '') ?? 0;
         return {
           catalogId,
@@ -277,12 +321,14 @@ export class AddSupplementToInventory {
             quantityUnits: (quantityUnits ?? 0) + extra,
           },
           settings,
+          purpose,
+          severity,
         } as BulkExistingItem;
       },
     );
     console.log('formatted: ', formatted);
     const req: AddInventoryBulkExistingRequest = { items: formatted };
-    this.supplementService.addExistingSupplementsToUserBulk(req).subscribe();
+    // this.supplementService.addExistingSupplementsToUserBulk(req).subscribe();
     // const imgData = this.imageFormData();
     // if (imgData) {
     //   this.cnService

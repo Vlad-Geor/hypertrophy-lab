@@ -2,6 +2,7 @@ import { ActivatedRouteSnapshot, Route } from '@angular/router';
 import { AuthGuard } from '@auth0/auth0-angular';
 import { PlaygroundComponent } from '@ikigaidev/playground';
 import { route, RouteMeta } from '@ikigaidev/router';
+import { isDevModeGuard } from '@ikigaidev/tech-debt';
 import { Shell } from './shell/shell.component';
 
 export const appRoutes: Route[] = [
@@ -80,6 +81,11 @@ export const appRoutes: Route[] = [
   {
     path: 'pg',
     component: PlaygroundComponent,
+  },
+  {
+    path: 'tech-debt',
+    loadComponent: () => import('@ikigaidev/tech-debt').then((m) => m.TechDebt),
+    canMatch: [isDevModeGuard],
   },
   { path: '**', redirectTo: 'login' },
 ];

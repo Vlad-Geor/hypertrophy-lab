@@ -8,8 +8,10 @@ import {
 import { z } from 'zod';
 import { batchSchema } from './batch.schema';
 import {
+  severityLevel,
   supplementCatalogSchema,
   supplementFormSchema,
+  supplementPurpose,
 } from './supplement-catalog.schema';
 
 export const userSupplementSchema = z.object({
@@ -188,6 +190,8 @@ const bulkExistingItem = z.object({
       costCents: z.number().int().nullable().optional(),
     })
     .optional(),
+  severity: severityLevel,
+  purpose: supplementPurpose,
   settings: z
     .object({
       lowStockAlertsEnabled: z.boolean().optional(),

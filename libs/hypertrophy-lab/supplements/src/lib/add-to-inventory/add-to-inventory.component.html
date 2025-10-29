@@ -57,9 +57,27 @@
 }
 
 @if (selectedGroup()) {
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
+  <form [formGroup]="form" class="flex flex-col gap-3">
     <div formArrayName="items">
       <div [formGroup]="selectedGroup()!" class="flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-4">
+          <lib-single-select
+            size="sm"
+            appearance="minimal"
+            label="What's this for?"
+            [options]="purposeOptions"
+            placeholder="e.g Medical Treatment"
+            formControlName="purpose"
+          ></lib-single-select>
+          <lib-single-select
+            size="sm"
+            appearance="minimal"
+            label="Severity"
+            [options]="severityOptions"
+            placeholder="e.g Low"
+            formControlName="severity"
+          ></lib-single-select>
+        </div>
         <div class="flex items-center justify-between gap-4">
           <lib-input
             size="sm"
@@ -74,22 +92,6 @@
             label="Reorder Threshold"
             [options]="unitOptions()"
             placeholder="e.g 7 units"
-            formControlName="lowStockThresholdUnits"
-          ></lib-single-select>
-          <lib-single-select
-            size="sm"
-            appearance="minimal"
-            label="What's this for?"
-            [options]="unitOptions()"
-            placeholder="e.g Medical Treatment"
-            formControlName="lowStockThresholdUnits"
-          ></lib-single-select>
-          <lib-single-select
-            size="sm"
-            appearance="minimal"
-            label="Severity"
-            [options]="unitOptions()"
-            placeholder="e.g Low"
             formControlName="lowStockThresholdUnits"
           ></lib-single-select>
         </div>

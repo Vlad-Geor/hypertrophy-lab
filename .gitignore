@@ -7,6 +7,7 @@ apps/hypertrophy-lab-api/.env
 **/.env
 **/.env.*
 
+libs/hypertrophy-lab/tech-debt
 .utils
 
 # compiled output
