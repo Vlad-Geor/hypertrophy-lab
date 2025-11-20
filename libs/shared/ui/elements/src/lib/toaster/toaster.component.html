@@ -2,22 +2,25 @@
 <div
   [@fadeTranslate]="animationState()"
   (@fadeTranslate.done)="onAnimateDone($event)"
-  class="toaster"
+  class="flex p-4 gap-3 shadow-xl rounded-md text-white bg-primary-dark/60 backdrop-blur-xl"
   [class.show]="animationState() === 'animate-in'"
   [class]="[conf.type ?? 'info', conf.contentType ?? 'standard']"
 >
-  <section class="content-wrapper">
-    <div class="icon-text-wrapper">
-      <lib-icon icon="shekel-sign-solid"></lib-icon>
+  <section class="flex flex-col gap-2 items-end">
+    <div class="flex items-center gap-2">
+      <lib-icon
+        class="text-white self-start translate-y-0.5"
+        icon="info-circle-liner"
+      ></lib-icon>
       <div
-        class="toaster-message body2-regular"
-        [class.ellipsis]="conf.contentType !== 'overflow'"
+        class="truncate line-clamp-2 max-w-[280px] md:max-w-[320px] lg:max-w-[400px] mr-0"
+        [class.truncate]="conf.contentType !== 'overflow'"
       >
         {{ conf.message }}
       </div>
     </div>
 
-    @if (!!conf.linkLabel) {
+    <!-- @if (!!conf.linkLabel) {
       <a
         tabindex="0"
         class="toaster-link ellipsis link-14-regular"
@@ -26,19 +29,25 @@
       >
         {{ conf.linkLabel }}
       </a>
-    }
+    } -->
     @if (conf.buttonLabel) {
-      <lib-button class="toaster-button" (click)="onButtonClicked()">
-        conf.buttonLabel
+      <lib-button theme="white" class="toaster-button w-full" (click)="onButtonClicked()">
+        {{ conf.buttonLabel }}
       </lib-button>
     }
   </section>
   @if ((conf.showCloseBtn !== null && conf.showCloseBtn) || true) {
-    <div class="divider">
-      <lib-divider orientation="vertical" size="sm" opacity="low"></lib-divider>
-    </div>
+    <!-- <div class="divider">
+      <lib-divider orientation="vertical"></lib-divider>
+    </div> -->
     <div class="close-btn-wrapper">
-      <lib-icon icon="atom-solid" class="close-btn" (click)="onClose()"></lib-icon>
+      <lib-icon
+        icon="xmark-solid"
+        [iconSize]="20"
+        class="cursor-pointer text-white translate-y-0.5"
+        [fillContainer]="true"
+        (click)="onClose()"
+      ></lib-icon>
     </div>
   }
 </div>

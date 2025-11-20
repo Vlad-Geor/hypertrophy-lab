@@ -1,3 +1,8 @@
+import {
+  BulkExistingItem,
+  SeverityLevel,
+  SupplementPurpose,
+} from '@ikigaidev/hl/contracts';
 import { Knex } from 'knex';
 import { db } from '../config/database.js';
 import { toNumber } from '../util/single-count.js';
@@ -100,21 +105,42 @@ export async function getRecentlyAdded(userId: string, limit: number) {
     })
     .orderBy('vus.created_at', 'desc')
     .limit(limit);
+}
 
-  return db('nutrition.v_user_supplements as vus')
-    .select({
-      userSupplementId: 'vus.id',
-      name: 'vus.display_name',
-      quantityUnits: db.raw(`COALESCE(SUM(b.quantity_units),0)::int`),
-      createdAt: db.raw(
-        `to_char(vus.created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`,
+export async function getTotalMonthlyCostCents(userId: string) {
+  const batchRoll = db('nutrition.batches as b')
+    .select('b.user_supplement_id')
+    .sum<{ cost: string }>({ cost: 'b.cost_cents' })
+    .sum<{ units: string }>({ units: 'b.quantity_units' })
+    .groupBy('b.user_supplement_id')
+    .as('bc');
+
+  const planRoll = db('nutrition.schedule_plans as p')
+    .select('p.user_supplement_id')
+    .sum({
+      daily_units: db.raw(
+        `p.units_per_dose * COALESCE(cardinality(p.days_of_week),7)::float / 7.0`,
       ),
     })
-    .leftJoin('nutrition.batches as b', 'b.user_supplement_id', 'vus.id')
-    .where('vus.user_id', userId)
-    .groupBy('vus.id')
-    .orderBy('vus.created_at', 'desc')
-    .limit(limit);
+    .where({ active: true })
+    .groupBy('p.user_supplement_id')
+    .as('pl');
+
+  const row = await db('nutrition.user_supplements as us')
+    .leftJoin(batchRoll, 'bc.user_supplement_id', 'us.id')
+    .leftJoin(planRoll, 'pl.user_supplement_id', 'us.id')
+    .where('us.user_id', userId)
+    .select({
+      totalMonthlyCostCents: db.raw(
+        `COALESCE(SUM( COALESCE(pl.daily_units,0) * 30 *
+           (COALESCE(bc.cost,0) / NULLIF(bc.units,0)) ), 0)::int`,
+      ),
+    })
+    .first();
+
+  console.log('centsData: row: ', row);
+
+  return toNumber(row?.totalMonthlyCostCents); // number in cents
 }
 
 export async function getLowStock(userId: string, limit: number) {
@@ -365,7 +391,7 @@ export async function createNewCatalog(
 
 export async function addBulkExisting(
   userId: string,
-  items: any[],
+  items: BulkExistingItem[],
 ): Promise<{ index: number; userSupplementId: string }[]> {
   return db.transaction(async (trx) => {
     const results: { index: number; userSupplementId: string }[] = [];
@@ -378,6 +404,8 @@ export async function addBulkExisting(
           catalog_id: i.catalogId,
           nickname: i.nickname ?? null,
           low_stock_threshold_units: i.lowStockThresholdUnits ?? 0,
+          criticality_level: i.severity ?? ('low' as SeverityLevel),
+          purpose_category: i.purpose ?? ('baseline_wellness' as SupplementPurpose),
           // custom_* stay null for catalog-backed
           custom_name: null,
           custom_form: null,

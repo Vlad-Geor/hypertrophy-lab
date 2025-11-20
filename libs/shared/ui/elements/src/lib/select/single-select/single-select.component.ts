@@ -48,7 +48,7 @@ export function stableCellId(key: string) {
   hostDirectives: [ConnectedOverlayDirective],
   host: {
     '[attr.tabindex]': '0',
-    class: 'flex-1',
+    class: 'w-full',
   },
 })
 export class SingleSelectComponent<V, T>
@@ -85,7 +85,7 @@ export class SingleSelectComponent<V, T>
   >(undefined);
   icon = input<IconType>();
   appearance = input<'default' | 'minimal'>('default');
-  size = input<Extract<Size, 'sm' | 'lg'>>('lg');
+  size = input<Extract<Size, 'sm' | 'md' | 'lg'>>('lg');
   tagLabel = input('');
   hint = input('');
   selectedCount = input(0, { transform: coerceNumberProperty });
@@ -120,18 +120,11 @@ export class SingleSelectComponent<V, T>
       this.selectionModel.clear();
       return;
     }
-    // const map = this._valueToItem();
-    // console.log('map is: ', map);
-
-    // const found =
-    //   map.get(value) ?? [...map.entries()].find(([v]) => this.equals()(v, value))?.[1];
     const found = false;
-
     if (found) {
       this._item.set(found);
       this.selectionModel.select(found);
     } else {
-      // value not in options; clear or keep as-is per your UX
       this._item.set(undefined);
       this.selectionModel.clear();
     }
@@ -154,9 +147,6 @@ export class SingleSelectComponent<V, T>
     effect(() => {
       useOverlayComponentPortal(Dropdown, this.providers(), this.injector);
       configCommonDropdownOverlay(this.overlayDirectiveRef);
-    });
-    effect(() => {
-      const cmp = this.dropdownCompRef();
     });
 
     this.selectionModel.changed.subscribe((chg) => {

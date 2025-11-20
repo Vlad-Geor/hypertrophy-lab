@@ -4,7 +4,7 @@ export type ToasterType = 'info' | 'danger' | 'warning' | 'success';
 export type ToasterContentType = 'standard' | 'overflow';
 
 export const toasterAppearanceDurations: Record<ToasterType, number> = {
-  info: 5000,
+  info: 50000,
   success: 5000,
   warning: 7000,
   danger: 7000,

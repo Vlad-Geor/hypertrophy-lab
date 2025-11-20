@@ -1,97 +1,77 @@
 .toaster {
-  display: flex;
-  padding: var(--spacing-md);
-  box-shadow: 0 8px 25px 0 rgba(0, 0, 0, 0.2);
-  border-radius: var(--border-radius-sm);
-  color: var(--color-text-and-icon-theme-independent-light);
-
   &.success {
-    background: var(--color-component-toster-positive);
+    @apply bg-success;
   }
 
   &.danger {
-    background: var(--color-component-toster-negative);
+    @apply bg-danger;
   }
 
   &.info {
-    background: var(--color-component-toster-info);
+    @apply bg-gray-dark;
   }
 
   &.warning {
-    background: var(--color-component-toster-warning);
+    @apply bg-warning;
   }
 
   &.overflow {
     .content-wrapper {
-      flex-direction: column;
+      @apply flex-col;
 
       .icon-text-wrapper {
         .type-icon {
-          align-self: center;
+          @apply self-center;
         }
 
         .toaster-message {
-          margin-right: 0;
-          max-width: 460px;
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
+          @apply line-clamp-3 max-w-[240px] md:max-w-[320px] lg:max-w-[400px] mr-0;
         }
       }
 
       .toaster-link {
-        margin-right: 0;
-        align-self: self-end;
-        max-width: 180px;
+        @apply mr-0 self-end max-w-44;
       }
 
       .toaster-button {
-        align-self: self-end;
+        @apply self-end;
       }
     }
 
     .close-btn-wrapper {
-      align-items: flex-start;
+      @apply items-start;
     }
   }
 
   .content-wrapper {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
+    @apply flex items-center gap-2;
 
     .icon-text-wrapper {
-      display: flex;
-      align-items: center;
+      @apply flex items-center;
 
       .type-icon {
-        margin-right: 8px;
+        @apply mr-2;
       }
 
       .toaster-message {
-        max-width: 360px;
+        @apply max-w-[240px] md:max-w-[320px] lg:max-w-[400px];
       }
     }
 
     .toaster-link {
-      color: var(--color-text-and-icon-theme-independent-light);
-      max-width: 220px;
-      cursor: pointer;
+      @apply text-white max-w-56 cursor-pointer;
     }
   }
 
   .divider {
-    margin-left: var(--spacing-xl);
-    margin-right: 8px;
+    @apply ml-4 mr-2;
   }
 
   .close-btn-wrapper {
-    display: flex;
-    align-items: center;
+    @apply flex items-center;
 
     .close-btn {
-      cursor: pointer;
+      @apply cursor-pointer;
     }
   }
 }

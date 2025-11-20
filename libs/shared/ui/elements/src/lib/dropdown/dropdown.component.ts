@@ -21,6 +21,9 @@ import { DROPDOWN_CONFIG, DropdownConfig } from './model/dropdown-model';
     DividerComponent,
     ReactiveFormsModule,
   ],
+  host: {
+    '[class]': 'sizingClasses',
+  },
 })
 export class Dropdown<V, T> {
   config = inject<DropdownConfig<V, T>>(DROPDOWN_CONFIG, { optional: true });
@@ -35,8 +38,12 @@ export class Dropdown<V, T> {
   cancelClicked = output<void>();
 
   filterInput = new FormControl<string>('');
+  sizingClasses = '';
 
   constructor() {
+    const s = this.config?.dropdownSize;
+    this.sizingClasses =
+      s === 'sm' ? 'min-w-[20ch]' : s === 'md' ? 'min-w-[28ch]' : 'min-w-[36ch]';
     this.filterInput.valueChanges.pipe(debounceTime(200)).subscribe((v) =>
       this._options.set(
         this.config?.options?.filter((op) => {

@@ -6,11 +6,16 @@ import {
   provideAppInitializer,
   provideZoneChangeDetection,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import {
+  provideAnimations,
+  provideNoopAnimations,
+} from '@angular/platform-browser/animations';
+import { provideRouter, withViewTransitions } from '@angular/router';
 import { AuthService, authHttpInterceptorFn, provideAuth0 } from '@auth0/auth0-angular';
-import { API_BASE_URL } from '@ikigaidev/hl/shared';
-import { AngularSvgIconModule } from 'angular-svg-icon';
 import { environment } from '@ikigaidev/config';
+import { API_BASE_URL } from '@ikigaidev/hl/shared';
+
+import { AngularSvgIconModule } from 'angular-svg-icon';
 import { appRoutes } from './app.routes';
 
 export const handleAuthError = () => {
@@ -26,7 +31,9 @@ export const handleAuthError = () => {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(appRoutes),
+    provideAnimations(),
+    provideNoopAnimations(),
+    provideRouter(appRoutes, withViewTransitions()),
     provideHttpClient(withInterceptors([authHttpInterceptorFn])),
     importProvidersFrom(AngularSvgIconModule.forRoot()),
     provideAuth0({

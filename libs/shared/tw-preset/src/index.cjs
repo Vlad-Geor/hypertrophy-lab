@@ -46,7 +46,7 @@ module.exports = {
         border: 'var(--border)',
 
         /* Premium whites & helpers */
-        white: 'hsl(from var(--white) h s l/ <alpha-value>)',
+        white: 'hsl(from var(--white) h s l / <alpha-value>)',
         black: 'hsl(from var(--black) h s l / <alpha-value>)',
         'white-ghost': 'var(--white-ghost)',
         'white-subtle': 'var(--white-subtle)',
@@ -70,26 +70,27 @@ module.exports = {
         'muted-02': 'hsl(var(--text-muted-02))',
 
         /* ===== Brand / Status (solids) ===== */
-        primary: 'var(--primary)',
-        secondary: 'var(--secondary)', // brand yellow (not warning)
-        warning: 'var(--warning)', // orange status
-        success: 'var(--success)',
-        'success-bright': 'var(--success-bright)',
-        danger: 'var(--danger)',
-        info: 'var(--info)',
-        gray: 'var(--gray)',
+        primary: 'hsl(from var(--primary) h s l / <alpha-value>)',
+        secondary: 'hsl(from var(--secondary) h s l / <alpha-value>)', // brand yellow (not warning)
+        warning: 'hsl(from var(--warning) h s l / <alpha-value>)', // orange status
+        success: 'hsl(from var(--success) h s l / <alpha-value>)',
+        'success-bright': 'hsl(from var(--success-bright) h s l / <alpha-value>)',
+        danger: 'hsl(from var(--danger) h s l / <alpha-value>)',
+        info: 'hsl(from var(--info) h s l / <alpha-value>)',
+        gray: 'hsl(from var(--gray) h s l / <alpha-value>)',
 
         /* ===== State variants (alpha-overlay) ===== */
         // Primary
-        'primary-ghost': 'var(--primary-ghost)',
-        'primary-subtle': 'var(--primary-subtle)',
-        'primary-soft': 'var(--primary-soft)',
-        'primary-hover': 'var(--primary-hover)',
-        'primary-active': 'var(--primary-active)',
-        'primary-ring': 'var(--primary-ring)',
-        'primary-bright': 'var(--primary-bright)',
+        'primary-ghost': 'hsl(from var(--primary-ghost) h s l / <alpha-value>)',
+        'primary-subtle': 'hsl(from var(--primary-subtle) h s l / <alpha-value>)',
+        'primary-soft': 'hsl(from var(--primary-soft) h s l / <alpha-value>)',
+        'primary-hover': 'hsl(from var(--primary-hover) h s l / <alpha-value>)',
+        'primary-active': 'hsl(from var(--primary-active) h s l / <alpha-value>)',
+        'primary-ring': 'hsl(from var(--primary-ring) h s l / <alpha-value>)',
+        'primary-bright': 'hsl(from  var(--primary-bright) h s l / <alpha-value>)',
+        'primary-dark': 'hsl(from var(--primary-dark) h s l / <alpha-value>)',
         // Secondary
-        'secondary-ghost': 'var(--secondary-ghost)',
+        'secondary-ghost': 'hsl(from var(--secondary-ghost) h s l / <alpha-value>)',
         'secondary-subtle': 'var(--secondary-subtle)',
         'secondary-soft': 'var(--secondary-soft)',
         'secondary-hover': 'var(--secondary-hover)',
@@ -193,7 +194,24 @@ module.exports = {
         danger: 'var(--danger-ring)',
         info: 'var(--info-ring)',
       },
-
+      width: {
+        'field-sm': 'var(--field-sm)',
+        'field-md': 'var(--field-md)',
+        'field-lg': 'var(--field-lg)',
+        'field-max': 'var(--field-max)',
+      },
+      minWidth: {
+        'field-sm': 'var(--field-sm)',
+        'field-md': 'var(--field-md)',
+        'field-lg': 'var(--field-lg)',
+        'field-max': 'var(--field-max)',
+      },
+      maxWidth: {
+        'field-sm': 'var(--field-sm)',
+        'field-md': 'var(--field-md)',
+        'field-lg': 'var(--field-lg)',
+        'field-max': 'var(--field-max)',
+      },
       borderRadius: { '2xl': '1rem' },
       ringWidth: { DEFAULT: '2px' },
       boxShadow: {

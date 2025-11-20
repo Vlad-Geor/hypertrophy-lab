@@ -1,6 +1,7 @@
 <!-- <lib-single-select [options]="options"></lib-single-select> -->
 
 <!-- <hr class="mb-6" /> -->
+<lib-button (click)="popToaster()">Test Toaster</lib-button>
 
 <div class="grid grid-cols-2 justify-items-stretch gap-3">
   <hl-dashboard-summary-card
@@ -19,6 +20,15 @@
         Add supplements
       </a>
     </span>
+  </hl-dashboard-summary-card>
+
+  <hl-dashboard-summary-card
+    title="Monthly Cost"
+    [value]="totalCents() ?? 0"
+    theme="success"
+    icon="hand-coins-liner"
+  >
+    <span class="text-xl" valueSuffix>$</span>
   </hl-dashboard-summary-card>
 
   <hl-dashboard-summary-card
@@ -159,6 +169,8 @@
     }
   </lib-surface-card>
 }
+
+@if (totalCents()) {}
 
 <lib-surface-card
   cardTitle="Quick Actions"

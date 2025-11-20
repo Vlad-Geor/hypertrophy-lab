@@ -1,3 +1,4 @@
+import { BulkExistingItem } from '@ikigaidev/hl/contracts';
 import * as repo from '../repositories/inventory.repo.js';
 import * as suppRepo from '../repositories/supplements.repo.js';
 
@@ -111,7 +112,7 @@ export async function add(userId: string, payload: any) {
   return { userSupplementId };
 }
 
-export async function addBulkExisting(userId: string, items: any[]) {
+export async function addBulkExisting(userId: string, items: BulkExistingItem[]) {
   return repo.addBulkExisting(userId, items);
 }
 

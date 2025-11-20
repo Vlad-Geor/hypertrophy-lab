@@ -6,18 +6,18 @@ import { ErrorMessageComponent } from '../error/error-message.component';
   selector: 'lib-form-control-wrapper',
   template: `
     @if (label()) {
-      <span class="inline-block text-text-3 text-sm">{{ label() }}</span>
+      <span class="inline-block text-gray-text text-xs">{{ label() }}</span>
     }
 
     <ng-content></ng-content>
 
-    @if (control() && !control()?.valid) {
+    @if (control() && control()?.dirty && !control()?.valid) {
       <lib-error-message [control]="control()"></lib-error-message>
     }
   `,
   imports: [ErrorMessageComponent],
   host: {
-    class: 'flex flex-col gap-1',
+    class: 'flex flex-col gap-1.5',
   },
 })
 export class FormControlWrapperComponent {

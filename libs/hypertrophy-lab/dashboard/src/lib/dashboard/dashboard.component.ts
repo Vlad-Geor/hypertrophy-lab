@@ -9,8 +9,10 @@ import {
   Progressbar,
   SurfaceCard,
   TagComponent,
+  ToasterComponent,
 } from '@ikigaidev/elements';
 import { IconType, Theme } from '@ikigaidev/model';
+import { GlobalOverlay } from '@ikigaidev/overlay';
 import { DashboardService } from '../data-access/dashboard.service';
 import { SummaryCard } from '../statistics/summary-card/summary-card.component';
 
@@ -43,6 +45,8 @@ type RouteButton = {
 })
 export class Dashboard {
   readonly dashboardService = inject(DashboardService);
+  private readonly overlay = inject(GlobalOverlay);
+
   options = options;
   readonly base = this.dashboardService.dashboardDetails;
   readonly summary = this.dashboardService.dashboardDetails.value;
@@ -51,6 +55,9 @@ export class Dashboard {
   readonly recentlyAdded = computed(() => this.summary()?.recentlyAdded);
   readonly lowStockAlerts = computed(() => this.summary()?.lowStockAlerts);
   readonly expiringSoon = computed(() => this.summary()?.expiringSoonItems);
+  readonly totalCents = computed(() =>
+    Math.round((this.summary()?.totalMonthlyCostCents ?? 0) / 100),
+  );
 
   quickActions: RouteButton[] = [
     {
@@ -73,7 +80,27 @@ export class Dashboard {
       label: 'Track Orders',
       icon: 'cart-liner',
       redirectUrl: '/schedule',
-      disabled: true
+      disabled: true,
     },
   ];
+
+  popToaster(): void {
+    this.overlay.openComponent(ToasterComponent, {
+      data: {
+        showCloseBtn: true,
+        message: 'Supplement has been successfuly added',
+        
+        buttonLabel: 'Action Label',
+        type: 'info',
+        contentType: 'overflow',
+        linkLabel: 'Custom link',
+        onLinkClick: () => console.log('clicked'),
+        onButtonClick: () => console.log('button clicked'),
+      },
+      position: {
+        bottom: 40,
+        left: 40,
+      },
+    });
+  }
 }

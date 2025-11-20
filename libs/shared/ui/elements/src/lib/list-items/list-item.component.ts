@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, effect, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { ListItem, Size } from '@ikigaidev/model';
 import { IconComponent } from '../icon/icon.component';
 import { ListItemsComponent } from './list-items.component';
@@ -7,11 +7,11 @@ import { ListItemsComponent } from './list-items.component';
 @Component({
   selector: 'lib-list-item',
   template: `
-    <div class="flex gap-3">
+    <div class="flex gap-3 max-w-full">
       @if (config()?.icon) {
         <lib-icon [iconSize]="12" [icon]="config()?.icon"></lib-icon>
       }
-      <span>{{ config()?.displayText }}</span>
+      <span class="truncate text-ellipsis">{{ config()?.displayText }}</span>
     </div>
     <!-- @if (selected()) {
       <lib-icon
@@ -24,7 +24,7 @@ import { ListItemsComponent } from './list-items.component';
   `,
   imports: [CommonModule, IconComponent],
   host: {
-    class: 'flex items-center justify-between rounded',
+    class: 'flex items-center justify-between rounded max-w-full',
     '[class]': 'computedClasses()',
     '[class.selected]': 'selected()',
     '[attr.tabindex]': '0',
@@ -44,7 +44,7 @@ export class ListItemComponent<V, T> {
   config = input<ListItem<V, T>>();
   selectable = input(true);
   selected = input(false);
-  size = input<Extract<Size, 'sm' | 'lg'>>('lg');
+  size = input<Extract<Size, 'sm' | 'md' | 'lg'>>('lg');
 
   computedClasses = computed(() => {
     const selectableClasses = this.selectable()

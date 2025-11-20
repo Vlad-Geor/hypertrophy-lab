@@ -27,13 +27,14 @@ import {
 } from '@ikigaidev/elements';
 import {
   AddInventoryBulkExistingRequest,
+  AddInventoryBulkExistingResponse,
   BulkExistingItem,
   SeverityLevel,
   SupplementPurpose,
 } from '@ikigaidev/hl/contracts';
 import { ListItem } from '@ikigaidev/model';
 import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
-import { filter, map, tap } from 'rxjs';
+import { filter, map, Observable, tap } from 'rxjs';
 import { SupplementService } from '../data-access/supplement.service';
 import {
   AddedSupplementCard,
@@ -295,7 +296,7 @@ export class AddSupplementToInventory {
       });
   }
 
-  onSubmit(): void {
+  onSubmit: () => Observable<AddInventoryBulkExistingResponse> = () => {
     console.log('submit');
 
     const selectedByCatalogId = new Map(
@@ -318,7 +319,7 @@ export class AddSupplementToInventory {
           catalogId,
           lowStockThresholdUnits: lowStockThresholdUnits ?? 0,
           initialBatch: {
-            quantityUnits: (quantityUnits ?? 0) + extra,
+            quantityUnits: Number(quantityUnits ?? 0) + extra,
           },
           settings,
           purpose,
@@ -328,7 +329,7 @@ export class AddSupplementToInventory {
     );
     console.log('formatted: ', formatted);
     const req: AddInventoryBulkExistingRequest = { items: formatted };
-    // this.supplementService.addExistingSupplementsToUserBulk(req).subscribe();
+    return this.supplementService.addExistingSupplementsToUserBulk(req);
     // const imgData = this.imageFormData();
     // if (imgData) {
     //   this.cnService
@@ -351,7 +352,7 @@ export class AddSupplementToInventory {
     //     )
     //     .subscribe();
     // }
-  }
+  };
 
   // onFileInput(ev: Event) {
   //   const file = (ev.target as HTMLInputElement).files![0];

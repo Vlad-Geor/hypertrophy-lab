@@ -1,4 +1,5 @@
 import {
+  AddInventoryBulkExistingRequest,
   addInventoryBulkExistingRequest,
   addInventoryRequest,
 } from '@ikigaidev/hl/contracts';
@@ -39,7 +40,7 @@ export const addBulkExisting: RequestHandler = async (req: Request, res, next) =
     // return;
     console.log('API log: ', req.body);
 
-    const items = addInventoryBulkExistingRequest.parse(req.body);
+    const items: AddInventoryBulkExistingRequest = addInventoryBulkExistingRequest.parse(req.body);
     const results = await svc.addBulkExisting(req.user.id, items.items);
     res.status(201).json({ results });
   } catch (e) {

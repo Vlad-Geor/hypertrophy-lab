@@ -56,5 +56,6 @@ export const dashboardSummaryResponse = z.object({
   recentlyAdded: z.array(recentlyAddedItem).default([]),
   lowStockAlerts: z.array(lowStockItem).default([]),
   expiringSoonItems: z.array(expiringSoonItem).default([]),
+  totalMonthlyCostCents: z.number().nonnegative().default(0),
 });
 export type DashboardSummaryResponse = z.infer<typeof dashboardSummaryResponse>;

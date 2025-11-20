@@ -6,6 +6,11 @@
   --a-active: 0.32; /* active */
   --a-ring: 0.55; /* focus ring */
 
+  --field-sm: 20ch;
+  --field-md: 28ch;
+  --field-lg: 36ch;
+  --field-max: 64ch;
+
   --lightness-lift: 8%;
   --g-deg: 90deg;
 
@@ -36,7 +41,7 @@
   --text-inverse: hsl(0 0% 12%); /* dark text on bright chips */
 
   --gray-bright: #94a3b8;
-  --gray-heading: #CBD5E1;
+  --gray-heading: #cbd5e1;
 
   /* (optional synonyms if you already use these names) */
   --text-heading-01: var(--white-1-hsl);
@@ -82,6 +87,7 @@
   --primary-active: hsl(from var(--primary) h s l / var(--a-active));
   --primary-ring: hsl(from var(--primary) h s l / var(--a-ring));
   --primary-bright: hsl(from var(--primary) h s calc(l * 1.3));
+  --primary-dark: hsl(from var(--primary) h calc(s * 1.2) calc(l * 0.55));
 
   /* Secondary (brand yellow) */
   --secondary-ghost: hsl(from var(--secondary) h s l / var(--a-ghost));

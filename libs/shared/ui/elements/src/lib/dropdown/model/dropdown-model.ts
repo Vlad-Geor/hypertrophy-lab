@@ -9,7 +9,7 @@ export type DropdownType = 'single' | 'multi';
 
 export const DROPDOWN_TITLE = new InjectionToken<string>('DROPDOWN_TITLE');
 
-export type DropdownSize = Extract<Size, 'sm' | 'lg'>;
+export type DropdownSize = Extract<Size, 'sm' | 'md' | 'lg'>;
 
 export type DropdownConfig<V = unknown, T = undefined> = {
   options: ListItem<V, T>[];

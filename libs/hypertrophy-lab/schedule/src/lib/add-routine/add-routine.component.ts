@@ -30,6 +30,7 @@ import { debounceTime, filter, map, Observable } from 'rxjs';
 import { ScheduleService } from '../data-access/schedule.service';
 import { DaysGroup } from '../model/create-routine-form.model';
 import { DAY_KEYS, DAY_NUM } from '../model/weekdays.model';
+import { TitlecaseArrayPipe } from '@ikigaidev/pipe';
 
 type AddRoutineForm = {
   days: FormGroup<DaysGroup>;
@@ -43,6 +44,7 @@ type AddRoutineForm = {
   selector: 'hl-add-routine',
   templateUrl: './add-routine.component.html',
   imports: [
+    TitlecaseArrayPipe,
     IconComponent,
     ButtonComponent,
     IconButtonComponent,
@@ -71,10 +73,10 @@ export class AddRoutine {
 
   DAYS = DAY_KEYS;
   timeOfDayOptions = signal<ListItem<TimeOfDay>[]>([
-    { displayText: 'morning', value: 'morning' },
-    { displayText: 'afternoon', value: 'afternoon' },
-    { displayText: 'evening', value: 'evening' },
-    { displayText: 'bedtime', value: 'bedtime' },
+    { displayText: 'Morning', value: 'morning' },
+    { displayText: 'Afternoon', value: 'afternoon' },
+    { displayText: 'Evening', value: 'evening' },
+    { displayText: 'Bedtime', value: 'bedtime' },
   ]);
   noPlanSupplements = this.suppService.userSupplements(true);
   // addRoutineOptions = signal([]);

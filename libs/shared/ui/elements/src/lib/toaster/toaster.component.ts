@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, afterNextRender, inject } from '@angular/core';
 import { AnimatableOverlayBase, OVERLAY_DATA } from '@ikigaidev/overlay';
 import { take, timer } from 'rxjs';
+import { IconButtonComponent } from '../button';
 import { ButtonComponent } from '../button/button.component';
 import { DividerComponent } from '../divider/divider.component';
 import { IconComponent } from '../icon/icon.component';
@@ -13,11 +14,16 @@ import {
 } from './toaster.model';
 
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'lib-nds-toaster',
+  selector: 'lib-toaster',
   templateUrl: './toaster.component.html',
   styleUrls: ['./toaster.component.scss'],
-  imports: [CommonModule, IconComponent, ButtonComponent, DividerComponent],
+  imports: [
+    CommonModule,
+    IconComponent,
+    ButtonComponent,
+    DividerComponent,
+    IconButtonComponent,
+  ],
   animations: [
     trigger('fadeTranslate', [
       state('animate-in', style({ opacity: 1, transform: 'translateY(0)' })),

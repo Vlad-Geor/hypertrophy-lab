@@ -76,16 +76,16 @@ export const appRoutes: Route[] = [
         path: 'schedule',
         loadComponent: () => import('@ikigaidev/hl/schedule').then((m) => m.Schedule),
       },
+      {
+        path: 'tech-debt',
+        loadComponent: () => import('@ikigaidev/tech-debt').then((m) => m.TechDebt),
+        canMatch: [isDevModeGuard],
+      },
     ],
   },
   {
     path: 'pg',
     component: PlaygroundComponent,
-  },
-  {
-    path: 'tech-debt',
-    loadComponent: () => import('@ikigaidev/tech-debt').then((m) => m.TechDebt),
-    canMatch: [isDevModeGuard],
   },
   { path: '**', redirectTo: 'login' },
 ];

@@ -4,15 +4,21 @@
   [label]="label()"
 >
   <div
-    class="bg-surface-2 flex-1 inline-flex items-center justify-between px-3 border border-gray-ring text-white hover:cursor-pointer rounded-md focus-within:border-secondary-active transition-all duration-100 ease-in-out"
-    [ngClass]="{ 'min-h-8 text-sm': size() === 'sm', 'min-h-11': size() === 'lg' }"
+    class="bg-surface-2 flex-1 max-w-field-max inline-flex items-center justify-between px-3 border border-gray-ring text-white rounded-md transition-all duration-100 ease-in-out hover:cursor-pointer focus-within:border-secondary-active"
+    [ngClass]="{
+      'min-h-8 max-w-field-sm text-sm': size() === 'sm',
+      'min-h-9 max-w-field-md text-base': size() === 'md',
+      'min-h-11 max-w-field-lg': size() === 'lg',
+    }"
   >
     @if (icon()) {
       <lib-icon [icon]="icon()"></lib-icon>
     }
     <span
-      class="text-xs text-gray-text font-light text-ellipsis truncate"
+      class="text-sm font-light text-ellipsis truncate"
       [class.text-sm]="!!placeholder()"
+      [class.text-gray-text]="!!placeholder() && !_item()?.displayText"
+      [class.text-gray-heading]="!!_item()?.displayText"
     >
       {{ _item()?.displayText || placeholder() }}
     </span>

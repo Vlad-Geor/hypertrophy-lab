@@ -142,7 +142,12 @@
 
 <div class="flex justify-center gap-3">
   <lib-button appearance="outline" (click)="onClose()">Discard</lib-button>
-  <lib-button (click)="onSubmit()" theme="gradient-primary" [disabled]="!selectedGroup()">
+  <lib-button
+    [asyncClick]="onSubmit"
+    (next)="globalOverlayRef?.close()"
+    theme="gradient-primary"
+    [disabled]="!selectedGroup()"
+  >
     <lib-icon
       left
       [icon]="'check-circle-broken-liner'"

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
+  computed,
   DestroyRef,
   effect,
   inject,
@@ -29,8 +30,14 @@ import { CustomListItemComponent } from './model/custom-list-item.model';
   template: `
     @if (options().length) {
       <cdk-virtual-scroll-viewport
-        [itemSize]="size() === 'sm' ? 32 : 40"
-        class="min-h-[300px] scrollbar-thin scrollbar-theme flex flex-col gap-2 "
+        [itemSize]="itemHeight()"
+        class="scrollbar-thin scrollbar-theme flex flex-col gap-2"
+        [style.min-height.px]="menuHeight()"
+        [ngClass]="{
+          'max-w-[20ch]': size() === 'sm',
+          'max-w-[28ch]': size() === 'md',
+          'max-w-[36ch]': size() === 'lg',
+        }"
       >
         <div class="flex items-center gap-1.5" *cdkVirtualFor="let option of options()">
           @if (selectionModel().isSelected(option)) {
@@ -92,12 +99,19 @@ export class ListItemsComponent<V, T> implements AfterViewInit {
 
   options = input.required<ListItem<V, T>[]>();
   selectable = input(true);
-  size = input<Extract<Size, 'sm' | 'lg'>>('lg');
+  size = input<Extract<Size, 'sm' | 'md' | 'lg'>>('lg');
   customListItemComponent = input<Type<CustomListItemComponent<V, T>>>();
 
   selectionModel = input.required<SelectionModel<ListItem<V, T>>>();
 
   itemSelected = output<ListItem<V, T>>();
+
+  itemHeight = computed(() =>
+    this.size() === 'sm' ? 32 : this.size() === 'md' ? 40 : 48,
+  );
+  menuHeight = computed(
+    () => Math.min(this.options().length * this.itemHeight() + 20, 440), //  16px for padding-block
+  );
 
   constructor() {
     effect(() => {
