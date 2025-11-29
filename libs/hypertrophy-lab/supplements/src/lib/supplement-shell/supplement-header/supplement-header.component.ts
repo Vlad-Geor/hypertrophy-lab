@@ -1,5 +1,6 @@
 import { TitleCasePipe } from '@angular/common';
 import { Component, inject, input, linkedSignal, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   ButtonComponent,
   generateUnitOptions,
@@ -11,11 +12,13 @@ import {
 } from '@ikigaidev/elements';
 import { ListItem } from '@ikigaidev/model';
 import { GlobalOverlay } from '@ikigaidev/overlay';
+import { debounceTime } from 'rxjs';
 import { AddSupplementToInventory } from '../../add-to-inventory/add-to-inventory.component';
 import {
   ExistingSuppItemData,
   ExistingSupplementItem,
 } from '../../add-to-inventory/existing-supplement-dropdown-item/existing-supplement-item.component';
+import { SupplementStore } from '../../data-access/supplement.store';
 
 export type DemiType = {
   valOne: string;
@@ -53,7 +56,11 @@ export type DemiType = {
       </div>
 
       <div class="flex flex-col gap-3">
-        <lib-input [withSearch]="true" placeholder="Search..."></lib-input>
+        <lib-input
+          [withSearch]="true"
+          placeholder="Search..."
+          [formControl]="searchControl"
+        ></lib-input>
         <lib-single-select
           [options]="_options()"
           [value]="_options()[0].value"
@@ -73,12 +80,18 @@ export type DemiType = {
     IconComponent,
     TitleCasePipe,
     MultiSelectComponent,
+    ReactiveFormsModule,
   ],
 })
 export class SupplementHeaderComponent {
   private readonly overlay = inject(GlobalOverlay);
+  private readonly store = inject(SupplementStore);
 
   existingSuppComponentType = ExistingSupplementItem;
+
+  searchControl = new FormControl('');
+
+  headerFor = input.required<'inventory' | 'catalog'>();
 
   unitOptions = signal(
     generateUnitOptions(30).map((op, i) => ({
@@ -94,6 +107,12 @@ export class SupplementHeaderComponent {
       id: stableCellId(`${opt.displayText}|${opt.data}`),
     })),
   );
+
+  constructor() {
+    this.searchControl.valueChanges
+      .pipe(debounceTime(200))
+      .subscribe((v) => this.store.setSearchFilter(v ?? ''));
+  }
 
   readonly options = signal<
     ListItem<{ id: string; displayName: string }, ExistingSuppItemData>[]
@@ -115,8 +134,6 @@ export class SupplementHeaderComponent {
       data: { images: ['val three'], name: 'Name 1', id: '' },
     },
   ]);
-
-  headerFor = input.required<'inventory' | 'catalog'>();
 
   onAddInventoryItem(): void {
     this.overlay.openComponent(AddSupplementToInventory, {

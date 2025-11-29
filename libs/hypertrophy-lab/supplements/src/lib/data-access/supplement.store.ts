@@ -14,6 +14,7 @@ import { SupplementService } from './supplement.service';
 
 type SupplementsState = {
   userSupplements: InventoryItemSummary[] | null;
+  searchFilter: string;
   isLoading: boolean;
   isError: boolean;
 };
@@ -22,6 +23,7 @@ const initialState: SupplementsState = {
   isError: false,
   isLoading: false,
   userSupplements: null,
+  searchFilter: '',
 };
 
 export const SupplementStore = signalStore(
@@ -29,16 +31,18 @@ export const SupplementStore = signalStore(
   withState(initialState),
   withComputed((store) => ({
     userSupplementCount: computed(() => store.userSupplements()?.length),
+    filteredUserSupplements: computed(() =>
+      store
+        .userSupplements()
+        ?.filter((us) =>
+          us.catalogName?.toLowerCase().startsWith(store.searchFilter().toLowerCase()),
+        ),
+    ),
   })),
   withMethods((store, supplementService = inject(SupplementService)) => ({
-    // getAllSupplements: rxMethod<boolean | undefined>(
-    //   pipe(
-    //     map((includeUser) => !!includeUser),
-    //     exhaustMap((includeUser) => {
-
-    //     })
-    //   )
-    // ),
+    setSearchFilter(query: string): void {
+      patchState(store, (state) => ({ searchFilter: query }));
+    },
     getUserSupplements: rxMethod<boolean | undefined>(
       pipe(
         map((force) => !!force),

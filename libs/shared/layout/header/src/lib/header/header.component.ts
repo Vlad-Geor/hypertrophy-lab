@@ -6,10 +6,10 @@ import {
   InputComponent,
   StatefulIconComponent,
 } from '@ikigaidev/elements';
+import { ViewportService } from '@ikigaidev/layout-service';
 import { SidenavComponent } from '@ikigaidev/navigation';
 import { GlobalOverlay } from '@ikigaidev/overlay';
 import { RouterMetaService } from '@ikigaidev/router';
-import { ViewportService } from '@ikigaidev/service';
 
 @Component({
   selector: 'lib-header',

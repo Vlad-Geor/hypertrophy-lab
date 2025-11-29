@@ -6,10 +6,7 @@ import {
   provideAppInitializer,
   provideZoneChangeDetection,
 } from '@angular/core';
-import {
-  provideAnimations,
-  provideNoopAnimations,
-} from '@angular/platform-browser/animations';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withViewTransitions } from '@angular/router';
 import { AuthService, authHttpInterceptorFn, provideAuth0 } from '@auth0/auth0-angular';
 import { environment } from '@ikigaidev/config';
@@ -32,7 +29,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideAnimations(),
-    provideNoopAnimations(),
     provideRouter(appRoutes, withViewTransitions()),
     provideHttpClient(withInterceptors([authHttpInterceptorFn])),
     importProvidersFrom(AngularSvgIconModule.forRoot()),

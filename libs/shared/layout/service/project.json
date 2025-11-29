@@ -1,5 +1,5 @@
 {
-  "name": "service",
+  "name": "layout-service",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/layout/service/src",
   "prefix": "lib",

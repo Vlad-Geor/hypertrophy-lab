@@ -15,9 +15,8 @@ export const createMenuItems: () => MenuItem[] = () => {
     },
     {
       icon: 'list-check-liner',
-      label: 'Active Supplements',
+      label: 'Active Routines',
       route: '/routine',
-      disabled: true,
     },
     {
       icon: 'box-liner',

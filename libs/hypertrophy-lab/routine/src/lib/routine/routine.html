@@ -1,1 +1,23 @@
-<p>Routine works!</p>
+<lib-surface-card
+  cardTitle="My Routines"
+  cardTitleIcon="list-check-liner"
+  cardTitleIconClass="text-blue-400"
+>
+  <div surfaceCardHeaderRight>
+    <lib-button theme="gradient-primary" size="lg">+ Add</lib-button>
+  </div>
+  <div class="flex gap-4">
+    <lib-single-select class="flex-1" placeholder="E.g Vacation"></lib-single-select>
+    <lib-button class="flex-1" appearance="outline">
+      <lib-icon icon="gear-liner"></lib-icon>
+      Manage Plans
+    </lib-button>
+  </div>
+  <lib-input
+    [fullWidth]="true"
+    [withSearch]="true"
+    placeholder="Search Routines"
+  ></lib-input>
+</lib-surface-card>
+
+<!-- <p class="text-sm text-gray">5 Routines Found</p> -->

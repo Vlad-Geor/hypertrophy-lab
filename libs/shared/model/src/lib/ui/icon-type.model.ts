@@ -65,6 +65,7 @@ export const iconType = [
   'egg-solid',
   'ellipsis-vertical-solid',
   'exclamation-solid',
+  'exclamation-circle-liner',
   'eye-solid',
   'face-angry-solid',
   'face-grin-beam-sweat-solid',

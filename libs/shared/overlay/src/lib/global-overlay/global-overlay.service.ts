@@ -30,6 +30,13 @@ export const GLOBAL_OVERLAY_REF = new InjectionToken<GlobalOverlayRef>(
   'GLOBAL_OVERLAY_REF',
 );
 
+export type OpenComponentConfig = {
+  overlayConfig?: OverlayConfig;
+  position?: OverlayPosition;
+  disableBackdropClick?: boolean;
+  data?: Record<string, any>;
+};
+
 @Injectable({ providedIn: 'root' })
 export class GlobalOverlay {
   private readonly overlay = inject(Overlay);
@@ -70,12 +77,7 @@ export class GlobalOverlay {
 
   openComponent<T, THandle = unknown>(
     component: Type<T>,
-    config: {
-      overlayConfig?: OverlayConfig;
-      position?: OverlayPosition;
-      disableBackdropClick?: boolean;
-      data?: Record<string, any>;
-    } = {},
+    config: OpenComponentConfig = {},
     handler?: { token: InjectionToken<THandle>; value: THandle },
   ): GlobalOverlayRef {
     const positionStrategy = buildPosition(this.overlay, config.position);

@@ -4,8 +4,8 @@ import { Component, inject, isDevMode, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { InputComponent } from '@ikigaidev/elements';
 import { HeaderComponent } from '@ikigaidev/header';
+import { ViewportService } from '@ikigaidev/layout-service';
 import { SidenavComponent } from '@ikigaidev/navigation';
-import { ViewportService } from '@ikigaidev/service';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector

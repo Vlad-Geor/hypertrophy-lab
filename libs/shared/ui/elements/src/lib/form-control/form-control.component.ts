@@ -26,8 +26,8 @@ export abstract class FormControlComponent<T> implements ControlValueAccessor {
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected onChange: (v: T | null | undefined) => void = () => {};
-
-  protected onTouched!: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  protected onTouched: () => void = () => {};
 
   abstract writeValue(value: T): void;
   abstract registerOnChange(fn: (value?: T | null) => void): void;

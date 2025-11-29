@@ -78,7 +78,9 @@ export class Schedule {
   });
 
   onDaypartFilter(dayPart: Daypart): void {
-    this.selectedDaypartFilter.set(dayPart);
+    this.selectedDaypartFilter.set(
+      this.selectedDaypartFilter() === dayPart ? null : dayPart,
+    );
   }
 
   addRoutine(): void {

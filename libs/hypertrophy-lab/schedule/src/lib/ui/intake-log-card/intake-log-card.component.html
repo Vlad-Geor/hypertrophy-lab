@@ -37,6 +37,7 @@
       [fillContainer]="true"
       [asyncClick]="logSkipped"
       (next)="onLogSkipped($event)"
+      (btnError)="onLogError($event)"
     >
       <lib-icon [icon]="'close-circle-liner'"></lib-icon>
       Skip
@@ -45,6 +46,7 @@
     <lib-button
       [asyncClick]="logTaken"
       (next)="onLogTaken($event)"
+      (btnError)="onLogError($event)"
       theme="success-bright"
       [fillContainer]="true"
     >

@@ -1,6 +1,7 @@
 export * from './lib/constants/endpoints';
 export * from './lib/constants/routes';
 export * from './lib/contracts/index';
+export * from './lib/directive/routing.directive';
 export * from './lib/model/index';
 export * from './lib/store/app-state.store';
 export * from './lib/store/route.store';

@@ -2,15 +2,25 @@
 <div
   [@fadeTranslate]="animationState()"
   (@fadeTranslate.done)="onAnimateDone($event)"
-  class="flex p-4 gap-3 shadow-xl rounded-md text-white bg-primary-dark/60 backdrop-blur-xl"
+  class="flex p-4 gap-3 shadow-xl rounded-md text-white backdrop-blur-xl"
   [class.show]="animationState() === 'animate-in'"
-  [class]="[conf.type ?? 'info', conf.contentType ?? 'standard']"
+  [ngClass]="{
+    'bg-primary-dark/60': conf.type === 'info',
+    'bg-danger/80': conf.type === 'danger',
+  }"
 >
   <section class="flex flex-col gap-2 items-end">
     <div class="flex items-center gap-2">
       <lib-icon
         class="text-white self-start translate-y-0.5"
-        icon="info-circle-liner"
+        [icon]="
+          conf.type === 'info'
+            ? 'info-circle-liner'
+            : conf.type === 'danger'
+              ? 'exclamation-circle-liner'
+              : 'alert-triangle-liner'
+        "
+        [iconSize]="conf.type === 'danger' ? 24 : 16"
       ></lib-icon>
       <div
         class="truncate line-clamp-2 max-w-[280px] md:max-w-[320px] lg:max-w-[400px] mr-0"
@@ -43,7 +53,7 @@
     <div class="close-btn-wrapper">
       <lib-icon
         icon="xmark-solid"
-        [iconSize]="20"
+        [iconSize]="16"
         class="cursor-pointer text-white translate-y-0.5"
         [fillContainer]="true"
         (click)="onClose()"

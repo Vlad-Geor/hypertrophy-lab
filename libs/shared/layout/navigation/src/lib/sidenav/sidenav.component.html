@@ -1,6 +1,6 @@
 <header class="flex justify-between p-4 text-white border-b border-gray-active">
   <div class="flex gap-3 items-center">
-    <div class="max-w-16">
+    <div class="max-w-16 hover:cursor-pointer" hlRoute="dashboard">
       <img
         class="rounded-full"
         src="/assets/images/hl-logo-solid-transparent.png"
@@ -27,7 +27,7 @@
       <li
         class="py-3 px-4 border border-transparent rounded hover:cursor-pointer [&:hover:not(.active)]:bg-surface-2 [&:hover:not(.active)]:border-gray-active transition-all duration-100"
         [ngClass]="{
-          'bg-gradient-primary border-primary-ring text-white': item.isActive,
+          'bg-gradient-primary text-white': item.isActive,
           'pointer-events-none text-gray': item.disabled,
         }"
         tabindex="0"

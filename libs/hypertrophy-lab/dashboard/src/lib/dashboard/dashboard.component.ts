@@ -9,10 +9,9 @@ import {
   Progressbar,
   SurfaceCard,
   TagComponent,
-  ToasterComponent,
 } from '@ikigaidev/elements';
 import { IconType, Theme } from '@ikigaidev/model';
-import { GlobalOverlay } from '@ikigaidev/overlay';
+import { CurrencyService } from '@ikigaidev/service';
 import { DashboardService } from '../data-access/dashboard.service';
 import { SummaryCard } from '../statistics/summary-card/summary-card.component';
 
@@ -45,18 +44,21 @@ type RouteButton = {
 })
 export class Dashboard {
   readonly dashboardService = inject(DashboardService);
-  private readonly overlay = inject(GlobalOverlay);
+  private readonly currencyService = inject(CurrencyService);
 
   options = options;
   readonly base = this.dashboardService.dashboardDetails;
-  readonly summary = this.dashboardService.dashboardDetails.value;
-  readonly counters = computed(() => this.summary()?.counters);
-  readonly latestOrders = computed(() => this.summary()?.latestOrders);
-  readonly recentlyAdded = computed(() => this.summary()?.recentlyAdded);
-  readonly lowStockAlerts = computed(() => this.summary()?.lowStockAlerts);
-  readonly expiringSoon = computed(() => this.summary()?.expiringSoonItems);
-  readonly totalCents = computed(() =>
-    Math.round((this.summary()?.totalMonthlyCostCents ?? 0) / 100),
+  readonly summaryValue = this.base.value;
+  readonly counters = computed(() => this.summaryValue()?.counters);
+  readonly latestOrders = computed(() => this.summaryValue()?.latestOrders);
+  readonly recentlyAdded = computed(() => this.summaryValue()?.recentlyAdded);
+  readonly lowStockAlerts = computed(() => this.summaryValue()?.lowStockAlerts);
+  readonly expiringSoon = computed(() => this.summaryValue()?.expiringSoonItems);
+  readonly totalCostDollars = computed(() =>
+    Math.round((this.summaryValue()?.totalMonthlyCostCents ?? 0) / 100),
+  );
+  readonly totalCostIls = computed(() =>
+    this.currencyService.usdToIls(this.totalCostDollars()),
   );
 
   quickActions: RouteButton[] = [
@@ -83,24 +85,4 @@ export class Dashboard {
       disabled: true,
     },
   ];
-
-  popToaster(): void {
-    this.overlay.openComponent(ToasterComponent, {
-      data: {
-        showCloseBtn: true,
-        message: 'Supplement has been successfuly added',
-        
-        buttonLabel: 'Action Label',
-        type: 'info',
-        contentType: 'overflow',
-        linkLabel: 'Custom link',
-        onLinkClick: () => console.log('clicked'),
-        onButtonClick: () => console.log('button clicked'),
-      },
-      position: {
-        bottom: 40,
-        left: 40,
-      },
-    });
-  }
 }

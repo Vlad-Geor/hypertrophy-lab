@@ -21,6 +21,7 @@ export class InputComponent<
 > extends FormControlComponent<T> {
   type = input<T>();
   withSearch = input<boolean>(false);
+  fullWidth = input(false);
   rounded = input<boolean>(false);
   size = input<Extract<Size, 'sm' | 'lg'>>('lg');
 

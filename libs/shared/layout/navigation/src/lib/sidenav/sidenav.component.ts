@@ -3,17 +3,18 @@ import { Component, inject, linkedSignal, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
-import { IconButtonComponent, IconComponent, ButtonComponent } from '@ikigaidev/elements';
+import { IconButtonComponent, IconComponent } from '@ikigaidev/elements';
+import { ViewportService } from '@ikigaidev/layout-service';
 import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
-import { ViewportService } from '@ikigaidev/service';
 import { filter, map, startWith } from 'rxjs';
-import { MenuItem } from '../model/menu-item.model';
 import { createMenuItems } from '../create-menu-items/create-menu-items';
+import { MenuItem } from '../model/menu-item.model';
+import { HlRoutingDirective } from '@ikigaidev/hl/shared';
 
 @Component({
   selector: 'lib-sidenav',
 
-  imports: [CommonModule, IconComponent, RouterModule, IconButtonComponent],
+  imports: [CommonModule, IconComponent, RouterModule, IconButtonComponent, HlRoutingDirective],
   templateUrl: './sidenav.component.html',
   host: {
     role: 'navigation',
@@ -53,12 +54,9 @@ export class SidenavComponent {
   navigateTo(item: MenuItem): void {
     this.router.navigate([item.route]);
     this.overlayRef?.close();
-    // this.selectedItem.set(item);
-    // this.updateActiveMenuItem();
   }
 
   onSettingsClick(): void {
-    // Handle settings click
     console.log('Settings clicked');
   }
 

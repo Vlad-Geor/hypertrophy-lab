@@ -16,7 +16,6 @@ import {
 @Component({
   selector: 'lib-toaster',
   templateUrl: './toaster.component.html',
-  styleUrls: ['./toaster.component.scss'],
   imports: [
     CommonModule,
     IconComponent,

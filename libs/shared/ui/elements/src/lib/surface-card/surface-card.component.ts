@@ -9,21 +9,28 @@ import { IconComponent } from '../icon/icon.component';
   template: `
     @if (cardTitle()) {
       <div class="flex flex-col gap-2">
-        <div class="flex items-center gap-2 text-token" [attr.data-tone]="theme()">
-          <lib-icon [icon]="cardTitleIcon()" [class]="cardTitleIconClass()"></lib-icon>
-          <h1
-            [class]="
-              titleSize() === 'md'
-                ? 'text-heading-md-semibold'
-                : titleSize() === 'sm'
-                  ? 'text-heading-sm-semibold'
-                  : 'text-heading-semibold'
-            "
-            [ngClass]="{ 'text-white': cardTitleWhite() }"
-          >
-            {{ cardTitle() }}
-          </h1>
-          <ng-content select="[surfaceCardTag]"></ng-content>
+        <div
+          class="flex items-center justify-between text-token"
+          [attr.data-tone]="theme()"
+        >
+          <div class="flex gap-2">
+            <lib-icon [icon]="cardTitleIcon()" [class]="cardTitleIconClass()"></lib-icon>
+            <h1
+              [class]="
+                titleSize() === 'md'
+                  ? 'text-heading-md-semibold'
+                  : titleSize() === 'sm'
+                    ? 'text-heading-sm-semibold'
+                    : 'text-heading-semibold'
+              "
+              [ngClass]="{ 'text-white': cardTitleWhite() }"
+            >
+              {{ cardTitle() }}
+            </h1>
+            <ng-content select="[surfaceCardTag]"></ng-content>
+          </div>
+
+          <ng-content select="[surfaceCardHeaderRight]"></ng-content>
         </div>
         <p class="text-sm text-nowrap text-gray-text">
           {{ cardSubtitle() }}

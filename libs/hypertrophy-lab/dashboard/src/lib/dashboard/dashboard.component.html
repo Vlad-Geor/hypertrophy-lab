@@ -1,10 +1,8 @@
-<!-- <lib-single-select [options]="options"></lib-single-select> -->
-
-<!-- <hr class="mb-6" /> -->
-<lib-button (click)="popToaster()">Test Toaster</lib-button>
+@let baseLoading = base.isLoading();
 
 <div class="grid grid-cols-2 justify-items-stretch gap-3">
   <hl-dashboard-summary-card
+    [loading]="baseLoading"
     title="Total Supplements"
     [value]="counters()?.totalSupplements ?? 0"
     theme="primary"
@@ -24,16 +22,18 @@
 
   <hl-dashboard-summary-card
     title="Monthly Cost"
-    [value]="totalCents() ?? 0"
+    [value]="(totalCostIls() ?? 0 | number: '1.2-2') ?? 0"
+    [loading]="baseLoading"
     theme="success"
     icon="hand-coins-liner"
   >
-    <span class="text-xl" valueSuffix>$</span>
+    <span class="text-xl" valueSuffix>₪</span>
   </hl-dashboard-summary-card>
 
   <hl-dashboard-summary-card
     title="Low Stock"
     [value]="counters()?.lowStock ?? 0"
+    [loading]="baseLoading"
     [showAlert]="(counters()?.lowStock ?? 0) > 2"
     theme="secondary"
     icon="alert-triangle-liner"
@@ -45,6 +45,7 @@
   </hl-dashboard-summary-card>
 
   <hl-dashboard-summary-card
+    [loading]="baseLoading"
     title="Expiring"
     [value]="counters()?.expiringSoon ?? 0"
     theme="danger"
@@ -59,6 +60,7 @@
   <hl-dashboard-summary-card
     title="Orders"
     [value]="counters()?.openOrders ?? 0"
+    [loading]="baseLoading"
     theme="accent-purple"
     icon="cart-liner"
   >
@@ -169,8 +171,6 @@
     }
   </lib-surface-card>
 }
-
-@if (totalCents()) {}
 
 <lib-surface-card
   cardTitle="Quick Actions"

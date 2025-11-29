@@ -7,7 +7,9 @@
 <div class="flex flex-col gap-4">
   <p class="text-xs text-gray-text font-medium">{{ title() }}</p>
   <div class="flex items-center gap-2">
-    @if (value()) {
+    @if (loading()) {
+      <lib-bouncing-loader size="sm"></lib-bouncing-loader>
+    } @else if (value()) {
       <span class="text-2xl font-bold">{{ value() }}</span>
       <ng-content select="[valueSuffix]"></ng-content>
     } @else {

@@ -3,12 +3,11 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BouncingLoaderComponent } from '@ikigaidev/elements';
 import { categories } from '@ikigaidev/hl/mock';
+import { ErrorPage } from '@ikigaidev/hl/shared';
 import { GlobalOverlay } from '@ikigaidev/overlay';
-import { CreateSupplementComponent } from '../../create-supplement/create-supplement.component';
+import { AddSupplementToInventory } from '../../add-to-inventory/add-to-inventory.component';
 import { SupplementStore } from '../../data-access/supplement.store';
 import { SupplementCardComponent } from '../../supplement-card/supplement-card.component';
-import { AddSupplementToInventory } from '../../add-to-inventory/add-to-inventory.component';
-import { ErrorPage } from '@ikigaidev/hl/shared';
 
 @Component({
   selector: 'hl-user-supplements',
@@ -17,7 +16,7 @@ import { ErrorPage } from '@ikigaidev/hl/shared';
     SupplementCardComponent,
     ReactiveFormsModule,
     BouncingLoaderComponent,
-    ErrorPage
+    ErrorPage,
   ],
   templateUrl: './user-supplements.component.html',
   styleUrl: './user-supplements.component.scss',

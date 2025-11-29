@@ -1,3 +1,5 @@
+import { HttpErrorResponse } from '@angular/common/http';
+
 import {
   Directive,
   HostBinding,
@@ -16,7 +18,7 @@ export class AsyncButton<T extends Observable<unknown>> {
   @HostBinding('attr.disabled') disabled = false;
 
   next = output<unknown>();
-  btnError = output<unknown>();
+  btnError = output<HttpErrorResponse>();
   complete = output<void>();
 
   @HostListener('click')

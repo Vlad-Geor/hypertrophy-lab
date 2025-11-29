@@ -15,7 +15,7 @@ export abstract class AnimatableOverlayBase {
     }
   }
 
-  onOverlayClose(result?: any): void {
+  onOverlayClose(result?: unknown): void {
     this.globalOverlayRef.close(result);
   }
 

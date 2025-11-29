@@ -1,5 +1,5 @@
 @if (store.userSupplements()?.length) {
-  @for (supp of store.userSupplements() ?? []; track $index) {
+  @for (supp of store.filteredUserSupplements() ?? []; track $index) {
     <hl-supplement-card [supplement]="supp"></hl-supplement-card>
   }
 } @else if (store.isLoading()) {

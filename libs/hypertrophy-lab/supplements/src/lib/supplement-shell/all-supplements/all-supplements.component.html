@@ -2,7 +2,7 @@
   <div
     class="py-3 px-2 flex flex-col gap-2 bg-surface border border-gray-soft rounded-lg shadow-xl"
   >
-    @for (supp of allSupplementsIncludeUsers.value()?.items ?? []; track $index) {
+    @for (supp of filteredSupplements(); track $index) {
       <hl-supplement-list-item [supplement]="supp"></hl-supplement-list-item>
     }
   </div>

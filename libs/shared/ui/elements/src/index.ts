@@ -26,4 +26,4 @@ export * from './lib/surface-card/surface-card.component';
 export * from './lib/tag/tag-group/tag-group.component';
 export * from './lib/tag/tag.component';
 export * from './lib/textarea/textarea.component';
-export * from './lib/toaster/toaster.component';
+export * from './lib/toaster/index';

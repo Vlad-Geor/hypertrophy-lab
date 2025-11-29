@@ -1,6 +1,6 @@
 import { Feature } from './routes';
 
-export const API: Record<Feature, string> = {
+export const API = {
   logs: '/schedule/logs',
   dashboard: '/dashboard',
   orders: '/orders',
@@ -9,4 +9,7 @@ export const API: Record<Feature, string> = {
   supplements: '/supplements',
   inventory: '/inventory',
   'add-supplement': '/add-supplement',
-} as const;
+} as const satisfies Record<Feature, string>;
+
+export type ApiPath = (typeof API)[keyof typeof API];
+

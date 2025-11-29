@@ -1,7 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
   inject,
   input,
   linkedSignal,
@@ -12,11 +12,17 @@ import {
   IconButtonComponent,
   IconComponent,
   IconTile,
+  openToaster,
   TagComponent,
 } from '@ikigaidev/elements';
 import { CreateLogResponse, DayEntrySchema, IntakeStatus } from '@ikigaidev/hl/contracts';
+import { GlobalOverlay } from '@ikigaidev/overlay';
 import { finalize, Observable } from 'rxjs';
 import { ScheduleService } from '../../data-access/schedule.service';
+import {
+  intakeLogErrorToasterConfig,
+  intakeLogSuccessToasterConfig,
+} from './open-status-toaster.util';
 
 @Component({
   selector: 'hl-intake-action-card',
@@ -30,6 +36,7 @@ import { ScheduleService } from '../../data-access/schedule.service';
 })
 export class IntakeLogCard {
   private scheduleService = inject(ScheduleService);
+  private overlay = inject(GlobalOverlay);
 
   cardData = input<DayEntrySchema>();
   updatedLog = linkedSignal<Partial<DayEntrySchema>>(() => ({ ...this.cardData() }));
@@ -38,17 +45,30 @@ export class IntakeLogCard {
     () => this.updatedLog()?.status === 'pending' || this.inEditMode(),
   );
 
-  constructor() {
-    effect(() => console.log(this.cardData()));
-  }
-
   logTaken = (): Observable<CreateLogResponse> => this.updateIntakeLog('taken');
   logSkipped = (): Observable<CreateLogResponse> => this.updateIntakeLog('skipped');
-  onLogSkipped(ev: unknown) {
+
+  onLogSkipped(ev: unknown): void {
+    openToaster(
+      this.overlay,
+      intakeLogSuccessToasterConfig('skipped', this.cardData()?.name ?? ''),
+    );
     this.showActions.set(false);
     this.updatedLog.set({ ...(ev as Partial<DayEntrySchema>) });
   }
+
+  onLogError(ev: HttpErrorResponse): void {
+    openToaster(
+      this.overlay,
+      intakeLogErrorToasterConfig(this.cardData()?.name ?? '', ev),
+    );
+  }
+
   onLogTaken(ev: unknown) {
+    openToaster(
+      this.overlay,
+      intakeLogSuccessToasterConfig('taken', this.cardData()?.name ?? ''),
+    );
     this.showActions.set(false);
     this.updatedLog.set({ ...(ev as Partial<DayEntrySchema>) });
   }
