@@ -8,6 +8,7 @@ export * from './lib/divider/divider.component';
 export * from './lib/doughnut/doughnut.component';
 export * from './lib/dropdown/index';
 export * from './lib/error/error-message.component';
+export * from './lib/file-dropzone/file-dropzone.component';
 export * from './lib/form-control/form-control-wrapper.component';
 export * from './lib/form-control/form-control.component';
 export * from './lib/icon-tile/icon-tile.component';

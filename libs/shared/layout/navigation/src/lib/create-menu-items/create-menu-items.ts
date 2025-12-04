@@ -15,7 +15,7 @@ export const createMenuItems: () => MenuItem[] = () => {
     },
     {
       icon: 'list-check-liner',
-      label: 'Active Routines',
+      label: 'Manage Tracking',
       route: '/routine',
     },
     {
