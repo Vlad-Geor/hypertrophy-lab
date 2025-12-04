@@ -1,17 +1,5 @@
 import { z } from 'zod';
 
-export const groupSupplementSchema = z.object({
-  id: z.uuid(),
-  groupId: z.uuid(),
-  catalogId: z.uuid().nullable(),
-  nickname: z.string().max(120).nullish(),
-  safetyNotes: z.string().nullish(),
-  archivedAt: z.string().nullish(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-});
-export type GroupSupplement = z.infer<typeof groupSupplementSchema>;
-
 export const groupBatchSchema = z.object({
   id: z.uuid(),
   groupSupplementId: z.uuid(),
@@ -26,4 +14,24 @@ export const groupBatchSchema = z.object({
   createdAt: z.string(),
   updatedAt: z.string(),
 });
+
 export type GroupBatch = z.infer<typeof groupBatchSchema>;
+
+export const groupSupplementSchema = z.object({
+  id: z.uuid(),
+  groupId: z.uuid(),
+  catalogId: z.uuid().nullable(),
+  nickname: z.string().max(120).nullish(),
+  safetyNotes: z.string().nullish(),
+  archivedAt: z.string().nullish(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  catalogName: z.string(),
+  brandName: z.string(),
+  onHandUnits: z.number(),
+});
+export type GroupSupplement = z.infer<typeof groupSupplementSchema>;
+
+export type GroupSupplementListItem = GroupSupplement & {
+batches?: GroupBatch[];
+};

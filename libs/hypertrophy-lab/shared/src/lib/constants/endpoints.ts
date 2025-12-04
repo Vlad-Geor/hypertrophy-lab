@@ -8,6 +8,7 @@ export const API = {
   schedule: '/schedule',
   supplements: '/supplements',
   inventory: '/inventory',
+  groups: '/groups',
   'add-supplement': '/add-supplement',
 } as const satisfies Record<Feature, string>;
 

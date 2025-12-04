@@ -5,6 +5,7 @@ import {
   addInventoryBulkExistingRequest,
   AddInventoryBulkExistingRequest,
   AddInventoryBulkExistingResponse,
+  GroupSupplementListItem,
   ListCatalogResponse,
   ListInventoryResponse,
 } from '@ikigaidev/hl/contracts';
@@ -26,6 +27,19 @@ export class SupplementService {
   getUserSupplements(withoutPlan?: boolean): Observable<ListInventoryResponse> {
     return this.http.get<ListInventoryResponse>(
       `${this.API_BASE}${API.inventory}${withoutPlan ? '?withoutPlan=true' : ''}`,
+    );
+  }
+
+  // getGroups(): Observable<any> {
+    // return
+  // }
+
+  getGroupSupplements(
+    groupId: string,
+    includeBatches?: boolean,
+  ): Observable<GroupSupplementListItem[]> {
+    return this.http.get<GroupSupplementListItem[]>(
+      `${this.API_BASE}${API.groups}/${groupId}/supplements`,
     );
   }
 

@@ -1,8 +1,11 @@
 // repositories/user.repository.ts
 import { Request, RequestHandler } from 'express';
+import { Knex } from 'knex';
 import { db } from '../config/database.js';
+import { toNumber } from '../util/single-count.js';
 
 const USER_TABLE = 'users';
+const CORE_USERS = 'core.users';
 
 export type Claims = {
   sub: string;
@@ -136,3 +139,110 @@ export const hydrateUser: RequestHandler = async (req: Request, _res, next) => {
     next(err);
   }
 };
+
+const userSelectColumns = [
+  'u.id',
+  'u.email',
+  'u.email_verified as emailVerified',
+  'u.display_name as displayName',
+  'u.nickname',
+  'u.picture_url as pictureUrl',
+  'u.tz',
+  'u.locale',
+  'u.settings',
+  'u.created_at as createdAt',
+  'u.updated_at as updatedAt',
+] as const;
+
+export type UserRecord = {
+  id: string;
+  email: string | null;
+  emailVerified: boolean;
+  displayName: string | null;
+  nickname: string | null;
+  pictureUrl: string | null;
+  tz: string;
+  locale: string;
+  settings: Record<string, unknown>;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+function applySearch<T extends Knex.QueryBuilder>(
+  qb: T,
+  q?: string,
+) {
+  if (!q) return qb;
+  return qb.where((builder) =>
+    builder
+      .whereILike('u.email', `%${q}%`)
+      .orWhereILike('u.display_name', `%${q}%`)
+      .orWhereILike('u.nickname', `%${q}%`),
+  );
+}
+
+export const countUsers = async (q?: string) => {
+  const row = await applySearch(db(`${CORE_USERS} as u`).count<{ cnt: string | number | bigint }>({ cnt: '*' }), q).first();
+  return toNumber(row?.cnt);
+};
+
+export const listUsers = (params: { limit: number; offset: number; q?: string }) =>
+  applySearch(
+    db(`${CORE_USERS} as u`)
+      .select<UserRecord>(...userSelectColumns)
+      .orderBy('u.created_at', 'desc')
+      .limit(params.limit)
+      .offset(params.offset),
+    params.q,
+  );
+
+export const getUserById = (id: string) =>
+  db(`${CORE_USERS} as u`).select<UserRecord>(...userSelectColumns).where('u.id', id).first();
+
+export type UpdateUserInput = Partial<{
+  email: string | null;
+  emailVerified: boolean;
+  displayName: string | null;
+  nickname: string | null;
+  pictureUrl: string | null;
+  tz: string;
+  locale: string;
+  settings: Record<string, unknown>;
+}>;
+
+export const updateUser = async (id: string, patch: UpdateUserInput) => {
+  const update: Record<string, unknown> = {};
+  if (patch.email !== undefined) update.email = patch.email;
+  if (patch.emailVerified !== undefined) update.email_verified = patch.emailVerified;
+  if (patch.displayName !== undefined) update.display_name = patch.displayName;
+  if (patch.nickname !== undefined) update.nickname = patch.nickname;
+  if (patch.pictureUrl !== undefined) update.picture_url = patch.pictureUrl;
+  if (patch.tz !== undefined) update.tz = patch.tz;
+  if (patch.locale !== undefined) update.locale = patch.locale;
+  if (patch.settings !== undefined) update.settings = patch.settings;
+
+  if (!Object.keys(update).length) {
+    return getUserById(id);
+  }
+
+  const rows = await db(CORE_USERS)
+    .update(update)
+    .where({ id })
+    .returning<UserRecord>([
+      'id',
+      'email',
+      'email_verified as emailVerified',
+      'display_name as displayName',
+      'nickname',
+      'picture_url as pictureUrl',
+      'tz',
+      'locale',
+      'settings',
+      'created_at as createdAt',
+      'updated_at as updatedAt',
+    ]);
+
+  return rows[0] ?? null;
+};
+
+export const deleteUser = (id: string) => db(CORE_USERS).where({ id }).del();

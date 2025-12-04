@@ -23,12 +23,12 @@ import { SupplementCardComponent } from '../../supplement-card/supplement-card.c
 })
 export class SupplementList {
   private readonly globalOverlay = inject(GlobalOverlay);
-  // private readonly supplementService = inject(SupplementService);
   readonly store = inject(SupplementStore);
+  // TBD Create new service for groups.
+  // Call service to get groups (Authenticated user based), then call GET supplements
+  // Per Group. Fill User Supplements with both private and group owned suppls.
 
   categories = categories;
-
-  // supplements = this.supplementService.userSupplements;
 
   addSupp(): void {
     this.globalOverlay.openComponent(AddSupplementToInventory, {});
