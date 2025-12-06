@@ -8,7 +8,7 @@
         <span class="text-sm font-medium">{{ data?.name }}</span>
         @let units = data?.unitsPerDose;
         @if (units) {
-          <lib-tag [rounded]="true" [size]="'md'" [theme]="'secondary'">
+          <lib-tag [rounded]="true" [size]="'sm'" [theme]="'secondary'">
             {{ units + ' ' + (units > 1 ? 'units' : 'unit') }}
           </lib-tag>
         }

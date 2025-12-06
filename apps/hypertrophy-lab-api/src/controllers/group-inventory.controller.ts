@@ -71,11 +71,19 @@ export const listSupplements: RequestHandler<{ groupId: string }> = async (req: 
     req.query.includeArchived === '1' || req.query.includeArchived === 'true';
   const includeBatches =
     req.query.includeBatches === '1' || req.query.includeBatches === 'true';
+  const withoutPlan = req.query.withoutPlan === '1' || req.query.withoutPlan === 'true';
 
   const items = await svc.listSupplements(req.user.id, req.params.groupId, {
     includeArchived,
     includeBatches,
+    withoutPlan,
   });
+  res.json(items);
+};
+
+export const listUserSupplements: RequestHandler = async (req: Request, res) => {
+  const withoutPlan = req.query.withoutPlan === '1' || req.query.withoutPlan === 'true';
+  const items = await svc.listUserSupplements(req.user.id, { withoutPlan });
   res.json(items);
 };
 

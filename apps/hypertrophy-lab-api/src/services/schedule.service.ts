@@ -1,15 +1,76 @@
 import { CreatePlanRequest, UpdatePlanRequest } from '@ikigaidev/hl/contracts';
 import { Knex } from 'knex';
 import { db } from '../config/database.js';
+import * as groupInventoryRepo from '../repositories/group-inventory.repo.js';
 import * as inv from '../repositories/inventory.repo.js';
 import * as repo from '../repositories/schedule.repo.js';
+import * as groupsSvc from './groups.service.js';
+
+type InventorySource = 'personal' | 'group';
+
+type InventoryResolution = {
+  inventorySource: InventorySource;
+  userSupplementId: string | null;
+  groupId: string | null;
+  groupSupplementId: string | null;
+};
+
+type InventoryResolutionInput = Partial<InventoryResolution> & {
+  inventorySource?: InventorySource;
+};
+
+async function resolveInventoryContext(
+  userId: string,
+  input: InventoryResolutionInput,
+): Promise<InventoryResolution> {
+  const inventorySource: InventorySource = input.inventorySource ?? 'personal';
+
+  if (inventorySource === 'group') {
+    if (!input.groupId) throw new Error('groupId is required for group inventory');
+    if (!input.groupSupplementId)
+      throw new Error('groupSupplementId is required for group inventory');
+
+    await groupsSvc.requireActiveMembership(userId, input.groupId);
+    const supplement = await groupInventoryRepo.getGroupSupplement(
+      input.groupId,
+      input.groupSupplementId,
+    );
+    console.log('resolveInvContext, groupInvRepo.getGroupSupp: ', supplement);
+
+    if (!supplement) throw new Error('Group supplement not found');
+
+    return {
+      inventorySource: 'group',
+      userSupplementId: null,
+      groupId: input.groupId,
+      groupSupplementId: input.groupSupplementId,
+    };
+  }
+
+  if (!input.userSupplementId) throw new Error('userSupplementId is required');
+  const us = await repo.ensureUserSupplement(userId, input.userSupplementId);
+  if (!us) throw new Error('User supplement not found');
+
+  return {
+    inventorySource: 'personal',
+    userSupplementId: input.userSupplementId,
+    groupId: null,
+    groupSupplementId: null,
+  };
+}
 
 export async function listPlans(params: { userId: string }) {
   return repo.listPlans(params.userId);
 }
 
 export async function createPlan(params: { userId: string; payload: CreatePlanRequest }) {
-  return repo.createPlan({ userId: params.userId, payload: params.payload });
+  const normalized = await resolveInventoryContext(params.userId, params.payload);
+  console.log('createPlan params.payload', params.payload);
+  console.log('normalized (create Plan)', normalized);
+  return repo.createPlan({
+    userId: params.userId,
+    payload: { ...params.payload, ...normalized },
+  });
 }
 
 export async function updatePlan(params: {
@@ -17,7 +78,35 @@ export async function updatePlan(params: {
   planId: string;
   patch: UpdatePlanRequest;
 }) {
-  await repo.updatePlan({ ...params });
+  let patch = { ...params.patch };
+
+  if (
+    patch.inventorySource !== undefined ||
+    patch.userSupplementId !== undefined ||
+    patch.groupId !== undefined ||
+    patch.groupSupplementId !== undefined
+  ) {
+    const current = await repo.getPlanForUser(params.userId, params.planId);
+    if (!current) throw new Error('Plan not found');
+    const normalized = await resolveInventoryContext(params.userId, {
+      inventorySource: patch.inventorySource ?? current.inventorySource ?? 'personal',
+      userSupplementId:
+        patch.userSupplementId !== undefined
+          ? patch.userSupplementId
+          : current.userSupplementId,
+      groupId: patch.groupId !== undefined ? patch.groupId : current.groupId,
+      groupSupplementId:
+        patch.groupSupplementId !== undefined
+          ? patch.groupSupplementId
+          : current.groupSupplementId,
+    });
+    patch = {
+      ...patch,
+      ...normalized,
+    };
+  }
+
+  await repo.updatePlan({ ...params, patch });
 }
 
 export async function deletePlan(params: { userId: string; planId: string }) {
@@ -46,9 +135,18 @@ export async function patchLog(params: { userId: string; logId: string; patch: a
     const nextQty = patch.quantityUnits ?? cur.quantityUnits ?? 0;
 
     // 1) restore previous consumption if any
+    const inventorySource: InventorySource = cur.inventorySource ?? 'personal';
+    const userSupplementId = cur.userSupplementId ?? null;
+    const groupSupplementId = cur.groupSupplementId ?? null;
+
     if (cur.status === 'taken' && cur.totalConsumed > 0) {
-      await repo.restoreConsumptionsTx(trx, logId);
-      await repo.deleteConsumptionsTx(trx, logId);
+      if (inventorySource === 'group') {
+        await repo.restoreGroupConsumptionsTx(trx, logId);
+        await repo.deleteGroupConsumptionsTx(trx, logId);
+      } else {
+        await repo.restoreConsumptionsTx(trx, logId);
+        await repo.deleteConsumptionsTx(trx, logId);
+      }
     }
 
     // 2) update log fields
@@ -67,7 +165,13 @@ export async function patchLog(params: { userId: string; logId: string; patch: a
 
     // 3) re-consume if now taken with qty > 0
     if (nextStatus === 'taken' && nextQty > 0) {
-      await repo.consumeStockTx(trx, logId, cur.userSupplementId, nextQty);
+      if (inventorySource === 'group') {
+        if (!groupSupplementId) throw new Error('Group supplement missing on log');
+        await repo.consumeGroupStockTx(trx, logId, groupSupplementId, nextQty, userId);
+      } else {
+        if (!userSupplementId) throw new Error('User supplement missing on log');
+        await repo.consumePersonalStockTx(trx, logId, userSupplementId, nextQty);
+      }
     }
 
     return updated;
@@ -87,10 +191,18 @@ export async function patchLogTx(
 
   const nextStatus = patch.status ?? cur.status;
   const nextQty = patch.quantityUnits ?? cur.quantityUnits ?? 0;
+  const inventorySource: InventorySource = cur.inventorySource ?? 'personal';
+  const groupSupplementId = cur.groupSupplementId ?? null;
+  const userSupplementId = cur.userSupplementId ?? null;
 
   if (cur.status === 'taken' && cur.totalConsumed > 0) {
-    await repo.restoreConsumptionsTx(trx, logId);
-    await repo.deleteConsumptionsTx(trx, logId);
+    if (inventorySource === 'group') {
+      await repo.restoreGroupConsumptionsTx(trx, logId);
+      await repo.deleteGroupConsumptionsTx(trx, logId);
+    } else {
+      await repo.restoreConsumptionsTx(trx, logId);
+      await repo.deleteConsumptionsTx(trx, logId);
+    }
   }
 
   const updated = await repo.updateLogTx(trx, {
@@ -105,19 +217,31 @@ export async function patchLogTx(
   });
 
   if (nextStatus === 'taken' && nextQty > 0) {
-    await repo.consumeStockTx(trx, logId, cur.userSupplementId, nextQty);
+    if (inventorySource === 'group') {
+      if (!groupSupplementId) throw new Error('Group supplement missing on log');
+      await repo.consumeGroupStockTx(trx, logId, groupSupplementId, nextQty, userId);
+    } else {
+      if (!userSupplementId) throw new Error('User supplement missing on log');
+      await repo.consumePersonalStockTx(trx, logId, userSupplementId, nextQty);
+    }
   }
   return updated;
 }
 
 export async function deleteLog(params: { userId: string; logId: string }) {
   await db.transaction(async (trx) => {
-    // revert stock if any consumption
-    const consumptions = await repo.getLogConsumptions(trx, params.logId);
-    for (const c of consumptions) {
-      await inv.incrementBatchUnits(trx, c.batch_id, c.units);
+    const log = await repo.getLogById(trx, params.logId);
+    if (!log) return;
+    if (log.inventorySource === 'group') {
+      await repo.restoreGroupConsumptionsTx(trx, params.logId);
+      await repo.deleteGroupConsumptionsTx(trx, params.logId);
+    } else {
+      const consumptions = await repo.getLogConsumptions(trx, params.logId);
+      for (const c of consumptions) {
+        await inv.incrementBatchUnits(trx, c.batch_id, c.units);
+      }
+      await repo.deleteLogConsumptions(trx, params.logId);
     }
-    await repo.deleteLogConsumptions(trx, params.logId);
     await repo.deleteLog(trx, params.userId, params.logId);
   });
 }
@@ -126,7 +250,10 @@ export async function createLog(
   userId: string,
   payload: {
     planId?: string;
-    userSupplementId: string;
+    inventorySource?: InventorySource;
+    userSupplementId?: string | null;
+    groupId?: string | null;
+    groupSupplementId?: string | null;
     date: string;
     timeOfDay: 'morning' | 'afternoon' | 'evening' | 'bedtime';
     status: 'taken' | 'skipped' | 'pending';
@@ -135,36 +262,48 @@ export async function createLog(
     consumeStock?: boolean;
   },
 ) {
-  // If plan provided, validate and default quantity from plan
   let qty = payload.quantityUnits ?? 0;
+  let sourceInput: InventoryResolutionInput = {
+    inventorySource: payload.inventorySource,
+    userSupplementId: payload.userSupplementId ?? null,
+    groupId: payload.groupId ?? null,
+    groupSupplementId: payload.groupSupplementId ?? null,
+  };
+
   if (payload.planId) {
     const plan = await repo.getPlanForUser(userId, payload.planId);
     if (!plan) throw new Error('Plan not found');
     if (plan.timeOfDay !== payload.timeOfDay)
       throw new Error('Log time of day mismatch; Valid option: ' + plan.timeOfDay);
-    if (plan.userSupplementId !== payload.userSupplementId)
-      throw new Error('Plan/userSupplement mismatch');
+    sourceInput = {
+      inventorySource: plan.inventorySource ?? 'personal',
+      userSupplementId: plan.userSupplementId,
+      groupId: plan.groupId,
+      groupSupplementId: plan.groupSupplementId,
+    };
     if (qty === 0) qty = plan.unitsPerDose ?? 0;
   }
 
-  // Ownership check
-  const us = await repo.ensureUserSupplement(userId, payload.userSupplementId);
-  if (!us) throw new Error('User supplement not found');
+  const normalized = await resolveInventoryContext(userId, sourceInput);
 
-  // Uniqueness guard
-  const exists = await repo.getExistingLog(
+  const exists = await repo.getExistingLog({
     userId,
-    payload.userSupplementId,
-    payload.date,
-    payload.timeOfDay,
-  );
+    inventorySource: normalized.inventorySource,
+    userSupplementId: normalized.userSupplementId,
+    groupSupplementId: normalized.groupSupplementId,
+    date: payload.date,
+    timeOfDay: payload.timeOfDay,
+  });
   if (exists) throw new Error('Log already exists for this slot');
 
   // Transaction: insert log, optional stock consumption
   return db.transaction(async (trx) => {
     const log = await repo.insertLogTx(trx, {
       userId,
-      userSupplementId: payload.userSupplementId,
+      inventorySource: normalized.inventorySource,
+      userSupplementId: normalized.userSupplementId,
+      groupId: normalized.groupId,
+      groupSupplementId: normalized.groupSupplementId,
       planId: payload.planId ?? null,
       date: payload.date,
       timeOfDay: payload.timeOfDay,
@@ -174,7 +313,18 @@ export async function createLog(
     });
 
     if (payload.status === 'taken' && (payload.consumeStock ?? true) && qty > 0) {
-      await repo.consumeStockTx(trx, log.id, payload.userSupplementId, qty);
+      if (normalized.inventorySource === 'group') {
+        if (!normalized.groupSupplementId) throw new Error('Group supplement missing');
+        await repo.consumeGroupStockTx(
+          trx,
+          log.id,
+          normalized.groupSupplementId,
+          qty,
+          userId,
+        );
+      } else if (normalized.userSupplementId) {
+        await repo.consumePersonalStockTx(trx, log.id, normalized.userSupplementId, qty);
+      }
     }
     return log;
   });
@@ -246,14 +396,35 @@ export async function getDayView(userId: string, date: string) {
     repo.getLogsForDate(userId, date),
     repo.getAdhocLoggedSupplements(userId, date),
   ]);
-  // index logs by (userSupplementId, timeOfDay)
-  const logKey = (usId: string, tod: string) => `${usId}|${tod}`;
+  const logKey = (
+    source: InventorySource,
+    userSupplementId: string | null,
+    groupSupplementId: string | null,
+    tod: string,
+  ) => `${source}|${userSupplementId ?? 'null'}|${groupSupplementId ?? 'null'}|${tod}`;
   const logMap = new Map<string, any>();
-  logs.forEach((l) => logMap.set(logKey(l.userSupplementId, l.timeOfDay), l));
+  logs.forEach((l) =>
+    logMap.set(
+      logKey(
+        l.inventorySource ?? 'personal',
+        l.userSupplementId ?? null,
+        l.groupSupplementId ?? null,
+        l.timeOfDay,
+      ),
+      l,
+    ),
+  );
 
   // base items from plans
   const itemsFromPlans = plans.map((p) => {
-    const l = logMap.get(logKey(p.userSupplementId, p.timeOfDay));
+    const l = logMap.get(
+      logKey(
+        p.inventorySource ?? 'personal',
+        p.userSupplementId ?? null,
+        p.groupSupplementId ?? null,
+        p.timeOfDay,
+      ),
+    );
 
     return {
       timeOfDay: p.timeOfDay,
@@ -274,7 +445,14 @@ export async function getDayView(userId: string, date: string) {
 
   // add ad-hoc logs (no plan)
   const adHoc = adHocInfos.map((info) => {
-    const l = logMap.get(logKey(info.userSupplementId, info.timeOfDay));
+    const l = logMap.get(
+      logKey(
+        info.inventorySource ?? 'personal',
+        info.userSupplementId ?? null,
+        info.groupSupplementId ?? null,
+        info.timeOfDay,
+      ),
+    );
     return {
       timeOfDay: info.timeOfDay,
       planId: null,

@@ -6,6 +6,8 @@ import {
 import { Knex } from 'knex';
 import { db } from '../config/database.js';
 
+type InventorySource = 'personal' | 'group';
+
 export async function getUserTz(userId: string): Promise<string> {
   const r = await db('core.users').where({ id: userId }).first('tz');
   return r?.tz || 'UTC';
@@ -14,9 +16,21 @@ export async function getUserTz(userId: string): Promise<string> {
 /** One row per active plan for the date, with LEFT JOIN to existing log */
 export async function fetchDaySummaryRows(userId: string, date: string) {
   return db('nutrition.schedule_plans as p')
-    .join('nutrition.user_supplements as us', 'us.id', 'p.user_supplement_id')
+    .leftJoin('nutrition.user_supplements as us', function () {
+      this.on('us.id', '=', 'p.user_supplement_id').andOn(
+        db.raw("p.inventory_source = 'personal'::inventory_source"),
+      );
+    })
     .leftJoin('nutrition.supplement_catalog as c', 'c.id', 'us.catalog_id')
     .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
+    .leftJoin('nutrition.group_supplements as gs', function () {
+      this.on('gs.id', '=', 'p.group_supplement_id').andOn(
+        db.raw("p.inventory_source = 'group'::inventory_source"),
+      );
+    })
+    .leftJoin('core.groups as g', 'g.id', 'gs.group_id')
+    .leftJoin('nutrition.supplement_catalog as gc', 'gc.id', 'gs.catalog_id')
+    .leftJoin('nutrition.brands as gb', 'gb.id', 'gc.brand_id')
     .leftJoin('nutrition.schedule_logs as l', function () {
       this.on('l.user_id', '=', 'p.user_id')
         .andOn('l.user_supplement_id', '=', 'p.user_supplement_id')
@@ -27,7 +41,13 @@ export async function fetchDaySummaryRows(userId: string, date: string) {
     .select({
       planId: 'p.id',
       timeOfDay: 'p.time_of_day',
-      name: db.raw(`coalesce(us.nickname, c.name, 'Supplement')`),
+      name: db.raw(
+        `CASE
+          WHEN p.inventory_source = 'group'::inventory_source
+            THEN COALESCE(gs.nickname, gc.name, g.name, 'Group Supplement')
+          ELSE COALESCE(us.nickname, c.name, 'Supplement')
+        END`,
+      ),
       doseUnits: db.raw(`coalesce(l.quantity_units, p.units_per_dose, 0)`),
       logId: 'l.id',
       logStatus: 'l.status',
@@ -38,7 +58,21 @@ export async function fetchDaySummaryRows(userId: string, date: string) {
 
 export async function listPlans(userId: string) {
   return db('nutrition.schedule_plans')
-    .select('*')
+    .select(
+      'id',
+      'user_id',
+      'user_supplement_id',
+      'group_supplement_id',
+      'group_id',
+      'inventory_source',
+      'units_per_dose',
+      'time_of_day',
+      'days_of_week',
+      'notes',
+      'active',
+      'created_at',
+      'updated_at',
+    )
     .where({ user_id: userId })
     .orderBy([
       { column: 'active', order: 'desc' },
@@ -51,7 +85,12 @@ export async function createPlan(params: { userId: string; payload: CreatePlanRe
   const [row] = await db('nutrition.schedule_plans')
     .insert({
       user_id: params.userId,
-      user_supplement_id: params.payload.userSupplementId,
+      inventory_source: params.payload.inventorySource ?? 'personal',
+      user_supplement_id:
+        params.payload.inventorySource === 'group' ? null : params.payload.userSupplementId,
+      group_id: params.payload.inventorySource === 'group' ? params.payload.groupId : null,
+      group_supplement_id:
+        params.payload.inventorySource === 'group' ? params.payload.groupSupplementId : null,
       units_per_dose: params.payload.unitsPerDose ?? 1,
       time_of_day: params.payload.timeOfDay,
       days_of_week: db.raw('?', [params.payload.daysOfWeek]),
@@ -74,6 +113,13 @@ export async function updatePlan(params: {
     patch.days_of_week = db.raw('?', [params.patch.daysOfWeek]);
   if (params.patch.notes !== undefined) patch.notes = params.patch.notes;
   if (params.patch.active !== undefined) patch.active = params.patch.active;
+  if (params.patch.inventorySource !== undefined)
+    patch.inventory_source = params.patch.inventorySource;
+  if (params.patch.userSupplementId !== undefined)
+    patch.user_supplement_id = params.patch.userSupplementId;
+  if (params.patch.groupId !== undefined) patch.group_id = params.patch.groupId;
+  if (params.patch.groupSupplementId !== undefined)
+    patch.group_supplement_id = params.patch.groupSupplementId;
 
   await db('nutrition.schedule_plans')
     .update(patch)
@@ -101,10 +147,17 @@ export async function createLog(
     )) ??
     0;
 
+  const inventorySource: InventorySource = params.payload.inventorySource ?? 'personal';
+
   const [row] = await trx('nutrition.schedule_logs')
     .insert({
       user_id: params.userId,
-      user_supplement_id: params.payload.userSupplementId,
+      inventory_source: inventorySource,
+      user_supplement_id:
+        inventorySource === 'group' ? null : params.payload.userSupplementId ?? null,
+      group_id: inventorySource === 'group' ? params.payload.groupId ?? null : null,
+      group_supplement_id:
+        inventorySource === 'group' ? params.payload.groupSupplementId ?? null : null,
       plan_id: params.payload.planId ?? null,
       date: params.payload.date,
       time_of_day: params.payload.timeOfDay,
@@ -290,6 +343,9 @@ function mapPlanRow(r: any) {
     id: r.id,
     userId: r.user_id,
     userSupplementId: r.user_supplement_id,
+    inventorySource: r.inventory_source || 'personal',
+    groupId: r.group_id,
+    groupSupplementId: r.group_supplement_id,
     unitsPerDose: Number(r.units_per_dose),
     timeOfDay: r.time_of_day,
     daysOfWeek: r.days_of_week,
@@ -305,6 +361,9 @@ function mapLogRow(r: any) {
     id: r.id,
     userId: r.user_id,
     userSupplementId: r.user_supplement_id,
+    inventorySource: r.inventory_source || 'personal',
+    groupId: r.group_id,
+    groupSupplementId: r.group_supplement_id,
     planId: r.plan_id,
     date: r.date,
     timeOfDay: r.time_of_day,
@@ -321,6 +380,9 @@ export const getPlanForUser = (userId: string, planId: string) =>
     .select(
       'id',
       'user_supplement_id as userSupplementId',
+      'inventory_source as inventorySource',
+      'group_id as groupId',
+      'group_supplement_id as groupSupplementId',
       'units_per_dose as unitsPerDose',
       'time_of_day as timeOfDay',
       'days_of_week as daysOfWeek',
@@ -334,18 +396,27 @@ export const ensureUserSupplement = (userId: string, userSupplementId: string) =
     .where({ id: userSupplementId, user_id: userId })
     .first();
 
-export const getExistingLog = (
-  userId: string,
-  userSupplementId: string,
-  date: string,
-  timeOfDay: string,
-) =>
+export const getExistingLog = (params: {
+  userId: string;
+  inventorySource: InventorySource;
+  userSupplementId?: string | null;
+  groupSupplementId?: string | null;
+  date: string;
+  timeOfDay: string;
+}) =>
   db('nutrition.schedule_logs')
     .where({
-      user_id: userId,
-      user_supplement_id: userSupplementId,
-      date,
-      time_of_day: timeOfDay,
+      user_id: params.userId,
+      date: params.date,
+      time_of_day: params.timeOfDay,
+      inventory_source: params.inventorySource,
+    })
+    .modify((qb) => {
+      if (params.inventorySource === 'group') {
+        qb.andWhere('group_supplement_id', params.groupSupplementId ?? null);
+      } else {
+        qb.andWhere('user_supplement_id', params.userSupplementId ?? null);
+      }
     })
     .first();
 
@@ -353,7 +424,10 @@ export const insertLogTx = (
   trx: any,
   log: {
     userId: string;
-    userSupplementId: string;
+    inventorySource: InventorySource;
+    userSupplementId?: string | null;
+    groupId?: string | null;
+    groupSupplementId?: string | null;
     planId?: string | null;
     date: string;
     timeOfDay: string;
@@ -365,7 +439,11 @@ export const insertLogTx = (
   trx('nutrition.schedule_logs')
     .insert({
       user_id: log.userId,
-      user_supplement_id: log.userSupplementId,
+      inventory_source: log.inventorySource,
+      user_supplement_id: log.inventorySource === 'group' ? null : log.userSupplementId ?? null,
+      group_id: log.inventorySource === 'group' ? log.groupId ?? null : null,
+      group_supplement_id:
+        log.inventorySource === 'group' ? log.groupSupplementId ?? null : null,
       plan_id: log.planId ?? null,
       date: log.date,
       time_of_day: log.timeOfDay,
@@ -377,6 +455,9 @@ export const insertLogTx = (
       'id',
       'user_id as userId',
       'user_supplement_id as userSupplementId',
+      'inventory_source as inventorySource',
+      'group_id as groupId',
+      'group_supplement_id as groupSupplementId',
       'plan_id as planId',
       'date',
       'time_of_day as timeOfDay',
@@ -398,28 +479,77 @@ export async function getPlansForDay(userId: string, weekday: number) {
     .groupBy('bat.user_supplement_id')
     .as('inv');
 
+  const groupInv = db('nutrition.group_batches as gb')
+    .select('gb.group_supplement_id')
+    .select(
+      db.raw('COALESCE(SUM(gb.qty_remaining),0)::int AS on_hand'),
+      db.raw('MIN(gb.expires_on) AS earliest_expiry'),
+    )
+    .groupBy('gb.group_supplement_id')
+    .as('ginv');
+
   const weekdayArr = [Number(weekday)];
 
   return db('nutrition.schedule_plans as p')
-    .join('nutrition.user_supplements as us', 'us.id', 'p.user_supplement_id')
+    .leftJoin('nutrition.user_supplements as us', function () {
+      this.on('us.id', '=', 'p.user_supplement_id').andOn(
+        db.raw("p.inventory_source = 'personal'::inventory_source"),
+      );
+    })
     .leftJoin('nutrition.supplement_catalog as c', 'c.id', 'us.catalog_id')
     .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
     .leftJoin(inv, 'inv.user_supplement_id', 'us.id')
+    .leftJoin('nutrition.group_supplements as gs', function () {
+      this.on('gs.id', '=', 'p.group_supplement_id').andOn(
+        db.raw("p.inventory_source = 'group'::inventory_source"),
+      );
+    })
+    .leftJoin('core.groups as g', 'g.id', 'gs.group_id')
+    .leftJoin('nutrition.supplement_catalog as gc', 'gc.id', 'gs.catalog_id')
+    .leftJoin('nutrition.brands as gb', 'gb.id', 'gc.brand_id')
+    .leftJoin(groupInv, 'ginv.group_supplement_id', 'gs.id')
     .where('p.user_id', userId)
     .andWhere('p.active', true)
-    .andWhereRaw('p.days_of_week && ?::smallint[]', [weekdayArr]) // ← key fix
+    .andWhereRaw('p.days_of_week && ?::smallint[]', [weekdayArr])
     .select({
       planId: 'p.id',
-      userSupplementId: 'us.id',
-      catalogId: 'c.id',
+      inventorySource: 'p.inventory_source',
+      userSupplementId: 'p.user_supplement_id',
+      groupSupplementId: 'p.group_supplement_id',
+      groupId: 'p.group_id',
+      catalogId: db.raw('COALESCE(c.id, gc.id)'),
       timeOfDay: 'p.time_of_day',
       unitsPerDose: 'p.units_per_dose',
       notes: 'p.notes',
-      brandName: 'b.name',
-      name: db.raw('COALESCE(us.custom_name, c.name)'),
-      form: db.raw('COALESCE(us.custom_form, c.form)'),
-      onHand: db.raw('COALESCE(??.??, 0)', ['inv', 'on_hand']),
-      earliestExpiry: db.raw('??.??', ['inv', 'earliest_expiry']),
+      brandName: db.raw('COALESCE(b.name, gb.name)'),
+      name: db.raw(
+        `CASE
+          WHEN p.inventory_source = 'group'::inventory_source
+            THEN COALESCE(gs.nickname, gc.name, g.name, 'Group Supplement')
+          ELSE COALESCE(us.custom_name, c.name, 'Supplement')
+        END`,
+      ),
+      form: db.raw(
+        `CASE
+          WHEN p.inventory_source = 'group'::inventory_source
+            THEN COALESCE(gc.form, 'other')
+          ELSE COALESCE(us.custom_form, c.form)
+        END`,
+      ),
+      onHand: db.raw(
+        `CASE
+          WHEN p.inventory_source = 'group'::inventory_source
+            THEN COALESCE(ginv.on_hand, 0)
+          ELSE COALESCE(inv.on_hand, 0)
+        END`,
+      ),
+      earliestExpiry: db.raw(
+        `CASE
+          WHEN p.inventory_source = 'group'::inventory_source
+            THEN ginv.earliest_expiry
+          ELSE inv.earliest_expiry
+        END`,
+      ),
     })
     .orderBy([{ column: 'p.time_of_day' }, { column: 'name' }]);
 }
@@ -427,7 +557,9 @@ export async function getPlansForDay(userId: string, weekday: number) {
 export function getLogsForDate(userId: string, date: string) {
   return db('nutrition.schedule_logs').where({ user_id: userId, date }).select({
     id: 'id',
+    inventorySource: 'inventory_source',
     userSupplementId: 'user_supplement_id',
+    groupSupplementId: 'group_supplement_id',
     planId: 'plan_id',
     timeOfDay: 'time_of_day',
     status: 'status',
@@ -439,7 +571,11 @@ export function getLogsForDate(userId: string, date: string) {
 export function getAdhocLoggedSupplements(userId: string, date: string) {
   // logs without a plan need minimal supplement info to display
   return db('nutrition.schedule_logs as l')
-    .join('nutrition.user_supplements as us', 'us.id', 'l.user_supplement_id')
+    .leftJoin('nutrition.user_supplements as us', function () {
+      this.on('us.id', '=', 'l.user_supplement_id').andOn(
+        db.raw("l.inventory_source = 'personal'::inventory_source"),
+      );
+    })
     .leftJoin('nutrition.supplement_catalog as c', 'c.id', 'us.catalog_id')
     .leftJoin('nutrition.brands as b', 'b.id', 'c.brand_id')
     .leftJoin(
@@ -452,28 +588,72 @@ export function getAdhocLoggedSupplements(userId: string, date: string) {
       'inv.user_supplement_id',
       'us.id',
     )
+    .leftJoin('nutrition.group_supplements as gs', function () {
+      this.on('gs.id', '=', 'l.group_supplement_id').andOn(
+        db.raw("l.inventory_source = 'group'::inventory_source"),
+      );
+    })
+    .leftJoin('core.groups as g', 'g.id', 'gs.group_id')
+    .leftJoin('nutrition.supplement_catalog as gc', 'gc.id', 'gs.catalog_id')
+    .leftJoin('nutrition.brands as gb', 'gb.id', 'gc.brand_id')
+    .leftJoin(
+      db('nutrition.group_batches as gb2')
+        .select('gb2.group_supplement_id')
+        .sum({ on_hand: 'gb2.qty_remaining' })
+        .min({ earliest_expiry: 'gb2.expires_on' })
+        .groupBy('gb2.group_supplement_id')
+        .as('ginv'),
+      'ginv.group_supplement_id',
+      'gs.id',
+    )
     .where({ 'l.user_id': userId, 'l.date': date })
     .whereNull('l.plan_id')
     .select({
-      userSupplementId: 'us.id',
-      catalogId: 'c.id',
-      brandName: 'b.name',
-      name: db.raw('COALESCE(us.custom_name, c.name)'),
-      form: db.raw('COALESCE(us.custom_form, c.form)'),
-      onHand: db.raw('COALESCE(??.??, 0)', ['inv', 'on_hand']), // safe identifiers
-      earliestExpiry: db.raw('??.??', ['inv', 'earliest_expiry']), // safe identifiers
+      inventorySource: 'l.inventory_source',
+      userSupplementId: 'l.user_supplement_id',
+      groupSupplementId: 'l.group_supplement_id',
+      catalogId: db.raw('COALESCE(c.id, gc.id)'),
+      brandName: db.raw('COALESCE(b.name, gb.name)'),
+      name: db.raw(
+        `CASE
+          WHEN l.inventory_source = 'group'::inventory_source
+            THEN COALESCE(gs.nickname, gc.name, g.name, 'Group Supplement')
+          ELSE COALESCE(us.custom_name, c.name, 'Supplement')
+        END`,
+      ),
+      form: db.raw(
+        `CASE
+          WHEN l.inventory_source = 'group'::inventory_source
+            THEN COALESCE(gc.form, 'other')
+          ELSE COALESCE(us.custom_form, c.form)
+        END`,
+      ),
+      onHand: db.raw(
+        `CASE
+          WHEN l.inventory_source = 'group'::inventory_source
+            THEN COALESCE(ginv.on_hand, 0)
+          ELSE COALESCE(inv.on_hand, 0)
+        END`,
+      ),
+      earliestExpiry: db.raw(
+        `CASE
+          WHEN l.inventory_source = 'group'::inventory_source
+            THEN ginv.earliest_expiry
+          ELSE inv.earliest_expiry
+        END`,
+      ),
       timeOfDay: 'l.time_of_day',
     });
 }
 
-export const selectFifoBatchesTx = (trx: any, userSupplementId: string) =>
+export const selectPersonalBatchesTx = (trx: any, userSupplementId: string) =>
   trx('nutrition.batches')
     .select('id', 'quantity_units')
     .where({ user_supplement_id: userSupplementId })
     .andWhere('quantity_units', '>', 0)
     .orderByRaw('expires_on IS NULL, expires_on ASC, created_at ASC');
 
-export async function consumeStockTx(
+export async function consumePersonalStockTx(
   trx: any,
   logId: string,
   userSupplementId: string,
@@ -482,7 +662,7 @@ export async function consumeStockTx(
   console.log('trying to consumeStockTX');
 
   let remaining = units;
-  const batches = await selectFifoBatchesTx(trx, userSupplementId);
+  const batches = await selectPersonalBatchesTx(trx, userSupplementId);
 
   for (const b of batches) {
     if (remaining <= 0) break;
@@ -500,6 +680,46 @@ export async function consumeStockTx(
     remaining -= use;
   }
   return units - remaining; // consumed
+}
+
+export const selectGroupBatchesTx = (trx: any, groupSupplementId: string) =>
+  trx('nutrition.group_batches')
+    .select('id', 'qty_remaining')
+    .where({ group_supplement_id: groupSupplementId })
+    .andWhere('qty_remaining', '>', 0)
+    .orderByRaw('expires_on IS NULL, expires_on ASC, created_at ASC');
+
+export async function consumeGroupStockTx(
+  trx: any,
+  logId: string,
+  groupSupplementId: string,
+  units: number,
+  userId: string,
+) {
+  let remaining = units;
+  const batches = await selectGroupBatchesTx(trx, groupSupplementId);
+
+  for (const b of batches) {
+    if (remaining <= 0) break;
+    const available = Number(b.qty_remaining ?? 0);
+    const use = Math.min(remaining, available);
+    if (use <= 0) continue;
+
+    await trx('nutrition.group_batches')
+      .update({ qty_remaining: trx.raw('GREATEST(qty_remaining - ?, 0)', [use]) })
+      .where({ id: b.id });
+
+    await trx('nutrition.group_consumptions').insert({
+      group_batch_id: b.id,
+      user_id: userId,
+      log_id: logId,
+      units: use,
+    });
+
+    remaining -= use;
+  }
+
+  return units - remaining;
 }
 
 // Patch Methods + Helpers (TX)
@@ -520,6 +740,9 @@ export const getLogWithConsumptions = (userId: string, logId: string) =>
       'l.id',
       'l.user_id',
       'l.user_supplement_id',
+      'l.inventory_source',
+      'l.group_id',
+      'l.group_supplement_id',
       'l.status',
       'l.quantity_units',
       'l.time_of_day',
@@ -544,6 +767,9 @@ export const getLogWithConsumptionsTx = (trx: Knex, userId: string, logId: strin
       'l.id',
       'l.user_id',
       'l.user_supplement_id',
+      'l.inventory_source',
+      'l.group_id',
+      'l.group_supplement_id',
       'l.status',
       'l.quantity_units',
       'l.time_of_day',
@@ -565,6 +791,20 @@ export async function restoreConsumptionsTx(trx: any, logId: string) {
 
 export const deleteConsumptionsTx = (trx: any, logId: string) =>
   trx('nutrition.schedule_log_consumptions').where({ log_id: logId }).del();
+
+export async function restoreGroupConsumptionsTx(trx: any, logId: string) {
+  const rows = await trx('nutrition.group_consumptions')
+    .where({ log_id: logId })
+    .select('group_batch_id', 'units');
+  for (const r of rows) {
+    await trx('nutrition.group_batches')
+      .where({ id: r.group_batch_id })
+      .update({ qty_remaining: trx.raw('qty_remaining + ?', [r.units]) });
+  }
+}
+
+export const deleteGroupConsumptionsTx = (trx: any, logId: string) =>
+  trx('nutrition.group_consumptions').where({ log_id: logId }).del();
 
 export const updateLogTx = (
   trx: any,
@@ -595,6 +835,9 @@ export async function getLogForActionTx(trx: Knex.Transaction, logId: string) {
       'l.id',
       'l.user_id',
       'l.user_supplement_id',
+      'l.inventory_source',
+      'l.group_id',
+      'l.group_supplement_id',
       'l.quantity_units',
       'l.status',
       'u.telegram_chat_id',
@@ -606,7 +849,11 @@ export async function getLogForActionTx(trx: Knex.Transaction, logId: string) {
 
 export async function setStatusTakenTx(trx: Knex.Transaction, log: any) {
   // your FIFO consumption here
-  await consumeStockTx(trx, log.id, log.user_supplement_id, log.quantity_units);
+  if (log.inventory_source === 'group') {
+    await consumeGroupStockTx(trx, log.id, log.group_supplement_id, log.quantity_units, log.user_id);
+  } else {
+    await consumePersonalStockTx(trx, log.id, log.user_supplement_id, log.quantity_units);
+  }
   // await trx('nutrition.schedule_logs').where({ id: log.id }).update({
   //   status: 'taken',
   //   updated_at: trx.fn.now(),
@@ -647,7 +894,18 @@ export async function fetchDuePlanInstances(trx?: Knex.Transaction) {
   const k = (trx ?? db) as Knex;
   return k('nutrition.schedule_plans as p')
     .join('core.users as u', 'u.id', 'p.user_id')
-    .join('nutrition.v_user_supplements as vus', 'vus.id', 'p.user_supplement_id')
+    .leftJoin('nutrition.v_user_supplements as vus', function () {
+      this.on('vus.id', '=', 'p.user_supplement_id').andOn(
+        k.raw("p.inventory_source = 'personal'::inventory_source"),
+      );
+    })
+    .leftJoin('nutrition.group_supplements as gs', function () {
+      this.on('gs.id', '=', 'p.group_supplement_id').andOn(
+        k.raw("p.inventory_source = 'group'::inventory_source"),
+      );
+    })
+    .leftJoin('core.groups as g', 'g.id', 'gs.group_id')
+    .leftJoin('nutrition.supplement_catalog as gc', 'gc.id', 'gs.catalog_id')
     .whereNotNull('u.telegram_chat_id')
     .where({ 'p.active': true })
     .whereRaw(
@@ -669,22 +927,40 @@ export async function fetchDuePlanInstances(trx?: Knex.Transaction) {
       NOT EXISTS (
         SELECT 1 FROM nutrition.schedule_logs l
         WHERE l.user_id = p.user_id
-          AND l.user_supplement_id = p.user_supplement_id
+          AND l.inventory_source = p.inventory_source
           AND l.date = (now() AT TIME ZONE u.tz)::date
           AND l.time_of_day = p.time_of_day
+          AND (
+            (p.inventory_source = 'personal'::inventory_source AND l.user_supplement_id = p.user_supplement_id)
+            OR (p.inventory_source = 'group'::inventory_source AND l.group_supplement_id = p.group_supplement_id)
+          )
       )
     `,
     )
     .select({
       userId: 'p.user_id',
+      inventorySource: 'p.inventory_source',
+      groupId: 'p.group_id',
       chatId: 'u.telegram_chat_id',
-      name: 'vus.display_name',
+      name: k.raw(
+        `CASE
+          WHEN p.inventory_source = 'group'::inventory_source
+            THEN COALESCE(gs.nickname, gc.name, g.name, 'Group Supplement')
+          ELSE vus.display_name
+        END`,
+      ),
       doseUnits: 'p.units_per_dose',
       doseLabel: k.raw(`p.units_per_dose::text`),
       date: k.raw('(now() AT TIME ZONE u.tz)::date'),
       timeOfDay: 'p.time_of_day',
       userSupplementId: 'p.user_supplement_id',
+      groupSupplementId: 'p.group_supplement_id',
       planId: 'p.id',
-      images: 'vus.images',
+      images: k.raw(
+        `CASE
+          WHEN p.inventory_source = 'group'::inventory_source THEN COALESCE(gc.images, '[]'::jsonb)
+          ELSE COALESCE(to_jsonb(vus.images), '[]'::jsonb)
+        END`,
+      ),
     });
 }

@@ -13,7 +13,7 @@ import { IconComponent } from '../icon/icon.component';
           class="flex items-center justify-between text-token"
           [attr.data-tone]="theme()"
         >
-          <div class="flex gap-2">
+          <div class="flex gap-2 items-center">
             <lib-icon [icon]="cardTitleIcon()" [class]="cardTitleIconClass()"></lib-icon>
             <h1
               [class]="

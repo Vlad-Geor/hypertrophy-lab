@@ -118,9 +118,14 @@ const buildTargetsAgg = () =>
     )
     .as('ct_agg');
 
+type ListGroupSupplementsOptions = {
+  includeArchived?: boolean;
+  withoutPlanForUserId?: string;
+};
+
 export const listGroupSupplements = async (
   groupId: string,
-  opts?: { includeArchived?: boolean },
+  opts: ListGroupSupplementsOptions = {},
 ): Promise<GroupSupplementRow[]> => {
   const totals = db('nutrition.group_batches as gb')
     .select('gb.group_supplement_id')
@@ -146,7 +151,17 @@ export const listGroupSupplements = async (
     .where('gs.group_id', groupId)
     .orderBy('gs.created_at', 'asc');
 
-  if (!opts?.includeArchived) {
+  if (opts.withoutPlanForUserId) {
+    query
+      .leftJoin('nutrition.schedule_plans as sp', function () {
+        this.on('sp.group_supplement_id', '=', 'gs.id')
+          .andOn(db.raw('sp.user_id = ?', [opts.withoutPlanForUserId]))
+          .andOn(db.raw("sp.inventory_source = 'group'::inventory_source"));
+      })
+      .whereNull('sp.id');
+  }
+
+  if (!opts.includeArchived) {
     query.whereNull('gs.archived_at');
   }
 

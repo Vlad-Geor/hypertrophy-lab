@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { API, API_BASE_URL, Group, GroupSupplementListItem } from '@ikigaidev/hl/shared';
 import { Observable } from 'rxjs';
@@ -20,4 +20,16 @@ export class GroupsService {
       `${this.API_BASE}${API.groups}/${groupId}/supplements${includeBatches ? '?includeBatches=1' : ''}`,
     );
   }
+
+  getUserGroupSupplements(withoutPlan?: boolean): Observable<GroupSupplementListItem[]> {
+    return this.http.get<GroupSupplementListItem[]>(
+      `${this.API_BASE}${API.groups}/supplements${withoutPlan ? '?withoutPlan=true' : ''}`,
+    );
+  }
+
+  userGroupSupplements = (withoutPlan?: boolean) =>
+    httpResource<GroupSupplementListItem[]>(() => {
+      const qp = withoutPlan ? '?withoutPlan=true' : '';
+      return `${this.API_BASE}${API.groups}/supplements${qp}`;
+    });
 }

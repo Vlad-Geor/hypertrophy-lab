@@ -1,11 +1,13 @@
 import { db } from '../config/database.js';
 import * as groupRepo from '../repositories/group-inventory.repo.js';
+import type { GroupRow, MembershipRow } from '../repositories/groups.repo.js';
 import { httpError } from '../util/http-error.js';
 import * as groups from './groups.service.js';
 
 type ListOptions = {
   includeArchived?: boolean;
   includeBatches?: boolean;
+  withoutPlan?: boolean;
 };
 
 export async function listSupplements(
@@ -16,6 +18,7 @@ export async function listSupplements(
   await groups.requireActiveMembership(userId, groupId);
   const supplements = await groupRepo.listGroupSupplements(groupId, {
     includeArchived: opts.includeArchived,
+    withoutPlanForUserId: opts.withoutPlan ? userId : undefined,
   });
 
   if (!opts.includeBatches) return supplements;
@@ -33,6 +36,27 @@ export async function listSupplements(
     ...supplement,
     batches: bySupplement.get(supplement.id) ?? [],
   }));
+}
+
+export async function listUserSupplements(
+  userId: string,
+  opts: { withoutPlan?: boolean } = {},
+) {
+  const groupsList = (await groups.listGroups(userId)) as unknown as Array<
+    GroupRow & { role: MembershipRow['role'] }
+  >;
+  if (!groupsList.length) return [];
+
+  const results = await Promise.all(
+    groupsList.map((g) =>
+      groupRepo.listGroupSupplements(g.id, {
+        includeArchived: false,
+        withoutPlanForUserId: opts.withoutPlan ? userId : undefined,
+      }),
+    ),
+  );
+
+  return results.flat();
 }
 
 export async function getSupplement(

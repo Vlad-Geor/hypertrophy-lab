@@ -8,7 +8,7 @@ import { DayFullEntrySchema } from '@ikigaidev/hl/contracts';
     <ng-content></ng-content>
   `,
   host: {
-    class: 'py-4 px-3 flex flex-col gap-3 border border-gray-active rounded-xl',
+    class: 'py-4 px-3 flex flex-col gap-4 border border-gray-active rounded-xl',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

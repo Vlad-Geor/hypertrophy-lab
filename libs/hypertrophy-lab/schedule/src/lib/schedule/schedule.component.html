@@ -57,14 +57,16 @@
                 <lib-icon class="text-orange-400" [icon]="'sunrise-liner'"></lib-icon>
                 <span>{{ section?.timeOfDay | titlecase }}</span>
               </div>
-              <lib-tag [rounded]="true" theme="white" size="lg">
+              <lib-tag [rounded]="true" theme="white" size="sm">
                 {{ section?.items?.length }}
                 {{ (section?.items?.length ?? 0 > 1) ? 'supplements' : 'supplement' }}
               </lib-tag>
             </div>
-            @for (item of section?.items; track $index) {
-              <hl-intake-action-card [cardData]="item"></hl-intake-action-card>
-            }
+            <div class="flex flex-col gap-3">
+              @for (item of section?.items; track $index) {
+                <hl-intake-action-card [cardData]="item"></hl-intake-action-card>
+              }
+            </div>
           </hl-day-part-overview>
         }
       }
@@ -89,6 +91,6 @@
   cardTitleIcon="calendar-liner"
   cardTitleIconClass="text-primary"
 >
-  <p class="text-xl text-gray-text">Coming soon!...</p>
+  <p  class="text-xl text-gray-text">Coming soon!...</p>
   <lib-date-range-picker></lib-date-range-picker>
 </lib-surface-card>

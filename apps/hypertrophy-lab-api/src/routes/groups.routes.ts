@@ -6,6 +6,7 @@ const r = Router();
 
 r.get('/', groups.listGroups);
 r.post('/', groups.createGroup);
+r.get('/supplements', inventory.listUserSupplements);
 
 r.get('/:groupId/members', groups.listMembers);
 r.post('/:groupId/members', groups.addMember);

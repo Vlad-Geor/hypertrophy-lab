@@ -3,6 +3,7 @@ import { isoDate, timeOfDay, uuid } from '@ikigaidev/contracts';
 import { z } from 'zod';
 import { supplementFormSchema } from '../supplement/supplement-catalog.schema';
 import { intakeStatus } from './log.schema';
+import { inventorySourceSchema } from '../inventory/inventory-source.schema';
 
 export const dayEntrySchema = z.object({
   timeOfDay,
@@ -18,6 +19,7 @@ export const dayEntrySchema = z.object({
   logId: uuid.optional(),
   onHand: z.number().int().nonnegative().default(0),
   earliestExpiry: z.string().nullable().optional(), // YYYY-MM-DD
+  inventorySource: inventorySourceSchema
 });
 
 export const dayFullEntrySchema = z.object({

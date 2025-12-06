@@ -82,11 +82,12 @@ export class IntakeLogCard {
         timeOfDay: this.cardData()?.timeOfDay ?? 'morning',
         userSupplementId: this.cardData()?.userSupplementId ?? '',
         planId: this.cardData()?.planId ?? '',
+        inventorySource: this.cardData()?.inventorySource ?? 'personal'
       })
       .pipe(finalize(() => this.inEditMode.set(false)))
       .subscribe((res) => {
         this.showActions.set(false);
-        this.updatedLog.set({ ...res });
+        this.updatedLog.set({ ...res, userSupplementId: res.userSupplementId ?? '' });
       });
   }
 

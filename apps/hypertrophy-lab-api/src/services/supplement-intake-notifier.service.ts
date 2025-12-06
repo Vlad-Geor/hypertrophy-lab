@@ -1,8 +1,8 @@
 import { sendReminder } from '@ikigaidev/tg-bot';
+import * as crypto from 'crypto';
 import { db } from '../config/database.js';
 import { telegram } from '../infra/telegram.js';
 import { createLog, fetchDuePlanInstances } from '../repositories/schedule.repo.js';
-import * as crypto from 'crypto';
 
 export async function sendDueRemindersService() {
   const r = await db.raw('select pg_try_advisory_lock(?,?) AS ok', [42, 1]);
@@ -11,7 +11,7 @@ export async function sendDueRemindersService() {
   if (!got) return;
 
   try {
-    const due = await fetchDuePlanInstances(); // [{ userId, chatId, name, dose, date, timeOfDay, userSupplementId, planId }]
+    const due = await fetchDuePlanInstances(); // now includes inventorySource + group info
 
     if (due.length === 0) return;
 
@@ -28,7 +28,12 @@ export async function sendDueRemindersService() {
           userId: it.userId,
           payload: {
             consumeStock: false,
-            userSupplementId: it.userSupplementId,
+            inventorySource: it.inventorySource ?? 'personal',
+            userSupplementId:
+              it.inventorySource === 'group' ? null : (it.userSupplementId ?? null),
+            groupId: it.inventorySource === 'group' ? (it.groupId ?? null) : null,
+            groupSupplementId:
+              it.inventorySource === 'group' ? (it.groupSupplementId ?? null) : null,
             planId: it.planId ?? null,
             date: it.date,
             timeOfDay: it.timeOfDay,
