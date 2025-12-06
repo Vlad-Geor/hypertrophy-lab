@@ -13,16 +13,17 @@
       {{ this.routerService.pageHeader() | titlecase }}
     </h2>
   </div>
-  <div class="flex gap-4">
+  <div class="flex items-center gap-4">
     @if (vpService.isFullView()) {
-      <lib-input [withSearch]="true" placeholder="Search..."></lib-input>
+      <!-- <lib-input [withSearch]="true" placeholder="Search..."></lib-input> -->
     } @else {
-      <lib-icon-button
+      <!-- <lib-icon-button
         [icon]="'search-solid'"
         [inheritIconFillColor]="false"
-      ></lib-icon-button>
+      ></lib-icon-button> -->
     }
 
+    <span class="text-gray-heading text-sm hover:text-secondary hover:cursor-pointer">EN</span>
     <!-- IF notifService.hasNotifications(): secondary + badge -->
     <lib-stateful-icon-button
       [disabled]="true"

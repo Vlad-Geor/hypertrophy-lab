@@ -48,7 +48,7 @@ export function stableCellId(key: string) {
   hostDirectives: [ConnectedOverlayDirective],
   host: {
     '[attr.tabindex]': '0',
-    class: 'w-full',
+    class: 'flex-1',
   },
 })
 export class SingleSelectComponent<V, T>

@@ -81,16 +81,16 @@ module.exports = {
 
         /* ===== State variants (alpha-overlay) ===== */
         // Primary
-        'primary-ghost': 'hsl(from var(--primary-ghost) h s l / <alpha-value>)',
-        'primary-subtle': 'hsl(from var(--primary-subtle) h s l / <alpha-value>)',
-        'primary-soft': 'hsl(from var(--primary-soft) h s l / <alpha-value>)',
-        'primary-hover': 'hsl(from var(--primary-hover) h s l / <alpha-value>)',
-        'primary-active': 'hsl(from var(--primary-active) h s l / <alpha-value>)',
-        'primary-ring': 'hsl(from var(--primary-ring) h s l / <alpha-value>)',
-        'primary-bright': 'hsl(from  var(--primary-bright) h s l / <alpha-value>)',
-        'primary-dark': 'hsl(from var(--primary-dark) h s l / <alpha-value>)',
+        'primary-ghost': 'var(--primary-ghost)',
+        'primary-subtle': 'var(--primary-subtle)',
+        'primary-soft': 'var(--primary-soft)',
+        'primary-hover': 'var(--primary-hover)',
+        'primary-active': 'var(--primary-active)',
+        'primary-ring': 'var(--primary-ring)',
+        'primary-bright': ' var(--primary-bright)',
+        'primary-dark': 'var(--primary-dark)',
         // Secondary
-        'secondary-ghost': 'hsl(from var(--secondary-ghost) h s l / <alpha-value>)',
+        'secondary-ghost': 'var(--secondary-ghost)',
         'secondary-subtle': 'var(--secondary-subtle)',
         'secondary-soft': 'var(--secondary-soft)',
         'secondary-hover': 'var(--secondary-hover)',

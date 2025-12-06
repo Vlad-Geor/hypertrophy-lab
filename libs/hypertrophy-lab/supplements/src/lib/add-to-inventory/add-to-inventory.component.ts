@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  DestroyRef,
   effect,
   inject,
   linkedSignal,
@@ -34,7 +33,7 @@ import {
 } from '@ikigaidev/hl/contracts';
 import { ListItem } from '@ikigaidev/model';
 import { GLOBAL_OVERLAY_REF, GlobalOverlayRef } from '@ikigaidev/overlay';
-import { filter, map, Observable, tap } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { SupplementService } from '../data-access/supplement.service';
 import {
   AddedSupplementCard,
@@ -70,7 +69,7 @@ import {
   ],
   host: {
     class:
-      'max-w-[400px] md:max-w-md bg-surface p-3 pl-4 flex flex-col gap-4 rounded-2xl border border-gray-active shadow-2xl',
+      'max-w-[400px] relative md:max-w-md bg-surface max-h-[80dvh] overflow-hidden overflow-y-auto p-3 max-h-3/4 pl-4 flex flex-col gap-4 rounded-2xl border border-gray-active shadow-2xl',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -80,7 +79,6 @@ export class AddSupplementToInventory {
   private readonly fb = inject(FormBuilder);
   private readonly cnService = inject(CloudinaryService);
   readonly supplementService = inject(SupplementService);
-  private readonly destroyRef = inject(DestroyRef);
   protected globalOverlayRef = inject<GlobalOverlayRef>(GLOBAL_OVERLAY_REF, {
     optional: true,
   });
@@ -121,7 +119,6 @@ export class AddSupplementToInventory {
   supplementData = this.supplementService.allSupplements(true, true);
   options = toSignal(
     toObservable(this.supplementData.value).pipe(
-      tap((v) => console.log(v)),
       filter(Boolean),
       map(
         (response) =>
@@ -185,7 +182,6 @@ export class AddSupplementToInventory {
     const base = this.previewSupplements(); // read-only selection from multiselect
     const st = this.cardState();
     const mapped = base.map((s) => {
-      console.log('selected Data: ', s);
       const { id, images, name, form, unitsPerContainer, servingUnits } = s.data;
       const b = st[id]?.bottleCount ?? 1;
       return {
@@ -216,8 +212,6 @@ export class AddSupplementToInventory {
   }
 
   onStockChanged(change: SupplementStockChangeEvent): void {
-    console.log('change event: ', change);
-
     this.cardState.update((cs) => {
       const res = { ...cs };
       res[change.catalogId] = { bottleCount: change.newStock };
@@ -297,8 +291,6 @@ export class AddSupplementToInventory {
   }
 
   onSubmit: () => Observable<AddInventoryBulkExistingResponse> = () => {
-    console.log('submit');
-
     const selectedByCatalogId = new Map(
       this.selectedSupplementsData().map((s) => [
         s.id,

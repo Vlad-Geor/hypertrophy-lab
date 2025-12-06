@@ -1,12 +1,32 @@
-@if (store.userSupplements()?.length) {
-  @for (supp of store.filteredUserSupplements() ?? []; track $index) {
+@if (store.filteredUserSupplements().length) {
+  @for (supp of store.filteredUserSupplements(); track $index) {
     <hl-supplement-card [supplement]="supp"></hl-supplement-card>
   }
-} @else if (store.isLoading()) {
-  <div class="absolute flex justify-center w-full">
+} @else if (store.userSupplementsLoading()) {
+  <div class="flex justify-center w-full col-span-2">
     <lib-bouncing-loader></lib-bouncing-loader>
   </div>
-}
-@if (store.isError()) {
+} @else if (!store.userSupplementCount() && !store.isError()) {
+  <div class="flex flex-col items-center col-span-2 gap-3 pt-4 pb-7">
+    <lib-icon
+      class="text-secondary"
+      [icon]="'celebrate-liner'"
+      [iconSize]="40"
+    ></lib-icon>
+    <div class="flex flex-col gap-6 items-center">
+      <div>
+        <p class="text-center text-lg font-semibold text-gray-heading mb-1">
+          Welcome Aboard!
+        </p>
+        <p class="text-center text-sm text-gray-dark">
+          Add a supplement to start tracking your health journey.
+        </p>
+      </div>
+      <lib-button theme="gradient-primary" size="lg" (click)="onAddInventoryItem()">
+        Add First Supplement
+      </lib-button>
+    </div>
+  </div>
+} @else if (store.isError()) {
   <hl-error-page class="col-span-2"></hl-error-page>
 }

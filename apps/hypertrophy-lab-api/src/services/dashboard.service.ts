@@ -29,7 +29,11 @@ export async function getSummary(params: {
     latestOrders,
     recentlyAdded,
     lowStockAlerts,
-    expiringSoonItems,
+    expiringSoonItems: expiringSoonItems.map((item) => ({
+      ...item,
+      expiresOn:
+        item.expiresOn instanceof Date ? item.expiresOn.toISOString() : item.expiresOn,
+    })),
     totalMonthlyCostCents,
   };
 }

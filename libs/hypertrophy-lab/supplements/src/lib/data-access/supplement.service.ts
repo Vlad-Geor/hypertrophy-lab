@@ -5,6 +5,7 @@ import {
   addInventoryBulkExistingRequest,
   AddInventoryBulkExistingRequest,
   AddInventoryBulkExistingResponse,
+  Group,
   GroupSupplementListItem,
   ListCatalogResponse,
   ListInventoryResponse,
@@ -30,19 +31,7 @@ export class SupplementService {
     );
   }
 
-  // getGroups(): Observable<any> {
-    // return
-  // }
-
-  getGroupSupplements(
-    groupId: string,
-    includeBatches?: boolean,
-  ): Observable<GroupSupplementListItem[]> {
-    return this.http.get<GroupSupplementListItem[]>(
-      `${this.API_BASE}${API.groups}/${groupId}/supplements`,
-    );
-  }
-
+  
   userSupplements = (withoutPlan?: boolean) =>
     httpResource<ListInventoryResponse>(
       () => `${this.API_BASE}${API.inventory}${withoutPlan ? '?withoutPlan=true' : ''}`,

@@ -4,7 +4,7 @@
   [label]="label()"
 > -->
 <div
-  class="flex-1 border border-gray-ring text-white hover:cursor-pointer rounded-md focus-within:border-secondary-active transition-all duration-100 ease-in-out inline-flex items-center justify-between px-3"
+  class="flex-1 max-w-full border gap-2 border-gray-ring text-white hover:cursor-pointer rounded-md focus-within:border-secondary-active transition-all duration-100 ease-in-out inline-flex items-center justify-between px-3"
   [ngClass]="{ 'min-h-8 text-sm': size() === 'sm', 'min-h-11': size() === 'lg' }"
 >
   @if (icon()) {
@@ -16,8 +16,8 @@
     </span>
   }
   @if (displayValue()) {
-    <span class="text-text-1 font-light text-ellipsis">
-      {{ displayValue()}}
+    <span class="text-text-1 font-light truncate">
+      {{ displayValue() }}
     </span>
   }
 

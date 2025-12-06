@@ -31,8 +31,15 @@
 }
 
 @if (config?.type === 'multi') {
-  <footer class="flex justify-end" id="dropdown-actions" role="group">
-    <div class="flex gap-2 p-2">
+  <footer
+    class="flex items-center p-2 pl-3 justify-between"
+    id="dropdown-actions"
+    role="group"
+  >
+    <p class="text-sm text-gray-dark">
+      {{ selectedItems?.length }} of {{ _options()?.length }} selected
+    </p>
+    <div class="flex gap-2">
       <lib-button theme="danger" (click)="onClose()">
         {{ config?.cancelButtonLabel || 'Cancel' }}
       </lib-button>

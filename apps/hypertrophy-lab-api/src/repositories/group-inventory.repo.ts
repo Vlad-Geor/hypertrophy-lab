@@ -1,9 +1,17 @@
 import { Knex } from 'knex';
 import { db } from '../config/database.js';
+import { Target } from '@ikigaidev/hl/contracts';
+
+type TargetSummary = {
+  id: string;
+  slug: string;
+  name: string;
+};
 
 export type GroupSupplementRow = {
   id: string;
   groupId: string;
+  groupName?: string | null;
   catalogId: string | null;
   nickname: string | null;
   safetyNotes: string | null;
@@ -13,6 +21,11 @@ export type GroupSupplementRow = {
   catalogName?: string | null;
   brandName?: string | null;
   onHandUnits?: number;
+  onHand?: number;
+  images?: string[] | null;
+  unitsPerContainer?: number | null;
+  servingUnits?: number | null;
+  targets?: TargetSummary[];
 };
 
 export type GroupBatchRow = {
@@ -53,6 +66,10 @@ const supplementSelect = [
   'gs.updated_at as updatedAt',
   'sc.name as catalogName',
   'br.name as brandName',
+  'g.name as groupName',
+  'sc.images',
+  'sc.units_per_container as unitsPerContainer',
+  'sc.serving_units as servingUnits',
 ] as const;
 
 const batchSelect = [
@@ -85,6 +102,22 @@ const batchReturning = [
   'updated_at as updatedAt',
 ] as const;
 
+const buildTargetsAgg = () =>
+  db('nutrition.catalog_targets as ct')
+    .leftJoin('nutrition.targets as t', 't.id', 'ct.target_id')
+    .groupBy('ct.catalog_id')
+    .select({ catalog_id: 'ct.catalog_id' })
+    .select(
+      db.raw(
+        `COALESCE(
+          JSON_AGG(DISTINCT JSONB_BUILD_OBJECT('id', t.id, 'slug', t.slug, 'name', t.name))
+          FILTER (WHERE t.id IS NOT NULL),
+          '[]'::json
+        ) as targets`,
+      ),
+    )
+    .as('ct_agg');
+
 export const listGroupSupplements = async (
   groupId: string,
   opts?: { includeArchived?: boolean },
@@ -94,16 +127,21 @@ export const listGroupSupplements = async (
     .sum<{ qty: string }>({ qty: 'gb.qty_remaining' })
     .groupBy('gb.group_supplement_id')
     .as('totals');
+  const targetAgg = buildTargetsAgg();
 
   const query = db<GroupSupplementRow, GroupSupplementRow[]>(
     'nutrition.group_supplements as gs',
   )
+    .leftJoin('core.groups as g', 'g.id', 'gs.group_id')
     .leftJoin('nutrition.supplement_catalog as sc', 'sc.id', 'gs.catalog_id')
     .leftJoin('nutrition.brands as br', 'br.id', 'sc.brand_id')
     .leftJoin(totals, 'totals.group_supplement_id', 'gs.id')
+    .leftJoin(targetAgg, 'ct_agg.catalog_id', 'gs.catalog_id')
     .select(
       ...supplementSelect,
       db.raw('COALESCE(totals.qty, 0)::float as "onHandUnits"'),
+      db.raw('COALESCE(totals.qty, 0)::float as "onHand"'),
+      db.raw(`COALESCE(ct_agg.targets, '[]'::json) as targets`),
     )
     .where('gs.group_id', groupId)
     .orderBy('gs.created_at', 'asc');
@@ -118,9 +156,14 @@ export const listGroupSupplements = async (
 
 export const getGroupSupplement = (groupId: string, id: string) =>
   db('nutrition.group_supplements as gs')
+    .leftJoin('core.groups as g', 'g.id', 'gs.group_id')
     .leftJoin('nutrition.supplement_catalog as sc', 'sc.id', 'gs.catalog_id')
     .leftJoin('nutrition.brands as br', 'br.id', 'sc.brand_id')
-    .select<GroupSupplementRow>(...supplementSelect)
+    .leftJoin(buildTargetsAgg(), 'ct_agg.catalog_id', 'gs.catalog_id')
+    .select<GroupSupplementRow>(
+      ...supplementSelect,
+      db.raw(`COALESCE(ct_agg.targets, '[]'::json) as targets`),
+    )
     .where('gs.group_id', groupId)
     .andWhere('gs.id', id)
     .first();

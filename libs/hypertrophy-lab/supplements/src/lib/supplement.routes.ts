@@ -1,5 +1,8 @@
 import { Route } from '@angular/router';
 import { route, RouteMeta } from '@ikigaidev/router';
+import { GroupsService } from './data-access/groups.service';
+import { SupplementService } from './data-access/supplement.service';
+import { SupplementStore } from './data-access/supplement.store';
 
 export const supplementRoutes: Route[] = [
   {
@@ -8,6 +11,7 @@ export const supplementRoutes: Route[] = [
       import('./supplement-shell/supplement-shell.component').then(
         (m) => m.SupplementShellComponent,
       ),
+    providers: [SupplementStore, SupplementService, GroupsService],
     children: [
       {
         path: '',

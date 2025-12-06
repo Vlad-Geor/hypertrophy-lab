@@ -10,6 +10,7 @@ import {
   SingleSelectComponent,
   stableCellId,
 } from '@ikigaidev/elements';
+import { ViewportService } from '@ikigaidev/layout-service';
 import { ListItem } from '@ikigaidev/model';
 import { GlobalOverlay } from '@ikigaidev/overlay';
 import { debounceTime } from 'rxjs';
@@ -57,6 +58,7 @@ export type DemiType = {
 
       <div class="flex flex-col gap-3">
         <lib-input
+          [fullWidth]="viewportService.isMobile() || viewportService.isTablet()"
           [withSearch]="true"
           placeholder="Search..."
           [formControl]="searchControl"
@@ -84,6 +86,7 @@ export type DemiType = {
   ],
 })
 export class SupplementHeaderComponent {
+  readonly viewportService = inject(ViewportService);
   private readonly overlay = inject(GlobalOverlay);
   private readonly store = inject(SupplementStore);
 

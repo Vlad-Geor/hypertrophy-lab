@@ -61,6 +61,10 @@ export class Dropdown<V, T> {
     }
   }
 
+  get selectedItems() {
+    return this.configSm?.selected;
+  }
+
   onItemSelected(cell: ListItem<V, T>): void {
     if (this.config?.type === 'single') {
       this.config.selectionModel.select(cell);

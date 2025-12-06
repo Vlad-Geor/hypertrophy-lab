@@ -45,3 +45,14 @@
     </lib-button>
   </div>
 </div>
+
+@if (supp?.groupName) {
+  <lib-tag
+  size="sm"
+    class="absolute left-0 top-0 -translate-x-3 -translate-y-1/2"
+    [rounded]="true"
+    theme="accent-purple"
+  >
+    {{ supp?.groupName }}
+  </lib-tag>
+}

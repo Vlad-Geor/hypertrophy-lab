@@ -17,9 +17,16 @@ export const groupBatchSchema = z.object({
 
 export type GroupBatch = z.infer<typeof groupBatchSchema>;
 
+const groupSupplementTargetSchema = z.object({
+  id: z.uuid(),
+  slug: z.string(),
+  name: z.string(),
+});
+
 export const groupSupplementSchema = z.object({
   id: z.uuid(),
   groupId: z.uuid(),
+  groupName: z.string().optional(),
   catalogId: z.uuid().nullable(),
   nickname: z.string().max(120).nullish(),
   safetyNotes: z.string().nullish(),
@@ -29,9 +36,13 @@ export const groupSupplementSchema = z.object({
   catalogName: z.string(),
   brandName: z.string(),
   onHandUnits: z.number(),
+  onHand: z.number().optional(),
+  images: z.array(z.string().url()).optional(),
+  servingUnits: z.number().positive().nullable().optional(),
+  targets: z.array(groupSupplementTargetSchema).optional(),
 });
 export type GroupSupplement = z.infer<typeof groupSupplementSchema>;
 
 export type GroupSupplementListItem = GroupSupplement & {
-batches?: GroupBatch[];
+  batches?: GroupBatch[];
 };

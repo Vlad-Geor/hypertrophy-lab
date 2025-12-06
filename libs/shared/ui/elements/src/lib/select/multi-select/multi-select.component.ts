@@ -40,7 +40,7 @@ import { stableCellId } from '../single-select/single-select.component';
     IconButtonComponent,
   ],
   host: {
-    class: 'inline-flex',
+    class: 'inline-flex max-w-full',
   },
   hostDirectives: [ConnectedOverlayDirective],
 })
