@@ -82,15 +82,22 @@ export async function listPlans(userId: string) {
 }
 
 export async function createPlan(params: { userId: string; payload: CreatePlanRequest }) {
+  console.log('create Plan repo params: ', params);
+
   const [row] = await db('nutrition.schedule_plans')
     .insert({
       user_id: params.userId,
       inventory_source: params.payload.inventorySource ?? 'personal',
       user_supplement_id:
-        params.payload.inventorySource === 'group' ? null : params.payload.userSupplementId,
-      group_id: params.payload.inventorySource === 'group' ? params.payload.groupId : null,
+        params.payload.inventorySource === 'group'
+          ? null
+          : params.payload.userSupplementId,
+      group_id:
+        params.payload.inventorySource === 'group' ? params.payload.groupId : null,
       group_supplement_id:
-        params.payload.inventorySource === 'group' ? params.payload.groupSupplementId : null,
+        params.payload.inventorySource === 'group'
+          ? params.payload.groupSupplementId
+          : null,
       units_per_dose: params.payload.unitsPerDose ?? 1,
       time_of_day: params.payload.timeOfDay,
       days_of_week: db.raw('?', [params.payload.daysOfWeek]),
@@ -154,10 +161,10 @@ export async function createLog(
       user_id: params.userId,
       inventory_source: inventorySource,
       user_supplement_id:
-        inventorySource === 'group' ? null : params.payload.userSupplementId ?? null,
-      group_id: inventorySource === 'group' ? params.payload.groupId ?? null : null,
+        inventorySource === 'group' ? null : (params.payload.userSupplementId ?? null),
+      group_id: inventorySource === 'group' ? (params.payload.groupId ?? null) : null,
       group_supplement_id:
-        inventorySource === 'group' ? params.payload.groupSupplementId ?? null : null,
+        inventorySource === 'group' ? (params.payload.groupSupplementId ?? null) : null,
       plan_id: params.payload.planId ?? null,
       date: params.payload.date,
       time_of_day: params.payload.timeOfDay,
@@ -440,10 +447,11 @@ export const insertLogTx = (
     .insert({
       user_id: log.userId,
       inventory_source: log.inventorySource,
-      user_supplement_id: log.inventorySource === 'group' ? null : log.userSupplementId ?? null,
-      group_id: log.inventorySource === 'group' ? log.groupId ?? null : null,
+      user_supplement_id:
+        log.inventorySource === 'group' ? null : (log.userSupplementId ?? null),
+      group_id: log.inventorySource === 'group' ? (log.groupId ?? null) : null,
       group_supplement_id:
-        log.inventorySource === 'group' ? log.groupSupplementId ?? null : null,
+        log.inventorySource === 'group' ? (log.groupSupplementId ?? null) : null,
       plan_id: log.planId ?? null,
       date: log.date,
       time_of_day: log.timeOfDay,
@@ -560,6 +568,7 @@ export function getLogsForDate(userId: string, date: string) {
     inventorySource: 'inventory_source',
     userSupplementId: 'user_supplement_id',
     groupSupplementId: 'group_supplement_id',
+    groupId: 'group_id',
     planId: 'plan_id',
     timeOfDay: 'time_of_day',
     status: 'status',
@@ -612,6 +621,7 @@ export function getAdhocLoggedSupplements(userId: string, date: string) {
       inventorySource: 'l.inventory_source',
       userSupplementId: 'l.user_supplement_id',
       groupSupplementId: 'l.group_supplement_id',
+      groupId: 'l.group_id',
       catalogId: db.raw('COALESCE(c.id, gc.id)'),
       brandName: db.raw('COALESCE(b.name, gb.name)'),
       name: db.raw(
@@ -698,10 +708,10 @@ export async function consumeGroupStockTx(
 ) {
   let remaining = units;
   const batches = await selectGroupBatchesTx(trx, groupSupplementId);
-
   for (const b of batches) {
     if (remaining <= 0) break;
-    const available = Number(b.qty_remaining ?? 0);
+
+    const available = Number(b.qtyRemaining ?? 0);
     const use = Math.min(remaining, available);
     if (use <= 0) continue;
 
@@ -850,7 +860,13 @@ export async function getLogForActionTx(trx: Knex.Transaction, logId: string) {
 export async function setStatusTakenTx(trx: Knex.Transaction, log: any) {
   // your FIFO consumption here
   if (log.inventory_source === 'group') {
-    await consumeGroupStockTx(trx, log.id, log.group_supplement_id, log.quantity_units, log.user_id);
+    await consumeGroupStockTx(
+      trx,
+      log.id,
+      log.group_supplement_id,
+      log.quantity_units,
+      log.user_id,
+    );
   } else {
     await consumePersonalStockTx(trx, log.id, log.user_supplement_id, log.quantity_units);
   }

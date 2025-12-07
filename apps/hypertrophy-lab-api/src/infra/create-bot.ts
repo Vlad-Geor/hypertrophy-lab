@@ -45,11 +45,21 @@ export async function createBot(env: ApiEnv) {
     const data = String(cq.data || '');
     console.log('callbackQ data: ', data);
 
-    const [action, rest] = data.split(':', 2); // "t:<id>|uriEncoded(suppName)" | "s:<id>|uriEncoded(suppName)"
-    const [id, encName] = (rest ?? '').split('|', 2);
+    const [action, rawPayload] = data.split(':', 2);
+    let payload = rawPayload ?? '';
+    let encodedName: string | undefined;
 
-    const logId = id ?? '';
-    const name = encName ? decodeURIComponent(encName) : undefined;
+    if (payload.includes('|')) {
+      const [idPart, namePart] = payload.split('|', 2);
+      payload = idPart ?? '';
+      encodedName = namePart;
+    }
+
+    const logId = payload ?? '';
+    const messageText = extractMessageText(cq.message);
+    const nameFromPayload = encodedName ? decodeURIComponent(encodedName) : undefined;
+    const derivedName = nameFromPayload ?? deriveNameFromMessage(messageText);
+    const safeName = escapeHtml(derivedName ?? 'Supplement');
 
     if (!['t', 's'].includes(action) || !logId || !ctx.chat.id)
       throw new Error('Bad Request.');
@@ -79,7 +89,7 @@ export async function createBot(env: ApiEnv) {
 
       await ctx.editMessageCaption(
         `${res.status === 'taken' ? '✅ <b>Taken</b>' : '🚫 <b>Skipped</b>'}\n` +
-          `<code>${name}</code>\n` +
+          `<code>${safeName}</code>\n` +
           `<i>${ts}</i>\n\n` +
           `— Hypertrophy Lab`,
         { parse_mode: 'HTML' },
@@ -91,4 +101,40 @@ export async function createBot(env: ApiEnv) {
   });
 
   return bot;
+}
+
+function extractMessageText(message: any): string | undefined {
+  if (!message) return undefined;
+  if ('caption' in message && typeof message.caption === 'string') return message.caption;
+  if ('text' in message && typeof message.text === 'string') return message.text;
+  return undefined;
+}
+
+function deriveNameFromMessage(text?: string): string | undefined {
+  if (!text) return undefined;
+  const prefix = 'Time to take:';
+  const idx = text.indexOf(prefix);
+  if (idx === -1) return text.trim();
+  const withoutPrefix = text.slice(idx + prefix.length).trim();
+  const [namePart] = withoutPrefix.split('•', 1);
+  return namePart?.trim();
+}
+
+function escapeHtml(str: string): string {
+  return str.replace(/[&<>"']/g, (ch) => {
+    switch (ch) {
+      case '&':
+        return '&amp;';
+      case '<':
+        return '&lt;';
+      case '>':
+        return '&gt;';
+      case '"':
+        return '&quot;';
+      case "'":
+        return '&#39;';
+      default:
+        return ch;
+    }
+  });
 }

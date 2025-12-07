@@ -20,14 +20,8 @@ export async function sendReminder(
     `Time to take: ${it.suppName} • ${it.doseLabel ?? it.doseUnits ?? ''}`.trimEnd();
   const kb = Markup.inlineKeyboard([
     [
-      Markup.button.callback(
-        '✅ Take',
-        `t:${it.logId}|${encodeURIComponent(it.suppName)}`,
-      ),
-      Markup.button.callback(
-        '⏭ Skip',
-        `s:${it.logId}|${encodeURIComponent(it.suppName)}`,
-      ),
+      Markup.button.callback('✅ Take', `t:${it.logId}`),
+      Markup.button.callback('⏭ Skip', `s:${it.logId}`),
     ],
   ]);
   if (it.images?.[0]) {

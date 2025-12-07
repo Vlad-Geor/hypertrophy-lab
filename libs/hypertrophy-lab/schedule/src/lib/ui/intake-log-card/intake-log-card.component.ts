@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   inject,
   input,
   linkedSignal,
@@ -48,6 +49,10 @@ export class IntakeLogCard {
   logTaken = (): Observable<CreateLogResponse> => this.updateIntakeLog('taken');
   logSkipped = (): Observable<CreateLogResponse> => this.updateIntakeLog('skipped');
 
+  constructor() {
+    effect(() => console.log(this.cardData()));
+  }
+
   onLogSkipped(ev: unknown): void {
     openToaster(
       this.overlay,
@@ -82,7 +87,7 @@ export class IntakeLogCard {
         timeOfDay: this.cardData()?.timeOfDay ?? 'morning',
         userSupplementId: this.cardData()?.userSupplementId ?? '',
         planId: this.cardData()?.planId ?? '',
-        inventorySource: this.cardData()?.inventorySource ?? 'personal'
+        inventorySource: this.cardData()?.inventorySource ?? 'personal',
       })
       .pipe(finalize(() => this.inEditMode.set(false)))
       .subscribe((res) => {

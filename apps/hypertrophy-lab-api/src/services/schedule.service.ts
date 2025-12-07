@@ -23,6 +23,8 @@ async function resolveInventoryContext(
   userId: string,
   input: InventoryResolutionInput,
 ): Promise<InventoryResolution> {
+  console.log('resolveContext input: ', input);
+
   const inventorySource: InventorySource = input.inventorySource ?? 'personal';
 
   if (inventorySource === 'group') {
@@ -121,13 +123,8 @@ export async function deletePlan(params: { userId: string; planId: string }) {
 
 export async function patchLog(params: { userId: string; logId: string; patch: any }) {
   const { userId, logId, patch } = params;
-  console.log('patchLog init, params: ', params);
-
   return db.transaction(async (trx) => {
     const cur = await repo.getLogWithConsumptions(userId, logId).transacting(trx);
-    console.log('CURRENT: ', cur);
-    console.log('PATCH: ', patch);
-
     if (!cur) throw new Error('Log not found');
 
     // derive new status/qty (fall back to current)
@@ -160,8 +157,6 @@ export async function patchLog(params: { userId: string; logId: string; patch: a
         time_of_day: patch.timeOfDay ?? cur.timeOfDay,
       },
     });
-
-    console.log('LOGGING UPDATED: ', updated);
 
     // 3) re-consume if now taken with qty > 0
     if (nextStatus === 'taken' && nextQty > 0) {
@@ -429,7 +424,10 @@ export async function getDayView(userId: string, date: string) {
     return {
       timeOfDay: p.timeOfDay,
       planId: p.planId,
+      inventorySource: p.inventorySource ?? 'personal',
       userSupplementId: p.userSupplementId,
+      groupId: p.groupId ?? null,
+      groupSupplementId: p.groupSupplementId ?? null,
       catalogId: p.catalogId,
       brandName: p.brandName ?? null,
       name: p.name,
@@ -456,7 +454,10 @@ export async function getDayView(userId: string, date: string) {
     return {
       timeOfDay: info.timeOfDay,
       planId: null,
+      inventorySource: info.inventorySource ?? 'personal',
       userSupplementId: info.userSupplementId,
+      groupId: info.groupId ?? null,
+      groupSupplementId: info.groupSupplementId ?? null,
       catalogId: info.catalogId ?? null,
       brandName: info.brandName ?? null,
       name: info.name,
