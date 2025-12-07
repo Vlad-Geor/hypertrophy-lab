@@ -5,8 +5,6 @@ import {
   addInventoryBulkExistingRequest,
   AddInventoryBulkExistingRequest,
   AddInventoryBulkExistingResponse,
-  Group,
-  GroupSupplementListItem,
   ListCatalogResponse,
   ListInventoryResponse,
 } from '@ikigaidev/hl/contracts';
@@ -31,7 +29,6 @@ export class SupplementService {
     );
   }
 
-  
   userSupplements = (withoutPlan?: boolean) =>
     httpResource<ListInventoryResponse>(
       () => `${this.API_BASE}${API.inventory}${withoutPlan ? '?withoutPlan=true' : ''}`,

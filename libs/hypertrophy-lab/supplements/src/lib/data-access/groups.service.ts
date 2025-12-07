@@ -1,6 +1,7 @@
 import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { API, API_BASE_URL, Group, GroupSupplementListItem } from '@ikigaidev/hl/shared';
+import { Group, GroupSupplementListItem } from '@ikigaidev/contracts';
+import { API, API_BASE_URL } from '@ikigaidev/hl/shared';
 import { Observable } from 'rxjs';
 
 @Injectable()

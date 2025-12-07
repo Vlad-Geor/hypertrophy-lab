@@ -5,7 +5,7 @@
     "declaration": true,
     "types": ["node"]
   },
-  "include": ["src/**/*.ts", "../../hypertrophy-lab/shared/src/lib/contracts/group/group-inventory.schema.ts", "../../hypertrophy-lab/shared/src/lib/contracts/group/group.schema.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": [
     "vite.config.ts",
     "vite.config.mts",

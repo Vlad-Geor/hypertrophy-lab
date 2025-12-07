@@ -1,10 +1,7 @@
 import { updateState, withDevtools } from '@angular-architects/ngrx-toolkit';
 import { computed, inject } from '@angular/core';
-import {
-  Group,
-  GroupSupplementListItem,
-  InventoryItemSummary,
-} from '@ikigaidev/hl/contracts';
+import { Group, GroupSupplementListItem } from '@ikigaidev/contracts';
+import { InventoryItemSummary } from '@ikigaidev/hl/contracts';
 import { tapResponse } from '@ngrx/operators';
 import {
   patchState,

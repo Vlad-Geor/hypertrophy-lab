@@ -1,5 +1,6 @@
-import { GroupSupplementListItem, InventoryItemSummary } from '@ikigaidev/hl/contracts';
+import { InventoryItemSummary } from '@ikigaidev/hl/contracts';
 import { UserSupplementOverview } from '../../supplement-card/supplement-card.component';
+import { GroupSupplementListItem } from '@ikigaidev/contracts';
 
 export const fromInventoryItemSummary: (
   data: InventoryItemSummary,
